@@ -1,1 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+*{
+    box-sizing: border-box;
+}
+
+/* Variables */
+:root{
+    --color-primary: #F28482;
+    --color-secondary: #84A59D;
+}
+
+
+html, body{
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+
+p, h1, h2, h3{
+    margin: 0;
+    padding: 0;
+}
+
+ul{
+    list-style: none;
+}
