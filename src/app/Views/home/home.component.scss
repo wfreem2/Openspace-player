@@ -2,7 +2,7 @@
 
 :host{
     @extend %max-WH, %flx-col, %align-center;
-    gap: 3rem;
+    // gap: 3rem;
 }
 
 .wrapper{
@@ -10,12 +10,7 @@
     gap: 1rem;
     flex: 1;
     
-    h1{
-        width: 90%;
-        max-width: 100rem;
-        font-size: 3rem;
-        font-weight: 400;
-    }
+   
 }
 
 .header{

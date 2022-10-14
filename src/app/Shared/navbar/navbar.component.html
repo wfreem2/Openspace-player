@@ -1,0 +1,11 @@
+<div id="links">
+    <a routerLink="/shows" routerLinkActive="active">Your Shows</a>
+    <a routerLink="/create" routerLinkActive="active">Create Show</a>
+</div>
+
+<div id="status">
+    <p>Connection Status:</p>
+    <span class="status" [class]="isConnected ? 'connected': 'disconnected'">
+        {{isConnected ? 'Connected': 'Disconnected'}}
+    </span>
+</div>

@@ -1,0 +1,64 @@
+@use '/src/styles';
+
+:host{
+    @extend %max-W, %card, %align-center;
+    justify-content: space-between;
+    height: 4rem;
+    padding: 0.5rem;
+    max-width: 50rem;
+    gap: 1rem;
+    // border-radius: var(--bd-radius);
+    // border: solid 2px var(--gray)
+}
+
+#links{
+    @extend %align-center;
+    flex: 2;
+    gap: 1rem;
+
+    a{
+        transition: all 0.2s;
+        text-decoration: none;
+        min-width: 8rem;
+        padding: 0.75rem 2rem;
+        color: var(--txt-color);
+        border-radius: var(--bd-radius); 
+        text-align: center;
+
+        &.active{
+            color: #ffffff;
+            background: var(--color-primary);
+        }
+
+        &:hover:not(.active){
+            transform: translateY(-2px);
+            color: #ff001e;
+            background: #e4b6bb83
+        }
+    }
+}
+
+
+
+#status{
+    @extend %align-center, %max-H;
+    gap: 0.5rem;
+}
+
+// Status icon
+.status{
+    @extend %just-center, %align-center;
+    width: 8rem;
+    // height: 1.2rem;
+    padding: 0.5rem;
+    border-radius: var(--bd-radius);
+    color: #ffffff;
+
+    &.disconnected{
+        background: red;
+    }
+
+    &.connected{
+        background: green;
+    }
+}
