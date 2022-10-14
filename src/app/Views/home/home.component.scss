@@ -2,23 +2,23 @@
 
 :host{
     @extend %max-WH, %flx-col, %align-center;
-    justify-content: space-between;
+    gap: 3rem;
 }
 
 .wrapper{
     @extend %max-W, %align-center, %flx-col;
     gap: 1rem;
     flex: 1;
-    // max-height: 40rem;
+    
+    h1{
+        width: 90%;
+        max-width: 100rem;
+        font-size: 3rem;
+        font-weight: 400;
+    }
 }
 
 .header{
-    @extend %just-center;
-    width: 90%;
+    @extend %max-W, %just-center;
     margin-top: 1rem;
-}
-
-h1{
-    font-size: 3rem;
-    font-weight: 400;
 }

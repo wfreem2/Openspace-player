@@ -11,9 +11,9 @@
     padding: .25rem 0.5rem;
     background: #ffffff;
     box-shadow: unset;
-    border: solid 2px #d5d7da;
-
-    // border: solid 2px transparent;
+    // border: solid 2px #d5d7da;
+    box-shadow: var(--shadow);
+    border: solid 2px transparent;
     &:hover{
         border-color: var(--color-primary);
         box-shadow: 0 0 8px var(--color-primary);
