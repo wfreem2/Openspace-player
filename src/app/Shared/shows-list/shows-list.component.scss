@@ -34,7 +34,7 @@ $W: 90%;
     gap: 1rem;
     padding: 1rem;
     width: 100%;
-
+    border-bottom: solid 2px var(--gray);
     // width: 80%;
 }
 
@@ -75,11 +75,12 @@ $W: 90%;
     cursor: pointer;
     border: solid 2px transparent;
     border-radius: var(--bd-radius);
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: solid 2px var(--gray);
 
     &:hover{
         border-color: var(--color-primary);
-        box-shadow: 0 0 6px var(--color-primary);
+        // box-shadow: 0 0 6px var(--color-primary);
     }
 }
 
