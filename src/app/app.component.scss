@@ -1,0 +1,6 @@
+@use '/src/styles';
+
+:host{
+    @extend %max-WH;
+    display: block;
+}
