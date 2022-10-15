@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Show } from 'src/app/Interfaces/Show';
+import { ShowPreviewService } from 'src/app/Services/show-preview.service';
 
 @Component({
   selector: 'shows-list',
@@ -11,7 +12,7 @@ export class ShowsListComponent implements OnInit {
 
   @Input() showsList?: Show[]
 
-  constructor() { }
+  constructor(public showPreviewService: ShowPreviewService) { }
 
   ngOnInit(): void {
     this.showsList = [

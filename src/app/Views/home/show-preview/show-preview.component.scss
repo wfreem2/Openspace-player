@@ -1,0 +1,24 @@
+@use '/src/styles';
+
+:host{
+    @extend %max-WH, %flx-col;
+    gap: 1rem;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    max-width: 30rem;
+    background: #ffffff;
+    box-shadow: var(--shadow);
+    padding-left: 1rem;
+}
+
+#close-btn{
+    align-self: flex-end;
+    margin: 0.25rem 1rem;
+}
+
+#description{
+    min-height: 5rem;
+    color: #7a7777;
+}

@@ -5,7 +5,7 @@
     justify-content: space-between;
     height: 4rem;
     padding: 0.5rem;
-    max-width: 50rem;
+    max-width: 60rem;
     gap: 1rem;
     margin: 0 0.5rem;
     // border-radius: var(--bd-radius);
@@ -39,27 +39,62 @@
     }
 }
 
+#circle{
+    width: .5rem;
+    height: .5rem;
+    border-radius: 50%;
 
+    &.disconnected{ background: red; }
+    &.connected{ background: green; }
+    &.connecting{ background: orange; }
+}
 
-#status{
+#status-bar{
     @extend %align-center, %max-H;
-    gap: 0.5rem;
+    gap: 1rem;
+
+
+    & > div{
+        @extend %align-center;
+        gap: 0.25rem;
+    }
+}
+
+
+#refresh-btn{
+    @extend %bare, %align-center, %just-center;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    padding: 0.5rem;
+
+    &:hover{
+        background: var(--gray);
+
+        svg{ stroke: var(--txt-color); }
+    }
+
+    // Refresh icon
+    svg{
+        stroke: #a2a4a7;
+
+        &.syncing{
+            animation: spin 2s infinite linear;
+        }
+    }
 }
 
 // Status icon
 .status{
-    @extend %just-center, %align-center;
-    width: 8rem;
-    // height: 1.2rem;
-    padding: 0.5rem;
+    font-weight: bold;
     border-radius: var(--bd-radius);
-    color: #ffffff;
+    color: var(--txt-color);
+}
 
-    &.disconnected{
-        background: red;
-    }
-
-    &.connected{
-        background: green;
-    }
+@keyframes spin { 
+    100% { 
+        transform:rotate(360deg); 
+    } 
 }

@@ -1,6 +1,11 @@
 @use '/src/styles';
 
 :host{
-    @extend %max-WH;
-    display: block;
+    @extend %max-WH, %flx-col;
+    gap: 1rem;
+}
+
+.header{
+    @extend %max-W, %just-center, %align-center;
+    min-height: 5rem;
 }

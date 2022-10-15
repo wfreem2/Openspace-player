@@ -16,7 +16,7 @@
     --gray: #ced1d4;
     --bg: #f8fafb;
     --txt-color:#2B2D42;
-    --bd-radius: 14px;
+    --bd-radius: 16px;
     --shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 
     --gradient-bg: #f28482;
@@ -72,10 +72,45 @@ input{
     color: var(--txt-color);
 }
 
-ul{
-    list-style: none;
-}
+ul{ list-style: none; }
 
-svg{
-    @extend %svg-M;
+svg{ @extend %svg-M; }
+
+
+// Default button style
+.btn{
+    @extend %bare, %align-center, %just-center;
+    transition: all 0.2s;
+    padding: 0.5rem 1rem;
+    color: #ffffff;
+    border-radius: var(--bd-radius);
+    border: solid 2px transparent;
+    gap: 0.5rem;
+    font-size: 1rem;
+
+    &:active{
+        transform: translateY(2px);
+    }
+
+    &.primary{
+        @extend .btn;
+        background: var(--color-primary);
+
+        &:hover{
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            background: #ffffff;
+        }
+    }
+
+    &.secondary{
+        @extend .btn;
+        background: var(--color-secondary);
+
+        &:hover{
+            border-color: var(--color-secondary);
+            color: var(--color-secondary);
+            background: #ffffff;
+        }
+    }
 }

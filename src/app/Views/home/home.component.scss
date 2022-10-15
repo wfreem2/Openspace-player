@@ -2,18 +2,13 @@
 
 :host{
     @extend %max-WH, %flx-col, %align-center;
+    max-height: calc(100% - 10rem);
     // gap: 3rem;
 }
 
 .wrapper{
-    @extend %max-W, %align-center, %flx-col;
+    @extend %max-WH, %align-center, %flx-col;
     gap: 1rem;
     flex: 2;
-    max-height: calc(100% - 8rem);
 }
 
-.header{
-    @extend %max-W, %just-center;
-    margin-top: 1rem;
-    height: 5rem;
-}

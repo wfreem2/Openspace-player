@@ -36,5 +36,5 @@
 </ng-template>
 
 <ng-template #list>
-    <show-card *ngFor="let s of showsList" [show]="s"></show-card>
+    <show-card (cardClicked)="showPreviewService.previewShow($event)" *ngFor="let s of showsList" [show]="s"></show-card>
 </ng-template>

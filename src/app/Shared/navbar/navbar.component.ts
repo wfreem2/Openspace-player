@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { first, map, mergeMap, of, retry, throwError } from 'rxjs';
 import { OpenspaceService } from 'src/app/Services/openspace.service';
 
 @Component({
@@ -9,15 +10,20 @@ import { OpenspaceService } from 'src/app/Services/openspace.service';
 export class NavbarComponent implements OnInit {
 
   isConnected!: boolean
+  connecting:boolean = false
 
-  constructor(openSpaceService: OpenspaceService) { 
+  constructor(private openSpaceService: OpenspaceService) { 
     
-    openSpaceService._isConnected.subscribe(status =>{
+    openSpaceService._isConnected
+    .subscribe(status =>{
       this.isConnected = status
     })
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  connect(): void {
+   
   }
 
 }

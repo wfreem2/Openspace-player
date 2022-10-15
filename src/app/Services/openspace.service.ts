@@ -11,15 +11,13 @@ export class OpenspaceService {
 
   openspace: any
   _isConnected = new BehaviorSubject<boolean>(false)
+  o = api('localhost', 4682)
 
   constructor() {
-    var o = api('localhost', 4682)
- 
- 
-    o.onConnect(async () => await this.onConnect(o))
-    o.onDisconnect(async () => await this.onDisconnect())
+    this.o.onConnect(async () => await this.onConnect(this.o))
+    this.o.onDisconnect(async () => await this.onDisconnect())
 
-    o.connect()
+    this.o.connect()
   }
 
   private async onDisconnect(){
@@ -33,7 +31,6 @@ export class OpenspaceService {
       
     console.log('connected')
   }
-
 
   isConnected(): Observable<boolean>{
     return this._isConnected.asObservable()

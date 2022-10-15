@@ -13,7 +13,6 @@ $W: 95%;
     padding: 0.5rem;
     border: solid 2px var(--gray);
     border-radius: var(--bd-radius);
-    // background: #ffffff;
 }
 
 
@@ -29,7 +28,7 @@ $W: 95%;
 }
 
 .list{
-    @extend %align-center, %just-center, %max-H;
+    @extend %just-center, %max-H;
     gap: 1rem;
     flex-wrap: wrap;
     overflow-y: auto;

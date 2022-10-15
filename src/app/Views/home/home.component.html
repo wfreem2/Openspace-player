@@ -1,8 +1,5 @@
-<div class="header">
-    <navbar></navbar>
-</div>
-
-
 <div class="wrapper">
     <router-outlet></router-outlet>
 </div>
+
+<show-preview (closeBtnClicked)="isPreviewing=false" *ngIf="isPreviewing"></show-preview>
