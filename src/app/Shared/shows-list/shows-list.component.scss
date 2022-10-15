@@ -1,15 +1,11 @@
 @use '/src/styles';
 
-$W: 90%;
+$W: 95%;
 
 :host{
     @extend %flx-col, %max-H;
-    // max-width: 100rem;
-    // max-height: 40rem;
     gap: 1rem;
     width: $W;
-    // height: max-content;
-    overflow-y: auto;
     min-width: 10rem;
     min-height: 10rem;
     max-width: 100rem;
@@ -33,10 +29,11 @@ $W: 90%;
 }
 
 .list{
-    @extend %align-center, %just-center;
-    // flex: 1;
+    @extend %align-center, %just-center, %max-H;
     gap: 1rem;
     flex-wrap: wrap;
+    overflow-y: auto;
+    padding: 1rem 0rem;
 }
 
 
