@@ -19,7 +19,7 @@
 
 .scene-wrapper{
     @extend %flx, %max-WH;
-    gap: 1rem;
+    gap: 3rem;
 }
 
 
@@ -31,9 +31,9 @@
     width: 60%;
 
     & > div:first-of-type{
-        @extend %flx-col, %align-center, %max-H;
+        @extend %flx-col, %align-center, %max-WH;
         gap: 1rem;
-
+        
         .btn{
             align-self: flex-end;
             width: 8rem;
@@ -47,6 +47,11 @@
 }
 
 
+.title{
+    font-size: 1.5em;
+    margin: 0.5rem 0;
+}
+
 //Options for a particular scene (e.g., trail, fly-to, focus, etc.)
 .scene-options{
     @extend %flx-col;
@@ -54,10 +59,6 @@
     min-width: max-content;
     width: 13rem;
 
-    .title{
-        font-size: 1.5em;
-        margin: 0.5rem 0;
-    }
 
     .section{
         justify-content: flex-start;
@@ -70,12 +71,12 @@
 
 // List of created scenes
 .scene-list{
-    @extend %flx-col, %max-W;
+    @extend %flx-col, %max-WH;
     gap: 0.5rem;
-    padding: 1rem;
+    padding: 0 1rem;
     min-width: 10rem;
-    max-width: 15rem;
-    border-right: solid 2px var(--gray);
+    max-width: 12rem;
+    // border-right: solid 2px var(--gray);
 
     .scene-item{
         @extend %align-center;

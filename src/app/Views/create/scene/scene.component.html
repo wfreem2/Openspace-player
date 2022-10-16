@@ -1,14 +1,14 @@
 <!-- <div id="options">
     <ul>
         <li [class.active]="selectedSetting=='geo'" (click)="selectedSetting='geo'">GeoLocation</li>
-        <li [class.active]="selectedSetting=='settings'" (click)="selectedSetting='settings'">Settings</li>
+        <li [class.active]="selectedSetting=='script'" (click)="selectedSetting='script'">Script</li>
     </ul>
 </div> -->
 
 
 <ng-template #geoLocation [ngIf]="selectedSetting=='geo'">
     
-    <button class="btn primary">Set From OpenSpace</button>
+    <button id="set-openspace" class="btn primary">Set From OpenSpace</button>
 
     <div class="section" id="title">
         <label for="title">Title:</label>
@@ -34,12 +34,14 @@
     </div>
 
     <div class="section">
-        <button class="btn secondary">Clear All</button>
-        <button class="btn primary" (click)="sceneSavedEvent.emit(scene)">Save</button>
+        <button class="btn secondary" (click)="clear()">Clear All</button>
+        <button class="btn primary" (click)="sceneSavedEvent.emit(scene)"
+        [disabled]="!scene.title">Save</button>
     </div>
 
 </ng-template>
 
-<ng-template #settings [ngIf]="selectedSetting=='settings'">  
-    Settings
+<ng-template #settings [ngIf]="selectedSetting=='script'">  
+    <textarea name="script" id="script" 
+    class="input" placeholder="Enter Script"></textarea>
 </ng-template>

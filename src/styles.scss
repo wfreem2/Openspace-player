@@ -12,7 +12,7 @@
 /* Variables */
 :root{
     --color-primary: #157aff;
-    --color-secondary: #4475b4;
+    --color-hover: #0b3d80;
     --gray: #ced1d4;
     --bg: #f8fafb;
     --txt-color:#262949;
@@ -123,7 +123,7 @@ svg{ @extend %svg-M; }
         background: var(--color-primary);
 
         &:hover{
-            background: var(--color-secondary);
+            background: var(--color-hover);
         }
     }
 
@@ -139,8 +139,8 @@ svg{ @extend %svg-M; }
         border-color: var(--color-primary);
 
         &:hover{
-            border-color: var(--color-secondary);
-            color: var(--color-secondary);
+            border-color: var(--color-hover);
+            color: var(--color-hover);
         }
     }
 }

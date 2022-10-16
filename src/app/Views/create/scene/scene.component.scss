@@ -1,13 +1,18 @@
 @use '/src/styles';
 
 :host{
-    @extend %max-WH, %flx-col;
+    @extend %max-W, %flx-col;
     gap: 1rem;
+    min-height: 15rem;
+    height: max-content;
 }
 
+#geoLocation{
+    @extend %flx-col;
+    gap: 0.5rem;
+}
 
 .section{
-    height: 4rem;
     label{ font-size: 1.25rem; }
     
     display: grid;
@@ -39,4 +44,15 @@
             }
         }
     }
+}
+
+#script{
+    @extend %max-W;
+    height: 25rem;
+}
+
+#set-openspace{
+    @extend %max-W;
+    align-self: center;
+    max-width: 25rem;
 }
