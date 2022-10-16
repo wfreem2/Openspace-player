@@ -4,6 +4,7 @@ import { SharedModule } from '../Shared/shared.module';
 import { YourShowsComponent } from './home/your-shows/your-shows.component';
 import { ShowPreviewComponent } from './home/show-preview/show-preview.component';
 import { CreateComponent } from './create/create.component';
+import { SceneComponent } from './create/scene/scene.component';
 
 
 
@@ -12,7 +13,8 @@ import { CreateComponent } from './create/create.component';
     HomeComponent,
     YourShowsComponent,
     ShowPreviewComponent,
-    CreateComponent
+    CreateComponent,
+    SceneComponent
   ],
   imports: [
     SharedModule

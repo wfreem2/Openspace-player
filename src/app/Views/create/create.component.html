@@ -21,31 +21,51 @@
             <p class="num">3</p>
             <p class="name">Finish</p>
         </div>
-
     </div>
 
-    <h1>Show Details</h1>
-    <ng-container [ngTemplateOutlet]="details"></ng-container>
+    <ng-container *ngIf="step==1" [ngTemplateOutlet]="details"></ng-container>
+    <ng-container *ngIf="step==2" [ngTemplateOutlet]="scene"></ng-container>
     <!-- <hr>
 
     <h2>Scenes</h2> -->
 </div>
 
 <ng-template #details>
-    <form [formGroup]="detailsForm">
-        <div class="section">
-            <label for="title">Title: </label>
-            <input formControlName="title" name="title" class="input"
-             type="text" placeholder="Show Title">
-        </div>
-        <div class="section">
-            <label for="desc">Description: </label>
-            <textarea formControlName="desc" name="desc" id="description"
-             class="input" rows="10" placeholder="Show Description"></textarea>
-        </div>
+    <div class="details">
+        <h1>Show Details</h1>
 
-        <button class="btn primary" [disabled]="!detailsForm.valid">Next</button>
-    </form>
+        <form [formGroup]="detailsForm">
+            <div class="section">
+                <label for="title">Title<span>(required)</span></label>
+                <input formControlName="title" name="title" class="input"
+                type="text" placeholder="Show Title">
+            </div>
+            <div class="section">
+                <label for="desc">Description </label>
+                <textarea formControlName="desc" name="desc" id="description"
+                class="input" rows="10" placeholder="Show Description"></textarea>
+            </div>
+
+            <button class="btn primary" [disabled]="!detailsForm.valid">Next</button>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #scene>
+    <div class="scene-wrapper">
+
+        <div class="scene">
+            <div>
+                <h1>Add Scenes</h1>
+                <button class="btn primary">Add Scene</button>
+            </div>
+            <scene></scene>
+        </div>
+        
+        <div class="scene-list">
+            
+        </div>
+    </div>
 </ng-template>
 
 <ng-template #chevron>

@@ -8,6 +8,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class CreateComponent implements OnInit {
 
+  step = 2
+
   detailsForm: FormGroup = new FormGroup({
     title: new FormControl('', Validators.required),
     desc: new FormControl(''),

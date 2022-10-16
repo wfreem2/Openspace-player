@@ -8,27 +8,60 @@
 .creator{
     @extend %glass, %max-WH, %card, %align-center, %flx-col;
     position: relative;
-    gap: 1rem;
+    overflow-y: auto;
+    gap: 2rem;
     width: 95%;
     padding: 1rem;
     max-width: 60rem;
-    max-height: calc(100% - 5rem);
+    max-height: calc(100% - 7rem);
+
+}
+
+
+.scene-wrapper{
+    @extend %flx, %max-WH;
+    gap: 1rem;
+}
+
+
+// Scene creation
+.scene{
+    @extend %flx-col;
+    gap: 2rem;
+    flex: 2;
+    & > div:first-of-type{
+        @extend %align-center;
+        gap: 1rem;
+    }
+}
+
+// List of created scenes
+.scene-list{
+    width: 12rem;
+    border-left: solid 2px var(--gray);
+}
+
+
+// Show details 
+.details{
+    width: max-content;
 
     form{
-        @extend %flx-col, %align-center;
+        @extend %flx-col;
         gap: 1rem;
-        padding: 1rem;
-        width: 40rem;
-
+        padding: 1rem 0;
+        width: 30rem;
+    
         .btn{
             @extend %max-W;
+            align-self: center;
             max-width: 20rem;
             height: 3rem;
         }
-
+    
         textarea{ resize: none; }
     }
-
+    
     hr{
         margin: 1rem;
         overflow: hidden;
@@ -74,10 +107,16 @@
 
 .section{
     @extend %flx-col, %just-center, %max-W;
-    max-width: 25rem;    
     gap: 1rem;
 
-    label{
-        font-size: 1.5rem;
+    label{ 
+        @extend %align-center;
+        gap: 0.5rem;
+        font-size: 1.5rem; 
+        // Required inidicator
+        span{
+            color: #a5a1a1;
+            font-size: 0.9rem;
+        }
     }
 }
