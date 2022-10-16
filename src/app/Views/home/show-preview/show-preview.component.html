@@ -1,4 +1,10 @@
-<button id="close-btn" (click)="closeBtnClicked.emit()">X</button>
+<div id="btns">
+    <button id="close" (click)="closeBtnClicked.emit()">
+        <ng-container [ngTemplateOutlet]="rightArrow"></ng-container>
+    </button>
+
+    <button id="edit">Edit</button>
+</div>
 
 <h1 id="title">Show Title</h1>
 
@@ -9,3 +15,12 @@
     <h2>Steps:</h2>
     list of steps
 </div>
+
+
+<ng-template #rightArrow>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
+</ng-template>

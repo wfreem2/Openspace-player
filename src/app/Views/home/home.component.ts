@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs';
+import { SlideInOut } from 'src/app/Animations/animations';
 import { ShowPreviewService } from 'src/app/Services/show-preview.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  animations: [SlideInOut]
 })
 export class HomeComponent implements OnInit {
 

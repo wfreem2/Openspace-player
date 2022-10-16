@@ -1,7 +1,7 @@
 @use '/src/styles';
 
 :host{
-    @extend %max-W, %card, %align-center;
+    @extend %max-W, %card, %align-center, %glass;
     justify-content: space-between;
     height: 4rem;
     padding: 0.5rem;

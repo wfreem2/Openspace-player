@@ -12,7 +12,7 @@
 /* Variables */
 :root{
     --color-primary: #ef233c;
-    --color-secondary: #84A59D;
+    --color-secondary: #882430;
     --gray: #ced1d4;
     --bg: #f8fafb;
     --txt-color:#2B2D42;
@@ -53,12 +53,40 @@
     height: 1.5rem;
 }
 
+%glass{
+    $blur: 25px;
+    background: rgba(255, 255, 255, 0.76);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur($blur);
+    -webkit-backdrop-filter: blur($blur);
+}
+
+/* %mesh{
+    background-color:hsla(221,0%,100%,1);
+    background-image:
+    radial-gradient(at 45% 91%, hsla(157,67%,88%,1) 0px, transparent 50%),
+    radial-gradient(at 2% 100%, hsla(157,93%,67%,1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(170,0%,100%,1) 0px, transparent 50%);
+} */
+%mesh{
+    background-color:hsla(200,27%,97%,1);
+    background-image:
+    radial-gradient(at 83% 69%, hsla(282,86%,72%,1) 0px, transparent 50%),
+    radial-gradient(at 65% 67%, hsla(72,76%,71%,1) 0px, transparent 50%),
+    radial-gradient(at 36% 92%, hsla(187,94%,66%,1) 0px, transparent 50%);
+}
+
+
+
 html, body{
     margin: 0;
     padding: 0;
     width: 100vw;
     height: 100vh;
-    background: var(--bg);
+    background-color: #eeeff8;
+    // background: var(--bg);
+    @extend %mesh;
 }
 
 
@@ -97,20 +125,20 @@ svg{ @extend %svg-M; }
         background: var(--color-primary);
 
         &:hover{
-            border-color: var(--color-primary);
-            color: var(--color-primary);
-            background: #ffffff;
+            background: var(--color-secondary);
+
         }
     }
 
     &.secondary{
         @extend .btn;
-        background: var(--color-secondary);
+        background: #ffffff;
+        color: var(--color-primary);
+        border-color: var(--color-primary);
 
         &:hover{
             border-color: var(--color-secondary);
             color: var(--color-secondary);
-            background: #ffffff;
         }
     }
 }

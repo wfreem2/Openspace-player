@@ -3,7 +3,7 @@
 $W: 95%;
 
 :host{
-    @extend %flx-col, %max-H;
+    @extend %flx-col, %max-H, %glass;
     gap: 1rem;
     width: $W;
     min-width: 10rem;
@@ -11,7 +11,8 @@ $W: 95%;
     max-width: 100rem;
     margin: 0.5rem;
     padding: 0.5rem;
-    border: solid 2px var(--gray);
+    // background: #ffffff;
+    // border: solid 2px var(--gray);
     border-radius: var(--bd-radius);
 }
 
