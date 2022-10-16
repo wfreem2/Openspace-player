@@ -1,1 +1,56 @@
-<p>create works!</p>
+<h1>Create a Show</h1>
+
+
+<div class="creator">
+
+    <div class="prog-indicator">
+        <div class="step">
+            <p class="num">1</p>
+            <p class="name active">Show Details</p>
+        </div>
+        <ng-container [ngTemplateOutlet]="chevron"></ng-container>
+
+        <div class="step">
+            <p class="num">2</p>
+            <p class="name">Add Scenes</p>
+        </div>
+
+        <ng-container [ngTemplateOutlet]="chevron"></ng-container>
+
+        <div class="step">
+            <p class="num">3</p>
+            <p class="name">Finish</p>
+        </div>
+
+    </div>
+
+    <h1>Show Details</h1>
+    <ng-container [ngTemplateOutlet]="details"></ng-container>
+    <!-- <hr>
+
+    <h2>Scenes</h2> -->
+</div>
+
+<ng-template #details>
+    <form [formGroup]="detailsForm">
+        <div class="section">
+            <label for="title">Title: </label>
+            <input formControlName="title" name="title" class="input"
+             type="text" placeholder="Show Title">
+        </div>
+        <div class="section">
+            <label for="desc">Description: </label>
+            <textarea formControlName="desc" name="desc" id="description"
+             class="input" rows="10" placeholder="Show Description"></textarea>
+        </div>
+
+        <button class="btn primary" [disabled]="!detailsForm.valid">Next</button>
+    </form>
+</ng-template>
+
+<ng-template #chevron>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class=" chevron feather feather-chevron-right">
+        <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+</ng-template>

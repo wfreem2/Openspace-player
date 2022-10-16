@@ -11,11 +11,11 @@
 
 /* Variables */
 :root{
-    --color-primary: #ef233c;
-    --color-secondary: #882430;
+    --color-primary: #157aff;
+    --color-secondary: #4475b4;
     --gray: #ced1d4;
     --bg: #f8fafb;
-    --txt-color:#2B2D42;
+    --txt-color:#262949;
     --bd-radius: 16px;
     --shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 
@@ -55,8 +55,7 @@
 
 %glass{
     $blur: 25px;
-    background: rgba(255, 255, 255, 0.76);
-    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.75);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur($blur);
     -webkit-backdrop-filter: blur($blur);
@@ -116,11 +115,11 @@ svg{ @extend %svg-M; }
     gap: 0.5rem;
     font-size: 1rem;
 
-    &:active{
+    &:not(:disabled):active{
         transform: translateY(2px);
     }
 
-    &.primary{
+    &:not(:disabled).primary{
         @extend .btn;
         background: var(--color-primary);
 
@@ -130,7 +129,12 @@ svg{ @extend %svg-M; }
         }
     }
 
-    &.secondary{
+    &:disabled{
+        background: #157aff38;
+        cursor: not-allowed;
+    }
+
+    &:not(:disabled).secondary{
         @extend .btn;
         background: #ffffff;
         color: var(--color-primary);
@@ -140,5 +144,20 @@ svg{ @extend %svg-M; }
             border-color: var(--color-secondary);
             color: var(--color-secondary);
         }
+    }
+}
+
+//Default text input style
+.input{
+    @extend %bare, %max-W;
+    transition: border-color 0.2s;
+    font-size: 1rem;
+    background: #ffffff;
+    padding: 0.5rem 1rem;
+    border-radius: var(--bd-radius);
+    border: solid 2px var(--gray);
+    
+    &:hover, &:focus-within{
+        border-color: var(--color-primary);
     }
 }

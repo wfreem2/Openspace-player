@@ -1,5 +1,83 @@
 @use '/src/styles';
 
 :host{
-    @extend %max-WH, %just-center;
+    @extend %max-WH, %align-center, %flx-col;
+    gap: 1rem;
+}
+
+.creator{
+    @extend %glass, %max-WH, %card, %align-center, %flx-col;
+    position: relative;
+    gap: 1rem;
+    width: 95%;
+    padding: 1rem;
+    max-width: 60rem;
+    max-height: calc(100% - 5rem);
+
+    form{
+        @extend %flx-col, %align-center;
+        gap: 1rem;
+        padding: 1rem;
+        width: 40rem;
+
+        .btn{
+            @extend %max-W;
+            max-width: 20rem;
+            height: 3rem;
+        }
+
+        textarea{ resize: none; }
+    }
+
+    hr{
+        margin: 1rem;
+        overflow: hidden;
+        border-radius: 18px;
+        border: solid 1px var(--gray);
+    }
+}
+
+
+.prog-indicator{
+    @extend %align-center;
+    align-self: flex-start;
+    gap: 1rem;
+    
+    & > div{
+        @extend %align-center;
+        gap: 0.5rem;
+
+        .num{
+            @extend %align-center, %just-center;
+            width: 2rem;
+            height: 2rem;
+            text-align: center;
+            background: var(--color-primary);
+            border-radius: 50%;
+            color: #ffffff;
+        }
+
+        .name{
+            color: #a5a1a1;
+            font-size: 1.25rem;
+
+            &.active{
+                color: unset;
+            }
+        }
+    }
+
+}
+
+// Chevron icon
+.chevron{ stroke: #a5a1a1; }
+
+.section{
+    @extend %flx-col, %just-center, %max-W;
+    max-width: 25rem;    
+    gap: 1rem;
+
+    label{
+        font-size: 1.5rem;
+    }
 }

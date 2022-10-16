@@ -1,15 +1,16 @@
 @use '/src/styles';
 
 :host{
-    @extend %max-WH, %flx-col;
+    @extend %max-WH, %flx-col, %glass;
     gap: 1rem;
     position: fixed;
     z-index: 2;
     top: 0;
     right: 0;
     max-width: 30rem;
-    background: #ffffff;
+    // background: #ffffff;
     box-shadow: var(--shadow);
+    border-radius: unset;
     padding-left: 1rem;
 }
 
