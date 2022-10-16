@@ -3,18 +3,17 @@
 :host{
     @extend %max-WH, %align-center, %flx-col;
     gap: 1rem;
+    max-height: calc(100% - 8rem);
 }
 
 .creator{
-    @extend %glass, %max-WH, %card, %align-center, %flx-col;
+    @extend %glass, %max-H, %card, %align-center, %flx-col;
     position: relative;
     overflow-y: auto;
     gap: 2rem;
     width: 95%;
     padding: 1rem;
-    max-width: 60rem;
-    max-height: calc(100% - 7rem);
-
+    max-width: 90rem;
 }
 
 
@@ -26,19 +25,72 @@
 
 // Scene creation
 .scene{
-    @extend %flx-col;
+    @extend %flx-col, %align-center;
     gap: 2rem;
     flex: 2;
+    width: 60%;
+
     & > div:first-of-type{
-        @extend %align-center;
+        @extend %flx-col, %align-center, %max-H;
         gap: 1rem;
+
+        .btn{
+            align-self: flex-end;
+            width: 8rem;
+        }
+    }
+
+    #finish{
+        align-self: center;
+        width: 25rem;
+    }
+}
+
+
+//Options for a particular scene (e.g., trail, fly-to, focus, etc.)
+.scene-options{
+    @extend %flx-col;
+    gap: 0.5rem;
+    min-width: max-content;
+    width: 13rem;
+
+    .title{
+        font-size: 1.5em;
+        margin: 0.5rem 0;
+    }
+
+    .section{
+        justify-content: flex-start;
+
+        label{
+            font-size: 1rem;
+        }
     }
 }
 
 // List of created scenes
 .scene-list{
-    width: 12rem;
-    border-left: solid 2px var(--gray);
+    @extend %flx-col, %max-W;
+    gap: 0.5rem;
+    padding: 1rem;
+    min-width: 10rem;
+    max-width: 15rem;
+    border-right: solid 2px var(--gray);
+
+    .scene-item{
+        @extend %align-center;
+        transition: all 0.2s;
+        cursor: pointer;
+        width: 95%;
+        padding: 0.5rem;
+        height: 1.8rem;
+        border-radius: var(--bd-radius);
+        overflow: hidden;
+
+        &:hover{
+            background: #b9b6b657;
+        }
+    }
 }
 
 
@@ -106,7 +158,7 @@
 .chevron{ stroke: #a5a1a1; }
 
 .section{
-    @extend %flx-col, %just-center, %max-W;
+    @extend %just-center, %max-W;
     gap: 1rem;
 
     label{ 

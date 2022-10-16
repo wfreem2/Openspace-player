@@ -33,8 +33,8 @@
 %max-WH{ @extend %max-H, %max-W; }
 
 %card{
-    border-radius: var(--bd-radius);
     box-shadow: var(--shadow);
+    border-radius: var(--bd-radius);
 }
 
 // For making buttons and inputs bare for customization
@@ -84,7 +84,6 @@ html, body{
     width: 100vw;
     height: 100vh;
     background-color: #eeeff8;
-    // background: var(--bg);
     @extend %mesh;
 }
 
@@ -99,7 +98,7 @@ input{
     color: var(--txt-color);
 }
 
-ul{ list-style: none; }
+ul{ list-style: none; padding: 0; }
 
 svg{ @extend %svg-M; }
 

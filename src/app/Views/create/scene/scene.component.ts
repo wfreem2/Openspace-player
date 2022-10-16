@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Scene } from 'src/app/Interfaces/Scene';
 
 @Component({
   selector: 'scene',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SceneComponent implements OnInit {
 
+
+  selectedSetting: selectedSetting = 'geo'
+  @Input() scene!:Scene
+  @Output() sceneSavedEvent = new EventEmitter<Scene>()
+
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }
+
+type selectedSetting = 'geo' | 'settings'

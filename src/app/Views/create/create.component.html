@@ -6,13 +6,13 @@
     <div class="prog-indicator">
         <div class="step">
             <p class="num">1</p>
-            <p class="name active">Show Details</p>
+            <p class="name" [class.active]="step==1">Show Details</p>
         </div>
         <ng-container [ngTemplateOutlet]="chevron"></ng-container>
 
         <div class="step">
             <p class="num">2</p>
-            <p class="name">Add Scenes</p>
+            <p class="name" [class.active]="step==2">Add Scenes</p>
         </div>
 
         <ng-container [ngTemplateOutlet]="chevron"></ng-container>
@@ -25,9 +25,6 @@
 
     <ng-container *ngIf="step==1" [ngTemplateOutlet]="details"></ng-container>
     <ng-container *ngIf="step==2" [ngTemplateOutlet]="scene"></ng-container>
-    <!-- <hr>
-
-    <h2>Scenes</h2> -->
 </div>
 
 <ng-template #details>
@@ -54,16 +51,32 @@
 <ng-template #scene>
     <div class="scene-wrapper">
 
-        <div class="scene">
-            <div>
-                <h1>Add Scenes</h1>
-                <button class="btn primary">Add Scene</button>
-            </div>
-            <scene></scene>
-        </div>
-        
+
         <div class="scene-list">
+            <div *ngFor="let s of scenes" class="scene-item">
+                <p>{{s.scene.title}}</p>
+            </div>
+        </div>
+
+        <div class="scene">
             
+            <div>
+                <scene [scene]="currScene" (sceneSavedEvent)="addScene($event)"></scene>
+            </div>
+
+            <button id="finish" class="btn primary">Finish</button>
+        </div>
+
+        <div class="scene-options">
+            <p class="title">Options</p>
+
+            <div class="section">
+                <label for="trails">Planet Trails</label>
+                <input type="checkbox" name="trails" id="trail"/>
+            </div>            
+
+            <p class="title">Flight</p>
+
         </div>
     </div>
 </ng-template>
