@@ -6,14 +6,14 @@
 *{
     box-sizing: border-box;
     font-family: 'Inter', 'Roboto';
-    transition: color, background, transform, border-color 0.2s;
+    transition: color 0.2s, background 0.2s, transform 0.2s, border-color 0.2s;
 }
 
 /* Variables */
 :root{
     --color-primary: #157aff;
     --color-hover: #0b3d80;
-    --gray: #ced1d4;
+    --gray: #e7e8ea;
     --bg: #f8fafb;
     --txt-color:#262949;
     --bd-radius: 16px;
@@ -98,7 +98,7 @@ input{
     color: var(--txt-color);
 }
 
-ul{ list-style: none; padding: 0; }
+ul{ list-style: none; margin: 0; }
 
 svg{ @extend %svg-M; }
 
@@ -106,7 +106,6 @@ svg{ @extend %svg-M; }
 // Default button style
 .btn{
     @extend %bare, %align-center, %just-center;
-    transition: all 0.2s;
     padding: 0.5rem 1rem;
     color: #ffffff;
     border-radius: var(--bd-radius);

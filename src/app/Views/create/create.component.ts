@@ -16,18 +16,18 @@ export class CreateComponent implements OnInit {
     desc: new FormControl(''),
   })
 
-  scenes: {scene: Scene, id: number}[] = []
-
+  
   currScene: Scene = 
   { 
-    title: '',
+    title: 'eqeqe',
     geoPos: {
       lat: 0,
       long: 0,
       alt: 0
     }
   }
-
+  
+  scenes: {scene: Scene, id: number}[] = [{ id: 1, scene: this.currScene}]
 
   constructor() { }
 
@@ -58,6 +58,10 @@ export class CreateComponent implements OnInit {
       }
     }
 
+  }
+
+  getScenes(){
+    return this.scenes.map(s => s.scene);
   }
 
 }

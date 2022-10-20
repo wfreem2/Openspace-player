@@ -31,9 +31,9 @@ $W: 95%;
 .list{
     @extend %just-center, %max-H;
     gap: 1rem;
+    padding: 1rem 0rem;
     flex-wrap: wrap;
     overflow-y: auto;
-    padding: 1rem 0rem;
 }
 
 
@@ -81,9 +81,13 @@ $W: 95%;
 }
 
 
-#no-content{
-    @extend %max-W, %just-center;
-    
+#no-content{ @extend %max-W, %just-center; }
+
+//4k Screens
+@media screen and (max-height: 1440px) {
+    .list{
+        max-height: 30rem;
+    }
 }
 
 

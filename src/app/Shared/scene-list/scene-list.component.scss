@@ -1,0 +1,9 @@
+@use '/src/styles';
+
+
+:host{
+    @extend %max-WH, %flx-col;
+    position: relative;
+    overflow-y: auto;
+    gap: 0.5rem;   
+}

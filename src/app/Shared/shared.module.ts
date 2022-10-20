@@ -5,7 +5,9 @@ import { ShowCardComponent } from './show-card/show-card.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import {BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SceneListComponent } from './scene-list/scene-list.component';
+import { SceneListItemComponent } from './scene-list-item/scene-list-item.component'
 
 
 
@@ -13,7 +15,9 @@ import {BrowserAnimationsModule } from '@angular/platform-browser/animations'
   declarations: [
     ShowsListComponent,
     ShowCardComponent,
-    NavbarComponent
+    NavbarComponent,
+    SceneListComponent,
+    SceneListItemComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +32,8 @@ import {BrowserAnimationsModule } from '@angular/platform-browser/animations'
     NavbarComponent,
     RouterModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SceneListComponent
   ]
 })
 export class SharedModule { }

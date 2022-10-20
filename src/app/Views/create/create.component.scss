@@ -7,30 +7,53 @@
 }
 
 .creator{
-    @extend %glass, %max-H, %card, %align-center, %flx-col;
+    @extend %max-H, %card, %align-center, %flx-col;
     position: relative;
     overflow-y: auto;
     gap: 2rem;
     width: 95%;
-    padding: 1rem;
+    background: #ffffff;
+    min-height: 25rem;
     max-width: 90rem;
 }
 
 
 .scene-wrapper{
     @extend %flx, %max-WH;
-    gap: 3rem;
+    // gap: 3rem;
 }
 
 
+.title{
+    font-size: 1.5em;
+    margin: 0.5rem 0;
+}
+.title-wrapper{
+    @extend %max-W;
+    height: max-content;
+    
+    hr{
+        margin: 0 -1rem;
+        border: solid 1px var(--gray);
+    }
+}
+
 // Scene creation
 .scene{
-    @extend %flx-col, %align-center;
+    @extend %flx-col, %align-center, %max-H;
     gap: 2rem;
-    flex: 2;
-    width: 60%;
+    width: 55%;
+    background: #fafafb;
+    
+    .title-wrapper{
+        background: #ffffff;
+        .title{
+            @extend %align-center, %flx-col;
+        }
+    }
 
-    & > div:first-of-type{
+    
+    & > div:nth-child(2){
         @extend %flx-col, %align-center, %max-WH;
         gap: 1rem;
         
@@ -47,52 +70,48 @@
 }
 
 
-.title{
-    font-size: 1.5em;
-    margin: 0.5rem 0;
+.scene-options, .scene-list{
+    padding: 0 1rem;
+    min-width: 10rem;
+    gap: 0.5rem;
+
 }
+
 
 //Options for a particular scene (e.g., trail, fly-to, focus, etc.)
 .scene-options{
     @extend %flx-col;
-    gap: 0.5rem;
-    min-width: max-content;
-    width: 13rem;
-
+    width: 20%;
+    border-left: solid 2px var(--gray);
 
     .section{
-        justify-content: flex-start;
+        @extend %flx-col;
+        gap: 0.5rem;
+    }
 
-        label{
-            font-size: 1rem;
+    .options{
+        @extend %flx-col;
+        gap: 0.5rem;
+        margin: 0;
+        padding-left: 1rem;
+
+        label{ font-size: 1rem; }
+        li{
+            @extend %align-center;
+            justify-content: space-between;
+            width: 8rem;
         }
     }
 }
+
 
 // List of created scenes
 .scene-list{
-    @extend %flx-col, %max-WH;
-    gap: 0.5rem;
-    padding: 0 1rem;
-    min-width: 10rem;
-    max-width: 12rem;
-    // border-right: solid 2px var(--gray);
-
-    .scene-item{
-        @extend %align-center;
-        transition: all 0.2s;
-        cursor: pointer;
-        width: 95%;
-        padding: 0.5rem;
-        height: 1.8rem;
-        border-radius: var(--bd-radius);
-        overflow: hidden;
-
-        &:hover{
-            background: #b9b6b657;
-        }
-    }
+    @extend %flx-col, %max-H;
+    width: 25%;
+    border-right: solid 2px var(--gray);
 }
+
 
 
 // Show details 
@@ -171,5 +190,19 @@
             color: #a5a1a1;
             font-size: 0.9rem;
         }
+    }
+}
+
+@media screen and (max-height: 1080px) {
+/*     .scene{
+        max-height: 35rem;
+    } */
+}
+
+
+//4k Screens
+@media screen and (max-height: 1440px) {
+    .creator{
+        max-height: 50rem;
     }
 }

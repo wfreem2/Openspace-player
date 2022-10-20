@@ -2,8 +2,7 @@
 
 
 <div class="creator">
-
-    <div class="prog-indicator">
+    <!-- <div class="prog-indicator">
         <div class="step">
             <p class="num">1</p>
             <p class="name" [class.active]="step==1">Show Details</p>
@@ -21,7 +20,7 @@
             <p class="num">3</p>
             <p class="name">Finish</p>
         </div>
-    </div>
+    </div> -->
 
     <ng-container *ngIf="step==1" [ngTemplateOutlet]="details"></ng-container>
     <ng-container *ngIf="step==2" [ngTemplateOutlet]="scene"></ng-container>
@@ -51,33 +50,57 @@
 <ng-template #scene>
     <div class="scene-wrapper">
 
-
         <div class="scene-list">
-            <p class="title">Scenes</p>
-            <div *ngFor="let s of scenes" class="scene-item">
-                <p>{{s.scene.title}}</p>
+            <div class="title-wrapper">
+                <p class="title">Scenes</p>
+                <hr/>
             </div>
+            <scene-list [scenes]="getScenes()"></scene-list>
         </div>
 
         <div class="scene">
-            
-            <div>
-                <scene [scene]="currScene" (sceneSavedEvent)="addScene($event)"></scene>
-            </div>
+            <div class="title-wrapper">
+                <div class="title">
+                    Scenes
 
+                </div>
+                <hr/>
+            </div>
+            <scene [scene]="currScene" (sceneSavedEvent)="addScene($event)"></scene>
             <button id="finish" class="btn primary">Finish</button>
         </div>
 
         <div class="scene-options">
-            <p class="title">Options</p>
+            <div class="title-wrapper">
+                <p class="title">Options</p>
+                <hr/>
+            </div>
 
             <div class="section">
-                <label for="trails">Planet Trails</label>
-                <input type="checkbox" name="trails" id="trail"/>
-            </div>            
-
-
+                <ul class="options">
+                    <li>
+                        <label for="trails">Planet Trails</label>
+                        <input type="checkbox" name="trails" id="trail"/>
+                    </li>
+                </ul>            
+            </div>
+            
+            <div class="section">
+                <p class="title">Focus Options</p>
+                
+                <ul class="options" id="focus-options">
+                    <li>
+                        <label for="focus">Focus On</label>
+                        <input type="radio" name="opts" id="focus" checked/>
+                    </li>
+                    <li>
+                        <label for="fly-to">Fly To</label>
+                        <input type="radio" name="opts" id="fly-to"/>
+                    </li>
+                </ul>
+            </div>
         </div>
+
     </div>
 </ng-template>
 

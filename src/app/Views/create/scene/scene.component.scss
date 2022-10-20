@@ -22,7 +22,7 @@
     grid-template-columns: 100px 300px;
 }
 
-.btn{ margin-top: 1.5rem; }
+// .btn{ margin-top: 1.5rem; }
 
 #options{
     ul{
@@ -55,4 +55,6 @@
     @extend %max-W;
     align-self: center;
     max-width: 25rem;
+    background: #d0e4ff;
+    color: var(--color-primary);
 }
