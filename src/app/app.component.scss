@@ -1,11 +1,8 @@
 @use '/src/styles';
 
 :host{
-    @extend %max-WH, %flx-col;
-    gap: 1rem;
+    @extend %max-WH;
+    display: grid;
+    grid-template-rows: auto 2fr;
 }
 
-.header{
-    @extend %max-W, %just-center, %align-center;
-    min-height: 5rem;
-}

@@ -9,6 +9,7 @@ import { Scene } from 'src/app/Interfaces/Scene';
 export class SceneComponent implements OnInit {
 
 
+  isAutoMode: boolean = true
   selectedSetting: selectedSetting = 'geo'
   
   @Input() scene!:Scene

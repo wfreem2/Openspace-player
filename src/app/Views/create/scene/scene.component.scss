@@ -1,10 +1,15 @@
 @use '/src/styles';
 
 :host{
-    @extend %max-W, %flx-col;
+    @extend %max-W, %flx-col, %align-center;
     gap: 1rem;
     min-height: 15rem;
     height: max-content;
+
+    & > .section:last-child{
+        display: flex;
+        justify-content: flex-end;
+    }
 }
 
 #geoLocation{
@@ -14,7 +19,7 @@
 
 .section{
     label{ font-size: 1.25rem; }
-    
+    width: max-content;
     display: grid;
     align-items: center;
     justify-content: center;
@@ -22,7 +27,20 @@
     grid-template-columns: 100px 300px;
 }
 
-// .btn{ margin-top: 1.5rem; }
+#clear{
+    @extend %bare;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #a8aabc;
+
+    &:hover{
+        color: var(--txt-color);
+    }
+}
+
+#save{
+    width: 7rem;
+}
 
 #options{
     ul{
@@ -57,4 +75,43 @@
     max-width: 25rem;
     background: #d0e4ff;
     color: var(--color-primary);
+}
+
+#mode-set{
+    @extend %align-center;
+    overflow: hidden;
+    align-self: center;
+    width: 12rem;
+    
+    span{
+        text-align: center;
+        width: 50%;
+        padding: 0.5rem 0.5rem;
+        border: solid 2px #7c7e88;
+        border-radius: var(--bd-radius);
+        
+        &:not(.active):hover{
+            cursor: pointer;
+            // color: #ffffff;
+            // background: #dadadd;
+        }
+        
+        &.active{
+            color: #ffffff;
+            border-color: var(--color-secondary);
+            background: var(--color-secondary);
+        }
+    }
+
+    & > span:nth-child(1){
+        border-right: none;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    
+    & > span:nth-child(2){
+        border-left: none;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
 }

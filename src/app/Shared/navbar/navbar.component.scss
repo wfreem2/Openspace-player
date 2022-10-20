@@ -1,15 +1,12 @@
 @use '/src/styles';
 
 :host{
-    @extend %max-W, %card, %align-center, %glass;
+    @extend %max-W, %align-center, %glass;
     justify-content: space-between;
+    gap: 1rem;
     height: 4rem;
     padding: 0.5rem;
-    max-width: 60rem;
-    gap: 1rem;
     margin: 0 0.5rem;
-    // border-radius: var(--bd-radius);
-    // border: solid 2px var(--gray)
 }
 
 #links{

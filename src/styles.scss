@@ -13,6 +13,7 @@
 :root{
     --color-primary: #157aff;
     --color-hover: #0b3d80;
+    --color-secondary: #444655;
     --gray: #e7e8ea;
     --bg: #f8fafb;
     --txt-color:#262949;
@@ -127,19 +128,25 @@ svg{ @extend %svg-M; }
     }
 
     &:disabled{
-        background: #157aff38;
         cursor: not-allowed;
     }
 
+    &:disabled.primary{
+        background: #157aff38;
+    }
+
+    &:disabled.secondary{
+        background: #a8aabc;
+    }
+
+
     &:not(:disabled).secondary{
         @extend .btn;
-        background: #ffffff;
-        color: var(--color-primary);
-        border-color: var(--color-primary);
+        color: #ffffff;
+        background: var(--color-secondary);
 
         &:hover{
-            border-color: var(--color-hover);
-            color: var(--color-hover);
+            background: #1b1c22;
         }
     }
 }
@@ -154,7 +161,12 @@ svg{ @extend %svg-M; }
     border-radius: var(--bd-radius);
     border: solid 2px var(--gray);
     
-    &:hover, &:focus-within{
+    &:not(:disabled):hover, &:not(:disabled):focus-within{
         border-color: var(--color-primary);
+    }
+
+    &:disabled{
+        background: #eaf1f8;
+        border-color: #dcdde4;
     }
 }

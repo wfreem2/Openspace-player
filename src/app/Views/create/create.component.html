@@ -50,32 +50,26 @@
 <ng-template #scene>
     <div class="scene-wrapper">
 
+        <div id="scene-list-title" class="title-wrapper">
+            <p class="title">Scenes</p>
+        </div>
+        <div id="scene-title" class="title-wrapper">
+            <div class="title">Creator</div>
+        </div>
+        <div id="opts-title" class="title-wrapper">
+            <p class="title">Options</p>
+        </div> 
+
         <div class="scene-list">
-            <div class="title-wrapper">
-                <p class="title">Scenes</p>
-                <hr/>
-            </div>
             <scene-list [scenes]="getScenes()"></scene-list>
         </div>
 
         <div class="scene">
-            <div class="title-wrapper">
-                <div class="title">
-                    Scenes
-
-                </div>
-                <hr/>
-            </div>
             <scene [scene]="currScene" (sceneSavedEvent)="addScene($event)"></scene>
             <button id="finish" class="btn primary">Finish</button>
         </div>
 
         <div class="scene-options">
-            <div class="title-wrapper">
-                <p class="title">Options</p>
-                <hr/>
-            </div>
-
             <div class="section">
                 <ul class="options">
                     <li>
@@ -86,7 +80,7 @@
             </div>
             
             <div class="section">
-                <p class="title">Focus Options</p>
+                <p>Focus Options</p>
                 
                 <ul class="options" id="focus-options">
                     <li>
@@ -100,7 +94,6 @@
                 </ul>
             </div>
         </div>
-
     </div>
 </ng-template>
 
