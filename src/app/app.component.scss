@@ -3,6 +3,6 @@
 :host{
     @extend %max-WH;
     display: grid;
-    grid-template-rows: auto 2fr;
+    grid-template-rows: minmax(5rem, auto) 0px 2fr;
 }
 

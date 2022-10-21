@@ -1,35 +1,22 @@
 @use '/src/styles';
 
 :host{
-    @extend %max-WH, %align-center, %flx-col;
+    @extend %align-center, %flx-col;
     gap: 1rem;
-    max-height: calc(100% - 8rem);
+    // max-height: calc(100% - 8rem);
 }
 
-/* .creator{
-    @extend %max-H, %card, %align-center, %flx-col;
-    position: relative;
-    gap: 2rem;
-    width: 95%;
-    background: #ffffff;
-    min-height: 25rem;
-    max-width: 90rem;
-} */
-
 .creator{
-    @extend %max-H, %card;
+    @extend %max-WH;
     overflow-y: auto;
-    width: 95%;
     background: #ffffff;
     min-height: 25rem;
-    max-width: 90rem;
-    
 }
 
 .scene-wrapper{
     @extend %flx, %max-WH;
     display: grid;
-    grid-template-columns: minmax(8rem, 1fr) minmax(10rem, 2fr)  minmax(8rem, 16rem);
+    grid-template-columns: minmax(8rem, 1fr) minmax(10rem, 2fr)  minmax(8rem, 1fr);
     grid-template-rows: max-content auto;
 }
 
@@ -56,7 +43,7 @@ $grid-bd: solid 2px var(--gray);
 // Scene creation
 .scene{
     @extend %flx-col, %align-center;
-    gap: 2rem;
+    gap: 5rem;
     padding-top: 1rem;
     background: #fafafb;
 
@@ -79,25 +66,17 @@ $grid-bd: solid 2px var(--gray);
 
 
 .scene-options, .scene-list{
-    padding: 0 1rem;
     min-width: 10rem;
-    gap: 0.5rem;
 }
 
 
 //Options for a particular scene (e.g., trail, fly-to, focus, etc.)
 .scene-options{
     @extend %flx-col;
+    overflow-y: auto;
     border-left: solid 2px var(--gray);
-
-    .section{
-        @extend %flx-col;
-        gap: 0.5rem;
-    }
-
     .options{
         @extend %flx-col;
-        gap: 0.5rem;
         margin: 0;
         padding-left: 1rem;
 
@@ -114,6 +93,8 @@ $grid-bd: solid 2px var(--gray);
 // List of created scenes
 .scene-list{
     @extend %flx-col;
+    gap: 0.5rem;
+    padding: 0 1rem;
     border-right: solid 2px var(--gray);
 }
 
@@ -147,48 +128,39 @@ $grid-bd: solid 2px var(--gray);
 }
 
 
-.prog-indicator{
-    @extend %align-center;
-    align-self: flex-start;
-    gap: 1rem;
-    
-    & > div{
-        @extend %align-center;
-        gap: 0.5rem;
-
-        .num{
-            @extend %align-center, %just-center;
-            width: 2rem;
-            height: 2rem;
-            text-align: center;
-            background: var(--color-primary);
-            border-radius: 50%;
-            color: #ffffff;
-        }
-
-        .name{
-            color: #a5a1a1;
-            font-size: 1.25rem;
-
-            &.active{
-                color: unset;
-            }
-        }
-    }
-
-}
-
 // Chevron icon
-.chevron{ stroke: #a5a1a1; }
+.chevron{ stroke: #a5a1a1; cursor: pointer; }
 
 .section{
-    @extend %just-center, %max-W;
-    gap: 1rem;
+    @extend %just-center, %max-W, %flx-col;
+    padding: 0.5rem;
+    border-bottom: $grid-bd;
+    
+    ul{
+        transition: all 0.2s;
+        max-height: 10rem;
+        overflow-y: auto;
+    }
+    
+    &.collapsed{ 
+        ul{
+            max-height: 0rem;
+            overflow-y: hidden; 
+        }
+        svg{ transform: rotate(180deg); }
+    }
+
+    .header{
+        @extend %align-center, %max-W;
+        justify-content: space-between;
+        font-size: 1.3rem;
+    }
 
     label{ 
         @extend %align-center;
         gap: 0.5rem;
         font-size: 1.5rem; 
+
         // Required inidicator
         span{
             color: #a5a1a1;
@@ -206,7 +178,4 @@ $grid-bd: solid 2px var(--gray);
 
 //4k Screens
 @media screen and (max-height: 1440px) {
-    .creator{
-        max-height: 50rem;
-    }
 }

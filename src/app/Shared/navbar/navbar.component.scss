@@ -1,12 +1,12 @@
 @use '/src/styles';
 
 :host{
-    @extend %max-W, %align-center, %glass;
+    @extend %align-center, %glass;
     justify-content: space-between;
+    box-shadow: unset;
     gap: 1rem;
-    height: 4rem;
     padding: 0.5rem;
-    margin: 0 0.5rem;
+    border-bottom: solid 2px var(--gray);
 }
 
 #links{

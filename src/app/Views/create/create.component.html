@@ -1,6 +1,3 @@
-<h1>Create a Show</h1>
-
-
 <div class="creator">
     <!-- <div class="prog-indicator">
         <div class="step">
@@ -61,7 +58,7 @@
         </div> 
 
         <div class="scene-list">
-            <scene-list [scenes]="getScenes()"></scene-list>
+            <scene-list></scene-list>
         </div>
 
         <div class="scene">
@@ -70,7 +67,11 @@
         </div>
 
         <div class="scene-options">
-            <div class="section">
+            <div class="section" #s1>
+                <div class="header">
+                    <p>Trails</p>
+                    <ng-container *ngTemplateOutlet="chevron; context: {el: s1}"></ng-container>
+                </div>
                 <ul class="options">
                     <li>
                         <label for="trails">Planet Trails</label>
@@ -79,8 +80,11 @@
                 </ul>            
             </div>
             
-            <div class="section">
-                <p>Focus Options</p>
+            <div class="section" #s2>
+                <div class="header">
+                    <p>Focus Options</p>
+                    <ng-container *ngTemplateOutlet="chevron; context: {el: s2}"></ng-container>
+                </div>
                 
                 <ul class="options" id="focus-options">
                     <li>
@@ -97,9 +101,11 @@
     </div>
 </ng-template>
 
-<ng-template #chevron>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class=" chevron feather feather-chevron-right">
-        <polyline points="9 18 15 12 9 6"></polyline>
+<ng-template #chevron let-el="el">
+    <svg (click)="toggleCollapse(el)"
+     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+        class="chevron feather feather-chevron-down">
+        <polyline points="6 9 12 15 18 9"></polyline>
     </svg>
 </ng-template>

@@ -22,14 +22,11 @@ export class OpenspaceService {
 
   private async onDisconnect(){
     this._isConnected.next(false)
-    console.log('disconnected')
   }
 
   private async onConnect(api: any){
     this.openspace = await api.library()
     this._isConnected.next(true)
-      
-    console.log('connected')
   }
 
   isConnected(): Observable<boolean>{
@@ -39,6 +36,9 @@ export class OpenspaceService {
   goToGeo(globe: string='', lat: Number, long: Number, alt: Number): void{
     this.openspace.globebrowsing.goToGeo(globe, lat, long, alt)
   }
+
+
+
 
   async getCurrentPosition(): Promise<GeoPosition>{
 

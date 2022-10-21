@@ -19,6 +19,7 @@ export class CreateComponent implements OnInit {
   
   currScene: Scene = 
   { 
+    id: 1,
     title: 'eqeqe',
     geoPos: {
       lat: 0,
@@ -27,7 +28,7 @@ export class CreateComponent implements OnInit {
     }
   }
   
-  scenes: {scene: Scene, id: number}[] = [{ id: 1, scene: this.currScene}]
+  scenes: Scene[] = [this.currScene]
 
   constructor() { }
 
@@ -43,13 +44,11 @@ export class CreateComponent implements OnInit {
 
   addScene(scene: Scene){
 
-    this.scenes.push({
-      id: 1, 
-      scene: scene
-    })
+    this.scenes.push(scene)
     
     this.currScene =
     { 
+      id: 1,
       title: '',
       geoPos: {
         lat: 0,
@@ -60,8 +59,16 @@ export class CreateComponent implements OnInit {
 
   }
 
-  getScenes(){
-    return this.scenes.map(s => s.scene);
+
+  toggleCollapse(el: HTMLDivElement){
+    if(el.classList.contains('collapsed')){
+      el.classList.remove('collapsed')
+    }
+    else{
+      el.classList.add('collapsed')
+    }
+    
+    console.log(el)
   }
 
 }

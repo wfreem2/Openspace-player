@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Scene } from 'src/app/Interfaces/Scene';
+import { OpenspaceService } from 'src/app/Services/openspace.service';
 
 @Component({
   selector: 'scene',
@@ -15,7 +16,7 @@ export class SceneComponent implements OnInit {
   @Input() scene!:Scene
   @Output() sceneSavedEvent = new EventEmitter<Scene>()
 
-  constructor() { }
+  constructor(private openSpaceService: OpenspaceService) { }
 
   ngOnInit(): void { }
 
@@ -29,6 +30,13 @@ export class SceneComponent implements OnInit {
     this.scene.title = ''
   }
 
+
+  async setGeo(){
+    const pos = await this.openSpaceService.getCurrentPosition()
+    this.scene.geoPos = {...pos}
+    
+    console.log(pos)
+  }
 }
 
 type selectedSetting = 'geo' | 'script'
