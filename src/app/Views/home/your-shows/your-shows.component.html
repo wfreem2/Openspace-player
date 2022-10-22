@@ -1,2 +1,36 @@
-<h1>Your Shows (3)</h1>
-<shows-list></shows-list>
+<div class="header">
+    <div class="search-bar">
+        <ng-container [ngTemplateOutlet]="searchIcon"></ng-container>
+        <input type="text" class="bare" placeholder="Search shows">
+        <ng-container [ngTemplateOutlet]="filterIcon"></ng-container>
+    </div>
+</div>
+
+<ng-container *ngIf="shows.length then list; else empty"></ng-container>
+
+<ng-template #list>
+    <div class="list-wrapper">
+        <shows-list></shows-list>
+    </div>
+</ng-template>
+
+<ng-template #empty>
+    <div class="empty-wrapper">
+        <img src="assets/empty.svg" alt="">
+        <h3>No Shows Yet. <a routerLink="/create">Create One</a> to get started.</h3>
+    </div>
+</ng-template>
+
+<ng-template #searchIcon>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+</ng-template>
+
+<ng-template #filterIcon>
+    <svg id="filter-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter">
+        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+    </svg>
+</ng-template>

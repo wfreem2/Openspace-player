@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { merge } from "lodash"
@@ -9,8 +9,6 @@ import { merge } from "lodash"
   styleUrls: ['./create.component.scss']
 })
 export class CreateComponent implements OnInit {
-
-  step = 2
 
   detailsForm: FormGroup = new FormGroup({
     title: new FormControl('', Validators.required),
@@ -32,7 +30,8 @@ export class CreateComponent implements OnInit {
   scenes: Scene[] = []
 
   isAutoMode:boolean = true
-  
+  showMeta: boolean = true
+
   constructor() { }
 
   ngOnInit(): void { }
@@ -49,6 +48,11 @@ export class CreateComponent implements OnInit {
     else{ el.classList.add('active') }
 
 
+  }
+
+  setTab(target: EventTarget | null){
+    const e = <HTMLInputElement> target
+    this.showMeta = !this.showMeta;
   }
 
   addScene(scene: Scene){

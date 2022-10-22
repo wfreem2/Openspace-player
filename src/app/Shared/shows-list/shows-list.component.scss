@@ -3,16 +3,12 @@
 $W: 95%;
 
 :host{
-    @extend %flx-col, %max-H, %glass;
+    @extend %flx-col, %max-H;
     gap: 1rem;
     width: $W;
     min-width: 10rem;
     min-height: 10rem;
     max-width: 100rem;
-    margin: 0.5rem;
-    padding: 0.5rem;
-    // background: #ffffff;
-    // border: solid 2px var(--gray);
     border-radius: var(--bd-radius);
 }
 
@@ -36,49 +32,6 @@ $W: 95%;
     overflow-y: auto;
 }
 
-
-
-.search-bar{
-    @extend %align-center;
-    gap: 0.25rem;
-    padding: 0.5rem 0.75rem;
-    border-radius: var(--bd-radius);
-    // background-color: var(--gray);
-    border: solid 2px var(--gray);
-    width: 100%;
-    min-width: 25rem;
-    max-width: 35rem;
-
-    input{
-        width: 100%;
-        font-size: 1.2rem;
-    }
-
-    svg{ color: #807d7d; }
-
-    &:focus-within, &:hover{
-        border-color: var(--color-primary);
-        // box-shadow: 0 0 6px var(--color-primary);
-    }
-}
-
-#filter-btn{
-    cursor: pointer;
-    border: solid 2px transparent;
-    border-radius: var(--bd-radius);
-    padding: 0.5rem 1rem;
-    border: solid 2px var(--gray);
-
-    &:hover{
-        border-color: var(--color-primary);
-        // box-shadow: 0 0 6px var(--color-primary);
-
-        svg{ color: var(--txt-color); }
-    }
-
-    svg{ color: #807d7d; }
-
-}
 
 
 #no-content{ @extend %max-W, %just-center; }

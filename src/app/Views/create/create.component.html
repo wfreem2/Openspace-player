@@ -1,109 +1,112 @@
 <div class="creator">
-    <ng-container [ngTemplateOutlet]="scene"></ng-container>
+
+    <div id="header">
+        <input name="title" class="input" type="text" placeholder="Show Title" ngModel #title>
+        <button id="save" class="btn primary" [disabled]="!title.value.trim()">
+            Save
+            <ng-container [ngTemplateOutlet]="save"></ng-container>
+        </button>
+    </div>
+
+    <!-- Row 2 -->
+    <div id="scene-list-title" class="title-wrapper">
+        <p class="title">Scenes</p>
+    </div>
+    <div id="scene-title" class="title-wrapper">
+        <div id="tabs" class="title">
+            <div class="tab">
+                <label>
+                    <input type="radio" name="tabs" id="" checked (change)="setTab($event.target)" />
+                    <p>MetaData</p>
+                </label>
+            </div>
+            <div class="tab">
+                <label>
+                    <input type="radio" name="tabs" id="" (change)="setTab($event.target)" />
+                    <p>GeoPosition</p>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div id="opts-title" class="title-wrapper">
+        <p class="title">Options</p>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="scene-list">
+        <scene-list [scenes]="scenes" (deleteSceneClicked)="onDelete($event)" (editSceneClicked)="onEdit($event)">
+        </scene-list>
+    </div>
+
+    <ng-container *ngIf="showMeta then meta; else scene;"></ng-container>
+
+    <div class="scene-options">
+        <div class="section" #s1>
+            <div class="header">
+                <p>Trails</p>
+                <ng-container *ngTemplateOutlet="chevron; context: {el: s1}"></ng-container>
+            </div>
+            <ul class="options">
+                <li>
+                    <label for="trails">Planet Trails</label>
+                    <input type="checkbox" name="trails" id="trail" />
+                </li>
+            </ul>
+        </div>
+
+        <div class="section" #s2>
+            <div class="header">
+                <p>Focus Options</p>
+                <ng-container *ngTemplateOutlet="chevron; context: {el: s2}"></ng-container>
+            </div>
+
+            <ul class="options" id="focus-options">
+                <li>
+                    <label for="focus">Focus On</label>
+                    <input type="radio" name="opts" id="focus" checked />
+                </li>
+                <li>
+                    <label for="fly-to">Fly To</label>
+                    <input type="radio" name="opts" id="fly-to" />
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 
-<ng-template #details>
+<ng-template #scene>
+    <div class="scene">
+        <scene [scene]="currScene" (sceneSavedEvent)="addScene($event)" [isAutoMode]="isAutoMode"></scene>
+    </div>
+</ng-template>
+
+<ng-template #meta>
     <div class="details">
         <h1>Show Details</h1>
 
         <form [formGroup]="detailsForm">
             <div class="section">
-                <label for="title">Title<span>(required)</span></label>
-                <input formControlName="title" name="title" class="input"
-                type="text" placeholder="Show Title">
+                <label for="desc">Script <span>(Optional)</span></label>
+                <textarea formControlName="desc" name="desc" id="description" class="input" rows="10"
+                    placeholder="Scene Script"></textarea>
             </div>
-            <div class="section">
-                <label for="desc">Description </label>
-                <textarea formControlName="desc" name="desc" id="description"
-                class="input" rows="10" placeholder="Show Description"></textarea>
-            </div>
-
-            <button class="btn primary" [disabled]="!detailsForm.valid">Next</button>
         </form>
     </div>
 </ng-template>
 
-<ng-template #scene>
-    <div class="scene-wrapper">
-
-        <!-- Row 1 -->
-        <div id="scene-list-title" class="title-wrapper">
-            <p class="title">Scenes</p>
-        </div>
-        <div id="scene-title" class="title-wrapper">
-            <div id="tabs" class="title">       
-                <div class="tab">
-                    <label>
-                        <input #r1 type="radio" name="tabs" id=""/>
-                        <p>MetaData</p>
-                    </label>
-                </div>
-                <div class="tab">
-                    <label>
-                        <input #r2 type="radio" name="tabs" id="" checked/>
-                        <p>GeoPosition</p>
-                    </label>
-                </div>
-            
-            </div>
-        </div>
-        <div id="opts-title" class="title-wrapper">
-            <p class="title">Options</p>
-        </div> 
-
-        <!-- Row 2 -->
-        <div class="scene-list">
-            <scene-list [scenes]="scenes"
-            (deleteSceneClicked)="onDelete($event)"
-            (editSceneClicked)="onEdit($event)"></scene-list>
-        </div>
-
-        <div class="scene">
-            <scene [scene]="currScene" (sceneSavedEvent)="addScene($event)" 
-            [isAutoMode]="isAutoMode"></scene>
-            <button id="finish" class="btn primary">Finish</button>
-        </div>
-
-        <div class="scene-options">
-            <div class="section" #s1>
-                <div class="header">
-                    <p>Trails</p>
-                    <ng-container *ngTemplateOutlet="chevron; context: {el: s1}"></ng-container>
-                </div>
-                <ul class="options">
-                    <li>
-                        <label for="trails">Planet Trails</label>
-                        <input type="checkbox" name="trails" id="trail"/>
-                    </li>
-                </ul>            
-            </div>
-            
-            <div class="section" #s2>
-                <div class="header">
-                    <p>Focus Options</p>
-                    <ng-container *ngTemplateOutlet="chevron; context: {el: s2}"></ng-container>
-                </div>
-                
-                <ul class="options" id="focus-options">
-                    <li>
-                        <label for="focus">Focus On</label>
-                        <input type="radio" name="opts" id="focus" checked/>
-                    </li>
-                    <li>
-                        <label for="fly-to">Fly To</label>
-                        <input type="radio" name="opts" id="fly-to"/>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</ng-template>
-
 <ng-template #chevron let-el="el">
-    <svg (click)="toggleCollapse(el)"
-     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+    <svg (click)="toggleCollapse(el)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
         class="chevron feather feather-chevron-down">
         <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+</ng-template>
+
+<ng-template #save>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+        <polyline points="7 3 7 8 15 8"></polyline>
     </svg>
 </ng-template>

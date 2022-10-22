@@ -7,17 +7,37 @@
 }
 
 .creator{
-    @extend %max-WH;
+    @extend %flx, %max-WH;
+    display: grid;
+    grid-template-columns: minmax(8rem, 1fr) minmax(10rem, 2fr)  minmax(8rem, 1fr);
+    grid-template-rows: max-content 4rem 1fr;
     overflow-y: auto;
     background: #ffffff;
     min-height: 25rem;
 }
 
-.scene-wrapper{
-    @extend %flx, %max-WH;
-    display: grid;
-    grid-template-columns: minmax(8rem, 1fr) minmax(10rem, 2fr)  minmax(8rem, 1fr);
-    grid-template-rows: 4rem 1fr;
+#header{
+    @extend %align-center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    grid-column: 1 / span 3;
+    border-bottom: solid 2px var(--gray);
+
+    .input{
+        font-size: 1.5rem;
+        border: none;
+        max-width: 40rem;
+    }
+    #save{
+        align-self: center;
+        width: 8rem;
+        height: 2.5rem;
+    
+        svg{
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+    }
 }
 
 
@@ -54,10 +74,7 @@ $grid-bd: solid 2px var(--gray);
         }
     }
 
-    #finish{
-        align-self: center;
-        width: 25rem;
-    }
+
 }
 
 
@@ -97,30 +114,20 @@ $grid-bd: solid 2px var(--gray);
 
 // Show details 
 .details{
-    width: max-content;
+    padding: 0.5rem;
+    background: #fafafb;
 
     form{
         @extend %flx-col;
         gap: 1rem;
         padding: 1rem 0;
-        width: 30rem;
-    
-        .btn{
-            @extend %max-W;
-            align-self: center;
-            max-width: 20rem;
-            height: 3rem;
+        
+        .section{ 
+            gap: 1rem;
+            border: none; 
         }
-    
         textarea{ resize: none; }
-    }
-    
-    hr{
-        margin: 1rem;
-        overflow: hidden;
-        border-radius: 18px;
-        border: solid 1px var(--gray);
-    }
+    }  
 }
 
 

@@ -1,14 +1,4 @@
 @use '/src/styles';
 
-:host{
-    @extend %max-WH, %flx-col, %align-center;
-    max-height: calc(100% - 10rem);
-    // gap: 3rem;
-}
 
-.wrapper{
-    @extend %max-WH, %align-center, %flx-col;
-    gap: 1rem;
-    flex: 2;
-}
 

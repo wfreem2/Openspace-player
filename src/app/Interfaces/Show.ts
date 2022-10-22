@@ -1,3 +1,8 @@
+import { Scene } from "./Scene";
+
 export interface Show{
-    name: string
+    id: number,
+    name: string,
+    scenes: Scene[],
+    dateCreated: Date
 }

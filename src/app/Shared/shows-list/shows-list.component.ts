@@ -10,16 +10,10 @@ import { ShowPreviewService } from 'src/app/Services/show-preview.service';
 export class ShowsListComponent implements OnInit {
 
 
-  @Input() showsList?: Show[]
+  @Input() shows?: Show[] = []
 
   constructor(public showPreviewService: ShowPreviewService) { }
 
-  ngOnInit(): void {
-    this.showsList = [
-      { name: 'Moon & Stars'},
-      { name: 'Sun with the Earth'},
-      { name: 'M87 Galaxy'},
-    ]
-  }
+  ngOnInit(): void { }
 
 }

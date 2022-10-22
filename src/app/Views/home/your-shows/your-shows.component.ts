@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Show } from 'src/app/Interfaces/Show';
 
 @Component({
   selector: 'app-your-shows',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./your-shows.component.scss']
 })
 export class YourShowsComponent implements OnInit {
+
+  shows: Show[] = []
 
   constructor() { }
 
