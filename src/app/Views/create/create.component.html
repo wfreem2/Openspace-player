@@ -1,26 +1,5 @@
 <div class="creator">
-    <!-- <div class="prog-indicator">
-        <div class="step">
-            <p class="num">1</p>
-            <p class="name" [class.active]="step==1">Show Details</p>
-        </div>
-        <ng-container [ngTemplateOutlet]="chevron"></ng-container>
-
-        <div class="step">
-            <p class="num">2</p>
-            <p class="name" [class.active]="step==2">Add Scenes</p>
-        </div>
-
-        <ng-container [ngTemplateOutlet]="chevron"></ng-container>
-
-        <div class="step">
-            <p class="num">3</p>
-            <p class="name">Finish</p>
-        </div>
-    </div> -->
-
-    <ng-container *ngIf="step==1" [ngTemplateOutlet]="details"></ng-container>
-    <ng-container *ngIf="step==2" [ngTemplateOutlet]="scene"></ng-container>
+    <ng-container [ngTemplateOutlet]="scene"></ng-container>
 </div>
 
 <ng-template #details>
@@ -47,22 +26,41 @@
 <ng-template #scene>
     <div class="scene-wrapper">
 
+        <!-- Row 1 -->
         <div id="scene-list-title" class="title-wrapper">
             <p class="title">Scenes</p>
         </div>
         <div id="scene-title" class="title-wrapper">
-            <div class="title">Creator</div>
+            <div id="tabs" class="title">       
+                <div class="tab">
+                    <label>
+                        <input #r1 type="radio" name="tabs" id=""/>
+                        <p>MetaData</p>
+                    </label>
+                </div>
+                <div class="tab">
+                    <label>
+                        <input #r2 type="radio" name="tabs" id="" checked/>
+                        <p>GeoPosition</p>
+                    </label>
+                </div>
+            
+            </div>
         </div>
         <div id="opts-title" class="title-wrapper">
             <p class="title">Options</p>
         </div> 
 
+        <!-- Row 2 -->
         <div class="scene-list">
-            <scene-list></scene-list>
+            <scene-list [scenes]="scenes"
+            (deleteSceneClicked)="onDelete($event)"
+            (editSceneClicked)="onEdit($event)"></scene-list>
         </div>
 
         <div class="scene">
-            <scene [scene]="currScene" (sceneSavedEvent)="addScene($event)"></scene>
+            <scene [scene]="currScene" (sceneSavedEvent)="addScene($event)" 
+            [isAutoMode]="isAutoMode"></scene>
             <button id="finish" class="btn primary">Finish</button>
         </div>
 

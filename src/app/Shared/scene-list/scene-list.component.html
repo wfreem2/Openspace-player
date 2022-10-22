@@ -1,1 +1,13 @@
-<scene-list-item *ngFor="let s of scenes" [scene]="s"></scene-list-item>
+<ng-template [ngIf]="!scenes.length">
+    <div class="wrapper">
+        <p>Nothing to Show</p>
+    </div>
+</ng-template>
+
+<ng-template [ngIf]="scenes.length">
+    <scene-list-item
+    *ngFor="let s of scenes" [scene]="s" 
+    (deleteClickedEvent)="deleteSceneClicked.emit($event)"
+    (editClickedEvent)="editSceneClicked.emit($event)">
+    </scene-list-item>
+</ng-template>

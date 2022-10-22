@@ -10,10 +10,10 @@ import { OpenspaceService } from 'src/app/Services/openspace.service';
 export class SceneComponent implements OnInit {
 
 
-  isAutoMode: boolean = true
   selectedSetting: selectedSetting = 'geo'
   
   @Input() scene!:Scene
+  @Input() isAutoMode: boolean = true
   @Output() sceneSavedEvent = new EventEmitter<Scene>()
 
   constructor(private openSpaceService: OpenspaceService) { }

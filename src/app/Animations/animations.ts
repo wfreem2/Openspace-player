@@ -19,3 +19,23 @@ export const SlideInOut = trigger(
       )
     ]
   )
+  
+export const ScaleInOut = trigger(
+    'scaleInOut', 
+    [
+      transition(
+        ':enter', 
+        [
+          style({ transform: 'scale(0.3)' }),
+          animate('0.3s ease-out', style({ transform: 'scale(1)' }))
+        ]
+      ),
+      transition(
+        ':leave', 
+        [
+          style({ transform: 'scale(1)' }),
+          animate('0.2s ease-in', style({ transform: 'scale(0.3)' }))
+        ]
+      )
+    ]
+  )

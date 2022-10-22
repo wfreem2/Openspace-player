@@ -40,7 +40,7 @@
     <div class="section">
         <button id="clear" (click)="clear()">Clear All</button>
         <button id="save" class="btn secondary" (click)="sceneSavedEvent.emit(scene)"
-        [disabled]="!scene.title">Save</button>
+        [disabled]="!scene.title.trim()">Save</button>
     </div>
 
 </ng-template>

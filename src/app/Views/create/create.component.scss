@@ -17,24 +17,20 @@
     @extend %flx, %max-WH;
     display: grid;
     grid-template-columns: minmax(8rem, 1fr) minmax(10rem, 2fr)  minmax(8rem, 1fr);
-    grid-template-rows: max-content auto;
+    grid-template-rows: 4rem 1fr;
 }
+
 
 
 $grid-bd: solid 2px var(--gray);
 
-.title{
-    font-size: 1.5em;
-    margin: 0.5rem 0;
-    text-align: center;
-}
-
 .title-wrapper{
-    @extend %max-W;
-    justify-self: center;
-    height: max-content;
+    @extend %max-WH, %just-center, %align-center;
     border-bottom: $grid-bd;
-    align-self: center;
+    .title{
+        font-size: 1.5em;
+        text-align: center;
+    }
 }
 
 #scene-list-title{ border-right: $grid-bd; }
@@ -128,6 +124,47 @@ $grid-bd: solid 2px var(--gray);
 }
 
 
+//For switching between views in the center
+#tabs{
+    @extend %align-center, %just-center;
+    gap: 1rem;
+
+    .tab{
+        label{
+            p{
+                cursor: pointer;
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+                text-align: center;
+                color: var(--txt-color);
+                border-radius: var(--bd-radius); 
+
+                // &:hover + input[type=radio]:not(:checked){
+                &:hover{
+                    transform: translateY(-2px);
+                    color: #ffffff;
+                    background: var(--color-primary);
+                }
+            }
+
+            input[type=radio]{
+                position: absolute;
+                opacity: 0;
+                width: 0;
+                height: 0;  
+            }
+
+            input[type=radio]:checked + p{
+                color: var(--color-primary);
+                background: #d0e4ff;
+            }
+
+
+        }
+
+    }
+}
+
 // Chevron icon
 .chevron{ stroke: #a5a1a1; cursor: pointer; }
 
@@ -167,15 +204,4 @@ $grid-bd: solid 2px var(--gray);
             font-size: 0.9rem;
         }
     }
-}
-
-@media screen and (max-height: 1080px) {
-/*     .scene{
-        max-height: 35rem;
-    } */
-}
-
-
-//4k Screens
-@media screen and (max-height: 1440px) {
 }

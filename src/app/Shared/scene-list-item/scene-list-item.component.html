@@ -3,7 +3,13 @@
         <p>{{scene.title}}</p>
         <ng-container [ngTemplateOutlet]="more"></ng-container>
     </div>
-   
+   <div class="ctx-menu" *ngIf="showCtxMenu" #ctx>
+        <div (click)="editClickedEvent.emit(scene); showCtxMenu=false;">
+            Edit <ng-container [ngTemplateOutlet]="edit"></ng-container>
+        </div>
+        <div (click)="deleteClickedEvent.emit(scene); showCtxMenu=false;">
+            Delete <ng-container [ngTemplateOutlet]="del"></ng-container></div>
+   </div>
 </div>
 
 
@@ -17,7 +23,8 @@
 </ng-template>
 
 <ng-template #edit>
-    <svg id="edit" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+    <svg id="edit"
+     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
         class="feather feather-edit">
         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -25,8 +32,17 @@
     </svg>
 </ng-template>
 
+<ng-template #del>
+    <svg 
+     xmlns="http://www.w3.org/2000/svg"  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
+        <polyline points="3 6 5 6 21 6"></polyline>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+    </svg>
+</ng-template>
+
 <ng-template #more>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg (click)="showCtxMenu=!showCtxMenu;" #m xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
         <circle cx="12" cy="12" r="1"></circle>
         <circle cx="12" cy="5" r="1"></circle>
@@ -34,10 +50,3 @@
     </svg>
 </ng-template>
 
-<ng-template #del>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
-        <polyline points="3 6 5 6 21 6"></polyline>
-        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-    </svg>
-</ng-template>

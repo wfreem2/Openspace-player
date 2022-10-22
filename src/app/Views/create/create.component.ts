@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Scene } from 'src/app/Interfaces/Scene';
+import { merge } from "lodash"
 
 @Component({
   selector: 'app-create',
@@ -20,7 +21,7 @@ export class CreateComponent implements OnInit {
   currScene: Scene = 
   { 
     id: 1,
-    title: 'eqeqe',
+    title: '',
     geoPos: {
       lat: 0,
       long: 0,
@@ -28,27 +29,42 @@ export class CreateComponent implements OnInit {
     }
   }
   
-  scenes: Scene[] = [this.currScene]
+  scenes: Scene[] = []
 
+  isAutoMode:boolean = true
+  
   constructor() { }
 
   ngOnInit(): void { }
 
-  title(){
-    return this.detailsForm.get('title')
-  }
+  title(){ return this.detailsForm.get('title') }
+  desc(){ return this.detailsForm.get('desc') }
 
-  desc(){
-    return this.detailsForm.get('desc')
+  setActive(el: HTMLDivElement, target: any){
+
+    const isChecked = target.checked
+
+    if(!isChecked){ el.classList.remove('active') }
+    
+    else{ el.classList.add('active') }
+
+
   }
 
   addScene(scene: Scene){
 
-    this.scenes.push(scene)
+    let existingScene = this.scenes.find(s => s.id === scene.id)
+
+    if(!existingScene){ this.scenes.push(scene) }
+    merge(existingScene, scene)
+
     
-    this.currScene =
-    { 
-      id: 1,
+    this.setDefaultState() 
+  }
+
+  private defaultScene(): Scene{
+    return  { 
+      id: this.currScene.id+1,
       title: '',
       geoPos: {
         lat: 0,
@@ -56,9 +72,27 @@ export class CreateComponent implements OnInit {
         alt: 0
       }
     }
+  }
+  
 
+  private setDefaultState(): void{
+    this.currScene = this.defaultScene()
+    this.isAutoMode = true
   }
 
+  onDelete(scene: Scene){
+    //If the user is editing the scene and deletes it, reset current scene
+    if(this.currScene.id === scene.id){
+      this.setDefaultState()
+    }
+
+    this.scenes = this.scenes.filter(s => s.id !== scene.id)
+  }
+
+  onEdit(scene: Scene){ 
+    this.isAutoMode = false
+    this.currScene = scene
+  }
 
   toggleCollapse(el: HTMLDivElement){
     if(el.classList.contains('collapsed')){
@@ -67,8 +101,6 @@ export class CreateComponent implements OnInit {
     else{
       el.classList.add('collapsed')
     }
-    
-    console.log(el)
   }
 
 }

@@ -7,3 +7,7 @@
     overflow-y: auto;
     gap: 0.5rem;   
 }
+
+.wrapper{
+    @extend %max-WH, %align-center, %just-center;
+}
