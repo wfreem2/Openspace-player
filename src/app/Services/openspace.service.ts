@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as api from 'openspace-api-js'
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, interval, map, mergeMap, Observable } from 'rxjs';
 import { GeoPosition } from '../Interfaces/GeoPosition';
 
 @Injectable({
@@ -38,8 +38,6 @@ export class OpenspaceService {
   }
 
 
-
-
   async getCurrentPosition(): Promise<GeoPosition>{
 
     const pos = await this.openspace.globebrowsing.getGeoPositionForCamera()
@@ -49,7 +47,33 @@ export class OpenspaceService {
       long: pos[2],
       alt: pos[3]
     }
+  } 
+  
+  
+  listenCurrentPosition(): Observable<GeoPosition>{
+    return interval(100)
+    .pipe(
+      mergeMap(async _ =>{
+      const pos = await this.openspace.globebrowsing.getGeoPositionForCamera()
+
+        return {
+          lat: pos[1],
+          long: pos[2],
+          alt: pos[3]
+        }
+      })
+    )
   }
 
-  
+}
+
+enum PathNavigationOptions{
+  Mercury="Mercury",
+  Venus="Venus",
+  Earth="Earth",
+  Mars="Mars",
+  Jupiter="Jupiter",
+  Saturn="Saturn",
+  Uranus="Uranus",
+  Neptune="Neptune"
 }

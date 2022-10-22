@@ -41,21 +41,42 @@ export class CreateComponent implements OnInit {
       map(id => {
         const show = showService.getShowById(id)
 
+        //If the show with the provided id does not exist return a blank show
         return !!show ? show : showService.getBlankShow() 
       }),
-      //If there is an id in the route params
-      //If the show with the provided id does not exist
     )
-    .subscribe(show => {
-      this.show = show
-      console.log(show)
-    })
+    .subscribe(show => this.show = show)
    }
 
   ngOnInit(): void { }
 
   title(){ return this.detailsForm.get('title') }
   desc(){ return this.detailsForm.get('desc') }
+
+
+
+  addScene(scene: Scene){
+
+    let existingScene = this.show.scenes.find(s => s.id === scene.id)
+
+    if(!existingScene){ this.show.scenes.push(scene) }
+    
+    merge(existingScene, scene)
+    
+    this.setDefaultState() 
+  }
+
+  onDelete(scene: Scene){
+    //If the user is editing the scene and deletes it, reset current scene
+    if(this.currScene.id === scene.id){ this.setDefaultState() }
+
+    this.show.scenes = this.show.scenes.filter(s => s.id !== scene.id)
+  }
+
+  onEdit(scene: Scene){ 
+    this.isAutoMode = false
+    this.currScene = scene
+  }
 
   setActive(el: HTMLDivElement, target: any){
 
@@ -64,8 +85,6 @@ export class CreateComponent implements OnInit {
     if(!isChecked){ el.classList.remove('active') }
     
     else{ el.classList.add('active') }
-
-
   }
 
   setTab(target: EventTarget | null){
@@ -73,15 +92,13 @@ export class CreateComponent implements OnInit {
     this.showMeta = !this.showMeta;
   }
 
-  addScene(scene: Scene){
-
-    let existingScene = this.scenes.find(s => s.id === scene.id)
-
-    if(!existingScene){ this.scenes.push(scene) }
-    merge(existingScene, scene)
-
-    
-    this.setDefaultState() 
+  toggleCollapse(el: HTMLDivElement){
+    if(el.classList.contains('collapsed')){
+      el.classList.remove('collapsed')
+    }
+    else{
+      el.classList.add('collapsed')
+    }
   }
 
   private defaultScene(): Scene{
@@ -96,34 +113,10 @@ export class CreateComponent implements OnInit {
       }
     }
   }
-  
 
   private setDefaultState(): void{
     this.currScene = this.defaultScene()
     this.isAutoMode = true
-  }
-
-  onDelete(scene: Scene){
-    //If the user is editing the scene and deletes it, reset current scene
-    if(this.currScene.id === scene.id){
-      this.setDefaultState()
-    }
-
-    this.scenes = this.scenes.filter(s => s.id !== scene.id)
-  }
-
-  onEdit(scene: Scene){ 
-    this.isAutoMode = false
-    this.currScene = scene
-  }
-
-  toggleCollapse(el: HTMLDivElement){
-    if(el.classList.contains('collapsed')){
-      el.classList.remove('collapsed')
-    }
-    else{
-      el.classList.add('collapsed')
-    }
   }
 
 }

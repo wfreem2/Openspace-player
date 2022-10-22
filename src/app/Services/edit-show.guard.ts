@@ -6,10 +6,10 @@ import { ShowService } from './show.service';
 @Injectable({
   providedIn: 'root'
 })
+
 export class EditShowGuard implements CanActivate {
-  constructor(private showService: ShowService, private router: Router){
-    this.showService.getAllShows().subscribe(s => console.log(s))
-  }
+  constructor(private showService: ShowService, private router: Router){ }
+  
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {

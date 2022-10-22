@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { takeWhile } from 'rxjs';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { OpenspaceService } from 'src/app/Services/openspace.service';
 
@@ -18,7 +19,9 @@ export class SceneComponent implements OnInit {
 
   constructor(private openSpaceService: OpenspaceService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+    if(this.isAutoMode){ this.listenGeo() }
+  }
 
   clear(): void{
     this.scene.geoPos = {
@@ -30,12 +33,11 @@ export class SceneComponent implements OnInit {
     this.scene.title = ''
   }
 
-
-  async setGeo(){
-    const pos = await this.openSpaceService.getCurrentPosition()
-    this.scene.geoPos = {...pos}
-    
-    console.log(pos)
+  listenGeo(): void{
+    this.openSpaceService.
+    listenCurrentPosition()
+    .pipe(takeWhile(_ => this.isAutoMode))
+    .subscribe(pos => this.scene.geoPos = pos)
   }
 }
 

@@ -9,7 +9,7 @@
 <ng-template #geoLocation [ngIf]="selectedSetting=='geo'">
     
     <div id="mode-set">
-        <span [class.active]="isAutoMode" (click)="isAutoMode=true; setGeo()">Auto</span>
+        <span [class.active]="isAutoMode" (click)="isAutoMode=true; listenGeo()">Auto</span>
         <span [class.active]="!isAutoMode" (click)="isAutoMode=false">Manual</span>
     </div>
 

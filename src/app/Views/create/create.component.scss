@@ -28,7 +28,8 @@
         border: none;
         max-width: 40rem;
     }
-    #save{
+    
+    .btn{
         align-self: center;
         width: 8rem;
         height: 2.5rem;
@@ -37,6 +38,11 @@
             width: 1.2rem;
             height: 1.2rem;
         }
+    }
+
+    & > div:first-of-type{
+        @extend %align-center;
+        gap: 1rem;
     }
 }
 
