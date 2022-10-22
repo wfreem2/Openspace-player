@@ -3,16 +3,16 @@
         <ng-container [ngTemplateOutlet]="rightArrow"></ng-container>
     </button>
 
-    <button id="edit">Edit</button>
+    <a id="edit" [routerLink]="['/creator', show.id]">Edit</a>
 </div>
 
-<h1 id="title">Show Title</h1>
+<h1 id="title">{{show.title}}</h1>
 
 <p id="description">Some show description</p>
 
 
 <div class="steps">
-    <h2>Steps:</h2>
+    <h2>Steps: ({{show.scenes.length}})</h2>
     list of steps
 </div>
 

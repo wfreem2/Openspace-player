@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs';
 import { SlideInOut } from 'src/app/Animations/animations';
+import { Show } from 'src/app/Interfaces/Show';
 import { ShowPreviewService } from 'src/app/Services/show-preview.service';
 
 @Component({
@@ -12,6 +13,7 @@ import { ShowPreviewService } from 'src/app/Services/show-preview.service';
 export class HomeComponent implements OnInit {
 
   isPreviewing:boolean = false
+  show!: Show
   
   constructor(showPreviewService: ShowPreviewService) { 
     showPreviewService
@@ -24,9 +26,7 @@ export class HomeComponent implements OnInit {
         return s
       })
       )
-    .subscribe(s => {
-      console.log(s)
-    })
+    .subscribe(s => this.show = s)
   }
   
   ngOnInit(): void { }

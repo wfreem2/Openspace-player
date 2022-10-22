@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Show } from 'src/app/Interfaces/Show';
 
 @Component({
   selector: 'show-preview',
@@ -8,8 +9,8 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 export class ShowPreviewComponent implements OnInit {
 
   @Output() closeBtnClicked = new EventEmitter()
-
-  constructor() { }
+  @Input() show!: Show
+  constructor() {} 
 
   ngOnInit(): void { }
 

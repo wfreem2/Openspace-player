@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { merge } from "lodash"
+import { ActivatedRoute, Route } from '@angular/router';
+import { filter, first, map, mergeMap, pluck } from 'rxjs';
+import { ShowService } from 'src/app/Services/show.service';
+import { Show } from 'src/app/Interfaces/Show';
 
 @Component({
   selector: 'app-create',
@@ -10,29 +14,43 @@ import { merge } from "lodash"
 })
 export class CreateComponent implements OnInit {
 
+
+  private id: number = 0
+
   detailsForm: FormGroup = new FormGroup({
     title: new FormControl('', Validators.required),
     desc: new FormControl(''),
   })
 
   
-  currScene: Scene = 
-  { 
-    id: 1,
-    title: '',
-    geoPos: {
-      lat: 0,
-      long: 0,
-      alt: 0
-    }
-  }
+  currScene: Scene = this.defaultScene()
   
+  show!: Show
   scenes: Scene[] = []
 
   isAutoMode:boolean = true
   showMeta: boolean = true
 
-  constructor() { }
+  constructor(private route: ActivatedRoute, public showService: ShowService) {
+
+    this.route.params
+    .pipe(
+      pluck('id'),
+      first(),
+      map(id => parseInt(id)),
+      map(id => {
+        const show = showService.getShowById(id)
+
+        return !!show ? show : showService.getBlankShow() 
+      }),
+      //If there is an id in the route params
+      //If the show with the provided id does not exist
+    )
+    .subscribe(show => {
+      this.show = show
+      console.log(show)
+    })
+   }
 
   ngOnInit(): void { }
 
@@ -67,8 +85,9 @@ export class CreateComponent implements OnInit {
   }
 
   private defaultScene(): Scene{
+    this.id++
     return  { 
-      id: this.currScene.id+1,
+      id: this.id,
       title: '',
       geoPos: {
         lat: 0,

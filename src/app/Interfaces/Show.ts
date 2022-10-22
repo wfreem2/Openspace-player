@@ -2,7 +2,7 @@ import { Scene } from "./Scene";
 
 export interface Show{
     id: number,
-    name: string,
+    title: string,
     scenes: Scene[],
     dateCreated: Date
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { map } from 'rxjs';
 import { Show } from 'src/app/Interfaces/Show';
+import { ShowService } from 'src/app/Services/show.service';
 
 @Component({
   selector: 'app-your-shows',
@@ -8,11 +10,16 @@ import { Show } from 'src/app/Interfaces/Show';
 })
 export class YourShowsComponent implements OnInit {
 
-  shows: Show[] = []
+  shows!: Show[]
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(showService: ShowService) { 
+    showService.getAllShows()
+    .pipe(
+      map(shows => shows.length ? shows : [])
+    )
+    .subscribe(shows => this.shows = shows)
   }
+
+  ngOnInit(): void { }
 
 }
