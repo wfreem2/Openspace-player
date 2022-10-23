@@ -94,9 +94,10 @@ $grid-bd: solid 2px var(--gray);
     @extend %flx-col;
     overflow-y: auto;
     border-left: solid 2px var(--gray);
+
     .options{
         @extend %flx-col;
-        margin: 0;
+        margin-top: 0.5rem;
         padding-left: 1rem;
 
         label{ font-size: 1rem; }
@@ -188,8 +189,8 @@ $grid-bd: solid 2px var(--gray);
     
     ul{
         transition: all 0.2s;
-        max-height: 10rem;
         overflow-y: auto;
+        max-height: 10rem;
     }
     
     &.collapsed{ 

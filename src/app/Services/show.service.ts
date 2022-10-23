@@ -12,7 +12,12 @@ export class ShowService {
   private id: number = 0
   private _shows = new BehaviorSubject<Show[]>([])
 
-  constructor() { }
+  constructor() {
+    if(document.cookie){
+      console.log('loading saved show')
+      this._shows.next(JSON.parse(document.cookie))
+    }
+  }
 
   getBlankShow(): Show{
     this.id++
@@ -51,6 +56,9 @@ export class ShowService {
     }
 
     merge(existing, show)
+
+    
+    document.cookie = JSON.stringify(this._shows.value)
   }
 
 }

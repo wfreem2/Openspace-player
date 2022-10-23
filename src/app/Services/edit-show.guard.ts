@@ -14,12 +14,16 @@ export class EditShowGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
+
+      if(route.params['id'] === 'new'){ return true }
+
+      
       const id: number = parseInt(route.params['id'])
 
-
-      if(Number.isNaN(id) || !!this.showService.getShowById(id)){ return true }
+      if(!Number.isNaN(id) || !!this.showService.getShowById(id)){
+         return true 
+      }
       
-      this.router.navigate(['/creator/new'])
       return false
   }
   

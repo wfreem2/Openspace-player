@@ -49,19 +49,14 @@ export class OpenspaceService {
     }
   } 
   
-  
+  flyTo(path: PathNavigationOptions){
+    this.openspace.pathnavigation.flyTo(path.toString())
+  }
+
   listenCurrentPosition(): Observable<GeoPosition>{
     return interval(100)
     .pipe(
-      mergeMap(async _ =>{
-      const pos = await this.openspace.globebrowsing.getGeoPositionForCamera()
-
-        return {
-          lat: pos[1],
-          long: pos[2],
-          alt: pos[3]
-        }
-      })
+      mergeMap(async _ => await this.getCurrentPosition())
     )
   }
 

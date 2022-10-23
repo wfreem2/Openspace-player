@@ -9,7 +9,6 @@ const routes: Routes = [
   { path: '', redirectTo: 'shows', pathMatch: 'full' },
   // { path: 'editor', redirectTo: 'editor/new', pathMatch: 'full' },
   { path: 'creator/:id', component: CreateComponent, canActivate: [EditShowGuard] },
-  // { path: 'creator/new', component: CreateComponent },
   { path: 'shows', component: HomeComponent, children: [
     { path: '', component: YourShowsComponent }
   ]}

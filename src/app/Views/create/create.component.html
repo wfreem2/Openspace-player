@@ -59,7 +59,7 @@
             <ul class="options">
                 <li>
                     <label for="trails">Planet Trails</label>
-                    <input type="checkbox" name="trails" id="trail" />
+                    <input type="checkbox" name="trails" id="trail" value="planet-trials"/>
                 </li>
             </ul>
         </div>
@@ -73,11 +73,15 @@
             <ul class="options" id="focus-options">
                 <li>
                     <label for="focus">Focus On</label>
-                    <input type="radio" name="opts" id="focus" checked />
+                    <input type="radio" name="opts" id="focus" value="focus" checked />
                 </li>
                 <li>
-                    <label for="fly-to">Fly To</label>
-                    <input type="radio" name="opts" id="fly-to" />
+                    <label for="anchor">Anchor</label>
+                    <input type="radio" name="opts" id="anchor" value="anchor"/>
+                </li>
+                <li>
+                    <label for="aim">Aim</label>
+                    <input type="radio" name="opts" id="aim" value="aim"/>
                 </li>
             </ul>
         </div>
@@ -86,7 +90,7 @@
 
 <ng-template #scene>
     <div class="scene">
-        <scene (sceneSavedEvent)="addScene($event)" [scene]="currScene" [isAutoMode]="isAutoMode"></scene>
+        <scene (sceneSavedEvent)="addScene($event)" [isAutoMode]="isAutoMode" [scene]="currScene"></scene>
     </div>
 </ng-template>
 

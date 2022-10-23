@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { takeWhile } from 'rxjs';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { of, Subscription, takeWhile } from 'rxjs';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { OpenspaceService } from 'src/app/Services/openspace.service';
 
@@ -8,7 +8,7 @@ import { OpenspaceService } from 'src/app/Services/openspace.service';
   templateUrl: './scene.component.html',
   styleUrls: ['./scene.component.scss']
 })
-export class SceneComponent implements OnInit {
+export class SceneComponent implements OnInit, OnDestroy, OnChanges {
 
 
   selectedSetting: selectedSetting = 'geo'
@@ -17,11 +17,27 @@ export class SceneComponent implements OnInit {
   @Input() isAutoMode: boolean = true
   @Output() sceneSavedEvent = new EventEmitter<Scene>()
 
+  
+  private listener!: Subscription
+
   constructor(private openSpaceService: OpenspaceService) { }
 
-  ngOnInit(): void { 
-    if(this.isAutoMode){ this.listenGeo() }
+  ngOnChanges(changes: SimpleChanges): void {
+    
+    if(changes['isAutoMode']){
+
+      const { isAutoMode } = changes
+      const { currentValue } = isAutoMode
+      
+      if(currentValue){ this.listenGeo() } 
+      else{ this.stopListening() }
+    }
   }
+
+  ngOnDestroy(): void { this.stopListening() }
+
+  ngOnInit(): void { }
+
 
   clear(): void{
     this.scene.geoPos = {
@@ -34,11 +50,14 @@ export class SceneComponent implements OnInit {
   }
 
   listenGeo(): void{
-    this.openSpaceService.
-    listenCurrentPosition()
+    this.listener = 
+    this.openSpaceService
+    .listenCurrentPosition()
     .pipe(takeWhile(_ => this.isAutoMode))
     .subscribe(pos => this.scene.geoPos = pos)
   }
+
+  stopListening(){ this.listener.unsubscribe() }
 }
 
 type selectedSetting = 'geo' | 'script'
