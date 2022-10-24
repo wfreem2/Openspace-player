@@ -1,1 +1,44 @@
-<p>play works!</p>
+<div class="header">
+    <h1>{{show.title}}</h1>
+    <button class="btn primary" (click)="play()" [disabled]="!!currScene">Play</button>
+</div>
+
+<ul class="list">
+    <li *ngFor="let s of scenes" class="item" [class.active]="s.isActive" (click)="setScene(s)">
+        {{s.scene.title}}
+    </li>
+</ul>
+
+<div class="player">
+    <h1>{{currScene?.title}}</h1>
+
+    <textarea class="input" disabled></textarea>
+
+    <div class="btns">
+        <button class="btn secondary" (click)="setScene(scenes[currIdx!-1])"
+        [disabled]="!currScene || currIdx === 0">
+            <ng-container [ngTemplateOutlet]="left"></ng-container>
+            Back
+        </button>
+        <button class="btn primary" (click)="setScene(scenes[currIdx!+1])"
+            [disabled]="!currScene || currIdx === scenes.length-1">
+            Next
+            <ng-container [ngTemplateOutlet]="right"></ng-container>
+        </button>
+    </div>
+</div>
+
+<ng-template #left>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+    </svg>
+</ng-template>
+<ng-template #right>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
+</ng-template>

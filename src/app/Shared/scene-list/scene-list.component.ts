@@ -10,6 +10,7 @@ import { Scene } from 'src/app/Interfaces/Scene';
 })
 export class SceneListComponent implements OnInit {
 
+  @Input() readonly:boolean = false
   @Input() scenes: Scene[] = []
   @Output() editSceneClicked = new EventEmitter<Scene>()
   @Output() deleteSceneClicked = new EventEmitter<Scene>()

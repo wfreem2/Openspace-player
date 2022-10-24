@@ -6,6 +6,8 @@ import { ActivatedRoute, Route } from '@angular/router';
 import { filter, first, map, mergeMap, pluck } from 'rxjs';
 import { ShowService } from 'src/app/Services/show.service';
 import { Show } from 'src/app/Interfaces/Show';
+import { toggleClass } from 'src/app/Utils/utils';
+
 
 @Component({
   selector: 'app-create',
@@ -15,7 +17,7 @@ import { Show } from 'src/app/Interfaces/Show';
 export class CreateComponent implements OnInit {
 
 
-  private id: number = 0
+  private id!: number
 
   detailsForm: FormGroup = new FormGroup({
     title: new FormControl('', Validators.required),
@@ -45,7 +47,11 @@ export class CreateComponent implements OnInit {
         return !!show ? show : showService.getBlankShow() 
       }),
     )
-    .subscribe(show => this.show = show)
+      .subscribe(show => {
+        this.show = show
+        //Set the id to the last show to not have conflicting ids
+        this.id = show.scenes.length
+      })
    }
 
   ngOnInit(): void { }
@@ -92,14 +98,7 @@ export class CreateComponent implements OnInit {
     this.showMeta = !this.showMeta;
   }
 
-  toggleCollapse(el: HTMLDivElement){
-    if(el.classList.contains('collapsed')){
-      el.classList.remove('collapsed')
-    }
-    else{
-      el.classList.add('collapsed')
-    }
-  }
+  toggleClass(el: HTMLElement){ toggleClass(el, 'collapsed') }
 
   private defaultScene(): Scene{
     this.id++

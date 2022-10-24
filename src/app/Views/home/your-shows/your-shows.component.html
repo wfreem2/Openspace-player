@@ -10,7 +10,7 @@
 
 <ng-template #list>
     <div class="list-wrapper">
-        <shows-list [shows]="shows"></shows-list>
+        <shows-list [shows]="shows" (cardClicked)="showPreviewService.previewShow($event)"></shows-list>
     </div>
 </ng-template>
 

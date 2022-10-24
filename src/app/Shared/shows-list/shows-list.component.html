@@ -1,4 +1,4 @@
 <div class="list">
     <show-card *ngFor="let s of shows" [show]="s"
-     (cardClicked)="showPreviewService.previewShow($event)"></show-card>
+     (cardClicked)="cardClicked.emit($event)"></show-card>
 </div>

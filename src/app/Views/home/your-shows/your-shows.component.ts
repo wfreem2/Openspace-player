@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs';
 import { Show } from 'src/app/Interfaces/Show';
+import { ShowPreviewService } from 'src/app/Services/show-preview.service';
 import { ShowService } from 'src/app/Services/show.service';
 
 @Component({
@@ -12,7 +13,7 @@ export class YourShowsComponent implements OnInit {
 
   shows!: Show[]
 
-  constructor(showService: ShowService) { 
+  constructor(showService: ShowService, public showPreviewService: ShowPreviewService) { 
     showService.getAllShows()
     .pipe(
       map(shows => shows.length ? shows : [])

@@ -12,6 +12,7 @@ export class SceneListItemComponent implements OnInit {
   isSelected:boolean = true
   showCtxMenu:boolean = false
 
+  @Input() readonly!: boolean
   @Input() scene!: Scene
   @ViewChild('ctx') ctxMenu?: ElementRef;
   @ViewChild('m') more!: ElementRef;
@@ -19,11 +20,13 @@ export class SceneListItemComponent implements OnInit {
   @Output() editClickedEvent = new EventEmitter<Scene>()
   @Output() deleteClickedEvent = new EventEmitter<Scene>()
 
-  constructor(private renderer: Renderer2) { 
-    this.renderer.listen('window', 'click', this.ctxMenuClickOutsideOf.bind(this))
-  } 
-
-  ngOnInit(): void { }
+  constructor(private renderer: Renderer2) { } 
+  
+  ngOnInit(): void { 
+    if(!this.readonly){
+      this.renderer.listen('window', 'click', this.ctxMenuClickOutsideOf.bind(this))
+    }
+  }
 
   private ctxMenuClickOutsideOf(e: Event){
     const svgClicked = this.isChildClicked(this.more.nativeElement, e.target)

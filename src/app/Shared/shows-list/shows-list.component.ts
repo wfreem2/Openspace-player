@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Show } from 'src/app/Interfaces/Show';
 import { ShowPreviewService } from 'src/app/Services/show-preview.service';
 
@@ -11,6 +11,7 @@ export class ShowsListComponent implements OnInit {
 
 
   @Input() shows?: Show[] = []
+  @Output() cardClicked = new EventEmitter<Show>()
 
   constructor(public showPreviewService: ShowPreviewService) { }
 

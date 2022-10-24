@@ -1,9 +1,9 @@
 <div class="wrapper" [class.selected]="isSelected" [class.expanded]="!isCollapsed">
     <div class="header">
         <p>{{scene.title}}</p>
-        <ng-container [ngTemplateOutlet]="more"></ng-container>
+        <ng-container [ngTemplateOutlet]="more" *ngIf="!readonly"></ng-container>
     </div>
-   <div class="ctx-menu" *ngIf="showCtxMenu" #ctx>
+   <div class="ctx-menu" *ngIf="showCtxMenu && !readonly" #ctx>
         <div (click)="editClickedEvent.emit(scene); showCtxMenu=false;">
             Edit <ng-container [ngTemplateOutlet]="edit"></ng-container>
         </div>
