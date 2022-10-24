@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map, pluck } from 'rxjs';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { Show } from 'src/app/Interfaces/Show';
+import { OpenspaceService } from 'src/app/Services/openspace.service';
 import { ShowService } from 'src/app/Services/show.service';
 import { toggleClass } from 'src/app/Utils/utils';
 
@@ -20,7 +21,8 @@ export class PlayComponent implements OnInit, AfterViewInit {
 
   currIdx?: number
 
-  constructor(private route: ActivatedRoute, private showService: ShowService) {
+  constructor(private route: ActivatedRoute, private showService: ShowService,
+     private openSpaceService: OpenspaceService) {
 
     this.route.params
     .pipe(
@@ -61,7 +63,15 @@ export class PlayComponent implements OnInit, AfterViewInit {
     this.currScene = playableScene.scene
 
     this.currIdx = this.scenes.indexOf(playableScene)
+    this.execute(this.currScene)
   }
+
+  private execute(scene: Scene): void{
+    const {lat, long, alt} = scene.geoPos
+
+    this.openSpaceService.flyToGeo(lat, long, alt)
+  }
+
 }
 
 type PlayableScene = { scene: Scene, isActive: boolean}

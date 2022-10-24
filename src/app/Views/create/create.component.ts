@@ -109,7 +109,8 @@ export class CreateComponent implements OnInit {
         lat: 0,
         long: 0,
         alt: 0
-      }
+      },
+      travelMethod: 'flyTo'
     }
   }
 

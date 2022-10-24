@@ -33,8 +33,8 @@ export class OpenspaceService {
     return this._isConnected.asObservable()
   }
   
-  goToGeo(globe: string='', lat: Number, long: Number, alt: Number): void{
-    this.openspace.globebrowsing.goToGeo(globe, lat, long, alt)
+  flyToGeo(lat: Number, long: Number, alt: Number, globe: string=''): void{
+    this.openspace.globebrowsing.flyToGeo('Earth', lat, long, alt)
   }
 
 

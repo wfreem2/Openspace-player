@@ -3,5 +3,7 @@ import { GeoPosition } from "./GeoPosition";
 export interface Scene{
     id: number,
     title: string,
-    geoPos: GeoPosition
+    nodeName?: string
+    geoPos: GeoPosition,
+    travelMethod: 'pathNav' | 'flyTo'
 }

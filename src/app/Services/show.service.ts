@@ -15,7 +15,13 @@ export class ShowService {
   constructor() {
     if(document.cookie){
       console.log('loading saved show')
-      this._shows.next(JSON.parse(document.cookie))
+      
+      try {
+        const { shows }  = JSON.parse(document.cookie)
+        this._shows.next(shows)
+      } 
+      catch (error) { console.log('error parsing cookie')  }
+
     }
   }
 
@@ -58,7 +64,8 @@ export class ShowService {
     merge(existing, show)
 
     
-    document.cookie = JSON.stringify(this._shows.value)
+    document.cookie = JSON.stringify({shows: this._shows.value})
+    document.cookie += ';path=/'
   }
 
 }
