@@ -1,11 +1,10 @@
-import { AfterViewInit, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, pluck } from 'rxjs';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { Show } from 'src/app/Interfaces/Show';
 import { OpenspaceService } from 'src/app/Services/openspace.service';
 import { ShowService } from 'src/app/Services/show.service';
-import { toggleClass } from 'src/app/Utils/utils';
 
 @Component({
   selector: 'play',
@@ -15,7 +14,7 @@ import { toggleClass } from 'src/app/Utils/utils';
 
 export class PlayComponent implements OnInit, AfterViewInit {
   show!: Show
-  currScene?: Scene
+  currScene?: PlayableScene
 
   scenes!: PlayableScene[]
 
@@ -34,7 +33,7 @@ export class PlayComponent implements OnInit, AfterViewInit {
       if(!show){ return } 
   
       this.show = show
-
+      console.log(show.scenes)
       this.scenes = show.scenes.map(s => { 
         return { scene: s, isActive: false}
       })
@@ -54,22 +53,23 @@ export class PlayComponent implements OnInit, AfterViewInit {
 
 
   setScene(playableScene: PlayableScene): void{
-    this.scenes.forEach((scene) => {
-      if(scene.isActive)
-        scene.isActive = false
-    })
+
+    if(this.currScene){
+      this.currScene.isActive = false
+    }
 
     playableScene.isActive = true
-    this.currScene = playableScene.scene
+    this.currScene = playableScene
 
     this.currIdx = this.scenes.indexOf(playableScene)
-    this.execute(this.currScene)
+    this.execute(this.currScene.scene)
   }
 
   private execute(scene: Scene): void{
     const {lat, long, alt} = scene.geoPos
-
-    this.openSpaceService.flyToGeo(lat, long, alt)
+    const { nodeName: pathNavOption } = scene
+    
+    this.openSpaceService.flyToGeo(lat, long, alt, pathNavOption)
   }
 
 }

@@ -60,7 +60,10 @@ export class SceneComponent implements OnInit, OnDestroy, OnChanges {
     .subscribe(pos => this.scene.geoPos = pos)
   }
 
-  stopListening(){ this.listener.unsubscribe() }
+  stopListening(){ 
+    if(this.listener)
+      this.listener.unsubscribe() 
+  }
 }
 
 type selectedSetting = 'geo' | 'script'

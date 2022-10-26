@@ -34,7 +34,7 @@ export class OpenspaceService {
   }
   
   flyToGeo(lat: Number, long: Number, alt: Number, globe: string=''): void{
-    this.openspace.globebrowsing.flyToGeo('Earth', lat, long, alt)
+    this.openspace.globebrowsing.flyToGeo(globe, lat, long, alt)
   }
 
 

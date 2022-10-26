@@ -95,4 +95,5 @@
 .steps{
     @extend %flx-col;
     gap: 1rem;
+    min-height: 20rem;
 }
