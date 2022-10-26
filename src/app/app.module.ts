@@ -9,7 +9,7 @@ import { ViewsModule } from './Views/views.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,

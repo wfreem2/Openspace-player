@@ -14,9 +14,7 @@ export class NavbarComponent implements OnInit {
   constructor(private openSpaceService: OpenspaceService) { 
     
     openSpaceService._isConnected
-    .subscribe(status =>{
-      this.isConnected = status
-    })
+    .subscribe(status => this.isConnected = status)
   }
 
   ngOnInit(): void {}

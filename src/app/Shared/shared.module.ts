@@ -7,7 +7,8 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SceneListComponent } from './scene-list/scene-list.component';
-import { SceneListItemComponent } from './scene-list-item/scene-list-item.component'
+import { SceneListItemComponent } from './scene-list-item/scene-list-item.component';
+import { DropdownComponent } from './dropdown/dropdown.component'
 
 
 
@@ -17,14 +18,15 @@ import { SceneListItemComponent } from './scene-list-item/scene-list-item.compon
     ShowCardComponent,
     NavbarComponent,
     SceneListComponent,
-    SceneListItemComponent
+    SceneListItemComponent,
+    DropdownComponent,
   ],
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   exports:[
     CommonModule,
@@ -33,7 +35,8 @@ import { SceneListItemComponent } from './scene-list-item/scene-list-item.compon
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    SceneListComponent
+    SceneListComponent,
+    DropdownComponent
   ]
 })
 export class SharedModule { }

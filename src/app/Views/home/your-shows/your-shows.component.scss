@@ -15,10 +15,16 @@ h1{
 }
 
 .header{
-    @extend %flx-col, %just-center;
+    @extend %align-center;
+    justify-content: space-between;
     padding: 0.5rem;
     gap: 1rem;
     border-bottom: solid 2px var(--gray);
+
+    .btn{
+        cursor: pointer;
+        text-decoration: none;
+    }
 }
 
 .empty-wrapper{

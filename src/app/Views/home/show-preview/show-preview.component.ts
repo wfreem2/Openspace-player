@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Show } from 'src/app/Interfaces/Show';
+import { ShowService } from 'src/app/Services/show.service';
 
 @Component({
   selector: 'show-preview',
@@ -10,10 +11,16 @@ export class ShowPreviewComponent implements OnInit {
 
   @Output() closeBtnClicked = new EventEmitter()
   @Input() show!: Show
-  constructor() {} 
+
+  constructor(private showService: ShowService) {} 
 
   ngOnInit(): void { }
 
+
+  delete(): void{
+    this.showService.removeShowById(this.show.id)
+    this.closeBtnClicked.emit()
+  }
 
 
 }

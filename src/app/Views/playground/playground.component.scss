@@ -1,0 +1,7 @@
+@use '/src/styles';
+
+
+:host{
+    @extend %max-WH, %align-center, %just-center;
+    background: #ffffff;
+}

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { of, Subscription, takeWhile } from 'rxjs';
 import { Scene } from 'src/app/Interfaces/Scene';
-import { OpenspaceService } from 'src/app/Services/openspace.service';
+import { OpenspaceService, PathNavigationOptions } from 'src/app/Services/openspace.service';
 
 @Component({
   selector: 'scene',
@@ -17,10 +17,13 @@ export class SceneComponent implements OnInit, OnDestroy, OnChanges {
   @Input() isAutoMode: boolean = true
   @Output() sceneSavedEvent = new EventEmitter<Scene>()
 
+  pathNavOptions: PathNavigationOptions[] = []
   
   private listener!: Subscription
 
-  constructor(private openSpaceService: OpenspaceService) { }
+  constructor(private openSpaceService: OpenspaceService) { 
+    this.pathNavOptions = Object.values(PathNavigationOptions)
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     

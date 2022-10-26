@@ -21,19 +21,23 @@
     
     <div id="geoLocation">
         <div class="section">
-            <label for="title">Latitude:</label>
-            <input [disabled]="isAutoMode" name="title" type="number" class="input" [(ngModel)]="scene.geoPos.lat" 
+            <label for="lat">Latitude:</label>
+            <input [disabled]="isAutoMode" name="lat" type="number" class="input" [(ngModel)]="scene.geoPos.lat" 
             placeholder="Latitude">
         </div>
         <div class="section">
-            <label for="title">Longitude:</label>
-            <input [disabled]="isAutoMode" name="title" type="number" class="input" [(ngModel)]="scene.geoPos.long" 
+            <label for="long">Longitude:</label>
+            <input [disabled]="isAutoMode" name="long" type="number" class="input" [(ngModel)]="scene.geoPos.long" 
              placeholder="Longitude">
         </div>
         <div class="section">
-            <label for="title">Altitude:</label>
-            <input [disabled]="isAutoMode" name="title" type="number" class="input" [(ngModel)]="scene.geoPos.alt" 
+            <label for="alt">Altitude:</label>
+            <input [disabled]="isAutoMode" name="alt" type="number" class="input" [(ngModel)]="scene.geoPos.alt" 
              placeholder="Altitude">
+        </div>
+        <div class="section">
+            <label for="node">Node:</label>
+           <dropdown [items]="pathNavOptions" name="pathnav" [(ngModel)]="scene.pathNavOption"></dropdown>
         </div>
     </div>
 

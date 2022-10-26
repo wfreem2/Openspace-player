@@ -1,3 +1,4 @@
+import { PathNavigationOptions } from "../Services/openspace.service";
 import { GeoPosition } from "./GeoPosition";
 
 export interface Scene{
@@ -5,5 +6,6 @@ export interface Scene{
     title: string,
     nodeName?: string
     geoPos: GeoPosition,
-    travelMethod: 'pathNav' | 'flyTo'
+    travelMethod: 'pathNav' | 'flyTo',
+    pathNavOption?: PathNavigationOptions
 }

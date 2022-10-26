@@ -1,0 +1,27 @@
+<div class="header" [class.active]="!isCollapsed">
+    <p>{{selectedItem.item}}</p>
+    <ng-container [ngTemplateOutlet]="chevron"></ng-container>
+</div>
+
+<ul class="items" [class.collapsed]="isCollapsed">
+    <li *ngFor="let i of selectableItems" (click)="selectItem(i); isCollapsed=true"
+     [class.selected]="i.isSelected">
+        <ng-container [ngTemplateOutlet]="check" *ngIf="i.isSelected"></ng-container>
+        {{i.item}}
+    </li>
+</ul>
+
+<ng-template #chevron>
+    <svg id="chevron" (click)="isCollapsed = !isCollapsed" [class.rotated]="!isCollapsed"
+        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="chevron feather feather-chevron-down">
+        <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+</ng-template>
+
+<ng-template #check>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check">
+        <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+</ng-template>

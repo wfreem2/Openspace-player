@@ -6,6 +6,7 @@ import { ShowPreviewComponent } from './home/show-preview/show-preview.component
 import { CreateComponent } from './create/create.component';
 import { SceneComponent } from './create/scene/scene.component';
 import { PlayComponent } from './play/play.component';
+import { PlaygroundComponent } from './playground/playground.component';
 
 
 
@@ -16,7 +17,8 @@ import { PlayComponent } from './play/play.component';
     ShowPreviewComponent,
     CreateComponent,
     SceneComponent,
-    PlayComponent
+    PlayComponent,
+    PlaygroundComponent
   ],
   imports: [
     SharedModule

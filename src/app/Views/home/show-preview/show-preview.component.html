@@ -3,7 +3,7 @@
         <ng-container [ngTemplateOutlet]="rightArrow"></ng-container>
     </button>
 
-    <a id="delete">
+    <a id="delete" (click)="delete()">
         Delete
         <ng-container [ngTemplateOutlet]="del"></ng-container>
     </a>

@@ -4,6 +4,8 @@
         <input type="text" class="bare" placeholder="Search shows">
         <ng-container [ngTemplateOutlet]="filterIcon"></ng-container>
     </div>
+
+    <a routerLink="/creator/new" class="btn primary">New Show</a>
 </div>
 
 <ng-container *ngIf="shows.length then list; else empty"></ng-container>

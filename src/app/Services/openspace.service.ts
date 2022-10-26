@@ -62,7 +62,7 @@ export class OpenspaceService {
 
 }
 
-enum PathNavigationOptions{
+export enum PathNavigationOptions{
   Mercury="Mercury",
   Venus="Venus",
   Earth="Earth",

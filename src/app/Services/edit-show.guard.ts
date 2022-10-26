@@ -15,8 +15,14 @@ export class EditShowGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
 
-      if(route.params['id'] === 'new'){ return true }
+      if(route.params['id'] === 'new'){ 
+        const show = this.showService.getBlankShow()
+        console.log(show)
+        this.showService.addShow(show)
+        this.router.navigate(['/creator/' + show.id])
 
+        return true 
+      }
       
       const id: number = parseInt(route.params['id'])
 
