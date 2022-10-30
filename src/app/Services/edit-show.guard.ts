@@ -25,8 +25,8 @@ export class EditShowGuard implements CanActivate {
       }
       
       const id: number = parseInt(route.params['id'])
-
-      if(!Number.isNaN(id) || !!this.showService.getShowById(id)){
+      
+      if(!Number.isNaN(id) && !!this.showService.getShowById(id)){
          return true 
       }
       

@@ -18,7 +18,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class DropdownComponent implements OnInit, ControlValueAccessor {
 
   @Input() items!: any[]
-  @Input() defaultItem?: any
+  // @Input() defaultItem?: any
 
 
   onChange: any = () => {}
@@ -34,14 +34,15 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
 
   constructor() { }
 
-  writeValue(obj: any): void { 
-    if(!this.defaultItem){
-      this.defaultItem = obj
-      this.onDefaultProvided()
+  ngOnInit(): void { }
 
+  writeValue(obj: any): void { 
+  
+    if(!obj){
+      this.onDefaultNotProvided()
       this.onChange(this.selectedItem.item)
     }
-    else{ this.selectItem({ item: obj, isSelected: false}) }
+    else{ this.setItem(obj) }
   }
 
   registerOnChange(fn: any): void { this.onChange = fn }
@@ -50,20 +51,13 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
  
   setDisabledState?(isDisabled: boolean): void { this.disabled = isDisabled }
 
-  ngOnInit(): void {
 
-/*     //If there is no default item provided
-    if(!this.defaultItem){ this.onDefaultProvided() }
-    else{ this.onDefaultNotProvided() }
-
-    this.onChange(this.selectedItem.item) */
-  }
-
-  selectItem(item: SelectableItem){
+  selectItem(item: SelectableItem): void{
     
     this.selectedItem.isSelected = false
-    item.isSelected = true
+
     this.selectedItem = item
+    this.selectedItem.isSelected = true
 
     this.onChange(item.item)
 
@@ -73,8 +67,16 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
     }
   } 
 
+  setItem(item: any): void{
+    const selectableItem = this.selectableItems.find(i => i.item === item)
 
-  private onDefaultProvided(): void{
+    if(selectableItem){
+      this.selectItem(selectableItem)
+    }
+  } 
+
+
+  private onDefaultNotProvided(): void{
     this.selectableItems = this.items.map(i => {
       return {item: i, isSelected: false}
     })  
@@ -85,7 +87,7 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
   }
 
 
-  private onDefaultNotProvided(): void{
+/*   private onDefaultProvided(): void{
     //If default item was provided, find it and make isSelected true
     this.selectableItems = this.items.map(i => {
       if(i === this.defaultItem){
@@ -96,7 +98,7 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
       return {item: i, isSelected: false}
     })
 
-  }
+  } */
 } 
 
 type SelectableItem = {item: any, isSelected: boolean}

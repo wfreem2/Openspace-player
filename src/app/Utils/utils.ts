@@ -8,3 +8,18 @@ export function toggleClass(el: HTMLElement, className: string){
             break
     }
 }
+
+
+export function isChildClicked(e: HTMLElement, clickedElement: EventTarget | null): boolean{
+    
+    if(e === clickedElement){ return true }
+    
+    for(var i = 0; i < e.childNodes.length; i++){
+      let c = e.childNodes[i]
+
+      if(isChildClicked(<HTMLElement> c, clickedElement)) 
+        return true 
+    }
+    
+    return false
+  }
