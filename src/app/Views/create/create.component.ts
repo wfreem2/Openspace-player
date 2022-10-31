@@ -3,10 +3,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { merge } from "lodash"
 import { ActivatedRoute } from '@angular/router';
-import { map, pluck } from 'rxjs';
+import { map, pluck, Subject } from 'rxjs';
 import { ShowService } from 'src/app/Services/show.service';
 import { Show } from 'src/app/Interfaces/Show';
 import { toggleClass } from 'src/app/Utils/utils';
+import { SelectedSceneService } from './selected-scene.service';
 
 
 @Component({
@@ -19,20 +20,26 @@ export class CreateComponent implements OnInit {
 
   private id: number = 0
 
+  tabIdx = 0
+
+
   detailsForm: FormGroup = new FormGroup({
     title: new FormControl('', Validators.required),
     desc: new FormControl(''),
   })
 
   
-  currScene!: Scene
-  
   show!: Show
+  currScene!: Scene
 
   isAutoMode:boolean = true
-  showMeta: boolean = true
+  showMeta: boolean = false
 
-  constructor(private route: ActivatedRoute, public showService: ShowService) {
+
+  events = new Subject<Scene>()
+
+  constructor(private route: ActivatedRoute, public showService: ShowService,
+     private selectedSceneService: SelectedSceneService) {
 
     this.route.params
     .pipe(
@@ -48,12 +55,16 @@ export class CreateComponent implements OnInit {
 
       //If at least on scene, set the id to be greater to avoid conflicting ids
       if(show.scenes.length){
-        show.scenes.forEach( ({ id }) => this.id = Math.max(id, this.id))
+        this.id = show.scenes.reduce( 
+          (id, s) => Math.max(id, s.id), show.scenes[0].id
+        )
       }
-
-      this.currScene = this.defaultScene
     })
-   }
+    
+    this.selectedSceneService.$selectedScene
+    .subscribe(s => this.currScene = s)
+
+  }
 
   ngOnInit(): void { }
 
@@ -62,15 +73,13 @@ export class CreateComponent implements OnInit {
 
 
 
-  addScene(scene: Scene){
+  onSave(scene: Scene){
 
     let existingScene = this.show.scenes.find(s => s.id === scene.id)
 
     if(!existingScene){ this.show.scenes.push(scene) }
     
-    merge(existingScene, scene)
-    
-    this.setDefaultState() 
+    merge(existingScene, scene)    
   }
 
   onDelete(scene: Scene){
@@ -85,10 +94,11 @@ export class CreateComponent implements OnInit {
   onEdit(scene: Scene){ 
     this.isAutoMode = false
     this.currScene = scene
+
+    this.events.next(scene)
   }
 
   setActive(el: HTMLDivElement, target: any){
-
     const isChecked = target.checked
 
     if(!isChecked){ el.classList.remove('active') }
@@ -100,6 +110,11 @@ export class CreateComponent implements OnInit {
     const e = <HTMLInputElement> target
     this.showMeta = !this.showMeta;
   }
+
+  newScene(): void{
+    this.selectedSceneService.setScene(this.defaultScene)
+  }
+
 
   toggleClass(el: HTMLElement){ toggleClass(el, 'collapsed') }
 

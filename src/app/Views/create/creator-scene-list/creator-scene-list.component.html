@@ -1,20 +1,23 @@
-<div class="wrapper" [class.selected]="isSelected" [class.expanded]="!isCollapsed">
-    <div class="header">
-        <p>{{scene.title}}</p>
-        <ng-container [ngTemplateOutlet]="more" *ngIf="!readonly"></ng-container>
-    </div>
-   <div class="ctx-menu" *ngIf="showCtxMenu && !readonly" #ctx>
-        <div (click)="editClickedEvent.emit(scene); showCtxMenu=false;">
-            Edit <ng-container [ngTemplateOutlet]="edit"></ng-container>
-        </div>
-        <div (click)="deleteClickedEvent.emit(scene); showCtxMenu=false;">
-            Delete <ng-container [ngTemplateOutlet]="del"></ng-container></div>
-   </div>
+<div class="list">
+    <list-item *ngFor="let s of scenes" 
+    [scene]="s"
+    (itemClickedEvent)="onItemClicked($event)">
+    </list-item>
 </div>
 
 
+<!-- <div class="ctx-menu" *ngIf="showCtxMenu && !isReadOnly" #ctx>
+    <div (click)="onEditClicked(scene)">
+        Edit 
+        <ng-container [ngTemplateOutlet]="edit"></ng-container>
+    </div>
+    <div (click)="onDeleteClicked(scene)">
+        Delete
+        <ng-container [ngTemplateOutlet]="del"></ng-container>
+    </div>
+</div> -->
 
-<ng-template #chevron>
+<!-- <ng-template #chevron>
     <svg id="chevron" [class.rotated]="!isCollapsed" (click)="isCollapsed = !isCollapsed"
         xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
@@ -40,13 +43,4 @@
         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
     </svg>
 </ng-template>
-
-<ng-template #more>
-    <svg (click)="showCtxMenu=!showCtxMenu;" #m xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
-        <circle cx="12" cy="12" r="1"></circle>
-        <circle cx="12" cy="5" r="1"></circle>
-        <circle cx="12" cy="19" r="1"></circle>
-    </svg>
-</ng-template>
-
+ -->

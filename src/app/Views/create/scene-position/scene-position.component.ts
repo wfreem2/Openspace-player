@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { of, Subscription, takeWhile } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { OpenspaceService, PathNavigationOptions } from 'src/app/Services/openspace.service';
 
 @Component({
-  selector: 'scene',
-  templateUrl: './scene.component.html',
-  styleUrls: ['./scene.component.scss']
+  selector: 'scene-position',
+  templateUrl: './scene-position.component.html',
+  styleUrls: ['./scene-position.component.scss']
 })
-export class SceneComponent implements OnInit, OnDestroy, OnChanges {
+export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges {
 
 
   selectedSetting: selectedSetting = 'geo'
@@ -56,8 +56,10 @@ export class SceneComponent implements OnInit, OnDestroy, OnChanges {
     this.listener = 
     this.openSpaceService
     .listenCurrentPosition()
-    .pipe(takeWhile(_ => this.isAutoMode))
-    .subscribe(pos => this.scene.geoPos = pos)
+    .subscribe({
+      next: pos => this.scene.geoPos = pos,
+      error:  _ => console.log('error with openspace')
+    })
   }
 
   stopListening(){ 

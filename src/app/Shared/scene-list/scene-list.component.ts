@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { ScaleInOut } from 'src/app/Animations/animations';
 import { Scene } from 'src/app/Interfaces/Scene';
 
@@ -10,13 +10,15 @@ import { Scene } from 'src/app/Interfaces/Scene';
 })
 export class SceneListComponent implements OnInit {
 
-  @Input() readonly:boolean = false
+
   @Input() scenes: Scene[] = []
+
+  @Input() isReadOnly:boolean = false
+
   @Output() editSceneClicked = new EventEmitter<Scene>()
   @Output() deleteSceneClicked = new EventEmitter<Scene>()
 
-
   constructor() { }
 
-  ngOnInit(): void {   }
+  ngOnInit(): void { }
 }

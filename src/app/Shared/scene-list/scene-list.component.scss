@@ -11,3 +11,34 @@
 .wrapper{
     @extend %max-WH, %align-center, %just-center;
 }
+
+
+ul{
+    padding: 0.5rem 0;
+}
+
+.item{
+    @extend %max-W, %align-center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+
+    svg{
+        cursor: pointer;
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+
+    &:not(:last-child){
+        margin-bottom: 0.5rem;
+    }
+    
+    &:not(.active):hover{
+        background: var(--gray);
+    }
+
+    &.active{
+        background: var(--gray);
+    }
+}

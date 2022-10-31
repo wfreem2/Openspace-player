@@ -20,7 +20,7 @@
 
 <div class="steps">
     <h2>Scenes: ({{show.scenes.length}})</h2>
-    <scene-list id="scene-list" [scenes]="show.scenes" [readonly]="true"></scene-list>
+    <scene-list id="scene-list" [scenes]="show.scenes"></scene-list>
 </div>
 
 <a id="play" [routerLink]="['/player', show.id]" class="btn primary">Play</a>

@@ -1,10 +1,12 @@
 <div class="creator">
 
     <div id="header">
-        <input name="title" class="input" [(ngModel)]="show.title" type="text" placeholder="Show Title" ngModel #title>
+        <input name="title" class="input" [(ngModel)]="show.title" type="text" 
+        placeholder="Show Title" ngModel #title>
 
         <div>
-            <button id="save" class="btn primary" [disabled]="!title.value.trim()" (click)="showService.save(show)">
+            <button id="save" class="btn primary" [disabled]="!title.value.trim()" 
+            (click)="showService.save(show)">
                 Save
                 <ng-container [ngTemplateOutlet]="save"></ng-container>
             </button>
@@ -16,84 +18,60 @@
         </div>
     </div>
 
-    <!-- Row 2 -->
-    <div id="scene-list-title" class="title-wrapper">
-        <p class="title">Scenes</p>
-    </div>
-    <div id="scene-title" class="title-wrapper">
-        <div id="tabs" class="title">
-            <div class="tab">
-                <label>
-                    <input type="radio" name="tabs" id="" checked (change)="setTab($event.target)" />
-                    <p>MetaData</p>
-                </label>
-            </div>
-            <div class="tab">
-                <label>
-                    <input type="radio" name="tabs" id="" (change)="setTab($event.target)" />
-                    <p>GeoPosition</p>
-                </label>
-            </div>
-        </div>
-    </div>
-    <div id="opts-title" class="title-wrapper">
-        <p class="title">Options</p>
+    
+     <div class="scene">
+        <ng-container *ngIf="currScene then scenePos; else noScene"></ng-container>
     </div>
 
-    <!-- Row 3 -->
     <div class="scene-list">
-        <scene-list [scenes]="show.scenes" 
-        (editSceneClicked)="onEdit($event)" 
-        (deleteSceneClicked)="onDelete($event)">
-        </scene-list>
-    </div>
-
-    <ng-container *ngIf="showMeta then meta; else scene;"></ng-container>
-
-    <div class="scene-options">
-        <div class="section" #s1>
-            <div class="header">
-                <p>Trails</p>
-                <ng-container *ngTemplateOutlet="chevron; context: {el: s1}"></ng-container>
-            </div>
-            <ul class="options">
-                <li>
-                    <label for="trails">Planet Trails</label>
-                    <input type="checkbox" name="trails" id="trail" value="planet-trials"/>
-                </li>
-            </ul>
+        <div>
+            <p class="title">Scenes</p>
+            <button class="btn primary" (click)="newScene()">Add Scene</button>
         </div>
 
-        <div class="section" #s2>
-            <div class="header">
-                <p>Focus Options</p>
-                <ng-container *ngTemplateOutlet="chevron; context: {el: s2}"></ng-container>
-            </div>
-
-            <ul class="options" id="focus-options">
-                <li>
-                    <label for="focus">Focus On</label>
-                    <input type="radio" name="opts" id="focus" value="focus" checked />
-                </li>
-                <li>
-                    <label for="anchor">Anchor</label>
-                    <input type="radio" name="opts" id="anchor" value="anchor"/>
-                </li>
-                <li>
-                    <label for="aim">Aim</label>
-                    <input type="radio" name="opts" id="aim" value="aim"/>
-                </li>
-            </ul>
-        </div>
+        <creator-scene-list [scenes]="show.scenes">
+        </creator-scene-list>
     </div>
 </div>
 
-<ng-template #scene>
-    <div class="scene">
-        <scene (sceneSavedEvent)="addScene($event)" [isAutoMode]="isAutoMode" [scene]="currScene"></scene>
+
+
+<ng-template #scenePos>
+    <div class="scene-title">
+        <input name="title" type="text" class="bare title" [(ngModel)]="currScene.title" placeholder="Scene Title">
+        <ng-container [ngTemplateOutlet]="x"></ng-container>
     </div>
+
+    <div class="tabs">
+        <div class="tab" (click)="tabIdx=0" [class.active]="tabIdx===0">
+            <p>Position</p>
+        </div>
+        <div class="tab" (click)="tabIdx=1" [class.active]="tabIdx===1">
+            <p>Options</p>
+        </div>
+        <div class="tab" (click)="tabIdx=2" [class.active]="tabIdx===2">
+            <p>Transition</p>
+        </div>
+        <div class="tab" (click)="tabIdx=3" [class.active]="tabIdx===3">
+            <p>Script</p>
+        </div>
+    </div>
+
+  
+    <scene-position id="scene-pos"
+    [style.visibility]="tabIdx===0 ? 'visible': 'hidden'"
+    [scene]="currScene"
+    [isAutoMode]="isAutoMode"
+    (sceneSavedEvent)="onSave($event)">
+    </scene-position>
 </ng-template>
 
+
+<ng-template #noScene>
+    <div id="no-scene">
+        <h1>No Scene Selected</h1>
+    </div>
+</ng-template>
 
 <ng-template #meta>
     <div class="details">
@@ -132,5 +110,13 @@
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
         <polyline points="17 8 12 3 7 8"></polyline>
         <line x1="12" y1="3" x2="12" y2="15"></line>
+    </svg>
+</ng-template>
+
+<ng-template #x>
+    <svg id="x" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
     </svg>
 </ng-template>

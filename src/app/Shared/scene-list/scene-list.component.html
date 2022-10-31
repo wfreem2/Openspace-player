@@ -5,10 +5,7 @@
 </ng-template>
 
 <ng-template [ngIf]="scenes.length">
-    <scene-list-item
-    *ngFor="let s of scenes" [scene]="s" 
-    [readonly]="readonly"
-    (deleteClickedEvent)="deleteSceneClicked.emit($event)"
-    (editClickedEvent)="editSceneClicked.emit($event)">
-    </scene-list-item>
+    <ul class="list">
+        <li class="item" *ngFor="let s of scenes">{{s.title}}</li>
+    </ul>
 </ng-template>

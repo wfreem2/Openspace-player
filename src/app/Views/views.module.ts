@@ -4,9 +4,11 @@ import { SharedModule } from '../Shared/shared.module';
 import { YourShowsComponent } from './home/your-shows/your-shows.component';
 import { ShowPreviewComponent } from './home/show-preview/show-preview.component';
 import { CreateComponent } from './create/create.component';
-import { SceneComponent } from './create/scene/scene.component';
+import { ScenePositionComponent } from './create/scene-position/scene-position.component';
 import { PlayComponent } from './play/play.component';
 import { PlaygroundComponent } from './playground/playground.component';
+import { CreatorSceneListComponent } from './create/creator-scene-list/creator-scene-list.component';
+import { ListItemComponent } from './create/creator-scene-list/list-item/list-item.component';
 
 
 
@@ -16,9 +18,11 @@ import { PlaygroundComponent } from './playground/playground.component';
     YourShowsComponent,
     ShowPreviewComponent,
     CreateComponent,
-    SceneComponent,
+    ScenePositionComponent,
     PlayComponent,
-    PlaygroundComponent
+    PlaygroundComponent,
+    CreatorSceneListComponent,
+    ListItemComponent
   ],
   imports: [
     SharedModule

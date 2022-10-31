@@ -7,8 +7,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SceneListComponent } from './scene-list/scene-list.component';
-import { SceneListItemComponent } from './scene-list-item/scene-list-item.component';
-import { DropdownComponent } from './dropdown/dropdown.component'
+import { DropdownComponent } from './dropdown/dropdown.component';
 
 
 
@@ -18,7 +17,6 @@ import { DropdownComponent } from './dropdown/dropdown.component'
     ShowCardComponent,
     NavbarComponent,
     SceneListComponent,
-    SceneListItemComponent,
     DropdownComponent,
   ],
   imports: [
@@ -36,7 +34,7 @@ import { DropdownComponent } from './dropdown/dropdown.component'
     FormsModule,
     ReactiveFormsModule,
     SceneListComponent,
-    DropdownComponent
+    DropdownComponent,
   ]
 })
 export class SharedModule { }

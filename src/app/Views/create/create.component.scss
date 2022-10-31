@@ -9,8 +9,8 @@
 .creator{
     @extend %flx, %max-WH;
     display: grid;
-    grid-template-columns: minmax(8rem, 1fr) minmax(10rem, 2fr)  minmax(8rem, 1fr);
-    grid-template-rows: max-content 4rem 1fr;
+    grid-template-columns: minmax(12rem, 20rem) minmax(10rem, 2fr);
+    grid-template-rows: max-content 1fr;
     overflow-y: auto;
     background: #ffffff;
     min-height: 25rem;
@@ -50,72 +50,69 @@
 
 $grid-bd: solid 2px var(--gray);
 
-.title-wrapper{
-    @extend %max-WH, %just-center, %align-center;
-    border-bottom: $grid-bd;
-    .title{
-        font-size: 1.5em;
-        text-align: center;
-    }
-}
+.title{ font-size: 1.5rem; }
 
-#scene-list-title{ border-right: $grid-bd; }
-#opts-title{ border-left: $grid-bd; }
 
 // Scene creation
 .scene{
-    @extend %flx-col, %align-center;
-    gap: 5rem;
-    padding-top: 1rem;
-    background: #fafafb;
+    padding-top: 2rem;
+    grid-column: 2;
+    grid-row: 2;
 
-    
-    & > div:nth-child(2){
-        @extend %flx-col, %align-center, %max-WH;
-        gap: 1rem;
+    display: grid;
+    row-gap: 2rem;
+    grid-template-rows: max-content max-content 1fr;
+    grid-template-columns: 1fr;
+    justify-items: center;
+
+
+    #scene-pos{ grid-row: 3; }
+
+    .scene-title{
+        @extend %align-center;
+        justify-content: space-between;
+        margin-left: 2rem;
+        padding-bottom: 0.5rem;
+        border-bottom: $grid-bd;
+
+        width: 35rem;
+        height: max-content;
         
-        .btn{
-            align-self: flex-end;
-            width: 8rem;
+        &:hover, &:focus-within{
+            border-color: var(--color-primary);
         }
-    }
 
+        #x{ 
+            cursor: pointer;
+            color: #c2bebe; 
 
-}
-
-
-.scene-options, .scene-list{
-    min-width: 10rem;
-}
-
-
-//Options for a particular scene (e.g., trail, fly-to, focus, etc.)
-.scene-options{
-    @extend %flx-col;
-    overflow-y: auto;
-    border-left: solid 2px var(--gray);
-
-    .options{
-        @extend %flx-col;
-        margin-top: 0.5rem;
-        padding-left: 1rem;
-
-        label{ font-size: 1rem; }
-        li{
-            @extend %align-center;
-            justify-content: space-between;
-            width: 8rem;
+            &:hover{ color: #333333; }
         }
     }
 }
+
+
 
 
 // List of created scenes
 .scene-list{
     @extend %flx-col;
+    grid-column: 1;
     gap: 0.5rem;
-    padding: 0 1rem;
+    padding: 0.5rem 1rem;
+    background: #fafafb;
     border-right: solid 2px var(--gray);
+
+    & > div:first-child{
+        @extend %align-center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+}
+
+#no-scene{
+    @extend %max-WH, %just-center, %align-center;
+    grid-row: 1 / span all;
 }
 
 
@@ -138,45 +135,30 @@ $grid-bd: solid 2px var(--gray);
 }
 
 
-//For switching between views in the center
-#tabs{
-    @extend %align-center, %just-center;
+.tabs{
+    grid-row: 2;
+
+
+    @extend %align-center;
     gap: 1rem;
+    padding: 0.3rem;
+    background: #f6f6f6;
+    border-radius: 8px;
+    
 
     .tab{
-        label{
-            p{
-                cursor: pointer;
-                font-size: 1rem;
-                padding: 0.5rem 1rem;
-                text-align: center;
-                color: var(--txt-color);
-                border-radius: var(--bd-radius); 
-
-                // &:hover + input[type=radio]:not(:checked){
-                &:hover{
-                    transform: translateY(-2px);
-                    color: #ffffff;
-                    background: var(--color-primary);
-                }
-            }
-
-            input[type=radio]{
-                position: absolute;
-                opacity: 0;
-                width: 0;
-                height: 0;  
-            }
-
-            input[type=radio]:checked + p{
-                color: var(--color-primary);
-                background: #d0e4ff;
-            }
-
-
+        cursor: pointer;
+        text-align: center;
+        border-radius: 8px;
+        padding: 0.2rem 0.75rem;
+        min-width: 7rem;
+        
+        &.active, &:hover{
+            background: #ffffff;
+            box-shadow: var(--shadow);
         }
-
     }
+
 }
 
 // Chevron icon
