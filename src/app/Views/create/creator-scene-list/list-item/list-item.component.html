@@ -7,10 +7,17 @@
     <ng-container [ngTemplateOutlet]="more"></ng-container>
 </div>
 
+<div class="ctx-menu" *ngIf="isCtxShowing">
+    <div (click)="onDeleteClicked()">
+        Delete
+        <ng-container [ngTemplateOutlet]="del"></ng-container>
+    </div>
+</div>
+
 
 
 <ng-template #more>
-    <svg id="more" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+    <svg #m (click)="isCtxShowing = !isCtxShowing" id="more" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
         class="feather feather-more-vertical">
         <circle cx="12" cy="12" r="1"></circle>
@@ -27,5 +34,15 @@
         <path
             d="M7 15.2527V13.2527H17V15.2527H13.0001L13 19.6669L14.8284 17.8385L16.2426 19.2527L12 23.4954L7.75732 19.2527L9.17154 17.8385L11 19.667V15.2527L7 15.2527Z"
             fill="currentColor" />
+    </svg>
+</ng-template>
+
+
+<ng-template #del>
+    <svg 
+     xmlns="http://www.w3.org/2000/svg"  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
+        <polyline points="3 6 5 6 21 6"></polyline>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
     </svg>
 </ng-template>
