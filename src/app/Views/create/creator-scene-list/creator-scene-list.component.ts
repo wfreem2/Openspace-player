@@ -8,7 +8,7 @@ import { ListItemComponent } from './list-item/list-item.component';
   templateUrl: './creator-scene-list.component.html',
   styleUrls: ['./creator-scene-list.component.scss']
 })
-export class CreatorSceneListComponent implements OnInit, AfterViewInit {
+export class CreatorSceneListComponent implements OnInit{
 
   @ViewChildren(ListItemComponent) items!: QueryList<ListItemComponent>
   @Input() scenes!: Scene[]
@@ -16,11 +16,6 @@ export class CreatorSceneListComponent implements OnInit, AfterViewInit {
   constructor(private selectedSceneService: SelectedSceneService) { }
 
   ngOnInit(): void { }
-
-  ngAfterViewInit(): void {
-    console.log(this.items)
-  }
-
 
   onItemClicked(item: ListItemComponent): void{
     const { scene } = item

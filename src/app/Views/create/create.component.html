@@ -57,13 +57,23 @@
         </div>
     </div>
 
-  
-    <scene-position id="scene-pos"
-    [style.visibility]="tabIdx===0 ? 'visible': 'hidden'"
-    [scene]="currScene"
-    [isAutoMode]="isAutoMode"
-    (sceneSavedEvent)="onSave($event)">
-    </scene-position>
+    
+    <div class="content-area">
+
+        <scene-position id="scene-pos"
+        *ngIf="tabIdx===0"
+        [scene]="currScene"
+        [isAutoMode]="isAutoMode"
+        (sceneSavedEvent)="onSave($event)">
+        </scene-position>
+
+        <scene-options *ngIf="tabIdx===1">
+
+        </scene-options>
+
+    </div>
+
+
 </ng-template>
 
 
@@ -85,14 +95,6 @@
             </div>
         </form>
     </div>
-</ng-template>
-
-<ng-template #chevron let-el="el">
-    <svg (click)="toggleClass(el)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        class="chevron feather feather-chevron-down">
-        <polyline points="6 9 12 15 18 9"></polyline>
-    </svg>
 </ng-template>
 
 <ng-template #save>

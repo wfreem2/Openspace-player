@@ -20,7 +20,7 @@ export class CreateComponent implements OnInit {
 
   private id: number = 0
 
-  tabIdx = 0
+  tabIdx = 1
 
 
   detailsForm: FormGroup = new FormGroup({

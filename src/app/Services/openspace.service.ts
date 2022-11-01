@@ -60,6 +60,10 @@ export class OpenspaceService {
     )
   }
 
+  setTrail(trail: Trail, value: boolean): void{
+    this.openspace.setPropertyValueSingle(`Scene.${trail}Trail.Renderable.Enabled`, value) 
+  }
+
 }
 
 export enum PathNavigationOptions{
@@ -72,3 +76,71 @@ export enum PathNavigationOptions{
   Uranus="Uranus",
   Neptune="Neptune"
 }
+
+export type Trail = 
+ "Mercury" |
+ "Venus" |
+ "Earth" |
+ "Mars" |
+ "Jupiter" |
+ "Saturn" |
+ "Uranus" |
+ "Neptune" |
+ "Moon" |
+ "Phobos" |
+ "Deimos" |
+ "Callisto" |
+ "Europa" |
+ "Ganymede" |
+ "Io" |
+ "Saturn" |
+ "Dione" |
+ "Enceladus" |
+ "Hyperion" |
+ "Iapetus" |
+ "Mimas" |
+ "Rhea" |
+ "Tethys" |
+ "Titan" |
+ "PlutoBarycenter" |
+ "PlutoBarycentric" |
+ "CharonBarycentric" |
+ "Hydra" |
+ "Kerberos" |
+ "Nix" |
+ "Styx"
+
+
+export const trails: Trail[] = [
+  "Mercury",
+  "Venus",
+  "Earth",
+  "Mars",
+  "Jupiter",
+  "Saturn",
+  "Uranus",
+  "Neptune",
+  "Moon",
+  "Phobos",
+  "Deimos",
+  "Callisto",
+  "Europa",
+  "Ganymede",
+  "Io",
+  "Saturn",
+  "Dione",
+  "Enceladus",
+  "Hyperion",
+  "Iapetus",
+  "Mimas",
+  "Rhea",
+  "Tethys",
+  "Titan",
+  "PlutoBarycenter",
+  "PlutoBarycentric",
+  "CharonBarycentric",
+  "Hydra",
+  "Kerberos",
+  "Nix",
+  "Styx",
+]

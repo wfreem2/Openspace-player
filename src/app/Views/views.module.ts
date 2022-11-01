@@ -9,6 +9,7 @@ import { PlayComponent } from './play/play.component';
 import { PlaygroundComponent } from './playground/playground.component';
 import { CreatorSceneListComponent } from './create/creator-scene-list/creator-scene-list.component';
 import { ListItemComponent } from './create/creator-scene-list/list-item/list-item.component';
+import { SceneOptionsComponent } from './create/scene-options/scene-options.component';
 
 
 
@@ -22,14 +23,15 @@ import { ListItemComponent } from './create/creator-scene-list/list-item/list-it
     PlayComponent,
     PlaygroundComponent,
     CreatorSceneListComponent,
-    ListItemComponent
+    ListItemComponent,
+    SceneOptionsComponent
   ],
   imports: [
     SharedModule
   ],
   exports: [
     HomeComponent,
-    CreateComponent
+    CreateComponent,
   ]
 })
 export class ViewsModule { }

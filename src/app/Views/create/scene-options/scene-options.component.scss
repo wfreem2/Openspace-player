@@ -1,0 +1,148 @@
+@use '/src/styles';
+
+
+:host{
+    @extend %flx-col;
+    padding: 0.5rem;
+    min-width: max-content;
+    width: 25rem;
+    min-height: 30rem;
+}
+
+.option{
+    @extend %align-center;
+    gap: 1rem;
+    justify-content: space-between;
+
+    &:not(:last-child){
+        margin-bottom: 0.5rem;
+    }
+}
+
+ul{
+    padding: 0 1rem;
+    overflow-y: auto;
+}
+
+#trails{
+    max-height: 25rem;
+    max-width: 25rem;
+}
+
+.section{
+    transition: all 0.2s;
+    padding: 0.5rem;
+    overflow-y: hidden;
+    max-height: 50rem;
+
+    .title{ 
+        font-size: 1.85rem; 
+        margin-bottom: 0.5rem;
+    }
+
+    &.collapsed{
+        max-height: 3.5rem;
+        
+        .search{ opacity: 0; }
+        .chevron{ transform: rotate(180deg); }
+    }
+
+
+    & > div:first-child{
+        @extend %align-center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    border-bottom: solid 2px var(--gray);
+    
+    &:not(:last-child){
+        border-top: solid 2px var(--gray);
+    }
+}
+
+.chevron{ cursor: pointer; }
+
+.select-opts{
+    @extend %align-center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    height: 3rem;
+
+    .bare{
+        cursor: pointer;
+        color: var(--color-primary);
+        font-size: 1rem;
+
+        &:hover{
+            text-decoration: underline;
+        }
+    }
+}
+
+
+.search{
+    position: relative;
+    display: grid;
+    align-items: center;
+    grid-template-columns: max-content 1fr max-content;
+    column-gap: 0.5rem;
+    
+    border-top: solid 2px var(--gray);
+    border-bottom: solid 2px var(--gray);
+    height: 3rem;
+    margin: 0 -0.5rem;
+
+    input{
+        grid-column: 2;
+        font-size: 1rem;
+    }
+
+    svg{
+        color: #b8b5b5;
+        width: 1.2rem;
+        height: 1.2rem;
+    }
+
+    #filter-icon{
+        cursor: pointer;
+        &:hover{ color: var(--color-primary); }
+    }
+
+    .filter-ctx{
+        @extend %card;
+        position: absolute;
+        background: #ffffff;
+        top: 3rem;
+        right: 0.2rem;
+        padding: 0.5rem 0.25rem;
+        width: 10rem;
+
+        ul{ padding: 0rem; }
+        li{
+            @extend %align-center;
+            justify-content: space-between;
+            cursor: pointer;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            border-radius: var(--bd-radius);
+
+            svg{ color: var(--txt-color); }
+            
+            &:hover{
+                background: var(--gray);
+            }
+
+            &:not(:last-child){
+                margin-bottom: 0.5rem;
+            }
+
+            &.active{
+                color: #ffffff;
+                background: var(--color-primary);
+                
+                svg{ color: #ffffff; }
+            }
+        }
+    }
+}
