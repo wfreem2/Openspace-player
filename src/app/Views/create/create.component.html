@@ -29,7 +29,9 @@
             <button class="btn primary" (click)="newScene()">Add Scene</button>
         </div>
 
-        <creator-scene-list [scenes]="show.scenes">
+        <creator-scene-list 
+        [scenes]="show.scenes"
+        (deleteClickedEvent)="onDelete($event)">
         </creator-scene-list>
     </div>
 </div>
@@ -67,12 +69,11 @@
         (sceneSavedEvent)="onSave($event)">
         </scene-position>
 
-        <scene-options *ngIf="tabIdx===1">
-
+        <scene-options *ngIf="tabIdx===1"
+        [(ngModel)]="currScene.sceneOptions">
         </scene-options>
 
     </div>
-
 
 </ng-template>
 

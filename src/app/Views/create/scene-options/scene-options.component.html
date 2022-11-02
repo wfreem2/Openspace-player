@@ -1,16 +1,34 @@
-<div class="section" #s1>
+<div class="section" id="camera" #s1>
     <div>
-        <p class="title">Focus</p>
+        <p class="title">Camera</p>
         <ng-container *ngTemplateOutlet="chevron; context: {el: s1}"></ng-container>
     </div>
 
+    <div class="select-opts">
+        <button class="bare" (click)="selectAllCameraOpts()">Select All</button>
+        <button class="bare" (click)="deselectAllCameraOpts()">Deselect All</button>
+    </div>
     <ul class="options">
-        <li class="option"> option</li>
-        <li class="option">opt</li>
+        <li class="option">
+            <label for="camera">Keep Zoom</label>
+            <input type="checkbox" name="camera" id="zoom" [(ngModel)]="sceneOptions.keepZoom">
+            <!-- <input type="checkbox" name="camera" id="zoom"> -->
+        </li>
+        <li class="option">
+
+            <label for="camera">Keep Rotation</label>
+            <input type="checkbox" name="camera" id="rotation" [(ngModel)]="sceneOptions.keepRotation">
+            <!-- <input type="checkbox" name="camera" id="rotation"> -->
+        </li>
+        <li class="option">
+            <label for="camera">Keep Roll</label>
+            <input type="checkbox" name="camera" id="roll" [(ngModel)]="sceneOptions.keepRoll">
+            <!-- <input type="checkbox" name="camera" id="roll"> -->
+        </li>
     </ul>
 </div>
 
-<div class="section" #s2>
+<div class="section" id="trails" #s2>
     <div>
         <p class="title">Trails</p>
         <ng-container *ngTemplateOutlet="chevron; context: {el: s2}"></ng-container>
@@ -22,28 +40,34 @@
         <ng-container [ngTemplateOutlet]="filterIcon"></ng-container>
 
         <div class="filter-ctx" #filter [style.visibility]="isFilterShowing ? 'visible' : 'hidden'">
-            <ul>
-                <li #sortOpt [class.active]="$currSorting.value === 'asc'" (click)="selectSort('asc')">
-                    Sort Ascending
-                    <ng-container [ngTemplateOutlet]="arrowUp"></ng-container>
-                </li>
-                <li #sortOpt [class.active]="$currSorting.value === 'des'" (click)="selectSort('des')">
-                    Sort Descending
-                    <ng-container [ngTemplateOutlet]="arrowDown"></ng-container>
-                </li>
-            </ul>
+            <div class="filter">
+                <p class="title">Sorting</p>
+                <ul>
+                    <li #sortOpt [class.active]="$currSorting.value === 'asc'" (click)="selectSort('asc')">
+                        Sort Ascending
+                        <ng-container [ngTemplateOutlet]="arrowUp"></ng-container>
+                    </li>
+                    <li #sortOpt [class.active]="$currSorting.value === 'des'" (click)="selectSort('des')">
+                        Sort Descending
+                        <ng-container [ngTemplateOutlet]="arrowDown"></ng-container>
+                    </li>
+                </ul>
+            </div>
+
         </div>
     </div>
 
     <div class="select-opts">
-        <button class="bare" (click)="selectAll()">Select All</button>
-        <button class="bare" (click)="deselectAll()">Deselect All</button>
+        <button class="bare" (click)="selectAllTrails()">Select All</button>
+        <button class="bare" (click)="deselectAllTrails()">Deselect All</button>
     </div>
 
-    <ul class="options" id="trails">
+    <ul class="options">
         <li class="option" *ngFor="let option of trailOptions">
-            <label [for]="option.trail">{{option.trail}} Trail</label>
-            <input type="checkbox" [name]="option.trail" [(ngModel)]="option.isEnabled">
+            <label for="{{option.trail}}">{{option.trail}} Trail</label>
+            <input type="checkbox" name="{{option.trail}}"
+             [(ngModel)]="option.isEnabled" (ngModelChange)="onOptionChecked()"
+             >
         </li>
     </ul>
 </div>

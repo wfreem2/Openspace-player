@@ -84,7 +84,6 @@ export class CreateComponent implements OnInit {
 
   onDelete(scene: Scene){
 
-    console.log(scene)
     //If the user is editing the scene and deletes it, reset current scene
     if(this.currScene.id === scene.id){ this.setDefaultState() }
 
@@ -123,12 +122,13 @@ export class CreateComponent implements OnInit {
     return  { 
       id: this.id,
       title: '',
-      geoPos: {
-        lat: 0,
-        long: 0,
-        alt: 0
+      sceneOptions: {
+        keepRoll: false,
+        keepRotation: false,
+        keepZoom: false,
+        enabledTrails: []
       },
-      travelMethod: 'flyTo'
+      geoPos: { lat: 0, long: 0, alt: 0 }
     }
   }
 

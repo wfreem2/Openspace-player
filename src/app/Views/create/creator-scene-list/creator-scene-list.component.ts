@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { SelectedSceneService } from '../selected-scene.service';
 import { ListItemComponent } from './list-item/list-item.component';
@@ -11,7 +11,9 @@ import { ListItemComponent } from './list-item/list-item.component';
 export class CreatorSceneListComponent implements OnInit{
 
   @ViewChildren(ListItemComponent) items!: QueryList<ListItemComponent>
+
   @Input() scenes!: Scene[]
+  @Output() deleteClickedEvent = new EventEmitter<Scene>()
 
   constructor(private selectedSceneService: SelectedSceneService) { }
 

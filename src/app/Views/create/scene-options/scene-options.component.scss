@@ -9,6 +9,10 @@
     min-height: 30rem;
 }
 
+.options{
+    @extend %max-H;
+}
+
 .option{
     @extend %align-center;
     gap: 1rem;
@@ -25,8 +29,15 @@ ul{
 }
 
 #trails{
-    max-height: 25rem;
-    max-width: 25rem;
+    display: grid;
+    grid-template-rows: max-content max-content max-content 1fr;
+    row-gap: 0.5rem;
+    max-height: 30rem;
+    // max-width: 25rem;
+    &.collapsed{
+        max-height: 3.5rem;
+        .search{ opacity: 0; }
+    }
 }
 
 .section{
@@ -43,8 +54,7 @@ ul{
     &.collapsed{
         max-height: 3.5rem;
         
-        .search{ opacity: 0; }
-        .chevron{ transform: rotate(180deg); }
+        .chevron{ transform: unset; }
     }
 
 
@@ -61,14 +71,16 @@ ul{
     }
 }
 
-.chevron{ cursor: pointer; }
+.chevron{ 
+    cursor: pointer; 
+    transform: rotate(180deg); 
+}
 
 .select-opts{
     @extend %align-center;
     justify-content: flex-end;
     gap: 0.5rem;
-    height: 3rem;
-
+    margin: 0.5rem 0;
     .bare{
         cursor: pointer;
         color: var(--color-primary);
@@ -108,41 +120,44 @@ ul{
         cursor: pointer;
         &:hover{ color: var(--color-primary); }
     }
+}
 
-    .filter-ctx{
-        @extend %card;
-        position: absolute;
-        background: #ffffff;
-        top: 3rem;
-        right: 0.2rem;
-        padding: 0.5rem 0.25rem;
-        width: 10rem;
+//Context menu for filters and sorting options
+.filter-ctx{
+    @extend %card;
+    position: absolute;
+    background: #ffffff;
+    top: 3rem;
+    right: 0.2rem;
+    padding: 0.5rem 0.35rem;
+    width: 11rem;
 
-        ul{ padding: 0rem; }
-        li{
-            @extend %align-center;
-            justify-content: space-between;
-            cursor: pointer;
-            padding: 0.5rem;
-            font-size: 0.9rem;
-            border-radius: var(--bd-radius);
+    .title{ font-size: 1.3rem; }
 
-            svg{ color: var(--txt-color); }
+    ul{ padding: 0rem; }
+    li{
+        @extend %align-center;
+        justify-content: space-between;
+        cursor: pointer;
+        padding: 0.5rem;
+        font-size: 0.9rem;
+        border-radius: var(--bd-radius);
+
+        svg{ color: var(--txt-color); }
+        
+        &:hover{
+            background: var(--gray);
+        }
+
+        &:not(:last-child){
+            margin-bottom: 0.5rem;
+        }
+
+        &.active{
+            color: #ffffff;
+            background: var(--color-primary);
             
-            &:hover{
-                background: var(--gray);
-            }
-
-            &:not(:last-child){
-                margin-bottom: 0.5rem;
-            }
-
-            &.active{
-                color: #ffffff;
-                background: var(--color-primary);
-                
-                svg{ color: #ffffff; }
-            }
+            svg{ color: #ffffff; }
         }
     }
 }
