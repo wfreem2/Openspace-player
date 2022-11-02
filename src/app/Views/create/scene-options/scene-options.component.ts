@@ -30,10 +30,10 @@ export class SceneOptionsComponent implements OnInit, OnDestroy {
     .subscribe(sorting => this.sort(sorting))
 
     this.query.asObservable()
-    .pipe(
-      switchMap(query => of(this.search(query))),
-    )
-    .subscribe(options => this.trailOptions = options)
+    .pipe(switchMap(query => of(this.search(query))))
+    .subscribe(options => {
+      this.trailOptions = options
+    })
   }
 
   ngOnDestroy(): void {
@@ -74,13 +74,12 @@ export class SceneOptionsComponent implements OnInit, OnDestroy {
         break
 
       case 'none':
-        this.trailOptions = this.originalTrails
+        this.trailOptions = [...this.originalTrails]
         break
     }
   }
 
   private search(query: string): TrailOption[] {
-    
     return this.originalTrails.filter(opt => opt.trail.includes(query))
   }
 
@@ -94,27 +93,17 @@ export class SceneOptionsComponent implements OnInit, OnDestroy {
     this.trailOptions.forEach(o => o.isEnabled = false)
   }
 
-  selectSort(event: Event, sorting: Sorting){
-    const target = event.target as HTMLElement
-
-    if(target.classList.contains('active')){
+  selectSort(sorting: Sorting){
+    
+    if(this.$currSorting.value === sorting){
       this.$currSorting.next('none')
-      target.classList.remove('active')
       return
     }
-
-    //Set all sorting options to inactive
-    this.sortOptions.forEach( ({ nativeElement }) => {
-      const node = nativeElement as HTMLElement
-      node.classList.remove('active')
-    })
-
-    target.classList.add('active')
-
+    
     this.$currSorting.next(sorting)
   }
 
-  filterMenuClicked(event: Event){  
+  private filterMenuClicked(event: Event){  
 
     const isFilterMenuClicked = isChildClicked(this.filterMenu.nativeElement, event.target)
     const isFilterBtnClicked = isChildClicked(this.filterBtn.nativeElement, event.target)

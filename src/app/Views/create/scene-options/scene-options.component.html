@@ -5,7 +5,7 @@
     </div>
 
     <ul class="options">
-        <li class="option">option</li>
+        <li class="option"> option</li>
         <li class="option">opt</li>
     </ul>
 </div>
@@ -23,11 +23,11 @@
 
         <div class="filter-ctx" #filter [style.visibility]="isFilterShowing ? 'visible' : 'hidden'">
             <ul>
-                <li #sortOpt (click)="selectSort($event, 'asc')">
+                <li #sortOpt [class.active]="$currSorting.value === 'asc'" (click)="selectSort('asc')">
                     Sort Ascending
                     <ng-container [ngTemplateOutlet]="arrowUp"></ng-container>
                 </li>
-                <li #sortOpt (click)="selectSort($event, 'des')">
+                <li #sortOpt [class.active]="$currSorting.value === 'des'" (click)="selectSort('des')">
                     Sort Descending
                     <ng-container [ngTemplateOutlet]="arrowDown"></ng-container>
                 </li>
@@ -56,6 +56,7 @@
         <polyline points="6 9 12 15 18 9"></polyline>
     </svg>
 </ng-template>
+
 <ng-template #searchIcon>
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
