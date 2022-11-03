@@ -1,5 +1,6 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { map, of, Subject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'dropdown',
@@ -15,32 +16,54 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 
 
-export class DropdownComponent implements OnInit, ControlValueAccessor {
+export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
   @Input() items!: any[]
-  // @Input() defaultItem?: any
 
-
+  
   onChange: any = () => {}
   onTouch: any = () => {}
-
+  
+  filteredSelectableItems: SelectableItem[] = []
   selectableItems: SelectableItem[] = []
   selectedItem!: SelectableItem
-
-  isCollapsed: boolean = true
+  
+  isCollapsed: boolean = false
   isTouched: boolean = false
   isDisabled: boolean = false
+  
+  query = new Subject<string>()
+  private $unSub = new Subject<any>()
 
-  constructor() { }
+  constructor() { 
+    this.query.asObservable()
+    .pipe(
+      takeUntil(this.$unSub),
+      map(query => query.toLowerCase()),
+      switchMap(query => of(this.search(query))),
+    )
+    .subscribe(items => this.filteredSelectableItems = items)
+  }
+
+  search(query: any): SelectableItem[] {
+    return this.selectableItems.filter(
+      i => i.item.toString().toLowerCase().includes(query)
+    )
+  }
+
+  ngOnDestroy(): void { this.$unSub.next(undefined) }
 
   ngOnInit(): void { 
     this.selectableItems = this.items.map(i => {
       return {item: i, isSelected: false}
     }) 
+
+    this.onDefaultNotProvided()
+
+    this.filteredSelectableItems = this.selectableItems
   }
 
   writeValue(obj: any): void { 
-
     if(!obj){
       this.onDefaultNotProvided()
       this.onChange(this.selectedItem.item)
@@ -69,6 +92,7 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
       this.isTouched = true
     }
 
+    this.moveToTop(this.selectedItem)
   } 
 
   setItem(item: any): void{
@@ -87,6 +111,11 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
   } 
 
 
+  private moveToTop(item: SelectableItem){
+    this.filteredSelectableItems = this.selectableItems.filter(i => i !== item)
+    this.filteredSelectableItems.unshift(item)
+  }
+
   private onDefaultNotProvided(): void{   
     //Set the first item as selected by default
     this.selectedItem = this.selectableItems[0]
@@ -95,3 +124,5 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
 }
 
 type SelectableItem = {item: any, isSelected: boolean}
+
+

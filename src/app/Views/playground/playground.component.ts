@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SceneGraphNode } from 'src/app/Services/openspace.service';
 
 @Component({
   selector: 'app-playground',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PlaygroundComponent implements OnInit {
 
-  constructor() { }
+  pathNavOptions: SceneGraphNode[] = []
+
+  constructor() { 
+    this.pathNavOptions = Object.values(SceneGraphNode)
+  }
 
   ngOnInit(): void {
   }
