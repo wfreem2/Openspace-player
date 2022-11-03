@@ -5,7 +5,10 @@
     position: relative;
     z-index: 99;
     min-width: 15rem;
+
 }
+
+
 
 .header{
     @extend %align-center;
@@ -17,6 +20,14 @@
     border-radius: var(--bd-radius);
     border: solid 2px var(--gray);
 
+    &.disabled{
+        cursor: unset;
+        pointer-events: none;
+        background: #eaf1f8;
+
+        #chevron{ color: #c4c5c5; }
+    }
+    
     &.active{
         border-color: var(--color-primary);
     }

@@ -1,64 +1,103 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { Scene } from 'src/app/Interfaces/Scene';
-import { OpenspaceService, PathNavigationOptions } from 'src/app/Services/openspace.service';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { BehaviorSubject, filter, map, Subject, Subscription, takeUntil } from 'rxjs';
+import { GeoPosition } from 'src/app/Interfaces/GeoPosition';
+import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
 
 @Component({
   selector: 'scene-position',
   templateUrl: './scene-position.component.html',
-  styleUrls: ['./scene-position.component.scss']
+  styleUrls: ['./scene-position.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: ScenePositionComponent,
+      multi: true
+    }
+  ]
 })
-export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges {
+
+export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
 
 
-  selectedSetting: selectedSetting = 'geo'
+  private $unSub = new Subject<any>()
   
-  @Input() scene!:Scene
+  @Input() geoPosition!:GeoPosition
   @Input() isAutoMode: boolean = true
-  @Output() sceneSavedEvent = new EventEmitter<Scene>()
-
-  pathNavOptions: PathNavigationOptions[] = []
+  
+  pathNavOptions: SceneGraphNode[] = []
+  
+  readonly $isAutoMode = new BehaviorSubject<boolean>(this.isAutoMode)
   
   private listener!: Subscription
+  private readonly $geoPos = new Subject<GeoPosition>()
 
+  onChange: any = () => {}
+  onTouch: any = () => {}
+  
   constructor(private openSpaceService: OpenspaceService) { 
-    this.pathNavOptions = Object.values(PathNavigationOptions)
+  
+
+    this.pathNavOptions = Object.values(SceneGraphNode)
+    
+    this.$isAutoMode.asObservable()
+    .pipe(takeUntil(this.$unSub))
+    .subscribe(isAuto => {
+      this.isAutoMode = isAuto
+
+      if(isAuto){ this.listenGeo() } 
+      else{ this.stopListening() }
+    })
+
+    this.$geoPos.asObservable()
+    .pipe(
+      map(geoPos => !!geoPos ? 
+        geoPos : 
+        { lat: 0, long: 0, alt: 0, nodeName: SceneGraphNode.Mercury }
+      ),
+      takeUntil(this.$unSub)
+    )
+    .subscribe(geoPos => this.geoPosition = geoPos)
+  }
+  
+  ngOnInit(): void { }
+
+  ngOnDestroy(): void {
+    this.$unSub.next(undefined)
+    this.stopListening() 
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     
     if(changes['isAutoMode']){
-
-      const { isAutoMode } = changes
-      const { currentValue } = isAutoMode
-      
-      if(currentValue){ this.listenGeo() } 
-      else{ this.stopListening() }
+      const { currentValue } = changes['isAutoMode']
+      this.$isAutoMode.next(currentValue)
     }
   }
 
-  ngOnDestroy(): void { this.stopListening() }
+  writeValue(obj: any): void { this.$geoPos.next(obj) }
 
-  ngOnInit(): void { }
+  registerOnChange(fn: any): void { this.onChange = fn }
+  registerOnTouched(fn: any): void { this.onTouch = fn }
+  setDisabledState?(isDisabled: boolean): void { }
 
+  onValueChange(): void{ this.onChange(this.geoPosition) }
 
   clear(): void{
-    this.scene.geoPos = {
+    this.geoPosition = {
        alt: 0,
        lat: 0,
        long: 0
     }
-
-    this.scene.title = ''
   }
 
-  listenGeo(): void{
+  async listenGeo(){
     this.listener = 
     this.openSpaceService
     .listenCurrentPosition()
     .subscribe({
-      next: pos => this.scene.geoPos = pos,
-      error:  _ => console.log('error with openspace')
+      next: pos => this.geoPosition = pos,
+      error: _ => console.log('error with openspace')
     })
   }
 
@@ -67,5 +106,3 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges {
       this.listener.unsubscribe() 
   }
 }
-
-type selectedSetting = 'geo' | 'script'

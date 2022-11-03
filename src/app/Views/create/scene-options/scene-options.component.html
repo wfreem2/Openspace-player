@@ -11,19 +11,22 @@
     <ul class="options">
         <li class="option">
             <label for="camera">Keep Zoom</label>
-            <input type="checkbox" name="camera" id="zoom" [(ngModel)]="sceneOptions.keepZoom">
-            <!-- <input type="checkbox" name="camera" id="zoom"> -->
+            <input type="checkbox" name="camera" id="zoom" 
+             (ngModelChange)="onOptionChecked()"
+             [(ngModel)]="sceneOptions.keepZoom">
         </li>
         <li class="option">
 
             <label for="camera">Keep Rotation</label>
-            <input type="checkbox" name="camera" id="rotation" [(ngModel)]="sceneOptions.keepRotation">
-            <!-- <input type="checkbox" name="camera" id="rotation"> -->
+            <input type="checkbox" name="camera" id="rotation" 
+             (ngModelChange)="onOptionChecked()"
+             [(ngModel)]="sceneOptions.keepRotation">
         </li>
         <li class="option">
             <label for="camera">Keep Roll</label>
-            <input type="checkbox" name="camera" id="roll" [(ngModel)]="sceneOptions.keepRoll">
-            <!-- <input type="checkbox" name="camera" id="roll"> -->
+            <input type="checkbox" name="camera" id="roll" 
+             (ngModelChange)="onOptionChecked()"
+             [(ngModel)]="sceneOptions.keepRoll">
         </li>
     </ul>
 </div>
@@ -64,10 +67,9 @@
 
     <ul class="options">
         <li class="option" *ngFor="let option of trailOptions">
-            <label for="{{option.trail}}">{{option.trail}} Trail</label>
-            <input type="checkbox" name="{{option.trail}}"
-             [(ngModel)]="option.isEnabled" (ngModelChange)="onOptionChecked()"
-             >
+            <label for="{{option.node}}">{{option.node}} Trail</label>
+            <input type="checkbox" name="{{option.node}}"
+             [(ngModel)]="option.isEnabled" (ngModelChange)="onOptionChecked()">
         </li>
     </ul>
 </div>

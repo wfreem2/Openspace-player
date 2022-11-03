@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { merge } from "lodash"
 import { ActivatedRoute } from '@angular/router';
-import { map, pluck, Subject } from 'rxjs';
+import { first, map, pluck, Subject, takeUntil } from 'rxjs';
 import { ShowService } from 'src/app/Services/show.service';
 import { Show } from 'src/app/Interfaces/Show';
 import { toggleClass } from 'src/app/Utils/utils';
@@ -15,12 +15,15 @@ import { SelectedSceneService } from './selected-scene.service';
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.scss']
 })
-export class CreateComponent implements OnInit {
+export class CreateComponent implements OnInit, OnDestroy {
 
 
   private id: number = 0
+  private readonly saveInterval = 1000 * 60 * 2
+  private $unSub = new Subject<any>()
 
-  tabIdx = 1
+
+  tabIdx = 0
 
 
   detailsForm: FormGroup = new FormGroup({
@@ -28,15 +31,14 @@ export class CreateComponent implements OnInit {
     desc: new FormControl(''),
   })
 
-  
   show!: Show
-  currScene!: Scene
+  currScene?: Scene
 
-  isAutoMode:boolean = true
+  isSaved: boolean = true
+  isAutoMode:boolean = false
   showMeta: boolean = false
 
 
-  events = new Subject<Scene>()
 
   constructor(private route: ActivatedRoute, public showService: ShowService,
      private selectedSceneService: SelectedSceneService) {
@@ -48,12 +50,13 @@ export class CreateComponent implements OnInit {
         return (id === 'new') ? 
         showService.getBlankShow() :
         showService.getShowById(parseInt(id))!
-      })
+      }),
+      first()
     )
     .subscribe(show => {
       this.show = show
 
-      //If at least on scene, set the id to be greater to avoid conflicting ids
+      //If at least on scene, set the id to highest id to avoid conflicting ids
       if(show.scenes.length){
         this.id = show.scenes.reduce( 
           (id, s) => Math.max(id, s.id), show.scenes[0].id
@@ -62,30 +65,51 @@ export class CreateComponent implements OnInit {
     })
     
     this.selectedSceneService.$selectedScene
+    .pipe(takeUntil(this.$unSub))
     .subscribe(s => this.currScene = s)
 
+    /*     setInterval(() => {
+      console.log('autosaving')
+      this.showService.save(this.show)
+    }, this.saveInterval) */
   }
+
+  ngOnDestroy(): void { this.$unSub.next(undefined) }
+
 
   ngOnInit(): void { }
 
   title(){ return this.detailsForm.get('title') }
   desc(){ return this.detailsForm.get('desc') }
 
+  onChange(): void{
+/*     let savedShows = localStorage.getItem('shows')
 
+    if(savedShows){
+      const show: Show = JSON.parse(savedShows)
+      console.log(show)
+    }
 
-  onSave(scene: Scene){
+    this.isSaved = false
+    console.log('change') */
+  }
 
-    let existingScene = this.show.scenes.find(s => s.id === scene.id)
+  saveShow(): void{
+    this.showService.save(this.show); 
+    this.isSaved=true
+  }
 
-    if(!existingScene){ this.show.scenes.push(scene) }
+  saveScene(){
+    console.log(this.currScene)
+    let existingScene = this.show.scenes.find(s => s.id === this.currScene!.id)
+    if(!existingScene){ this.show.scenes.push(this.currScene!) }
     
-    merge(existingScene, scene)    
+    merge(existingScene, this.currScene)    
   }
 
   onDelete(scene: Scene){
-
     //If the user is editing the scene and deletes it, reset current scene
-    if(this.currScene.id === scene.id){ this.setDefaultState() }
+    if(this.currScene!.id === scene.id){ this.setDefaultState() }
 
     this.show.scenes = this.show.scenes.filter(s => s.id !== scene.id)
   }
@@ -93,8 +117,6 @@ export class CreateComponent implements OnInit {
   onEdit(scene: Scene){ 
     this.isAutoMode = false
     this.currScene = scene
-
-    this.events.next(scene)
   }
 
   setActive(el: HTMLDivElement, target: any){
@@ -105,15 +127,9 @@ export class CreateComponent implements OnInit {
     else{ el.classList.add('active') }
   }
 
-  setTab(target: EventTarget | null){
-    const e = <HTMLInputElement> target
-    this.showMeta = !this.showMeta;
-  }
-
   newScene(): void{
     this.selectedSceneService.setScene(this.defaultScene)
   }
-
 
   toggleClass(el: HTMLElement){ toggleClass(el, 'collapsed') }
 
@@ -133,7 +149,8 @@ export class CreateComponent implements OnInit {
   }
 
   private setDefaultState(): void{
-    this.currScene = this.defaultScene
+    // this.currScene = this.defaultScene
+    this.currScene = undefined
     this.isAutoMode = true
   }
 

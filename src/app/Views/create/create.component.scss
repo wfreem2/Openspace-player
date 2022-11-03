@@ -61,7 +61,7 @@ $grid-bd: solid 2px var(--gray);
 
     display: grid;
     row-gap: 2rem;
-    grid-template-rows: max-content max-content 1fr;
+    grid-template-rows: max-content max-content max-content max-content;
     grid-template-columns: 1fr;
     justify-items: center;
 
@@ -89,10 +89,29 @@ $grid-bd: solid 2px var(--gray);
             &:hover{ color: #333333; }
         }
     }
+
+    form{
+        display: block
+    }    
+
+    #options{
+        @extend %align-center;
+        gap: 1rem;
+    }
+
+    #clear{
+        @extend %bare;
+        cursor: pointer;
+        font-size: 1rem;
+        color: #a8aabc;
+    
+        &:hover{
+            color: var(--txt-color);
+        }
+    }
 }
 
-
-
+//Button for clearing scene
 
 // List of created scenes
 .scene-list{

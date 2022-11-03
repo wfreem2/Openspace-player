@@ -1,45 +1,40 @@
-
-
 <div class="grid">
     <div id="geoLocation">
         <div class="section" id="mode">
             <label for="mode">Mode:</label>
             <div id="mode-set">
-                <span [class.active]="isAutoMode" (click)="isAutoMode=true; listenGeo()">Auto</span>
-                <span [class.active]="!isAutoMode" (click)="isAutoMode=false; stopListening()">Manual</span>
+                <span [class.active]="isAutoMode" 
+                (click)="$isAutoMode.next(true)">Auto</span>
+                <span [class.active]="!isAutoMode" 
+                (click)="$isAutoMode.next(false)">Manual</span>
             </div>
         </div>
 
         <div class="section">
             <label for="lat">Latitude:</label>
-            <input [disabled]="isAutoMode" name="lat" type="number" class="input" [(ngModel)]="scene.geoPos.lat"
-                placeholder="Latitude">
+            <input name="lat" type="number" class="input" [disabled]="isAutoMode"
+                [(ngModel)]="geoPosition.lat" (ngModelChange)="onValueChange()"
+            placeholder="Latitude">
         </div>
         <div class="section">
             <label for="long">Longitude:</label>
-            <input [disabled]="isAutoMode" name="long" type="number" class="input" [(ngModel)]="scene.geoPos.long"
-                placeholder="Longitude">
+            <input name="long" type="number" class="input" [disabled]="isAutoMode"
+            [(ngModel)]="geoPosition.long" (ngModelChange)="onValueChange()"
+            placeholder="Longitude">
         </div>
         <div class="section">
             <label for="alt">Altitude:</label>
-            <input [disabled]="isAutoMode" name="alt" type="number" class="input" [(ngModel)]="scene.geoPos.alt"
-                placeholder="Altitude">
+            <input name="alt" type="number" class="input" [disabled]="isAutoMode"
+            [(ngModel)]="geoPosition.alt" (ngModelChange)="onValueChange()"
+            placeholder="Altitude">
         </div>
         <div class="section">
             <label for="node">Node:</label>
-            <dropdown [items]="pathNavOptions" name="pathnav" [(ngModel)]="scene.nodeName"></dropdown>
+            <dropdown [items]="pathNavOptions" name="pathnav" 
+            [(ngModel)]="geoPosition.nodeName" (ngModelChange)="onValueChange()"></dropdown>
         </div>
     </div>
-
-    <div id="options">
-        
-    </div>
 </div>
 
-<div class="section">
-    <button id="clear" (click)="clear()">Clear All</button>
-    <button id="save" class="btn secondary" (click)="sceneSavedEvent.emit(scene)"
-        [disabled]="!scene.title.trim()">Save</button>
-</div>
 
 

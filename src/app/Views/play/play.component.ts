@@ -66,10 +66,9 @@ export class PlayComponent implements OnInit, AfterViewInit {
   }
 
   private execute(scene: Scene): void{
-    const {lat, long, alt} = scene.geoPos
-    const { nodeName: pathNavOption } = scene
+    const {lat, long, alt, nodeName} = scene.geoPos
     
-    this.openSpaceService.flyToGeo(lat, long, alt, pathNavOption)
+    this.openSpaceService.flyToGeo(lat, long, alt, nodeName)
   }
 
 }

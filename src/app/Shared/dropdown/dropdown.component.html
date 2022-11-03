@@ -1,9 +1,9 @@
-<div class="header" [class.active]="!isCollapsed" (click)="isCollapsed = !isCollapsed">
+<div class="header" [class.disabled]="isDisabled" [class.active]="!isCollapsed" (click)="isCollapsed = !isCollapsed">
     <p>{{selectedItem.item}}</p>
     <ng-container [ngTemplateOutlet]="chevron"></ng-container>
 </div>
 
-<ul class="items" [class.collapsed]="isCollapsed">
+<ul class="items" [class.collapsed]="isCollapsed" *ngIf="!isDisabled">
     <li *ngFor="let i of selectableItems" (click)="selectItem(i); isCollapsed=true"
      [class.selected]="i.isSelected">
         <ng-container [ngTemplateOutlet]="check" *ngIf="i.isSelected"></ng-container>

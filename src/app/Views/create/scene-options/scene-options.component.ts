@@ -1,8 +1,8 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { BehaviorSubject, map, of, Subject, switchMap } from 'rxjs';
+import { BehaviorSubject, map, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { SceneOptions } from 'src/app/Interfaces/SceneOptions';
-import { Trail, trails } from 'src/app/Services/openspace.service';
+import { SceneGraphNode } from 'src/app/Services/openspace.service';
 import { isChildClicked, toggleClass } from 'src/app/Utils/utils';
 
 @Component({
@@ -27,16 +27,16 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
 
   sceneOptions!: SceneOptions
 
-
   onChange: any = () => {}
   onTouch: any = () => {}
   
   //Unaltered array for searching
-  private readonly originalTrails: TrailOption[] = trails.map(t => { return { trail: t, isEnabled: false}})
+  private readonly originalTrails!: TrailOption[]
 
   trailOptions!: TrailOption[] 
   isFilterShowing: boolean = false
   
+  private $unsub = new Subject<any>()
   $currSorting = new BehaviorSubject<Sorting>('none')
   query = new Subject<string>()
 
@@ -44,18 +44,31 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
 
 
   constructor(private renderer: Renderer2) { 
+
+    this.originalTrails = 
+    Object.keys(SceneGraphNode)
+    .map((node) => {
+      return { node: <SceneGraphNode> node , isEnabled: false}
+    })
+
     renderer.listen('window', 'click', this.filterMenuClicked.bind(this))
 
     this.$currSorting.asObservable()
+    .pipe(takeUntil(this.$unsub))
     .subscribe(sorting => this.sort(sorting))
 
     this.query.asObservable()
     .pipe(
       map(query => query.toLowerCase()),
-      switchMap(query => of(this.search(query)))
+      switchMap(query => of(this.search(query))),
+      takeUntil(this.$unsub)
     )
     .subscribe(options => this.trailOptions = options)
   }
+
+  ngOnInit(): void { }
+  ngOnDestroy(): void { this.$unsub.next(undefined) }
+
 
   writeValue(obj: any): void {
 
@@ -63,13 +76,14 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
       this.sceneOptions = obj 
 
       if(!this.sceneOptions.enabledTrails.length){ 
-        this.deselectAllTrails() 
+        //Reset trail options
+        this.trailOptions.forEach(o => o.isEnabled = false)
         return
       }
 
       //Set each matching trail option to enabled 
       this.sceneOptions.enabledTrails.forEach(enabledTrail => {
-        const trail = this.trailOptions.find(t => t.trail === enabledTrail)
+        const trail = this.trailOptions.find(t => t.node === enabledTrail)
         trail!.isEnabled = true
       })
     }
@@ -84,27 +98,19 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   }
 
   registerOnChange(fn: any): void { this.onChange = fn }
-
   registerOnTouched(fn: any): void { this.onTouch = fn }
-
   setDisabledState?(isDisabled: boolean): void { }
 
-  ngOnDestroy(): void {
-    this.$currSorting.unsubscribe()
-    this.query.unsubscribe()
-  }
-
-  ngOnInit(): void { }
 
   private sort(sorting: Sorting): void{
     switch(sorting){
       case 'asc':
         this.trailOptions.sort( (a, b) =>{
-          if(a.trail < b.trail){
+          if(a.node < b.node){
             return -1
           }
 
-          if(a.trail > b.trail){
+          if(a.node > b.node){
             return 1
           }
 
@@ -114,11 +120,11 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
       
       case 'des':
         this.trailOptions.sort( (a, b) =>{
-          if(a.trail < b.trail){
+          if(a.node < b.node){
             return 1
           }
 
-          if(a.trail > b.trail){
+          if(a.node > b.node){
             return -1
           }
 
@@ -134,30 +140,48 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
 
   private search(query: string): TrailOption[] {
     return this.originalTrails.filter(
-      opt => opt.trail.toLowerCase().includes(query)
+      opt => opt.node.toLowerCase().includes(query)
     )
   }
 
   toggleClass(element: any): void{ toggleClass(element, 'collapsed') }
 
   selectAllTrails(){
-    this.trailOptions.forEach(o => o.isEnabled = true)
+    //Only if all the trails are not selected
+    if(!this.trailOptions.every(o => o.isEnabled)){
+      this.trailOptions.forEach(o => o.isEnabled = true)
+      this.onChange(this.sceneOptions)
+    }
   }
 
   deselectAllTrails(){
-    this.trailOptions.forEach(o => o.isEnabled = false)
+    //Only if all trails are not deselected
+    if(!this.trailOptions.every(o => !o.isEnabled)){
+      this.trailOptions.forEach(o => o.isEnabled = false)
+      this.onChange(this.sceneOptions)
+    }
   }
 
   selectAllCameraOpts(): void{
-    this.sceneOptions.keepRoll = true
-    this.sceneOptions.keepRotation = true
-    this.sceneOptions.keepZoom = true
-  }
+    let {keepRoll, keepRotation, keepZoom} = this.sceneOptions
+
+    if(! (keepRoll && keepRotation && keepZoom)){
+      this.sceneOptions.keepRoll = true
+      this.sceneOptions.keepRotation = true
+      this.sceneOptions.keepZoom = true
+      this.onChange(this.sceneOptions)
+    }
+  } 
 
   deselectAllCameraOpts(): void{
-    this.sceneOptions.keepRoll = false
-    this.sceneOptions.keepRotation = false
-    this.sceneOptions.keepZoom = false
+    let {keepRoll, keepRotation, keepZoom} = this.sceneOptions
+
+    if(!(!keepRoll && !keepRotation && !keepZoom)){
+      this.sceneOptions.keepRoll = false
+      this.sceneOptions.keepRotation = false
+      this.sceneOptions.keepZoom = false
+      this.onChange(this.sceneOptions)
+    }
   }
 
   selectSort(sorting: Sorting){
@@ -171,9 +195,8 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   }
 
   onOptionChecked(): void{
-    
     this.sceneOptions.enabledTrails = 
-      this.originalTrails.filter(t => t.isEnabled).map(t => t.trail)
+      this.originalTrails.filter(t => t.isEnabled).map(t => t.node)
                                       
     if(!this.touched){
       this.touched = true
@@ -196,5 +219,5 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
 }
 
 
-type TrailOption = {trail: Trail, isEnabled: boolean}
+type TrailOption = {node: SceneGraphNode, isEnabled: boolean}
 type Sorting = 'des' | 'asc' | 'none'

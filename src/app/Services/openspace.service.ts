@@ -41,15 +41,17 @@ export class OpenspaceService {
   async getCurrentPosition(): Promise<GeoPosition>{
 
     const pos = await this.openspace.globebrowsing.getGeoPositionForCamera()
+    const anchor = await this.getCurrentAnchor()
 
     return {
       lat: pos[1],
       long: pos[2],
-      alt: pos[3]
+      alt: pos[3],
+      nodeName: anchor
     }
   } 
   
-  flyTo(path: PathNavigationOptions){
+  flyTo(path: SceneGraphNode){
     this.openspace.pathnavigation.flyTo(path.toString())
   }
 
@@ -60,87 +62,51 @@ export class OpenspaceService {
     )
   }
 
-  setTrail(trail: Trail, value: boolean): void{
+  setTrail(trail: SceneGraphNode, value: boolean): void{
     this.openspace.setPropertyValueSingle(`Scene.${trail}Trail.Renderable.Enabled`, value) 
   }
 
+  private async getCurrentAim(): Promise<string>{
+    return await this.openspace.getPropertyValue('NavigationHandler.OrbitalNavigator.Aim')
+  }
+
+  async getCurrentAnchor(): Promise<SceneGraphNode>{
+    const anchor = (await this.openspace.getPropertyValue('NavigationHandler.OrbitalNavigator.Anchor'))['1']
+
+    return <SceneGraphNode> anchor
+  }
 }
 
-export enum PathNavigationOptions{
-  Mercury="Mercury",
-  Venus="Venus",
-  Earth="Earth",
-  Mars="Mars",
-  Jupiter="Jupiter",
-  Saturn="Saturn",
-  Uranus="Uranus",
-  Neptune="Neptune"
+export enum SceneGraphNode{  
+ Mercury="Mercury", 
+ Venus="Venus", 
+ Earth="Earth", 
+ Mars="Mars", 
+ Jupiter="Jupiter", 
+ Saturn="Saturn", 
+ Uranus="Uranus", 
+ Neptune="Neptune", 
+ Moon="Moon", 
+ Phobos="Phobos", 
+ Deimos="Deimos", 
+ Callisto="Callisto", 
+ Europa="Europa", 
+ Ganymede="Ganymede", 
+ Io="Io", 
+ Dione="Dione", 
+ Enceladus="Enceladus", 
+ Hyperion="Hyperion", 
+ Iapetus="Iapetus", 
+ Mimas="Mimas", 
+ Rhea="Rhea", 
+ Tethys="Tethys", 
+ Titan="Titan", 
+ PlutoBarycenter="PlutoBarycenter", 
+ PlutoBarycentric="PlutoBarycentric", 
+ CharonBarycentric="CharonBarycentric", 
+ Hydra="Hydra", 
+ Kerberos="Kerberos", 
+ Nix="Nix", 
+ Styx="Styx",
+ Sun="Sun"
 }
-
-export type Trail = 
- "Mercury" |
- "Venus" |
- "Earth" |
- "Mars" |
- "Jupiter" |
- "Saturn" |
- "Uranus" |
- "Neptune" |
- "Moon" |
- "Phobos" |
- "Deimos" |
- "Callisto" |
- "Europa" |
- "Ganymede" |
- "Io" |
- "Saturn" |
- "Dione" |
- "Enceladus" |
- "Hyperion" |
- "Iapetus" |
- "Mimas" |
- "Rhea" |
- "Tethys" |
- "Titan" |
- "PlutoBarycenter" |
- "PlutoBarycentric" |
- "CharonBarycentric" |
- "Hydra" |
- "Kerberos" |
- "Nix" |
- "Styx"
-
-
-export const trails: Trail[] = [
-  "Mercury",
-  "Venus",
-  "Earth",
-  "Mars",
-  "Jupiter",
-  "Saturn",
-  "Uranus",
-  "Neptune",
-  "Moon",
-  "Phobos",
-  "Deimos",
-  "Callisto",
-  "Europa",
-  "Ganymede",
-  "Io",
-  "Saturn",
-  "Dione",
-  "Enceladus",
-  "Hyperion",
-  "Iapetus",
-  "Mimas",
-  "Rhea",
-  "Tethys",
-  "Titan",
-  "PlutoBarycenter",
-  "PlutoBarycentric",
-  "CharonBarycentric",
-  "Hydra",
-  "Kerberos",
-  "Nix",
-  "Styx",
-]

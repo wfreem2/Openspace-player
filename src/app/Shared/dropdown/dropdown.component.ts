@@ -29,15 +29,18 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
 
   isCollapsed: boolean = true
   isTouched: boolean = false
-
-  @Input() disabled: boolean = false
+  isDisabled: boolean = false
 
   constructor() { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+    this.selectableItems = this.items.map(i => {
+      return {item: i, isSelected: false}
+    }) 
+  }
 
   writeValue(obj: any): void { 
-  
+
     if(!obj){
       this.onDefaultNotProvided()
       this.onChange(this.selectedItem.item)
@@ -49,7 +52,7 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
 
   registerOnTouched(fn: any): void { this.onTouch = fn }
  
-  setDisabledState?(isDisabled: boolean): void { this.disabled = isDisabled }
+  setDisabledState?(isDisabled: boolean): void { this.isDisabled = isDisabled }
 
 
   selectItem(item: SelectableItem): void{
@@ -65,40 +68,30 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
       this.onTouch(item.item)
       this.isTouched = true
     }
+
   } 
 
   setItem(item: any): void{
     const selectableItem = this.selectableItems.find(i => i.item === item)
-
+    
     if(selectableItem){
-      this.selectItem(selectableItem)
+      
+      if(this.selectedItem){ this.selectedItem.isSelected = false }
+
+      selectableItem.isSelected = true
+      this.selectedItem = selectableItem
+    }
+    else{
+      throw new Error(`Provided item: ${item} does not exist`)
     }
   } 
 
 
-  private onDefaultNotProvided(): void{
-    this.selectableItems = this.items.map(i => {
-      return {item: i, isSelected: false}
-    })  
-    
+  private onDefaultNotProvided(): void{   
     //Set the first item as selected by default
     this.selectedItem = this.selectableItems[0]
     this.selectedItem.isSelected = true
   }
-
-
-/*   private onDefaultProvided(): void{
-    //If default item was provided, find it and make isSelected true
-    this.selectableItems = this.items.map(i => {
-      if(i === this.defaultItem){
-        this.selectedItem = {item: i, isSelected: true}
-        return this.selectedItem
-      }
-      
-      return {item: i, isSelected: false}
-    })
-
-  } */
-} 
+}
 
 type SelectableItem = {item: any, isSelected: boolean}

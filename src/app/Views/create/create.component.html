@@ -1,12 +1,11 @@
 <div class="creator">
-
     <div id="header">
         <input name="title" class="input" [(ngModel)]="show.title" type="text" 
-        placeholder="Show Title" ngModel #title>
+         placeholder="Show Title" (ngModelChange)="isSaved=false">
 
         <div>
-            <button id="save" class="btn primary" [disabled]="!title.value.trim()" 
-            (click)="showService.save(show)">
+            <button id="save" class="btn primary" [disabled]="isSaved || !show.title.trim()" 
+            (click)="saveShow()">
                 Save
                 <ng-container [ngTemplateOutlet]="save"></ng-container>
             </button>
@@ -20,7 +19,7 @@
 
     
      <div class="scene">
-        <ng-container *ngIf="currScene then scenePos; else noScene"></ng-container>
+        <ng-container *ngIf="currScene then sceneTabs; else noScene"></ng-container>
     </div>
 
     <div class="scene-list">
@@ -38,9 +37,11 @@
 
 
 
-<ng-template #scenePos>
+<ng-template #sceneTabs>
     <div class="scene-title">
-        <input name="title" type="text" class="bare title" [(ngModel)]="currScene.title" placeholder="Scene Title">
+        <input name="title" type="text" class="bare title" 
+         [(ngModel)]="currScene!.title" (ngModelChange)="isSaved=false"
+         placeholder="Scene Title">
         <ng-container [ngTemplateOutlet]="x"></ng-container>
     </div>
 
@@ -64,17 +65,25 @@
 
         <scene-position id="scene-pos"
         *ngIf="tabIdx===0"
-        [scene]="currScene"
         [isAutoMode]="isAutoMode"
-        (sceneSavedEvent)="onSave($event)">
+        [(ngModel)]="currScene!.geoPos"
+        (ngModelChange)="onChange()">
         </scene-position>
 
-        <scene-options *ngIf="tabIdx===1"
-        [(ngModel)]="currScene.sceneOptions">
+        <scene-options 
+        *ngIf="tabIdx===1"
+        [(ngModel)]="currScene!.sceneOptions"
+        (ngModelChange)="onChange()">
         </scene-options>
 
     </div>
 
+    <div id="options">
+        <button id="clear">Clear All</button>
+        <button id="save" class="btn secondary" 
+        (click)="saveScene()"
+        [disabled]="!currScene!.title.trim()">Save</button>
+    </div>
 </ng-template>
 
 
@@ -117,7 +126,7 @@
 </ng-template>
 
 <ng-template #x>
-    <svg id="x" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg (click)="currScene!.title=''" id="x" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>
