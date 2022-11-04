@@ -1,6 +1,7 @@
-import { Component, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, forwardRef, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { map, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { isElementOrChildClicked } from 'src/app/Utils/utils';
 import { SortingType } from '../sorting-selector/sorting-selector.component';
 
 @Component({
@@ -20,8 +21,13 @@ import { SortingType } from '../sorting-selector/sorting-selector.component';
 export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
   @Input() items!: any[]
-
   
+  @ViewChild('selector', {read: ElementRef}) set content(content: ElementRef){
+    if(content){ this.sortingSelector = content }
+  }
+  
+  private sortingSelector!: ElementRef
+
   onChange: any = () => {}
   onTouch: any = () => {}
   
@@ -36,7 +42,9 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
   query = new Subject<string>()
   private $unSub = new Subject<any>()
 
-  constructor() { 
+  constructor(private hostRef: ElementRef, private render: Renderer2) { 
+    // render.listen('window', 'click', this.onHostClick.bind(this))`
+
     this.query.asObservable()
     .pipe(
       takeUntil(this.$unSub),
@@ -46,10 +54,15 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
     .subscribe(items => this.filteredSelectableItems = items)
   }
 
-  search(query: any): SelectableItem[] {
-    return this.selectableItems.filter(
-      i => i.item.toString().toLowerCase().includes(query)
-    )
+  private onHostClick(event: Event){
+    
+    const hostClicked = isElementOrChildClicked(this.hostRef.nativeElement, 
+      event.target as HTMLElement)
+      
+    const selectorClicked = isElementOrChildClicked(this.sortingSelector.nativeElement, 
+      event.target as HTMLElement)
+        
+    if(!hostClicked && !selectorClicked){ this.isCollapsed = true}
   }
 
   ngOnDestroy(): void { this.$unSub.next(undefined) }
@@ -60,7 +73,6 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
     }) 
 
     this.onDefaultNotProvided()
-
     this.filteredSelectableItems = [...this.selectableItems]
   }
 
@@ -72,11 +84,17 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
     else{ this.setItem(obj) }
   }
 
+  
   registerOnChange(fn: any): void { this.onChange = fn }
-
   registerOnTouched(fn: any): void { this.onTouch = fn }
- 
   setDisabledState?(isDisabled: boolean): void { this.isDisabled = isDisabled }
+ 
+
+  private search(query: any): SelectableItem[] {
+    return this.selectableItems.filter(
+      i => i.item.toString().toLowerCase().includes(query)
+    )
+  }
 
   selectItem(item: SelectableItem): void{
     
@@ -91,8 +109,6 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
       this.onTouch(item.item)
       this.isTouched = true
     }
-
-    this.moveToTop(this.selectedItem)
   } 
 
   setItem(item: any): void{
@@ -148,7 +164,7 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
 
   }
 
-  private moveToTop(item: SelectableItem){
+  moveToTop(item: SelectableItem){
     this.filteredSelectableItems = this.selectableItems.filter(i => i !== item)
     this.filteredSelectableItems.unshift(item)
   }

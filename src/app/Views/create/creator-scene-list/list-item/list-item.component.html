@@ -1,48 +1,47 @@
 <div class="wrapper" [class.active]="isActive" (click)="itemClickedEvent.emit(this)">
     <div>
-        <ng-container [ngTemplateOutlet]="breake"></ng-container>
         <p>{{scene.title}}</p>
     </div>
 
     <ng-container [ngTemplateOutlet]="more"></ng-container>
 </div>
 
-<div class="ctx-menu" *ngIf="isCtxShowing">
-    <div (click)="onDeleteClicked()">
+<div class="ctx-menu" *ngIf="isCtxShowing" clickedoutsideof (onClickOutside)="onClickOutsideOf($event)">
+    <div id="delete" (click)="onDeleteClicked()">
         Delete
         <ng-container [ngTemplateOutlet]="del"></ng-container>
+    </div>
+    <div (click)="onDuplicateClicked()">
+        Duplicate
+        <ng-container [ngTemplateOutlet]="duplicate"></ng-container>
     </div>
 </div>
 
 
 
 <ng-template #more>
-    <svg #m (click)="isCtxShowing = !isCtxShowing" id="more" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        class="feather feather-more-vertical">
+    <svg #m (click)="isCtxShowing = !isCtxShowing" id="more" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" class="feather feather-more-vertical">
         <circle cx="12" cy="12" r="1"></circle>
         <circle cx="12" cy="5" r="1"></circle>
         <circle cx="12" cy="19" r="1"></circle>
     </svg>
 </ng-template>
 
-<ng-template #breake>
-    <svg class="breake" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-            d="M16.2427 5.24264L14.8285 6.65685L13 4.82839L13.0001 9.24268H17.0001V11.2427H7.00012V9.24268H11.0001L11 4.82846L9.17161 6.65685L7.75739 5.24264L12 1L16.2427 5.24264Z"
-            fill="currentColor" />
-        <path
-            d="M7 15.2527V13.2527H17V15.2527H13.0001L13 19.6669L14.8284 17.8385L16.2426 19.2527L12 23.4954L7.75732 19.2527L9.17154 17.8385L11 19.667V15.2527L7 15.2527Z"
-            fill="currentColor" />
-    </svg>
-</ng-template>
-
 
 <ng-template #del>
-    <svg 
-     xmlns="http://www.w3.org/2000/svg"  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
         <polyline points="3 6 5 6 21 6"></polyline>
         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+    </svg>
+</ng-template>
+
+<ng-template #duplicate>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
     </svg>
 </ng-template>

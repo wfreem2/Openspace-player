@@ -76,6 +76,28 @@
         (ngModelChange)="onChange()">
         </scene-options>
 
+        <div class="transition"
+        *ngIf="tabIdx===2">
+            <p>How long it takes OpenSpace to fly to the selected target</p>
+            <input
+            [formControl]="transitionControl"
+            type="text" 
+            class="input" 
+            placeholder="Transition Duration"
+            name="transistion" id="transition"/>
+            <p class="error" *ngIf="!transitionControl.valid">
+                The field is digits only
+            </p>
+        </div>
+            
+        <textarea
+        *ngIf="tabIdx===3"
+         id="script"
+         cols="30"
+         rows="20"
+         class="input" [(ngModel)]="currScene!.script" 
+         placeholder="Script Text"></textarea>
+
     </div>
 
     <div id="options">

@@ -13,7 +13,7 @@
     grid-template-rows: max-content 1fr;
     overflow-y: auto;
     background: #ffffff;
-    min-height: 25rem;
+    min-height: 15rem;
 }
 
 #header{
@@ -134,7 +134,24 @@ $grid-bd: solid 2px var(--gray);
     grid-row: 1 / span all;
 }
 
+.transition{
+    @extend %flx-col;
+    gap: 1rem;
 
+    .ng-invalid{
+        border: solid 2px red;
+    }
+
+    .error{
+        color: red;
+        margin-left: 1rem;
+    }
+}
+
+#script{
+    max-width: 50rem;
+    min-width: 35rem;
+}
 // Show details 
 .details{
     padding: 0.5rem;

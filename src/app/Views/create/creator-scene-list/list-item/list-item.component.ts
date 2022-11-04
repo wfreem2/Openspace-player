@@ -1,11 +1,11 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { Scene } from 'src/app/Interfaces/Scene';
-import { isChildClicked } from 'src/app/Utils/utils';
+import { isElementOrChildClicked } from 'src/app/Utils/utils';
 
 @Component({
   selector: 'list-item',
   templateUrl: './list-item.component.html',
-  styleUrls: ['./list-item.component.scss']
+  styleUrls: ['./list-item.component.scss'],
 })
 export class ListItemComponent implements OnInit {
 
@@ -16,26 +16,26 @@ export class ListItemComponent implements OnInit {
 
   @Output() itemClickedEvent = new EventEmitter<ListItemComponent>()
   @Output() deleteClickedEvent = new EventEmitter<ListItemComponent>()
+  @Output() duplicateClickedEvent = new EventEmitter<ListItemComponent>()
 
   isCtxShowing: boolean = false
 
-  constructor(private renderer: Renderer2) {
-    this.renderer.listen('window', 'click', this.ctxMenuClicked.bind(this))
-  } 
+  constructor() { } 
+  ngOnInit(): void { }
   
 
-  ngOnInit(): void { }
+  onClickOutsideOf(target: HTMLElement){
+    const isMoreClicked = isElementOrChildClicked(this.more.nativeElement, target)
 
-  private ctxMenuClicked(event: Event){
-    const isMoreClicked = isChildClicked(this.more.nativeElement, event.target)
-
-    if(!isMoreClicked){
-      this.isCtxShowing = false
-    }
-
-  } 
+    if(!isMoreClicked){ this.isCtxShowing = false}
+  }
 
   onDeleteClicked(): void{
     this.deleteClickedEvent.emit(this)
+  }
+
+  onDuplicateClicked(): void{
+    this.duplicateClickedEvent.emit(this)
+    this.isCtxShowing = false
   }
 }

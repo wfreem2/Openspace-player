@@ -1,3 +1,4 @@
+
 export function toggleClass(el: HTMLElement, className: string){
     switch(el.classList.contains(className)){
         case true:
@@ -9,17 +10,6 @@ export function toggleClass(el: HTMLElement, className: string){
     }
 }
 
-
-export function isChildClicked(e: HTMLElement, clickedElement: EventTarget | null): boolean{
-    
-    if(e === clickedElement){ return true }
-    
-    for(var i = 0; i < e.childNodes.length; i++){
-      let c = e.childNodes[i]
-
-      if(isChildClicked(<HTMLElement> c, clickedElement)) 
-        return true 
-    }
-    
-    return false
-  }
+export function isElementOrChildClicked(element: HTMLElement, eventTarget: HTMLElement): boolean{
+    return element.contains(eventTarget)
+}

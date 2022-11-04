@@ -4,7 +4,7 @@ import { BehaviorSubject, map, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { SceneOptions } from 'src/app/Interfaces/SceneOptions';
 import { SceneGraphNode } from 'src/app/Services/openspace.service';
 import { SortingType } from 'src/app/Shared/sorting-selector/sorting-selector.component';
-import { isChildClicked, toggleClass } from 'src/app/Utils/utils';
+import { isElementOrChildClicked, toggleClass } from 'src/app/Utils/utils';
 
 @Component({
   selector: 'scene-options',
@@ -209,8 +209,10 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
 
   private filterMenuClicked(event: Event){  
 
-    const isFilterMenuClicked = isChildClicked(this.filterMenu.nativeElement, event.target)
-    const isFilterBtnClicked = isChildClicked(this.filterBtn.nativeElement, event.target)
+    const isFilterMenuClicked = isElementOrChildClicked(this.filterMenu.nativeElement, 
+      event.target as HTMLElement)
+    const isFilterBtnClicked = isElementOrChildClicked(this.filterBtn.nativeElement, 
+      event.target as HTMLElement)
     
     if(!isFilterBtnClicked && !isFilterMenuClicked){
       this.isFilterShowing = false

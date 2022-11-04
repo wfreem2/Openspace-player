@@ -9,8 +9,7 @@ import {BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SceneListComponent } from './scene-list/scene-list.component';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { SortingSelectorComponent } from './sorting-selector/sorting-selector.component';
-
-
+import { ClickedoutsideofDirective } from '../Directives/clickoutsideof.directive';
 
 @NgModule({
   declarations: [
@@ -20,6 +19,7 @@ import { SortingSelectorComponent } from './sorting-selector/sorting-selector.co
     SceneListComponent,
     DropdownComponent,
     SortingSelectorComponent,
+    ClickedoutsideofDirective,
   ],
   imports: [
     CommonModule,
@@ -37,7 +37,8 @@ import { SortingSelectorComponent } from './sorting-selector/sorting-selector.co
     ReactiveFormsModule,
     SceneListComponent,
     DropdownComponent,
-    SortingSelectorComponent
+    SortingSelectorComponent,
+    ClickedoutsideofDirective,
   ]
 })
 export class SharedModule { }

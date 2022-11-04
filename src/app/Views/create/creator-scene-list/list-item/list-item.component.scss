@@ -33,36 +33,34 @@ svg{
     height: 1.2rem;
 }
 
-.breake{
-    cursor: grab;
-    &:active{ cursor: grabbing; }
-}
+
 
 .ctx-menu{
     @extend %card, %flx-col;
     z-index: 99;
     gap: 0.5rem;
     font-size: 0.9rem;
-    padding: 0.25rem;
+    padding: 0.5rem;
     overflow: hidden;
     position: absolute;
-    bottom: -2.75rem;
+    top: 110%;
     right: 0.5rem;
     width: 8rem;
     height: max-content;
     background: #ffffff;
-    border-radius: 8px;
+    border-radius: var(--bd-radius);
 
     div{
         @extend %max-W, %align-center;
         cursor: pointer;
         justify-content: space-between;
-        height: 2rem;
-        padding: 0 0.25rem;
-        border-radius: 8px;
+        padding: 0.5rem;
+        border-radius: var(--bd-radius);
 
         &:hover{
             background: var(--gray);
         }
     }
+
+    #delete{ color: red; }
 }

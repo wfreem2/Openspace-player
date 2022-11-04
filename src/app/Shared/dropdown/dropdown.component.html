@@ -1,4 +1,5 @@
-<div class="header" [class.disabled]="isDisabled" [class.active]="!isCollapsed" (click)="isCollapsed = !isCollapsed">
+<div class="header" [class.disabled]="isDisabled" [class.active]="!isCollapsed" 
+    (click)="isCollapsed = !isCollapsed; moveToTop(selectedItem)">
     <p>{{selectedItem.item}}</p>
     <ng-container [ngTemplateOutlet]="chevron"></ng-container>
 </div>
@@ -8,10 +9,12 @@
         <ng-container [ngTemplateOutlet]="searchIcon"></ng-container>
         <input type="text" class="bare" placeholder="Node Name" ngModel
         (ngModelChange)="query.next($event)">
-        <sorting-selector (sortingChangedEvent)="onSortSelected($event)"></sorting-selector>
+
+        <sorting-selector #selector (sortingChangedEvent)="onSortSelected($event)">
+        </sorting-selector>
     </div>
     <ul class="items">
-        <li *ngFor="let i of filteredSelectableItems" (click)="selectItem(i); isCollapsed=true"
+        <li *ngFor="let i of filteredSelectableItems" (click)="selectItem(i);"
             [class.selected]="i.isSelected">
             <ng-container [ngTemplateOutlet]="check" *ngIf="i.isSelected"></ng-container>
             {{i.item}}

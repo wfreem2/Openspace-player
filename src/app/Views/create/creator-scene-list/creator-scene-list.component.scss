@@ -10,3 +10,33 @@
     overflow-y: auto;
     padding: 0.5rem;
 }
+
+.wrapper{
+    @extend %align-center;
+    gap: 0.5rem;
+
+    .breake{
+        cursor: grab;
+        color: #adabab;
+        width: 1.2rem;
+        height: 1.2rem;
+
+        &:active{ cursor: grabbing; }
+    }
+
+    .item{ flex: 1; }
+}
+
+.cdk-drag-preview{
+    box-shadow: var(--shadow);
+    background: var(--gray);
+    border-radius: var(--bd-radius);
+}
+
+.custom-placeholder {
+    height: 2rem;
+}
+
+.cdk-drop-list-dragging{
+    cursor: grabbing;
+}

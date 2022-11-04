@@ -7,7 +7,7 @@
     align-items: center;
     column-gap: 0.2rem;
     color: #a7a4a4;
-    width: 4rem;
+    width: max-content;
 
     &:hover{
         svg{ color: var(--color-hover); }

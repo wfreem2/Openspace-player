@@ -1,13 +1,16 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { cloneDeep } from 'lodash';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { SelectedSceneService } from '../selected-scene.service';
 import { ListItemComponent } from './list-item/list-item.component';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'creator-scene-list',
   templateUrl: './creator-scene-list.component.html',
   styleUrls: ['./creator-scene-list.component.scss']
 })
+
 export class CreatorSceneListComponent implements OnInit{
 
   @ViewChildren(ListItemComponent) items!: QueryList<ListItemComponent>
@@ -31,16 +34,30 @@ export class CreatorSceneListComponent implements OnInit{
     this.selectedSceneService.setScene(scene)
   }
 
-  
-/* 
-  private ctxMenuClickOutsideOf(e: Event){
-    const svgClicked = isChildClicked(this.more.nativeElement, e.target)
+  onDuplicateClicked(item: ListItemComponent): void{
+    const { scene } = item
+    const duplicate: Scene = cloneDeep(scene)
 
-    if(svgClicked){ return }
+    let id = 1
+    let newTitle = duplicate.title + ' (copy)'
+    let existingCopy = this.scenes.find(s => s.title === newTitle)
 
-    if(this.ctxMenu){
-      const ctxMenuClicked = isChildClicked(this.ctxMenu.nativeElement, e.target)
-      if(!ctxMenuClicked){ this.showCtxMenu = false }
+    /*
+     While there is a scene with the same name (user duplicated already)
+     increment a number to append behind the title to make it unique
+    */
+    while(existingCopy){
+      newTitle = duplicate.title + ' (copy)' + `(${id++})`
+      existingCopy = this.scenes.find(s => s.title === newTitle)
     }
-  } */
+
+    duplicate.title = newTitle
+    duplicate.id += 1
+
+    this.scenes.push(duplicate)
+  }
+
+  onDrop(event: CdkDragDrop<Scene[]>){
+    moveItemInArray(this.scenes, event.previousIndex, event.currentIndex)
+  }
 }

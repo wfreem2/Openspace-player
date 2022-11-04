@@ -10,6 +10,7 @@ import { PlaygroundComponent } from './playground/playground.component';
 import { CreatorSceneListComponent } from './create/creator-scene-list/creator-scene-list.component';
 import { ListItemComponent } from './create/creator-scene-list/list-item/list-item.component';
 import { SceneOptionsComponent } from './create/scene-options/scene-options.component';
+import { DragDropModule } from '@angular/cdk/drag-drop'
 
 
 
@@ -27,7 +28,8 @@ import { SceneOptionsComponent } from './create/scene-options/scene-options.comp
     SceneOptionsComponent
   ],
   imports: [
-    SharedModule
+    SharedModule,
+    DragDropModule
   ],
   exports: [
     HomeComponent,

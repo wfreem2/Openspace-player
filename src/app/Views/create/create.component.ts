@@ -38,7 +38,7 @@ export class CreateComponent implements OnInit, OnDestroy {
   isAutoMode:boolean = false
   showMeta: boolean = false
 
-
+  transitionControl: FormControl = new FormControl('', Validators.pattern(/^[0-9]*$/))
 
   constructor(private route: ActivatedRoute, public showService: ShowService,
      private selectedSceneService: SelectedSceneService) {
@@ -67,6 +67,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.selectedSceneService.$selectedScene
     .pipe(takeUntil(this.$unSub))
     .subscribe(s => this.currScene = s)
+
 
     /*     setInterval(() => {
       console.log('autosaving')
