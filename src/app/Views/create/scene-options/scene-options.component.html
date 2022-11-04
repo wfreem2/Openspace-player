@@ -4,29 +4,12 @@
         <ng-container *ngTemplateOutlet="chevron; context: {el: s1}"></ng-container>
     </div>
 
-    <div class="select-opts">
-        <button class="bare" (click)="selectAllCameraOpts()">Select All</button>
-        <button class="bare" (click)="deselectAllCameraOpts()">Deselect All</button>
-    </div>
     <ul class="options">
         <li class="option">
-            <label for="camera">Keep Zoom</label>
+            <label for="camera">Keep Camera Position</label>
             <input type="checkbox" name="camera" id="zoom" 
              (ngModelChange)="onOptionChecked()"
-             [(ngModel)]="sceneOptions.keepZoom">
-        </li>
-        <li class="option">
-
-            <label for="camera">Keep Rotation</label>
-            <input type="checkbox" name="camera" id="rotation" 
-             (ngModelChange)="onOptionChecked()"
-             [(ngModel)]="sceneOptions.keepRotation">
-        </li>
-        <li class="option">
-            <label for="camera">Keep Roll</label>
-            <input type="checkbox" name="camera" id="roll" 
-             (ngModelChange)="onOptionChecked()"
-             [(ngModel)]="sceneOptions.keepRoll">
+             [(ngModel)]="sceneOptions.keepCameraPosition">
         </li>
     </ul>
 </div>

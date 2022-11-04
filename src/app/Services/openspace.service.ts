@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import * as api from 'openspace-api-js'
 import { BehaviorSubject, interval, map, mergeMap, Observable } from 'rxjs';
 import { GeoPosition } from '../Interfaces/GeoPosition';
+import { NavigationState } from '../Interfaces/NavigationState';
+import { Scene } from '../Interfaces/Scene';
 
 @Injectable({
   providedIn: 'root'
@@ -66,9 +68,14 @@ export class OpenspaceService {
     this.openspace.setPropertyValueSingle(`Scene.${trail}Trail.Renderable.Enabled`, value) 
   }
 
-  private async getCurrentAim(): Promise<string>{
-    return await this.openspace.getPropertyValue('NavigationHandler.OrbitalNavigator.Aim')
+  async getNavigationState(): Promise<NavigationState>{
+    return await this.openspace.navigation.getNavigationState();
   }
+
+  loadNavigationState(state: NavigationState){
+    this.openspace.navigation.loadNavigationState(state)
+  }
+
 
   async getCurrentAnchor(): Promise<SceneGraphNode>{
     const anchor = (await this.openspace.getPropertyValue('NavigationHandler.OrbitalNavigator.Anchor'))['1']

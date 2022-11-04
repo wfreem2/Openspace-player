@@ -90,9 +90,7 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
     }
     else{
       this.sceneOptions = {
-        keepRoll: false,
-        keepRotation: false,
-        keepZoom: false,
+        keepCameraPosition: true,
         enabledTrails: []
       }
     }
@@ -159,28 +157,6 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
     //Only if all trails are not deselected
     if(!this.trailOptions.every(o => !o.isEnabled)){
       this.trailOptions.forEach(o => o.isEnabled = false)
-      this.onChange(this.sceneOptions)
-    }
-  }
-
-  selectAllCameraOpts(): void{
-    let {keepRoll, keepRotation, keepZoom} = this.sceneOptions
-
-    if(! (keepRoll && keepRotation && keepZoom)){
-      this.sceneOptions.keepRoll = true
-      this.sceneOptions.keepRotation = true
-      this.sceneOptions.keepZoom = true
-      this.onChange(this.sceneOptions)
-    }
-  } 
-
-  deselectAllCameraOpts(): void{
-    let {keepRoll, keepRotation, keepZoom} = this.sceneOptions
-
-    if(!(!keepRoll && !keepRotation && !keepZoom)){
-      this.sceneOptions.keepRoll = false
-      this.sceneOptions.keepRotation = false
-      this.sceneOptions.keepZoom = false
       this.onChange(this.sceneOptions)
     }
   }

@@ -8,6 +8,7 @@ import { ShowService } from 'src/app/Services/show.service';
 import { Show } from 'src/app/Interfaces/Show';
 import { toggleClass } from 'src/app/Utils/utils';
 import { SelectedSceneService } from './selected-scene.service';
+import { OpenspaceService } from 'src/app/Services/openspace.service';
 
 
 @Component({
@@ -41,7 +42,7 @@ export class CreateComponent implements OnInit, OnDestroy {
   transitionControl: FormControl = new FormControl('', Validators.pattern(/^[0-9]*$/))
 
   constructor(private route: ActivatedRoute, public showService: ShowService,
-     private selectedSceneService: SelectedSceneService) {
+     private selectedSceneService: SelectedSceneService, private openSpaceService: OpenspaceService) {
 
     this.route.params
     .pipe(
@@ -66,7 +67,10 @@ export class CreateComponent implements OnInit, OnDestroy {
     
     this.selectedSceneService.$selectedScene
     .pipe(takeUntil(this.$unSub))
-    .subscribe(s => this.currScene = s)
+    .subscribe(async s => {
+      this.currScene = s
+      await this.openSpaceService.getNavigationState()
+    })
 
 
     /*     setInterval(() => {
@@ -84,15 +88,7 @@ export class CreateComponent implements OnInit, OnDestroy {
   desc(){ return this.detailsForm.get('desc') }
 
   onChange(): void{
-/*     let savedShows = localStorage.getItem('shows')
-
-    if(savedShows){
-      const show: Show = JSON.parse(savedShows)
-      console.log(show)
-    }
-
     this.isSaved = false
-    console.log('change') */
   }
 
   saveShow(): void{
@@ -140,9 +136,7 @@ export class CreateComponent implements OnInit, OnDestroy {
       id: this.id,
       title: '',
       sceneOptions: {
-        keepRoll: false,
-        keepRotation: false,
-        keepZoom: false,
+        keepCameraPosition: true,
         enabledTrails: []
       },
       geoPos: { lat: 0, long: 0, alt: 0 }
