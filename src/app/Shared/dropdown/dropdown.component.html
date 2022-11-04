@@ -8,6 +8,7 @@
         <ng-container [ngTemplateOutlet]="searchIcon"></ng-container>
         <input type="text" class="bare" placeholder="Node Name" ngModel
         (ngModelChange)="query.next($event)">
+        <sorting-selector (sortingChangedEvent)="onSortSelected($event)"></sorting-selector>
     </div>
     <ul class="items">
         <li *ngFor="let i of filteredSelectableItems" (click)="selectItem(i); isCollapsed=true"

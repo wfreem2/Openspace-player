@@ -101,14 +101,14 @@ $H: 25rem;
     position: relative;
     display: grid;
     align-items: center;
-    grid-template-columns: max-content 1fr;
+    grid-template-columns: max-content 1fr max-content;
     padding: 0 0.5rem;
     column-gap: 0.5rem;
     border-bottom: solid 2px var(--gray);
     height: 3rem;
 
     input{
-        grid-column: 2;
+        @extend %max-W;
         font-size: 1rem;
     }
 

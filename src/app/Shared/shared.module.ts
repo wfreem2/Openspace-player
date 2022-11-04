@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SceneListComponent } from './scene-list/scene-list.component';
 import { DropdownComponent } from './dropdown/dropdown.component';
+import { SortingSelectorComponent } from './sorting-selector/sorting-selector.component';
 
 
 
@@ -18,6 +19,7 @@ import { DropdownComponent } from './dropdown/dropdown.component';
     NavbarComponent,
     SceneListComponent,
     DropdownComponent,
+    SortingSelectorComponent,
   ],
   imports: [
     CommonModule,
@@ -35,6 +37,7 @@ import { DropdownComponent } from './dropdown/dropdown.component';
     ReactiveFormsModule,
     SceneListComponent,
     DropdownComponent,
+    SortingSelectorComponent
   ]
 })
 export class SharedModule { }

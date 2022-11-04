@@ -46,11 +46,13 @@
             <div class="filter">
                 <p class="title">Sorting</p>
                 <ul>
-                    <li #sortOpt [class.active]="$currSorting.value === 'asc'" (click)="selectSort('asc')">
+                    <li #sortOpt [class.active]="$currSorting.value === SortingType.Ascending" 
+                    (click)="selectSort(SortingType.Ascending)">
                         Sort Ascending
                         <ng-container [ngTemplateOutlet]="arrowUp"></ng-container>
                     </li>
-                    <li #sortOpt [class.active]="$currSorting.value === 'des'" (click)="selectSort('des')">
+                    <li #sortOpt [class.active]="$currSorting.value === SortingType.Descending" 
+                        (click)="selectSort(SortingType.Descending)">
                         Sort Descending
                         <ng-container [ngTemplateOutlet]="arrowDown"></ng-container>
                     </li>

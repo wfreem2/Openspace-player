@@ -1,0 +1,22 @@
+@use '/src/styles';
+
+.wrapper{
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    align-items: center;
+    column-gap: 0.2rem;
+    color: #a7a4a4;
+    width: 4rem;
+
+    &:hover{
+        svg{ color: var(--color-hover); }
+        p{ color: var(--color-hover); }
+    }
+}
+
+p{ color: inherit; }
+
+.active{
+    color: var(--color-primary);
+}

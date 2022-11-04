@@ -1,6 +1,7 @@
 import { Component, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { map, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { SortingType } from '../sorting-selector/sorting-selector.component';
 
 @Component({
   selector: 'dropdown',
@@ -28,7 +29,7 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
   selectableItems: SelectableItem[] = []
   selectedItem!: SelectableItem
   
-  isCollapsed: boolean = false
+  isCollapsed: boolean = true
   isTouched: boolean = false
   isDisabled: boolean = false
   
@@ -60,7 +61,7 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
 
     this.onDefaultNotProvided()
 
-    this.filteredSelectableItems = this.selectableItems
+    this.filteredSelectableItems = [...this.selectableItems]
   }
 
   writeValue(obj: any): void { 
@@ -76,7 +77,6 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
   registerOnTouched(fn: any): void { this.onTouch = fn }
  
   setDisabledState?(isDisabled: boolean): void { this.isDisabled = isDisabled }
-
 
   selectItem(item: SelectableItem): void{
     
@@ -110,6 +110,43 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
     }
   } 
 
+  onSortSelected(sortingType: SortingType): void{
+
+    switch(sortingType){
+      case SortingType.None:
+        this.filteredSelectableItems = [...this.selectableItems]
+        break
+      case SortingType.Ascending:
+        this.filteredSelectableItems.sort( (a, b) =>{
+          if(a.item.toString() < b.item.toString()){
+            return -1
+          }
+
+          if(a.item.toString() > b.item.toString()){
+            return 1
+          }
+
+          return 0
+        })
+        break
+
+      case SortingType.Descending:
+        this.filteredSelectableItems.sort( (a, b) =>{
+          if(a.item.toString() < b.item.toString()){
+            return 1
+          }
+
+          if(a.item.toString() > b.item.toString()){
+            return -1
+          }
+
+          return 0
+        })
+        break
+    }
+
+
+  }
 
   private moveToTop(item: SelectableItem){
     this.filteredSelectableItems = this.selectableItems.filter(i => i !== item)

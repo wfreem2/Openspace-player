@@ -3,6 +3,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BehaviorSubject, map, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { SceneOptions } from 'src/app/Interfaces/SceneOptions';
 import { SceneGraphNode } from 'src/app/Services/openspace.service';
+import { SortingType } from 'src/app/Shared/sorting-selector/sorting-selector.component';
 import { isChildClicked, toggleClass } from 'src/app/Utils/utils';
 
 @Component({
@@ -32,15 +33,15 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   
   //Unaltered array for searching
   private readonly originalTrails!: TrailOption[]
+  private $unsub = new Subject<any>()
+  private touched: boolean = false
 
   trailOptions!: TrailOption[] 
   isFilterShowing: boolean = false
   
-  private $unsub = new Subject<any>()
-  $currSorting = new BehaviorSubject<Sorting>('none')
   query = new Subject<string>()
-
-  private touched: boolean = false
+  $currSorting = new BehaviorSubject<SortingType>(SortingType.None)
+  
 
 
   constructor(private renderer: Renderer2) { 
@@ -102,9 +103,9 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   setDisabledState?(isDisabled: boolean): void { }
 
 
-  private sort(sorting: Sorting): void{
+  private sort(sorting: SortingType): void{
     switch(sorting){
-      case 'asc':
+      case SortingType.Ascending:
         this.trailOptions.sort( (a, b) =>{
           if(a.node < b.node){
             return -1
@@ -118,7 +119,7 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
         })
         break
       
-      case 'des':
+      case SortingType.Descending:
         this.trailOptions.sort( (a, b) =>{
           if(a.node < b.node){
             return 1
@@ -132,7 +133,7 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
         })
         break
 
-      case 'none':
+      case SortingType.None:
         this.trailOptions = [...this.originalTrails]
         break
     }
@@ -184,10 +185,10 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
     }
   }
 
-  selectSort(sorting: Sorting){
+  selectSort(sorting: SortingType){
     
     if(this.$currSorting.value === sorting){
-      this.$currSorting.next('none')
+      this.$currSorting.next(SortingType.None)
       return
     }
     
@@ -216,8 +217,8 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
     }
   }
 
+  get SortingType() { return SortingType }
 }
 
 
 type TrailOption = {node: SceneGraphNode, isEnabled: boolean}
-type Sorting = 'des' | 'asc' | 'none'
