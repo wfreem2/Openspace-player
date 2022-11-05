@@ -74,6 +74,7 @@ $grid-bd: solid 2px var(--gray);
         margin-left: 2rem;
         padding-bottom: 0.5rem;
         border-bottom: $grid-bd;
+        gap: 1rem;
 
         width: 35rem;
         height: max-content;
@@ -81,6 +82,8 @@ $grid-bd: solid 2px var(--gray);
         &:hover, &:focus-within{
             border-color: var(--color-primary);
         }
+
+        input{ flex: 1;}
 
         #x{ 
             cursor: pointer;

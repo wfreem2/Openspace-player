@@ -1,4 +1,5 @@
 import { GeoPosition } from "./GeoPosition";
+import { NavigationState } from "./NavigationState";
 import { SceneOptions } from "./SceneOptions";
 
 export interface Scene{
@@ -7,4 +8,5 @@ export interface Scene{
     script?: string
     geoPos: GeoPosition,
     sceneOptions?: SceneOptions,
+    navState?: NavigationState
 }

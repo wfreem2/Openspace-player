@@ -10,7 +10,8 @@ export class SelectedSceneService {
 
   private _scene = new Subject<Scene>()
   public $selectedScene = this._scene.asObservable().pipe(filter(s => !!s))
-
+  public $newSceneAdded = new Subject<any>()
+  
   constructor() { }
 
 

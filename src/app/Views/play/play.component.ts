@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map, pluck } from 'rxjs';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { Show } from 'src/app/Interfaces/Show';
-import { OpenspaceService } from 'src/app/Services/openspace.service';
+import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
 import { ShowService } from 'src/app/Services/show.service';
 
 @Component({
@@ -12,17 +12,18 @@ import { ShowService } from 'src/app/Services/show.service';
   styleUrls: ['./play.component.scss']
 })
 
-export class PlayComponent implements OnInit, AfterViewInit {
+export class PlayComponent implements OnInit {
   show!: Show
   currScene?: PlayableScene
 
+  
   scenes!: PlayableScene[]
-
   currIdx?: number
+
 
   constructor(private route: ActivatedRoute, private showService: ShowService,
      private openSpaceService: OpenspaceService) {
-
+    
     this.route.params
     .pipe(
       pluck('id'),
@@ -34,21 +35,18 @@ export class PlayComponent implements OnInit, AfterViewInit {
   
       this.show = show
       console.log(show.scenes)
+      
       this.scenes = show.scenes.map(s => { 
         return { scene: s, isActive: false}
       })
     })
    }
 
-  ngAfterViewInit(): void { }
-
   ngOnInit(): void { }
 
 
   play(): void{
-    if(this.scenes.length){
-      this.setScene(this.scenes[0])
-    }
+    if(this.scenes.length){ this.setScene(this.scenes[0]) }
   }
 
 
@@ -66,10 +64,37 @@ export class PlayComponent implements OnInit, AfterViewInit {
   }
 
   private execute(scene: Scene): void{
-    const {lat, long, alt, nodeName} = scene.geoPos
+    console.log(scene)
     
+    const { navState, sceneOptions } = scene
+    const { lat, long, alt, nodeName } = scene.geoPos
+
     this.openSpaceService.flyToGeo(lat, long, alt, nodeName)
+
+    if(sceneOptions){
+      const { enabledTrails, keepCameraPosition } = sceneOptions
+      
+      if(keepCameraPosition && navState){ this.openSpaceService.setNavigationState(navState) }
+
+      switch(enabledTrails.length){
+        case 0: //No trails enabled 
+          this.openSpaceService.disableAllNodeTrails()
+          break
+          
+        case Object.keys(SceneGraphNode).length: //All trails enabled
+          this.openSpaceService.enableAllNodeTrails()
+          break
+
+        default: //Some trails enabled
+          enabledTrails.forEach(trial => this.openSpaceService.setTrail(trial, true))
+          break
+      }
+
+    }
+
   }
+
+
 
 }
 

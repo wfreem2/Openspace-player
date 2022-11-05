@@ -14,12 +14,18 @@ export class OpenspaceService {
   openspace: any
   _isConnected = new BehaviorSubject<boolean>(false)
   o = api('localhost', 4682)
+  private nodes!: SceneGraphNode[]
+
+  private isAllTrailsDisabled: boolean = false
+  private isAllTrailsEnabled: boolean = false
 
   constructor() {
     this.o.onConnect(async () => await this.onConnect(this.o))
     this.o.onDisconnect(async () => await this.onDisconnect())
 
     this.o.connect()
+
+    this.nodes = Object.keys(SceneGraphNode).map(n => <SceneGraphNode> n)
   }
 
   private async onDisconnect(){
@@ -35,7 +41,7 @@ export class OpenspaceService {
     return this._isConnected.asObservable()
   }
   
-  flyToGeo(lat: Number, long: Number, alt: Number, globe: string=''): void{
+  flyToGeo(lat: Number, long: Number, alt: Number, globe: string='', duration?: number): void{
     this.openspace.globebrowsing.flyToGeo(globe, lat, long, alt)
   }
 
@@ -65,17 +71,40 @@ export class OpenspaceService {
   }
 
   setTrail(trail: SceneGraphNode, value: boolean): void{
+    if(value === true){ this.isAllTrailsDisabled = false}
+    else{ this.isAllTrailsEnabled = false }
+
+    if(trail === SceneGraphNode.Sun){ //Sun does not have trail option
+      this.openspace.setPropertyValueSingle("Scene.SunOrbit.Renderable.Enabled", value)
+      return
+    }
+
     this.openspace.setPropertyValueSingle(`Scene.${trail}Trail.Renderable.Enabled`, value) 
   }
 
   async getNavigationState(): Promise<NavigationState>{
-    return await this.openspace.navigation.getNavigationState();
+    return (await this.openspace.navigation.getNavigationState())['1']
   }
 
-  loadNavigationState(state: NavigationState){
-    this.openspace.navigation.loadNavigationState(state)
+  setNavigationState(state: NavigationState){
+    this.openspace.navigation.setNavigationState(state)
   }
 
+  public disableAllNodeTrails(): void{
+    if(!this.isAllTrailsDisabled){
+      this.nodes.forEach(node => this.setTrail(node, false))
+    }
+    
+    this.isAllTrailsDisabled = true
+  }
+
+  public enableAllNodeTrails(): void{
+    if(!this.isAllTrailsEnabled){
+      this.nodes.forEach(node => this.setTrail(node, true))    
+    }
+
+    this.isAllTrailsEnabled =  true
+  }
 
   async getCurrentAnchor(): Promise<SceneGraphNode>{
     const anchor = (await this.openspace.getPropertyValue('NavigationHandler.OrbitalNavigator.Anchor'))['1']

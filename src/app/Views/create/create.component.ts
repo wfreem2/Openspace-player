@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { merge } from "lodash"
@@ -9,6 +9,7 @@ import { Show } from 'src/app/Interfaces/Show';
 import { toggleClass } from 'src/app/Utils/utils';
 import { SelectedSceneService } from './selected-scene.service';
 import { OpenspaceService } from 'src/app/Services/openspace.service';
+import { ScenePositionComponent } from './scene-position/scene-position.component';
 
 
 @Component({
@@ -18,10 +19,11 @@ import { OpenspaceService } from 'src/app/Services/openspace.service';
 })
 export class CreateComponent implements OnInit, OnDestroy {
 
+  @ViewChild(ScenePositionComponent) scenePositionComponent!: ScenePositionComponent
 
   private id: number = 0
-  private readonly saveInterval = 1000 * 60 * 2
   private $unSub = new Subject<any>()
+  private readonly saveInterval = 1000 * 60 * 2
 
 
   tabIdx = 0
@@ -37,7 +39,6 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   isSaved: boolean = true
   isAutoMode:boolean = false
-  showMeta: boolean = false
 
   transitionControl: FormControl = new FormControl('', Validators.pattern(/^[0-9]*$/))
 
@@ -68,15 +69,19 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.selectedSceneService.$selectedScene
     .pipe(takeUntil(this.$unSub))
     .subscribe(async s => {
+
+      if(this.scenePositionComponent){
+        this.scenePositionComponent.$isAutoMode.next(false)
+      }
+
       this.currScene = s
-      await this.openSpaceService.getNavigationState()
     })
 
-
-    /*     setInterval(() => {
+    setInterval(() => {
       console.log('autosaving')
-      this.showService.save(this.show)
-    }, this.saveInterval) */
+      this.saveShow()
+    }, this.saveInterval)
+
   }
 
   ngOnDestroy(): void { this.$unSub.next(undefined) }
@@ -96,8 +101,18 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.isSaved=true
   }
 
-  saveScene(){
+  async saveScene(): Promise<void>{
+    
+    if(this.currScene?.sceneOptions?.keepCameraPosition){
+      this.currScene.navState = await this.openSpaceService.getNavigationState()
+    }
+    //Unset navstate if the keepcameraposition is unchecked but navstate is already set
+    else if(!this.currScene?.sceneOptions?.keepCameraPosition && !!this.currScene?.navState){
+      this.currScene.navState = undefined
+    }
+
     console.log(this.currScene)
+
     let existingScene = this.show.scenes.find(s => s.id === this.currScene!.id)
     if(!existingScene){ this.show.scenes.push(this.currScene!) }
     
@@ -126,6 +141,7 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   newScene(): void{
     this.selectedSceneService.setScene(this.defaultScene)
+    this.selectedSceneService.$newSceneAdded.next(undefined)
   }
 
   toggleClass(el: HTMLElement){ toggleClass(el, 'collapsed') }

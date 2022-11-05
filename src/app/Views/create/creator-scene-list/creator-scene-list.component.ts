@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { SelectedSceneService } from '../selected-scene.service';
@@ -18,7 +18,10 @@ export class CreatorSceneListComponent implements OnInit{
   @Input() scenes!: Scene[]
   @Output() deleteClickedEvent = new EventEmitter<Scene>()
 
-  constructor(private selectedSceneService: SelectedSceneService) { }
+  constructor(private selectedSceneService: SelectedSceneService) { 
+    this.selectedSceneService.$newSceneAdded.asObservable()
+    .subscribe(_ => this.setAllInactive())
+  }
 
   ngOnInit(): void { }
 
@@ -32,6 +35,10 @@ export class CreatorSceneListComponent implements OnInit{
 
   private setScene(scene: Scene){
     this.selectedSceneService.setScene(scene)
+  }
+
+  setAllInactive(): void{
+    this.items.forEach(i => i.isActive = false)
   }
 
   onDuplicateClicked(item: ListItemComponent): void{

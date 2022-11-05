@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BehaviorSubject, filter, map, Subject, Subscription, takeUntil } from 'rxjs';
 import { GeoPosition } from 'src/app/Interfaces/GeoPosition';
@@ -22,6 +22,7 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
 
   private $unSub = new Subject<any>()
   
+
   @Input() geoPosition!:GeoPosition
   @Input() isAutoMode: boolean = true
   
@@ -36,7 +37,6 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
   onTouch: any = () => {}
   
   constructor(private openSpaceService: OpenspaceService) { 
-  
 
     this.pathNavOptions = Object.values(SceneGraphNode)
     
@@ -81,7 +81,9 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
   registerOnTouched(fn: any): void { this.onTouch = fn }
   setDisabledState?(isDisabled: boolean): void { }
 
-  onValueChange(): void{ this.onChange(this.geoPosition) }
+  onValueChange(): void{ 
+    this.onChange(this.geoPosition) 
+  }
 
   clear(): void{
     this.geoPosition = {
@@ -95,8 +97,12 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
     this.listener = 
     this.openSpaceService
     .listenCurrentPosition()
+    .pipe()
     .subscribe({
-      next: pos => this.geoPosition = pos,
+      next: pos => {
+        this.geoPosition = pos
+        this.onValueChange()
+      },
       error: _ => console.log('error with openspace')
     })
   }

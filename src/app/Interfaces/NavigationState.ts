@@ -1,7 +1,9 @@
 import { SceneGraphNode } from "../Services/openspace.service";
 
 export interface NavigationState{
-    anchor: SceneGraphNode,
-    position: number[],
-    up: number[]
+    Anchor: SceneGraphNode,
+    Position: number[],
+    Up: number[],
+    Pitch: number,
+    Yaw: number
 }

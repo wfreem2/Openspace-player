@@ -12,7 +12,7 @@
 <div class="player">
     <h1>{{currScene?.scene?.title}}</h1>
 
-    <textarea class="input" disabled></textarea>
+    <textarea class="input" [textContent]="currScene?.scene?.script" disabled></textarea>
 
     <div class="btns">
         <button class="btn secondary" (click)="setScene(scenes[currIdx!-1])"
