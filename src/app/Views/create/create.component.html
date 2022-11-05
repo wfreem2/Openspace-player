@@ -30,7 +30,8 @@
 
         <creator-scene-list 
         [scenes]="show.scenes"
-        (deleteClickedEvent)="onDelete($event)">
+        (deleteClickedEvent)="onDelete($event)"
+        (listDragDropEvent)="isSaved=false">
         </creator-scene-list>
     </div>
 </div>
@@ -44,61 +45,43 @@
          placeholder="Scene Title">
         <ng-container [ngTemplateOutlet]="x"></ng-container>
     </div>
-
-    <div class="tabs">
-        <div class="tab" (click)="tabIdx=0" [class.active]="tabIdx===0">
-            <p>Position</p>
-        </div>
-        <div class="tab" (click)="tabIdx=1" [class.active]="tabIdx===1">
-            <p>Options</p>
-        </div>
-        <div class="tab" (click)="tabIdx=2" [class.active]="tabIdx===2">
-            <p>Transition</p>
-        </div>
-        <div class="tab" (click)="tabIdx=3" [class.active]="tabIdx===3">
-            <p>Script</p>
-        </div>
-    </div>
-
     
-    <div class="content-area">
+    <tabs>
+        <tab name="Position" [isActive]="true">
+            <scene-position id="scene-pos"
+            [isAutoMode]="isAutoMode"
+            [(ngModel)]="currScene!.geoPos"
+            (ngModelChange)="onChange()">
+            </scene-position>
+        </tab>
 
-        <scene-position id="scene-pos"
-        *ngIf="tabIdx===0"
-        [isAutoMode]="isAutoMode"
-        [(ngModel)]="currScene!.geoPos"
-        (ngModelChange)="onChange()">
-        </scene-position>
+        <tab name="Options">
+            <scene-options 
+            [(ngModel)]="currScene!.sceneOptions"
+            (ngModelChange)="onChange()">
+            </scene-options>
+        </tab>
+        
+        <tab name="Transition">
+            <div class="transition">
+                <p>How long it takes OpenSpace to fly to the selected target</p>
+                
+                <input class="input" [formControl]="transitionControl" type="text" 
+                placeholder="Transition Duration" name="transistion" id="transition"/>
+        
+                <p class="error" *ngIf="!transitionControl.valid">The field is digits only</p>
+            </div>
+        </tab>
 
-        <scene-options 
-        *ngIf="tabIdx===1"
-        [(ngModel)]="currScene!.sceneOptions"
-        (ngModelChange)="onChange()">
-        </scene-options>
-
-        <div class="transition"
-        *ngIf="tabIdx===2">
-            <p>How long it takes OpenSpace to fly to the selected target</p>
-            <input
-            [formControl]="transitionControl"
-            type="text" 
-            class="input" 
-            placeholder="Transition Duration"
-            name="transistion" id="transition"/>
-            <p class="error" *ngIf="!transitionControl.valid">
-                The field is digits only
-            </p>
-        </div>
-            
-        <textarea id="script" class="input" 
-        *ngIf="tabIdx===3"
-         cols="30" rows="20"
-         [(ngModel)]="currScene!.script" 
-         (ngModelChange)="onChange()"
-         placeholder="Script Text">
-        </textarea>
-
-    </div>
+        <tab name="Script">
+            <textarea id="script" class="input" 
+             cols="30" rows="20"
+             [(ngModel)]="currScene!.script" 
+             (ngModelChange)="onChange()"
+             placeholder="Script Text">
+            </textarea>
+        </tab>
+    </tabs>
 
     <div id="options">
         <button id="clear">Clear All</button>

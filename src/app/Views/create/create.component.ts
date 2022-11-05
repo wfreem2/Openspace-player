@@ -26,9 +26,6 @@ export class CreateComponent implements OnInit, OnDestroy {
   private readonly saveInterval = 1000 * 60 * 2
 
 
-  tabIdx = 0
-
-
   detailsForm: FormGroup = new FormGroup({
     title: new FormControl('', Validators.required),
     desc: new FormControl(''),
@@ -68,7 +65,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     
     this.selectedSceneService.$selectedScene
     .pipe(takeUntil(this.$unSub))
-    .subscribe(async s => {
+    .subscribe(s => {
 
       if(this.scenePositionComponent){
         this.scenePositionComponent.$isAutoMode.next(false)
@@ -84,10 +81,10 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   }
 
+  ngOnInit(): void { }
   ngOnDestroy(): void { this.$unSub.next(undefined) }
 
 
-  ngOnInit(): void { }
 
   title(){ return this.detailsForm.get('title') }
   desc(){ return this.detailsForm.get('desc') }
@@ -97,7 +94,7 @@ export class CreateComponent implements OnInit, OnDestroy {
   }
 
   saveShow(): void{
-    this.showService.save(this.show); 
+    this.showService.save(this.show) 
     this.isSaved=true
   }
 

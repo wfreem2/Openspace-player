@@ -17,6 +17,7 @@ export class CreatorSceneListComponent implements OnInit{
 
   @Input() scenes!: Scene[]
   @Output() deleteClickedEvent = new EventEmitter<Scene>()
+  @Output() listDragDropEvent = new EventEmitter()
 
   constructor(private selectedSceneService: SelectedSceneService) { 
     this.selectedSceneService.$newSceneAdded.asObservable()
@@ -66,5 +67,6 @@ export class CreatorSceneListComponent implements OnInit{
 
   onDrop(event: CdkDragDrop<Scene[]>){
     moveItemInArray(this.scenes, event.previousIndex, event.currentIndex)
+    this.listDragDropEvent.emit()
   }
 }
