@@ -68,7 +68,8 @@
             <div class="transition">
                 <p>How long it takes OpenSpace to fly to the selected target</p>
                 
-                <input class="input" [formControl]="transitionControl" type="text" 
+                <input class="input" 
+                [formControl]="transitionControl" type="text" 
                 placeholder="Transition Duration" name="transistion" id="transition"/>
         
                 <p class="error" *ngIf="!transitionControl.valid">The field is digits only</p>

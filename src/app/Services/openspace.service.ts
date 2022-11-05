@@ -42,7 +42,12 @@ export class OpenspaceService {
   }
   
   flyToGeo(lat: Number, long: Number, alt: Number, globe: string='', duration?: number): void{
-    this.openspace.globebrowsing.flyToGeo(globe, lat, long, alt)
+    if(!duration){
+      this.openspace.globebrowsing.flyToGeo(globe, lat, long, alt)
+    }
+    else{
+      this.openspace.globebrowsing.flyToGeo(globe, lat, long, alt, duration)
+    }
   }
 
 

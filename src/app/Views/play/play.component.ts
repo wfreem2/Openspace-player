@@ -66,10 +66,10 @@ export class PlayComponent implements OnInit {
   private execute(scene: Scene): void{
     console.log(scene)
     
-    const { navState, sceneOptions } = scene
+    const { navState, sceneOptions, duration } = scene
     const { lat, long, alt, nodeName } = scene.geoPos
 
-    this.openSpaceService.flyToGeo(lat, long, alt, nodeName)
+    this.openSpaceService.flyToGeo(lat, long, alt, nodeName, duration)
 
     if(sceneOptions){
       const { enabledTrails, keepCameraPosition } = sceneOptions

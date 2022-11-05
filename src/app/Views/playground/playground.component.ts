@@ -16,8 +16,8 @@ export class PlaygroundComponent implements OnInit {
     this.pathNavOptions = Object.values(SceneGraphNode)
 
     notis.showNotification({ title: 'Test', type: NotificationType.SUCCESS })
-    notis.showNotification({ title: 'Test2', type: NotificationType.SUCCESS })
-    notis.showNotification({ title: 'Test3', type: NotificationType.SUCCESS })
+    notis.showNotification({ title: 'Test2', type: NotificationType.ERROR })
+    notis.showNotification({ title: 'Test3', type: NotificationType.WARNING })
   }
 
   ngOnInit(): void { }

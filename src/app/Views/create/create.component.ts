@@ -10,6 +10,8 @@ import { toggleClass } from 'src/app/Utils/utils';
 import { SelectedSceneService } from './selected-scene.service';
 import { OpenspaceService } from 'src/app/Services/openspace.service';
 import { ScenePositionComponent } from './scene-position/scene-position.component';
+import { NotificationService } from 'src/app/Services/notification.service';
+import { NotificationType } from 'src/app/Interfaces/ToastNotification';
 
 
 @Component({
@@ -35,7 +37,8 @@ export class CreateComponent implements OnInit, OnDestroy {
   transitionControl: FormControl = new FormControl('', Validators.pattern(/^[0-9]*$/))
 
   constructor(private route: ActivatedRoute, public showService: ShowService,
-     private selectedSceneService: SelectedSceneService, private openSpaceService: OpenspaceService) {
+     private selectedSceneService: SelectedSceneService, private openSpaceService: OpenspaceService,
+     private notiService: NotificationService) {
 
     this.route.params
     .pipe(
@@ -61,7 +64,6 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.initSelectedSceneService()
     
     setInterval(() => {
-      console.log('autosaving')
       this.saveShow()
     }, this.saveInterval)
     
@@ -77,7 +79,10 @@ export class CreateComponent implements OnInit, OnDestroy {
           this.scenePositionComponent.$isAutoMode.next(false)
       })
     )
-    .subscribe(s => this.currScene = s)
+    .subscribe(s => {
+      this.currScene = s
+      this.transitionControl.setValue(s.duration)
+    })
   }
 
   ngOnInit(): void { }
@@ -88,6 +93,7 @@ export class CreateComponent implements OnInit, OnDestroy {
   saveShow(): void{
     this.showService.save(this.show) 
     this.isSaved=true
+    this.notiService.showNotification({title: 'Show Saved', type: NotificationType.SUCCESS})
   }
 
   async saveScene(): Promise<void>{
@@ -102,8 +108,13 @@ export class CreateComponent implements OnInit, OnDestroy {
         this.currScene.navState = undefined
       }
     }
-    catch(err){ console.log('Error saving scene') }
+    catch(err){ console.log('Error saving camera position') }
     finally{
+      if(this.transitionControl.value){
+        console.log(this.transitionControl.value)
+        this.currScene!.duration = this.transitionControl.value
+      }
+      
       console.log(this.currScene)
       
       let existingScene = this.show.scenes.find(s => s.id === this.currScene!.id)
