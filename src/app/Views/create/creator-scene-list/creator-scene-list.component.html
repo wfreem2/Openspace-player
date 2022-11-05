@@ -10,7 +10,8 @@
             <line x1="3" y1="6" x2="21" y2="6"></line>
         </svg>
         
-        <list-item class="item" [scene]="s" (itemClickedEvent)="onItemClicked($event)"
+        <list-item class="item" [scene]="s" 
+        (itemClickedEvent)="onItemClicked($event)"
             (deleteClickedEvent)="deleteClickedEvent.emit(s)" (duplicateClickedEvent)="onDuplicateClicked($event)">
         </list-item>
     </div>

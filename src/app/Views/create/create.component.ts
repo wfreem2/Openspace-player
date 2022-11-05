@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { merge } from "lodash"
 import { ActivatedRoute } from '@angular/router';
-import { first, map, pluck, Subject, takeUntil } from 'rxjs';
+import { first, map, pluck, Subject, takeUntil, tap } from 'rxjs';
 import { ShowService } from 'src/app/Services/show.service';
 import { Show } from 'src/app/Interfaces/Show';
 import { toggleClass } from 'src/app/Utils/utils';
@@ -25,11 +25,6 @@ export class CreateComponent implements OnInit, OnDestroy {
   private $unSub = new Subject<any>()
   private readonly saveInterval = 1000 * 60 * 2
 
-
-  detailsForm: FormGroup = new FormGroup({
-    title: new FormControl('', Validators.required),
-    desc: new FormControl(''),
-  })
 
   show!: Show
   currScene?: Scene
@@ -63,35 +58,32 @@ export class CreateComponent implements OnInit, OnDestroy {
       }
     })
     
-    this.selectedSceneService.$selectedScene
-    .pipe(takeUntil(this.$unSub))
-    .subscribe(s => {
-
-      if(this.scenePositionComponent){
-        this.scenePositionComponent.$isAutoMode.next(false)
-      }
-
-      this.currScene = s
-    })
-
+    this.initSelectedSceneService()
+    
     setInterval(() => {
       console.log('autosaving')
       this.saveShow()
     }, this.saveInterval)
-
+    
+  }
+  
+  private initSelectedSceneService(): void{
+    this.selectedSceneService.$selectedScene
+    .pipe(
+      takeUntil(this.$unSub),
+      tap(_ =>{
+        //Set automode to false to no overwrite values
+        if(this.scenePositionComponent)
+          this.scenePositionComponent.$isAutoMode.next(false)
+      })
+    )
+    .subscribe(s => this.currScene = s)
   }
 
   ngOnInit(): void { }
   ngOnDestroy(): void { this.$unSub.next(undefined) }
 
-
-
-  title(){ return this.detailsForm.get('title') }
-  desc(){ return this.detailsForm.get('desc') }
-
-  onChange(): void{
-    this.isSaved = false
-  }
+  onChange(): void{ this.isSaved = false }
 
   saveShow(): void{
     this.showService.save(this.show) 
@@ -99,21 +91,26 @@ export class CreateComponent implements OnInit, OnDestroy {
   }
 
   async saveScene(): Promise<void>{
-    
-    if(this.currScene?.sceneOptions?.keepCameraPosition){
-      this.currScene.navState = await this.openSpaceService.getNavigationState()
-    }
-    //Unset navstate if the keepcameraposition is unchecked but navstate is already set
-    else if(!this.currScene?.sceneOptions?.keepCameraPosition && !!this.currScene?.navState){
-      this.currScene.navState = undefined
-    }
 
-    console.log(this.currScene)
-
-    let existingScene = this.show.scenes.find(s => s.id === this.currScene!.id)
-    if(!existingScene){ this.show.scenes.push(this.currScene!) }
-    
-    merge(existingScene, this.currScene)    
+    try{
+      //Set the current navigation state if option is selected
+      if(this.currScene?.sceneOptions?.keepCameraPosition){
+        this.currScene.navState = await this.openSpaceService.getNavigationState()
+      }
+      //Unset navstate if the keepcameraposition is unchecked but navstate is already set
+      else if(!this.currScene?.sceneOptions?.keepCameraPosition && !!this.currScene?.navState){
+        this.currScene.navState = undefined
+      }
+    }
+    catch(err){ console.log('Error saving scene') }
+    finally{
+      console.log(this.currScene)
+      
+      let existingScene = this.show.scenes.find(s => s.id === this.currScene!.id)
+      if(!existingScene){ this.show.scenes.push(this.currScene!) }
+      
+      merge(existingScene, this.currScene)    
+    }
   }
 
   onDelete(scene: Scene){
@@ -123,25 +120,10 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.show.scenes = this.show.scenes.filter(s => s.id !== scene.id)
   }
 
-  onEdit(scene: Scene){ 
-    this.isAutoMode = false
-    this.currScene = scene
-  }
-
-  setActive(el: HTMLDivElement, target: any){
-    const isChecked = target.checked
-
-    if(!isChecked){ el.classList.remove('active') }
-    
-    else{ el.classList.add('active') }
-  }
-
   newScene(): void{
     this.selectedSceneService.setScene(this.defaultScene)
     this.selectedSceneService.$newSceneAdded.next(undefined)
   }
-
-  toggleClass(el: HTMLElement){ toggleClass(el, 'collapsed') }
 
   private get defaultScene(): Scene{
     this.id++
@@ -159,7 +141,7 @@ export class CreateComponent implements OnInit, OnDestroy {
   private setDefaultState(): void{
     // this.currScene = this.defaultScene
     this.currScene = undefined
-    this.isAutoMode = true
+    this.isAutoMode = false
   }
 
 }

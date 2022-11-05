@@ -9,7 +9,7 @@
 .creator{
     @extend %flx, %max-WH;
     display: grid;
-    grid-template-columns: minmax(12rem, 20rem) minmax(10rem, 2fr);
+    grid-template-columns: minmax(15rem, 25rem) minmax(20rem, 2fr);
     grid-template-rows: max-content 1fr;
     overflow-y: auto;
     background: #ffffff;
@@ -33,10 +33,12 @@
         align-self: center;
         width: 8rem;
         height: 2.5rem;
-    
-        svg{
-            width: 1.2rem;
-            height: 1.2rem;
+
+        p{ color: #ffffff; }
+        
+        .icon{ 
+            max-width: 1.3rem;
+            max-height: 1.3rem;
         }
     }
 
@@ -54,63 +56,51 @@ $grid-bd: solid 2px var(--gray);
 
 
 // Scene creation
-.scene{
+.scene-creator{
     padding-top: 2rem;
     grid-column: 2;
     grid-row: 2;
 
     display: grid;
-    row-gap: 2rem;
-    grid-template-rows: max-content max-content max-content max-content;
-    grid-template-columns: 1fr;
     justify-items: center;
+    grid-template-rows: max-content max-content max-content;
+    row-gap: 2rem;
 
-
-    #scene-pos{ grid-row: 3; }
 
     .scene-title{
-        @extend %align-center;
-        justify-content: space-between;
-        margin-left: 2rem;
-        padding-bottom: 0.5rem;
-        border-bottom: $grid-bd;
-        gap: 1rem;
+        display:  grid;
+        align-items: center;
+        grid-template-columns: 1fr max-content;
+        column-gap: 1rem;
 
         width: 35rem;
-        height: max-content;
+        padding-bottom: 0.5rem;
+        border-bottom: $grid-bd;
         
         &:hover, &:focus-within{
             border-color: var(--color-primary);
         }
 
-        input{ flex: 1;}
-
         #x{ 
             cursor: pointer;
             color: #c2bebe; 
-
             &:hover{ color: #333333; }
         }
     }
 
-    form{
-        display: block
-    }    
 
     #options{
         @extend %align-center;
         gap: 1rem;
     }
 
-    #clear{
+    #reset{
         @extend %bare;
         cursor: pointer;
         font-size: 1rem;
         color: #a8aabc;
     
-        &:hover{
-            color: var(--txt-color);
-        }
+        &:hover{ color: var(--txt-color); }
     }
 }
 
@@ -154,89 +144,4 @@ $grid-bd: solid 2px var(--gray);
 #script{
     max-width: 50rem;
     min-width: 35rem;
-}
-// Show details 
-.details{
-    padding: 0.5rem;
-    background: #fafafb;
-
-    form{
-        @extend %flx-col;
-        gap: 1rem;
-        padding: 1rem 0;
-        
-        .section{ 
-            gap: 1rem;
-            border: none; 
-        }
-        textarea{ resize: none; }
-    }  
-}
-
-
-.tabs{
-    grid-row: 2;
-
-
-    @extend %align-center;
-    gap: 1rem;
-    padding: 0.3rem;
-    background: #f6f6f6;
-    border-radius: 8px;
-    
-
-    .tab{
-        cursor: pointer;
-        text-align: center;
-        border-radius: 8px;
-        padding: 0.2rem 0.75rem;
-        min-width: 7rem;
-        
-        &.active, &:hover{
-            background: #ffffff;
-            box-shadow: var(--shadow);
-        }
-    }
-
-}
-
-// Chevron icon
-.chevron{ stroke: #a5a1a1; cursor: pointer; }
-
-.section{
-    @extend %just-center, %max-W, %flx-col;
-    padding: 0.5rem;
-    border-bottom: $grid-bd;
-    
-    ul{
-        transition: all 0.2s;
-        overflow-y: auto;
-        max-height: 10rem;
-    }
-    
-    &.collapsed{ 
-        ul{
-            max-height: 0rem;
-            overflow-y: hidden; 
-        }
-        svg{ transform: rotate(180deg); }
-    }
-
-    .header{
-        @extend %align-center, %max-W;
-        justify-content: space-between;
-        font-size: 1.3rem;
-    }
-
-    label{ 
-        @extend %align-center;
-        gap: 0.5rem;
-        font-size: 1.5rem; 
-
-        // Required inidicator
-        span{
-            color: #a5a1a1;
-            font-size: 0.9rem;
-        }
-    }
 }
