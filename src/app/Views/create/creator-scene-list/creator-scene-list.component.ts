@@ -50,7 +50,7 @@ export class CreatorSceneListComponent implements OnInit{
     const duplicate: Scene = cloneDeep(scene)
 
     let id = 1
-    let newTitle = duplicate.title + ' (copy)'
+    let newTitle = duplicate.title + ` (${id})`
     let existingCopy = this.scenes.find(s => s.title === newTitle)
 
     /*
@@ -58,7 +58,7 @@ export class CreatorSceneListComponent implements OnInit{
      increment a number to append behind the title to make it unique
     */
     while(existingCopy){
-      newTitle = duplicate.title + ' (copy)' + `(${id++})`
+      newTitle = duplicate.title + `(${id++})`
       existingCopy = this.scenes.find(s => s.title === newTitle)
     }
 

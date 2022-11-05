@@ -10,6 +10,7 @@ import { SceneListComponent } from './scene-list/scene-list.component';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { SortingSelectorComponent } from './sorting-selector/sorting-selector.component';
 import { ClickedoutsideofDirective } from '../Directives/clickoutsideof.directive';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ClickedoutsideofDirective } from '../Directives/clickoutsideof.directiv
     DropdownComponent,
     SortingSelectorComponent,
     ClickedoutsideofDirective,
+    NotificationsComponent,
   ],
   imports: [
     CommonModule,
@@ -39,6 +41,7 @@ import { ClickedoutsideofDirective } from '../Directives/clickoutsideof.directiv
     DropdownComponent,
     SortingSelectorComponent,
     ClickedoutsideofDirective,
+    NotificationsComponent
   ]
 })
 export class SharedModule { }

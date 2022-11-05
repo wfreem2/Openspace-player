@@ -86,7 +86,7 @@
     </tabs>
 
     <div id="options">
-        <button id="reset">Reset</button>
+        <button id="reset" (click)="resetScene()">Reset</button>
         <button id="save" class="btn secondary" 
         (click)="saveScene()"
         [disabled]="!currScene!.title.trim()">Save</button>

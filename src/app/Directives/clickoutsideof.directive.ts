@@ -13,8 +13,6 @@ export class ClickedoutsideofDirective {
   @HostListener('document:click', ['$event.target'])
   onClicked(target: HTMLElement): void{
 
-    console.log(this.hostRef.nativeElement.contains(target))
-
     if(!this.hostRef.nativeElement.contains(target)){
       this.onClickOutside.emit(target)
     }

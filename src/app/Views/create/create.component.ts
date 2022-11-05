@@ -125,6 +125,11 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.selectedSceneService.$newSceneAdded.next(undefined)
   }
 
+  resetScene(): void{
+    this.currScene = this.defaultScene
+    this.isAutoMode = false
+  }
+
   private get defaultScene(): Scene{
     this.id++
     return  { 
