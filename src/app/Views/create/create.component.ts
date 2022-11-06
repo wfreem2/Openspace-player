@@ -52,7 +52,6 @@ export class CreateComponent implements OnInit, OnDestroy {
     )
     .subscribe(show => {
       this.show = show
-
       //If at least on scene, set the id to highest id to avoid conflicting ids
       if(show.scenes.length){
         this.id = show.scenes.reduce( 
@@ -62,7 +61,11 @@ export class CreateComponent implements OnInit, OnDestroy {
     })
     
     this.initSelectedSceneService()
-    
+    this.transitionControl.valueChanges
+    .pipe(takeUntil(this.$unSub))
+    .subscribe(_ => this.onChange())
+
+
     setInterval(() => {
       this.saveShow()
     }, this.saveInterval)
@@ -158,6 +161,12 @@ export class CreateComponent implements OnInit, OnDestroy {
     // this.currScene = this.defaultScene
     this.currScene = undefined
     this.isAutoMode = false
+  }
+
+  get isSceneValid(): boolean{
+
+    const { lat, long, alt, } = this.currScene!.geoPos
+    return lat !== null && long !== null && alt !== null
   }
 
 }

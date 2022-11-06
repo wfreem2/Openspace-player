@@ -20,16 +20,18 @@ export class ShowService {
       try {        
         const shows = JSON.parse(localStorage.getItem('shows')!)
         this._shows.next(shows)
-        this.id = shows.length
+        this.id = this.findUniqueId()
       } 
       catch (error) { console.log('error parsing cookie')  }
 
     }
   }
 
+  
   getBlankShow(): Show{
-    this.id++
-    
+    //Ensure unique ids
+    this.id = this.findUniqueId()
+
     return {
       id: this.id,
       title: '',
@@ -39,6 +41,13 @@ export class ShowService {
   }
 
   addShow(show: Show){
+    
+    if(this._shows.value.some(s => s.id === show.id)){
+      //Ensure unique id
+      this.id = this.findUniqueId()
+    }
+
+
     this._shows.value.push(show)
     this._shows.next(this._shows.value)
   }
@@ -59,14 +68,17 @@ export class ShowService {
   save(show: Show): void{
     const existing = this._shows.value.find(s => s.id === show.id)
 
+    
     if(!existing){ this.addShow(show); }
     else{ merge(existing, show) }
-
-    console.log(show)
 
     this.saveShow()
   }
 
+  private findUniqueId(): number{
+    const shows = this._shows.value
+    return shows.reduce((id, s) => Math.max(id, s.id), shows[0].id) + 1
+  }
 
   private saveShow(): void{
     localStorage.setItem('shows', JSON.stringify(this._shows.value))

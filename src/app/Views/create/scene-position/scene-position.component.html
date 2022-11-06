@@ -31,6 +31,7 @@
         <div class="section">
             <label for="node">Node:</label>
             <dropdown [items]="pathNavOptions" name="pathnav" 
+            [disabled]="isAutoMode"
             [(ngModel)]="geoPosition.nodeName" (ngModelChange)="onValueChange()"></dropdown>
         </div>
     </div>

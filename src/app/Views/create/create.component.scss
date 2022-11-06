@@ -144,6 +144,28 @@ $grid-bd: solid 2px var(--gray);
     }
 }
 
+.summary{
+    @extend %flx-col;
+    gap: 1rem;
+
+    ul{ padding-left: 1rem }
+
+    .section{
+        @extend %flx-col;
+        gap: 0.5rem
+    }
+
+    .geoPos{
+        @extend %flx-col;
+        gap: 0.5rem;
+        li{
+            @extend %align-center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+    }
+}
+
 #script{
     max-width: 50rem;
     min-width: 35rem;

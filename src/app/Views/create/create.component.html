@@ -49,6 +49,36 @@
     </div>
     
     <tabs>
+        <tab name="Summary">
+            <div class="summary">
+                <div class="section">
+                    <p class="title">GeoPosition</p>
+
+                    <ul class="geoPos">
+                        <li>
+                            <p>Node: {{currScene!.geoPos.nodeName}}</p>
+                        </li>
+                        <li>
+                            <p>Latitude:</p>
+                            <p>{{currScene!.geoPos.lat}}</p>
+                        </li>
+                        <li>
+                            <p>Longitude:</p>
+                            <p>{{currScene!.geoPos.long}}</p>
+                        </li>
+                        <li>
+                            <p>Altitude:</p>
+                            <p>{{currScene!.geoPos.alt}}</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    
+                </div>
+                <div class="section"></div>
+            </div>
+        </tab>
         <tab name="Position" [isActive]="true">
             <scene-position id="scene-pos"
             [isAutoMode]="isAutoMode"
@@ -84,13 +114,15 @@
              placeholder="Script Text">
             </textarea>
         </tab>
+
+       
     </tabs>
 
     <div id="options">
         <button id="reset" (click)="resetScene()">Reset</button>
         <button id="save" class="btn secondary" 
         (click)="saveScene()"
-        [disabled]="!currScene!.title.trim()">Save</button>
+        [disabled]="!currScene!.title.trim() || !isSceneValid">Save</button>
     </div>
 </ng-template>
 
