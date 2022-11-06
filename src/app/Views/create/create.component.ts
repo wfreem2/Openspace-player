@@ -1,12 +1,11 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { merge } from "lodash"
 import { ActivatedRoute } from '@angular/router';
 import { first, map, pluck, Subject, takeUntil, tap } from 'rxjs';
 import { ShowService } from 'src/app/Services/show.service';
 import { Show } from 'src/app/Interfaces/Show';
-import { toggleClass } from 'src/app/Utils/utils';
 import { SelectedSceneService } from './selected-scene.service';
 import { OpenspaceService } from 'src/app/Services/openspace.service';
 import { ScenePositionComponent } from './scene-position/scene-position.component';
@@ -34,7 +33,7 @@ export class CreateComponent implements OnInit, OnDestroy {
   isSaved: boolean = true
   isAutoMode:boolean = false
 
-  transitionControl: FormControl = new FormControl('', Validators.pattern(/^[0-9]*$/))
+  transitionControl: UntypedFormControl = new UntypedFormControl('', Validators.pattern(/^[0-9]*$/))
 
   constructor(private route: ActivatedRoute, public showService: ShowService,
      private selectedSceneService: SelectedSceneService, private openSpaceService: OpenspaceService,

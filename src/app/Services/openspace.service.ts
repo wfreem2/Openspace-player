@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as api from 'openspace-api-js'
-import { BehaviorSubject, interval, map, mergeMap, Observable } from 'rxjs';
+import { BehaviorSubject, interval, mergeMap, Observable } from 'rxjs';
 import { GeoPosition } from '../Interfaces/GeoPosition';
 import { NavigationState } from '../Interfaces/NavigationState';
-import { Scene } from '../Interfaces/Scene';
 
 @Injectable({
   providedIn: 'root'

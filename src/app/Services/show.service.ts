@@ -20,7 +20,7 @@ export class ShowService {
       try {        
         const shows = JSON.parse(localStorage.getItem('shows')!)
         this._shows.next(shows)
-        this.id = this.findUniqueId()
+        this.id = this.getUniqueId()
       } 
       catch (error) { console.log('error parsing cookie')  }
 
@@ -30,7 +30,7 @@ export class ShowService {
   
   getBlankShow(): Show{
     //Ensure unique ids
-    this.id = this.findUniqueId()
+    this.id = this.getUniqueId()
 
     return {
       id: this.id,
@@ -44,7 +44,7 @@ export class ShowService {
     
     if(this._shows.value.some(s => s.id === show.id)){
       //Ensure unique id
-      this.id = this.findUniqueId()
+      this.id = this.getUniqueId()
     }
 
 
@@ -75,9 +75,9 @@ export class ShowService {
     this.saveShow()
   }
 
-  private findUniqueId(): number{
+  private getUniqueId(): number{
     const shows = this._shows.value
-    return shows.reduce((id, s) => Math.max(id, s.id), shows[0].id) + 1
+    return shows.reduce((id, s) => Math.max(id, s.id), 0) + 1
   }
 
   private saveShow(): void{
