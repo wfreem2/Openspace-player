@@ -5,7 +5,7 @@ jobs:
   build:
     working_directory: ~/my-project
     docker:
-      - image: circleci/node:latest-browsers
+      - image: cimg/node:latest-browsers
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
