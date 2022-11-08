@@ -5,7 +5,7 @@ jobs:
   build:
     working_directory: ~/my-project
     docker:
-      - image: cimg/node:latest-browsers
+      - image: cimg/node:current-browsers
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
