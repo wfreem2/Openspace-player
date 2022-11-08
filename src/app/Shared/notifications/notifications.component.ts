@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ScaleInOut } from 'src/app/Animations/animations';
 import { NotificationType, ToastNotifcation } from 'src/app/Interfaces/ToastNotification';
 import { NotificationService } from 'src/app/Services/notification.service';
@@ -24,8 +24,6 @@ export class NotificationsComponent implements OnInit {
     this.notiService.removeNotification(noti)
   }
 
-  get NotificationType(){
-    return NotificationType
-  }
+  get NotificationType(){ return NotificationType }
 
 }
