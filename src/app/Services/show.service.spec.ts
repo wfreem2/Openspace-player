@@ -19,7 +19,7 @@ describe("ShowService", () => {
 
     afterEach( () => localStorage.clear() )
 
-    it('adding show with existing id should have id reassigned', () => {
+    it('#addShow() show with existing id should have id reassigned', () => {
         const id = 3    
         const show = { id: 3, title: 'Show 3 conflicting', scenes: [], dateCreated: new Date() }
 
@@ -28,7 +28,7 @@ describe("ShowService", () => {
         expect(show.id).not.toEqual(id)
     })
 
-    it('#removeShowById should remove show with id 2', () => {
+    it('#removeShowById() should remove show with id 2', () => {
         const id = 2
 
         showService.removeShowById(id)
@@ -37,7 +37,7 @@ describe("ShowService", () => {
         .toBeFalsy()
     })  
 
-    it('#saveShow should save existing show without appending', () => {
+    it('#saveShow() should save existing show without appending', () => {
         
         const toAdd: Show = { id: 4, title: 'Show 4', scenes: [], dateCreated: new Date() }
         showService.addShow(toAdd)
@@ -65,7 +65,7 @@ describe("ShowService", () => {
         
     })
 
-    it('#saveShow should save non-existing show and append', () => {
+    it('#saveShow() should save non-existing show and append', () => {
         
         const toAdd: Show = { id: 4, title: 'Show 4', scenes: [], dateCreated: new Date() }
         
@@ -84,7 +84,7 @@ describe("ShowService", () => {
         })
     })
 
-    it('#saveShow should save show to localstorage', () => {
+    it('#saveShow() should save show to localstorage', () => {
         
         const toAdd: Show = { id: 4, title: 'Show 4', scenes: [], dateCreated: new Date() }
 
@@ -95,7 +95,7 @@ describe("ShowService", () => {
         expect(savedShows.length).toEqual(shows.length+1)
     })
 
-    it('#getBlankShow should return show with unique id', () => {
+    it('#getBlankShow() should return show with unique id', () => {
 
         const lastShow = shows[shows.length-1]
         const newShow = showService.getBlankShow()

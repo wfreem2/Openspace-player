@@ -111,7 +111,7 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
     }
   } 
 
-  setItem(item: any): void{
+  private setItem(item: any): void{
     const selectableItem = this.selectableItems.find(i => i.item === item)
     
     if(selectableItem){
