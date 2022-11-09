@@ -7,13 +7,11 @@ import { ToastNotifcation as ToastNotification } from '../Interfaces/ToastNotifi
 })
 export class NotificationService {
 
-  private $queue = new BehaviorSubject<ToastNotification[]>([])
-  private readonly LIFETIME = 5000
-  
-  private queue: ToastNotification[] = []
-
-
   private id = 0
+  private _queue: ToastNotification[] = []
+  private $queue = new BehaviorSubject<ToastNotification[]>([])
+  
+  private readonly LIFETIME = 5000
 
   constructor() { }
 
@@ -22,12 +20,12 @@ export class NotificationService {
     this.id++
     notification.id = this.id
 
-    this.queue.push(notification)
+    this._queue.push(notification)
     
     //Immediately show
     if(!this.$queue.value.length){
       this.$queue.next([notification])
-      setTimeout( () => this.removeNotification(notification), this.LIFETIME * this.queue.length)
+      setTimeout( () => this.removeNotification(notification), this.LIFETIME * this._queue.length)
     }
   }
 
@@ -37,13 +35,13 @@ export class NotificationService {
 
   removeNotification(notification: ToastNotification): void{
     
-    const existing = this.queue.find(n => n === notification)
+    const existing = this._queue.find(n => n === notification)
 
     if(!existing){ return }
     
-    this.queue = this.queue.filter(n => n !== notification)
+    this._queue = this._queue.filter(n => n !== notification)
 
-    if(this.queue.length){
+    if(this._queue.length){
       //Immediately show notification if any
       this.checkQueue()
     }
@@ -52,8 +50,8 @@ export class NotificationService {
 
   private checkQueue(): void{
 
-    if(this.queue.length){
-      const noti = this.queue[0]
+    if(this._queue.length){
+      const noti = this._queue[0]
       this.$queue.next([noti])
       
       setTimeout( () => this.removeNotification(noti), this.LIFETIME)

@@ -44,9 +44,8 @@ export class ShowService {
     
     if(this._shows.value.some(s => s.id === show.id)){
       //Ensure unique id
-      this.id = this.getUniqueId()
+      show.id = this.getUniqueId()
     }
-
 
     this._shows.value.push(show)
     this._shows.next(this._shows.value)

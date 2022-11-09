@@ -2,10 +2,6 @@ import { first, map } from "rxjs"
 import { Show } from "../Interfaces/Show"
 import { ShowService } from "./show.service"
 
-function setup(){
-    // const serviceStub = jasmine.createSpyObj('ShowService', ['addShow'])
-}
-
 describe("ShowService", () => {
     let showService: ShowService
 
@@ -23,6 +19,14 @@ describe("ShowService", () => {
 
     afterEach( () => localStorage.clear() )
 
+    it('adding show with existing id should have id reassigned', () => {
+        const id = 3    
+        const show = { id: 3, title: 'Show 3 conflicting', scenes: [], dateCreated: new Date() }
+
+        showService.addShow(show)
+
+        expect(show.id).not.toEqual(id)
+    })
 
     it('#removeShowById should remove show with id 2', () => {
         const id = 2
@@ -43,8 +47,8 @@ describe("ShowService", () => {
         
         showService.save(toAdd)
         
-        
         let showCount: number = 0
+        
         showService.getAllShows()
         .pipe(map(s => s.length), first())
         .subscribe(N => showCount = N)
@@ -80,18 +84,23 @@ describe("ShowService", () => {
         })
     })
 
+    it('#saveShow should save show to localstorage', () => {
+        
+        const toAdd: Show = { id: 4, title: 'Show 4', scenes: [], dateCreated: new Date() }
+
+        showService.save(toAdd)
+        const savedShows: Show[] = JSON.parse(localStorage.getItem('shows')!)
+
+        expect(savedShows).toBeTruthy()
+        expect(savedShows.length).toEqual(shows.length+1)
+    })
+
     it('#getBlankShow should return show with unique id', () => {
 
         const lastShow = shows[shows.length-1]
-        
         const newShow = showService.getBlankShow()
-        
-        console.log(lastShow)
-        console.log(newShow)
 
         expect(newShow.id)
         .toBeGreaterThan(lastShow.id)
     })
-
-
 })

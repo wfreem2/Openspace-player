@@ -27,7 +27,7 @@ module.exports = function (config) {
         suppressAll: true // removes the duplicated traces
       },
       coverageReporter: {
-        dir: require('path').join(__dirname, './coverage/openspace-player'),
+        dir: require('path').join(__dirname, './coverage/'),
         subdir: '.',
         reporters: [
           { type: 'html' },
