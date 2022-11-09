@@ -24,7 +24,7 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   private id: number = 0
   private $unSub = new Subject<any>()
-  private readonly saveInterval = 1000 * 60 * 2
+  private readonly saveInterval = 1000 * 60 * 2 //2 minutes  
 
 
   show!: Show
@@ -32,8 +32,10 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   isSaved: boolean = true
   isAutoMode:boolean = false
-
   transitionControl: UntypedFormControl = new UntypedFormControl('', Validators.pattern(/^[0-9]*$/))
+
+  private readonly autoSaveInterval = setInterval( () => this.saveShow(), this.saveInterval )
+  
 
   constructor(private route: ActivatedRoute, public showService: ShowService,
      private selectedSceneService: SelectedSceneService, private openSpaceService: OpenspaceService,
@@ -42,11 +44,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.route.params
     .pipe(
       pluck('id'),
-      map(id => {
-        return (id === 'new') ? 
-        showService.getBlankShow() :
-        showService.getShowById(parseInt(id))!
-      }),
+      map(id => showService.getShowById(parseInt(id))! ),
       first()
     )
     .subscribe(show => {
@@ -60,23 +58,18 @@ export class CreateComponent implements OnInit, OnDestroy {
     })
     
     this.initSelectedSceneService()
+
     this.transitionControl.valueChanges
     .pipe(takeUntil(this.$unSub))
     .subscribe(_ => this.onChange())
-
-
-    setInterval(() => {
-      this.saveShow()
-    }, this.saveInterval)
-    
   }
   
   private initSelectedSceneService(): void{
     this.selectedSceneService.$selectedScene
     .pipe(
       takeUntil(this.$unSub),
-      tap(_ =>{
-        //Set automode to false to no overwrite values
+      tap(() =>{
+        //Set automode to false to not overwrite values
         if(this.scenePositionComponent)
           this.scenePositionComponent.$isAutoMode.next(false)
       })
@@ -88,7 +81,11 @@ export class CreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void { }
-  ngOnDestroy(): void { this.$unSub.next(undefined) }
+
+  ngOnDestroy(): void { 
+    this.$unSub.next(undefined) 
+    clearInterval(this.autoSaveInterval)
+  }
 
   onChange(): void{ this.isSaved = false }
 
@@ -96,6 +93,8 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.showService.save(this.show) 
     this.isSaved=true
     this.notiService.showNotification({title: 'Show Saved', type: NotificationType.SUCCESS})
+   
+    this.scenePositionComponent.$isAutoMode.next(false)
   }
 
   async saveScene(): Promise<void>{
@@ -145,25 +144,24 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   private get defaultScene(): Scene{
     this.id++
+    
     return  { 
       id: this.id,
       title: '',
+      geoPos: { lat: 0, long: 0, alt: 0 },
       sceneOptions: {
-        keepCameraPosition: true,
-        enabledTrails: []
-      },
-      geoPos: { lat: 0, long: 0, alt: 0 }
+        enabledTrails: [],
+        keepCameraPosition: true
+      }
     }
   }
 
   private setDefaultState(): void{
-    // this.currScene = this.defaultScene
     this.currScene = undefined
     this.isAutoMode = false
   }
 
   get isSceneValid(): boolean{
-
     const { lat, long, alt, } = this.currScene!.geoPos
     return lat !== null && long !== null && alt !== null
   }

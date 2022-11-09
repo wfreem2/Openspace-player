@@ -7,7 +7,7 @@ import { ShowService } from './show.service';
   providedIn: 'root'
 })
 
-export class EditShowGuard implements CanActivate {
+export class ShowCreatorGuard implements CanActivate {
   constructor(private showService: ShowService, private router: Router){ }
   
   canActivate(
@@ -17,7 +17,7 @@ export class EditShowGuard implements CanActivate {
 
       if(route.params['id'] === 'new'){ 
         const show = this.showService.getBlankShow()
-        console.log(show)
+        
         this.showService.addShow(show)
         this.router.navigate(['/creator/' + show.id])
 

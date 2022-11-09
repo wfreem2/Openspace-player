@@ -15,7 +15,6 @@ export class ShowService {
 
   constructor() {
     if(localStorage.getItem('shows')){
-      console.log('loading saved show')
       
       try {        
         const shows = JSON.parse(localStorage.getItem('shows')!)

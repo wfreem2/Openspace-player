@@ -7,7 +7,7 @@
 
         <div>
             <button id="save" class="btn primary" (click)="saveShow()"
-            [disabled]="isSaved || !show.title.trim()">
+            [disabled]="isSaved || !isSceneValid || !show.title.trim()">
                 <p>Save</p>
                 <img src="assets/icons/save.svg" class="icon" alt="">
             </button>
@@ -79,6 +79,7 @@
                 <div class="section"></div>
             </div>
         </tab>
+
         <tab name="Position" [isActive]="true">
             <scene-position id="scene-pos"
             [isAutoMode]="isAutoMode"
@@ -113,16 +114,11 @@
              (ngModelChange)="onChange()"
              placeholder="Script Text">
             </textarea>
-        </tab>
-
-       
+        </tab>       
     </tabs>
 
     <div id="options">
         <button id="reset" (click)="resetScene()">Reset</button>
-        <button id="save" class="btn secondary" 
-        (click)="saveScene()"
-        [disabled]="!currScene!.title.trim() || !isSceneValid">Save</button>
     </div>
 </ng-template>
 
