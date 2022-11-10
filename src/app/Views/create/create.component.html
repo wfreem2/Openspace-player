@@ -7,7 +7,7 @@
 
         <div>
             <button id="save" class="btn primary" (click)="saveShow()"
-            [disabled]="isSaved || !isSceneValid || !show.title.trim()">
+            [disabled]="!show.title.trim()">
                 <p>Save</p>
                 <img src="assets/icons/save.svg" class="icon" alt="">
             </button>
@@ -55,19 +55,19 @@
 
                         <ul class="geoPos">
                             <li>
-                                <p>Node: {{currScene!.geoPos.nodeName}}</p>
+                                <p>Node: {{currScene?.geoPos?.nodeName}}</p>
                             </li>
                             <li>
                                 <p>Latitude:</p>
-                                <p>{{currScene!.geoPos.lat}}</p>
+                                <p>{{currScene?.geoPos?.lat}}</p>
                             </li>
                             <li>
                                 <p>Longitude:</p>
-                                <p>{{currScene!.geoPos.long}}</p>
+                                <p>{{currScene?.geoPos?.long}}</p>
                             </li>
                             <li>
                                 <p>Altitude:</p>
-                                <p>{{currScene!.geoPos.alt}}</p>
+                                <p>{{currScene?.geoPos?.alt}}</p>
                             </li>
                         </ul>
                     </div>

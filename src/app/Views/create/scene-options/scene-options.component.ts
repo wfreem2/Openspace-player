@@ -69,10 +69,14 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
 
     this.optionsForm.valueChanges
     .pipe(
+      skip(1),
       filter(v => !!v),
       map(v => {
-        v.enabledTrails =  v.enabledTrails?.filter( t => t.isEnabled)
-        return v
+        v.enabledTrails =  v.enabledTrails?.filter(t => t.isEnabled)
+        return { 
+          keepCameraPosition: v.keepCameraPosition,
+          enabledTrails: v.enabledTrails?.map(t => t.trail)
+        } as SceneOptions
       }),
       distinctUntilChanged( (a, b) => isEqual(a, b)),
       takeUntil(this.$unsub)
@@ -117,15 +121,22 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
       keepCameraPosition: options.keepCameraPosition,
     })
 
-    const { enabledTrails } = this.optionsForm.controls
-
+    
     if(!options.enabledTrails.length){ 
       this.deselectAllTrails()
       return
     }
 
-    enabledTrails.value.forEach( t => {
-      t.isEnabled = options.enabledTrails.find(trail => t.trail === trail) ? true : t.isEnabled 
+    const { enabledTrails } = this.optionsForm.controls
+    
+    enabledTrails.controls.forEach( ctrl => {
+      const { value } = ctrl
+      value.isEnabled = options.enabledTrails.find(trail => value.trail === trail) ? true : value.isEnabled
+
+      ctrl.patchValue(
+        { isEnabled: value.isEnabled },
+        { emitEvent: false }
+      )
     })
   }
 

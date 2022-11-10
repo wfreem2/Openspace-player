@@ -46,8 +46,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     options: new FormControl<SceneOptions>({keepCameraPosition: true, enabledTrails: []}, {nonNullable: true})
   })
 
-
-  private readonly autoSaveInterval = setInterval( () => this.saveShow(), this.saveInterval )
+  // private readonly autoSaveInterval = setInterval( () => this.saveShow(), this.saveInterval )
 
 
   constructor(private route: ActivatedRoute, public showService: ShowService,
@@ -58,17 +57,14 @@ export class CreateComponent implements OnInit, OnDestroy {
     .pipe(
       pluck('id'),
       map(id => showService.getShowById(parseInt(id))! ),
+      tap(show => {
+        //If at least on scene, set the id to highest id to avoid conflicting ids
+        if(!show.scenes.length){ return }
+        this.id = show.scenes.reduce((id, s) => Math.max(id, s.id), this.id)
+      }),
       first()
     )
-    .subscribe(show => {
-      this.show = show
-      //If at least on scene, set the id to highest id to avoid conflicting ids
-      if(show.scenes.length){
-        this.id = show.scenes.reduce( 
-          (id, s) => Math.max(id, s.id), show.scenes[0].id
-        )
-      }
-    })
+    .subscribe(show => this.show = show)
     
     this.initSelectedSceneService()
 
@@ -76,9 +72,19 @@ export class CreateComponent implements OnInit, OnDestroy {
     .pipe(
       takeUntil(this.$unSub),
       distinctUntilChanged( (a, b) => isEqual(a, b)),
-      map(v => v as Scene)
+      map(v =>{ 
+        return {
+          title: v.title,
+          geoPos: v.position, sceneOptions: v.options,
+          duration: v.transistion, script: v.script,
+        } as Scene
+
+      })
     )
-    .subscribe(console.log)
+    .subscribe(scene => {
+      this.currScene = scene
+      console.log(this.currScene)
+    })
   }
   
   private initSelectedSceneService(): void{
@@ -108,12 +114,13 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void { 
     this.$unSub.next(undefined) 
-    clearInterval(this.autoSaveInterval)
+    // clearInterval(this.autoSaveInterval)
   }
 
   onChange(): void{ this.isSaved = false }
 
   saveShow(): void{
+    this.saveScene()
     this.showService.save(this.show) 
     this.isSaved=true
     this.notiService.showNotification({title: 'Show Saved', type: NotificationType.SUCCESS})
@@ -138,13 +145,16 @@ export class CreateComponent implements OnInit, OnDestroy {
     catch(err){ console.log('Error saving camera position') }
     finally{
      
-      
-      console.log(this.currScene)
-      
       let existingScene = this.show.scenes.find(s => s.id === this.currScene!.id)
-      if(!existingScene){ this.show.scenes.push(this.currScene!) }
+      
+      if(!existingScene){
+         this.show.scenes.push(this.currScene!) 
+         return
+      }
       
       merge(existingScene, this.currScene)    
+      console.log(existingScene)
+      console.log(this.show)
     }
   }
 

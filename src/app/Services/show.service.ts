@@ -66,10 +66,10 @@ export class ShowService {
   save(show: Show): void{
     const existing = this._shows.value.find(s => s.id === show.id)
 
-    
     if(!existing){ this.addShow(show); }
     else{ merge(existing, show) }
 
+    // this._shows.next(this._shows.value)
     this.saveShow()
   }
 
