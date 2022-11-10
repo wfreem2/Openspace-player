@@ -1,63 +1,44 @@
-<div class="section" id="camera" #s1>
-    <div>
-        <p class="title">Camera</p>
-        <ng-container *ngTemplateOutlet="chevron; context: {el: s1}"></ng-container>
-    </div>
-
-    <ul class="options">
-        <li class="option">
-            <label for="camera">Keep Camera Position</label>
-            <input type="checkbox" name="camera" id="zoom" 
-             (ngModelChange)="onOptionChecked()"
-             [(ngModel)]="sceneOptions.keepCameraPosition">
-        </li>
-    </ul>
-</div>
-
-<div class="section" id="trails" #s2>
-    <div>
-        <p class="title">Trails</p>
-        <ng-container *ngTemplateOutlet="chevron; context: {el: s2}"></ng-container>
-    </div>
-
-    <div class="search">
-        <ng-container [ngTemplateOutlet]="searchIcon"></ng-container>
-        <input type="text" class="bare" placeholder="Node Name" ngModel (ngModelChange)="query.next($event)">
-        <ng-container [ngTemplateOutlet]="filterIcon"></ng-container>
-
-        <div class="filter-ctx" #filter [style.visibility]="isFilterShowing ? 'visible' : 'hidden'">
-            <div class="filter">
-                <p class="title">Sorting</p>
-                <ul>
-                    <li #sortOpt [class.active]="$currSorting.value === SortingType.Ascending" 
-                    (click)="selectSort(SortingType.Ascending)">
-                        Sort Ascending
-                        <ng-container [ngTemplateOutlet]="arrowUp"></ng-container>
-                    </li>
-                    <li #sortOpt [class.active]="$currSorting.value === SortingType.Descending" 
-                        (click)="selectSort(SortingType.Descending)">
-                        Sort Descending
-                        <ng-container [ngTemplateOutlet]="arrowDown"></ng-container>
-                    </li>
-                </ul>
-            </div>
-
+<form [formGroup]="optionsForm">
+    <div class="section" id="camera" #s1>
+        <div>
+            <p class="title">Camera</p>
+            <ng-container *ngTemplateOutlet="chevron; context: {el: s1}"></ng-container>
         </div>
+
+        <ul class="options">
+            <li class="option">
+                <label for="camera">Keep Camera Position</label>
+                <input type="checkbox" name="camera" id="zoom"
+                formControlName="keepCameraPosition">
+            </li>
+        </ul>
     </div>
 
-    <div class="select-opts">
-        <button class="bare" (click)="selectAllTrails()">Select All</button>
-        <button class="bare" (click)="deselectAllTrails()">Deselect All</button>
-    </div>
+    <div class="section" id="trails" #s2>
+        <div>
+            <p class="title">Trails</p>
+            <ng-container *ngTemplateOutlet="chevron; context: {el: s2}"></ng-container>
+        </div>
 
-    <ul class="options">
-        <li class="option" *ngFor="let option of trailOptions">
-            <label for="{{option.node}}">{{option.node}} Trail</label>
-            <input type="checkbox" name="{{option.node}}"
-             [(ngModel)]="option.isEnabled" (ngModelChange)="onOptionChecked()">
-        </li>
-    </ul>
-</div>
+        <div class="search">
+            <ng-container [ngTemplateOutlet]="searchIcon"></ng-container>
+            <input type="text" class="bare" placeholder="Node Name" #i (input)="query.next(i.value)">
+            <sorting-selector (sortingChangedEvent)="sort($event)"></sorting-selector>
+        </div>
+
+        <div class="select-opts">
+            <button class="bare" (click)="selectAllTrails()">Select All</button>
+            <button class="bare" (click)="deselectAllTrails()">Deselect All</button>
+        </div>
+
+        <ul class="options" formArrayName="enabledTrails">
+            <li class="option" *ngFor="let option of filteredTrails.controls" [formGroup]="option">
+                <label for="{{option.controls['trail'].value}}">{{option.controls['trail'].value}} Trail</label>
+                <input type="checkbox" name="{{option.controls['trail'].value}}"  formControlName="isEnabled">
+            </li>
+        </ul>
+    </div>
+</form>
 
 
 <ng-template #chevron let-el="el">

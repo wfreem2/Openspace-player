@@ -3,6 +3,8 @@ import * as api from 'openspace-api-js'
 import { BehaviorSubject, interval, mergeMap, Observable } from 'rxjs';
 import { GeoPosition } from '../Interfaces/GeoPosition';
 import { NavigationState } from '../Interfaces/NavigationState';
+import { NotificationType } from '../Interfaces/ToastNotification';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,7 @@ export class OpenspaceService {
   private isAllTrailsDisabled: boolean = false
   private isAllTrailsEnabled: boolean = false
 
-  constructor() {
+  constructor(private notiService: NotificationService) {
     this.o.onConnect(async () => await this.onConnect(this.o))
     this.o.onDisconnect(async () => await this.onDisconnect())
 
@@ -29,6 +31,10 @@ export class OpenspaceService {
 
   private async onDisconnect(){
     this._isConnected.next(false)
+    this.notiService.showNotification({ 
+      title: 'Openspace is disconnected',
+      type: NotificationType.WARNING
+    })
   }
 
   private async onConnect(api: any){

@@ -5,10 +5,7 @@
     position: relative;
     z-index: 99;
     min-width: 15rem;
-
 }
-
-
 
 .header{
     @extend %align-center;
@@ -121,5 +118,13 @@ $H: 25rem;
     #filter-icon{
         cursor: pointer;
         &:hover{ color: var(--color-primary); }
+    }
+}
+
+
+@media only screen and (max-height: 1080px){
+    .items-wrapper{
+        height: 20rem;
+        max-height: 20rem;
     }
 }

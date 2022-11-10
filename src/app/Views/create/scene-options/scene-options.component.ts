@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { BehaviorSubject, map, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { isEqual } from 'lodash';
+import { BehaviorSubject, distinctUntilChanged, filter, first, map, of, skip, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { SceneOptions } from 'src/app/Interfaces/SceneOptions';
 import { SceneGraphNode } from 'src/app/Services/openspace.service';
 import { SortingType } from 'src/app/Shared/sorting-selector/sorting-selector.component';
@@ -19,81 +20,103 @@ import { isElementOrChildClicked, toggleClass } from 'src/app/Utils/utils';
   ]
 })
 
+
 export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
+  
   @ViewChildren('sortOpt') sortOptions!: QueryList<ElementRef>
   @ViewChild('filter') filterMenu!: ElementRef
   @ViewChild('filterBtn') filterBtn!: ElementRef
 
-
-  sceneOptions!: SceneOptions
-
   onChange: any = () => {}
   onTouch: any = () => {}
   
-  //Unaltered array for searching
-  private readonly originalTrails!: TrailOption[]
   private $unsub = new Subject<any>()
   private touched: boolean = false
-
-  trailOptions!: TrailOption[] 
-  isFilterShowing: boolean = false
+  
+  
+  sceneOptions!: SceneOptions
   
   query = new Subject<string>()
+
+  isFilterShowing: boolean = false
   $currSorting = new BehaviorSubject<SortingType>(SortingType.None)
   
+  optionsForm = new FormGroup({
+    keepCameraPosition: new FormControl<boolean>(true),
+    enabledTrails: new FormArray<FormGroup<OptionsGrp>>([])
+  })
+
+  filteredTrails = new FormArray<FormGroup<OptionsGrp>>([])
 
 
   constructor(private renderer: Renderer2) { 
-
-    this.originalTrails = 
-    Object.keys(SceneGraphNode)
-    .map((node) => {
-      return { node: <SceneGraphNode> node , isEnabled: false}
-    })
-
-    renderer.listen('window', 'click', this.filterMenuClicked.bind(this))
+    this.initFormGroup()
 
     this.$currSorting.asObservable()
     .pipe(takeUntil(this.$unsub))
     .subscribe(sorting => this.sort(sorting))
-
+   
     this.query.asObservable()
     .pipe(
       map(query => query.toLowerCase()),
       switchMap(query => of(this.search(query))),
+      takeUntil(this.$unsub),
+      map(v => [...v])
+    )
+    .subscribe( v => this.filteredTrails.controls = v )
+
+
+    this.optionsForm.valueChanges
+    .pipe(
+      skip(1),
+      filter(v => !!v),
+      distinctUntilChanged( (a, b) => isEqual(a, b)),
+      map(v => {
+        v.enabledTrails =  v.enabledTrails?.filter( t => t.isEnabled)
+        return v
+      }),
       takeUntil(this.$unsub)
     )
-    .subscribe(options => this.trailOptions = options)
+    .subscribe( v => {
+      console.log('value', v)
+      this.onChange(v)
+    })
+  }
+
+  private initFormGroup(): void{
+    const { enabledTrails } = this.optionsForm.controls
+
+    Object.keys(SceneGraphNode)
+    .map(node => { return { node: <SceneGraphNode> node , isEnabled: false} })
+    .forEach(t => {
+      
+      const group = new FormGroup<OptionsGrp>({
+        trail: new FormControl(t.node, {nonNullable: true}),
+        isEnabled: new FormControl(t.isEnabled, {nonNullable: true})
+      })
+
+      enabledTrails.push(group)
+    })
   }
 
   ngOnInit(): void { }
   ngOnDestroy(): void { this.$unsub.next(undefined) }
 
-
   writeValue(obj: any): void {
+    const options = obj as SceneOptions
 
-    if(obj){ 
-      this.sceneOptions = obj 
+    if(!options){ return }
 
-      if(!this.sceneOptions.enabledTrails.length){ 
-        //Reset trail options
-        this.trailOptions.forEach(o => o.isEnabled = false)
-        return
-      }
+    this.optionsForm.patchValue({
+      keepCameraPosition: options.keepCameraPosition,
+    })
 
-      //Set each matching trail option to enabled 
-      this.sceneOptions.enabledTrails.forEach(enabledTrail => {
-        const trail = this.trailOptions.find(t => t.node === enabledTrail)
-        trail!.isEnabled = true
-      })
-    }
-    else{
-      this.sceneOptions = {
-        keepCameraPosition: true,
-        enabledTrails: []
-      }
-    }
+    const { enabledTrails } = this.optionsForm.controls
+
+    enabledTrails.value.forEach( t => {
+      t.isEnabled = options.enabledTrails.find(trail => t.trail === trail) ? true : t.isEnabled 
+    })
   }
 
   registerOnChange(fn: any): void { this.onChange = fn }
@@ -101,101 +124,86 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   setDisabledState?(isDisabled: boolean): void { }
 
 
-  private sort(sorting: SortingType): void{
+  sort(sorting: SortingType): void{
+    const { controls } = this.filteredTrails
+    
     switch(sorting){
-      case SortingType.Ascending:
-        this.trailOptions.sort( (a, b) =>{
-          if(a.node < b.node){
-            return -1
-          }
+        case SortingType.Ascending:
+          controls.sort( (a, b) =>{
 
-          if(a.node > b.node){
-            return 1
-          }
+            const firstVal = a.controls['trail'].value
+            const secondVal = b.controls['trail'].value
 
-          return 0
-        })
-        break
-      
-      case SortingType.Descending:
-        this.trailOptions.sort( (a, b) =>{
-          if(a.node < b.node){
-            return 1
-          }
+            if(firstVal < secondVal){ return -1 }
+            if(firstVal > secondVal){ return 1 }
 
-          if(a.node > b.node){
-            return -1
-          }
+            return 0
+          })
+          break
+        
+        case SortingType.Descending:
+          controls.sort( (a, b) =>{
+            const firstVal = a.controls['trail'].value
+            const secondVal = b.controls['trail'].value
 
-          return 0
-        })
-        break
+            if(firstVal < secondVal){ return 1 }
+            if(firstVal > secondVal){ return -1 }
 
-      case SortingType.None:
-        this.trailOptions = [...this.originalTrails]
-        break
+            return 0
+          })
+          break
+
+        case SortingType.None:
+          this.filteredTrails.controls = [...this.optionsForm.controls.enabledTrails.controls]
+          break
     }
   }
 
-  private search(query: string): TrailOption[] {
-    return this.originalTrails.filter(
-      opt => opt.node.toLowerCase().includes(query)
-    )
+  private search(query: string): FormGroup[] {
+    const { enabledTrails } = this.optionsForm.controls
+
+    const filtered = enabledTrails.controls.filter(value => {
+      const trail: SceneGraphNode = value.controls['trail'].value
+      return trail.toLowerCase().includes(query)
+    })
+    
+    return filtered
   }
 
   toggleClass(element: any): void{ toggleClass(element, 'collapsed') }
 
   selectAllTrails(){
-    //Only if all the trails are not selected
-    if(!this.trailOptions.every(o => o.isEnabled)){
-      this.trailOptions.forEach(o => o.isEnabled = true)
-      this.onChange(this.sceneOptions)
-    }
+    const { controls } = this.filteredTrails
+    controls.forEach( (t, idx) => {
+      if(idx === controls.length-1){
+        t.controls['isEnabled'].setValue(true) 
+        return
+      }
+
+      t.controls['isEnabled'].setValue(true, {emitEvent: false}) 
+    })
+
   }
 
   deselectAllTrails(){
-    //Only if all trails are not deselected
-    if(!this.trailOptions.every(o => !o.isEnabled)){
-      this.trailOptions.forEach(o => o.isEnabled = false)
-      this.onChange(this.sceneOptions)
-    }
+    const { controls } = this.filteredTrails
+    controls.forEach( (t, idx) => {
+      if(idx === controls.length - 1){
+        t.controls['isEnabled'].setValue(false) 
+        return
+      }
+
+      t.controls['isEnabled'].setValue(false, {emitEvent: false}) 
+    })
   }
 
-  selectSort(sorting: SortingType){
-    
-    if(this.$currSorting.value === sorting){
-      this.$currSorting.next(SortingType.None)
-      return
-    }
-    
-    this.$currSorting.next(sorting)
-  }
-
-  onOptionChecked(): void{
-    this.sceneOptions.enabledTrails = 
-      this.originalTrails.filter(t => t.isEnabled).map(t => t.node)
-                                      
-    if(!this.touched){
-      this.touched = true
-      this.onTouch(this.sceneOptions)
-    }
-
-    this.onChange(this.sceneOptions)
-  }
-
-  private filterMenuClicked(event: Event){  
-
-    const isFilterMenuClicked = isElementOrChildClicked(this.filterMenu.nativeElement, 
-      event.target as HTMLElement)
-    const isFilterBtnClicked = isElementOrChildClicked(this.filterBtn.nativeElement, 
-      event.target as HTMLElement)
-    
-    if(!isFilterBtnClicked && !isFilterMenuClicked){
-      this.isFilterShowing = false
-    }
-  }
 
   get SortingType() { return SortingType }
+}
+
+interface OptionsGrp{
+  trail: FormControl<SceneGraphNode>,
+  isEnabled: FormControl<boolean>
 }
 
 

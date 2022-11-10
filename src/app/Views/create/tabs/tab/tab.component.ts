@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'tab',
-  template: `<div><ng-content *ngIf="isActive"></ng-content></div>`
+  template: `<div [style.display]="isActive ? '' : 'none'"><ng-content></ng-content></div>`
 })
 
 export class TabComponent implements OnInit {

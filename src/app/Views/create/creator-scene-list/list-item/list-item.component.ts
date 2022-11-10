@@ -38,4 +38,9 @@ export class ListItemComponent implements OnInit {
     this.duplicateClickedEvent.emit(this)
     this.isCtxShowing = false
   }
+
+  onItemClick(): void{
+    if(this.isActive){ return }
+    this.itemClickedEvent.emit(this)
+  }
 }

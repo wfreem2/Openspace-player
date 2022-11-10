@@ -1,4 +1,4 @@
-<div class="wrapper" [class.active]="isActive" (click)="itemClickedEvent.emit(this)">
+<div class="wrapper" [class.active]="isActive" (click)="onItemClick()">
     <div>
         <p>{{scene.title}}</p>
     </div>

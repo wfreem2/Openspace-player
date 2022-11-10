@@ -6,12 +6,9 @@
     padding: 0.5rem;
     min-width: max-content;
     width: 25rem;
-    min-height: 30rem;
 }
 
-.options{
-    @extend %max-H;
-}
+// .options{ @extend %max-H; }
 
 .option{
     @extend %align-center;
@@ -33,7 +30,7 @@ ul{
     grid-template-rows: max-content max-content max-content 1fr;
     row-gap: 0.5rem;
     max-height: 30rem;
-    // max-width: 25rem;
+    
     &.collapsed{
         max-height: 3.5rem;
         .search{ opacity: 0; }
@@ -159,5 +156,12 @@ ul{
             
             svg{ color: #ffffff; }
         }
+    }
+}
+
+
+@media screen  and (max-height: 1080px) {
+    #trails{
+        max-height: 25em;
     }
 }

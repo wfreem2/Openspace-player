@@ -19,8 +19,7 @@
         </div>
     </div>
 
-    
-     <div class="scene-creator">
+    <div class="scene-creator">
         <ng-container *ngIf="currScene then sceneTabs; else noScene"></ng-container>
     </div>
 
@@ -82,9 +81,7 @@
 
         <tab name="Position" [isActive]="true">
             <scene-position id="scene-pos"
-            [isAutoMode]="isAutoMode"
-            [(ngModel)]="currScene!.geoPos"
-            (ngModelChange)="onChange()">
+            [isAutoMode]="isAutoMode">
             </scene-position>
         </tab>
 

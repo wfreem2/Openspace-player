@@ -7,7 +7,7 @@ import { first, map, pluck, Subject, takeUntil, tap } from 'rxjs';
 import { ShowService } from 'src/app/Services/show.service';
 import { Show } from 'src/app/Interfaces/Show';
 import { SelectedSceneService } from './selected-scene.service';
-import { OpenspaceService } from 'src/app/Services/openspace.service';
+import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
 import { ScenePositionComponent } from './scene-position/scene-position.component';
 import { NotificationService } from 'src/app/Services/notification.service';
 import { NotificationType } from 'src/app/Interfaces/ToastNotification';
@@ -94,7 +94,9 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.isSaved=true
     this.notiService.showNotification({title: 'Show Saved', type: NotificationType.SUCCESS})
    
-    this.scenePositionComponent.$isAutoMode.next(false)
+    if(this.scenePositionComponent){
+      this.scenePositionComponent.$isAutoMode.next(false)
+    }
   }
 
   async saveScene(): Promise<void>{
@@ -148,7 +150,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     return  { 
       id: this.id,
       title: '',
-      geoPos: { lat: 0, long: 0, alt: 0 },
+      geoPos: { lat: 0, long: 0, alt: 0, nodeName: SceneGraphNode.Earth },
       sceneOptions: {
         enabledTrails: [],
         keepCameraPosition: true

@@ -60,14 +60,14 @@ $grid-bd: solid 2px var(--gray);
 
 // Scene creation
 .scene-creator{
-    padding-top: 2rem;
+    padding: 1rem;
     grid-column: 2;
     grid-row: 2;
 
     display: grid;
     justify-items: center;
     grid-template-rows: max-content max-content max-content;
-    row-gap: 2rem;
+    row-gap: 1rem;
 
 
     .scene-title{

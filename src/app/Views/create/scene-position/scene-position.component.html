@@ -1,5 +1,5 @@
 <div class="grid">
-    <div id="geoLocation">
+    <form id="geoLocation" [formGroup]="geoPosForm">
         <div class="section" id="mode">
             <label for="mode">Mode:</label>
             <div id="mode-set">
@@ -12,30 +12,39 @@
 
         <div class="section">
             <label for="lat">Latitude:</label>
-            <input name="lat" type="number" class="input" [disabled]="isAutoMode"
-                [(ngModel)]="geoPosition.lat" (ngModelChange)="onValueChange()"
+            <input name="lat" class="input" formControlName="lat"               
             placeholder="Latitude">
+            
+            <ng-container *ngIf="lat!.errors?.['required']" [ngTemplateOutlet]="required"></ng-container>
+            <ng-container *ngIf="lat!.errors?.['pattern']" [ngTemplateOutlet]="pattern"></ng-container>
         </div>
         <div class="section">
             <label for="long">Longitude:</label>
-            <input name="long" type="number" class="input" [disabled]="isAutoMode"
-            [(ngModel)]="geoPosition.long" (ngModelChange)="onValueChange()"
+            <input name="long" class="input" formControlName="long"            
             placeholder="Longitude">
+            <ng-container *ngIf="long!.errors?.['required']" [ngTemplateOutlet]="required"></ng-container>
+            <ng-container *ngIf="long!.errors?.['pattern']" [ngTemplateOutlet]="pattern"></ng-container>
         </div>
         <div class="section">
             <label for="alt">Altitude:</label>
-            <input name="alt" type="number" class="input" [disabled]="isAutoMode"
-            [(ngModel)]="geoPosition.alt" (ngModelChange)="onValueChange()"
+            <input name="alt" class="input" formControlName="alt"            
             placeholder="Altitude">
+            <ng-container *ngIf="alt!.errors?.['required']" [ngTemplateOutlet]="required"></ng-container>
+            <ng-container *ngIf="alt!.errors?.['pattern']" [ngTemplateOutlet]="pattern"></ng-container>
         </div>
         <div class="section">
             <label for="node">Node:</label>
-            <dropdown [items]="pathNavOptions" name="pathnav" 
-            [disabled]="isAutoMode"
-            [(ngModel)]="geoPosition.nodeName" (ngModelChange)="onValueChange()"></dropdown>
+            <dropdown [items]="pathNavOptions" name="pathnav" formControlName="nodeName"></dropdown>
         </div>
-    </div>
+    </form>
 </div>
 
+<ng-template #required>    
+    <p class="err-msg">Field is Required</p>
+</ng-template>
+
+<ng-template #pattern>
+    <p class="err-msg">Field Must be a Number</p>
+</ng-template>
 
 
