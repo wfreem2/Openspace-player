@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormRecord, UntypedFormControl, Validators } from '@angular/forms';
 import { Scene } from 'src/app/Interfaces/Scene';
-import { merge } from "lodash"
+import { isEqual, merge } from "lodash"
 import { ActivatedRoute } from '@angular/router';
-import { first, map, pluck, Subject, takeUntil, tap } from 'rxjs';
+import { distinctUntilChanged, first, map, pluck, Subject, takeUntil, tap } from 'rxjs';
 import { ShowService } from 'src/app/Services/show.service';
 import { Show } from 'src/app/Interfaces/Show';
 import { SelectedSceneService } from './selected-scene.service';
@@ -11,6 +11,9 @@ import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.ser
 import { ScenePositionComponent } from './scene-position/scene-position.component';
 import { NotificationService } from 'src/app/Services/notification.service';
 import { NotificationType } from 'src/app/Interfaces/ToastNotification';
+import { SceneForm } from 'src/app/Interfaces/ShowForm';
+import { GeoPosition } from 'src/app/Interfaces/GeoPosition';
+import { SceneOptions } from 'src/app/Interfaces/SceneOptions';
 
 
 @Component({
@@ -18,6 +21,7 @@ import { NotificationType } from 'src/app/Interfaces/ToastNotification';
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.scss']
 })
+
 export class CreateComponent implements OnInit, OnDestroy {
 
   @ViewChild(ScenePositionComponent) scenePositionComponent!: ScenePositionComponent
@@ -32,10 +36,19 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   isSaved: boolean = true
   isAutoMode:boolean = false
-  transitionControl: UntypedFormControl = new UntypedFormControl('', Validators.pattern(/^[0-9]*$/))
+
+  sceneForm = new FormGroup<SceneForm>({
+    title: new FormControl<string>(''),
+    script: new FormControl<string | null>(null),
+    transistion: new FormControl<number | null>(null, Validators.pattern(/^[0-9]*$/)),
+
+    position: new FormControl<GeoPosition>({lat: 0, long: 0, alt: 0, nodeName: SceneGraphNode.Earth }, {nonNullable: true}),
+    options: new FormControl<SceneOptions>({keepCameraPosition: true, enabledTrails: []}, {nonNullable: true})
+  })
+
 
   private readonly autoSaveInterval = setInterval( () => this.saveShow(), this.saveInterval )
-  
+
 
   constructor(private route: ActivatedRoute, public showService: ShowService,
      private selectedSceneService: SelectedSceneService, private openSpaceService: OpenspaceService,
@@ -59,9 +72,13 @@ export class CreateComponent implements OnInit, OnDestroy {
     
     this.initSelectedSceneService()
 
-    this.transitionControl.valueChanges
-    .pipe(takeUntil(this.$unSub))
-    .subscribe(_ => this.onChange())
+    this.sceneForm.valueChanges
+    .pipe(
+      takeUntil(this.$unSub),
+      distinctUntilChanged( (a, b) => isEqual(a, b)),
+      map(v => v as Scene)
+    )
+    .subscribe(console.log)
   }
   
   private initSelectedSceneService(): void{
@@ -76,7 +93,14 @@ export class CreateComponent implements OnInit, OnDestroy {
     )
     .subscribe(s => {
       this.currScene = s
-      this.transitionControl.setValue(s.duration)
+
+      this.sceneForm.setValue({
+        title: s.title,
+        position: s.geoPos,
+        options: s.sceneOptions,
+        script: s.script || null,
+        transistion: s.duration || null
+      })
     })
   }
 
@@ -113,10 +137,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     }
     catch(err){ console.log('Error saving camera position') }
     finally{
-      if(this.transitionControl.value){
-        console.log(this.transitionControl.value)
-        this.currScene!.duration = this.transitionControl.value
-      }
+     
       
       console.log(this.currScene)
       
@@ -140,7 +161,7 @@ export class CreateComponent implements OnInit, OnDestroy {
   }
 
   resetScene(): void{
-    this.currScene = this.defaultScene
+    this.sceneForm.reset()
     this.isAutoMode = false
   }
 
@@ -169,3 +190,4 @@ export class CreateComponent implements OnInit, OnDestroy {
   }
 
 }
+

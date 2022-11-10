@@ -40,83 +40,83 @@
 
 
 <ng-template #sceneTabs>
-    <div class="scene-title">
-        <input name="title" type="text" class="bare title" 
-         [(ngModel)]="currScene!.title" (ngModelChange)="onChange()"
-         placeholder="Scene Title">
-        <ng-container [ngTemplateOutlet]="x"></ng-container>
-    </div>
-    
-    <tabs>
-        <tab name="Summary">
-            <div class="summary">
-                <div class="section">
-                    <p class="title">GeoPosition</p>
+    <form [formGroup]="sceneForm">
+        <div class="scene-title">
+            <input name="title" type="text" class="bare title" 
+            formControlName="title" placeholder="Scene Title">
+            <ng-container [ngTemplateOutlet]="x"></ng-container>
+        </div>
+        
+        <tabs>
+            <tab name="Summary">
+                <div class="summary">
+                    <div class="section">
+                        <p class="title">GeoPosition</p>
 
-                    <ul class="geoPos">
-                        <li>
-                            <p>Node: {{currScene!.geoPos.nodeName}}</p>
-                        </li>
-                        <li>
-                            <p>Latitude:</p>
-                            <p>{{currScene!.geoPos.lat}}</p>
-                        </li>
-                        <li>
-                            <p>Longitude:</p>
-                            <p>{{currScene!.geoPos.long}}</p>
-                        </li>
-                        <li>
-                            <p>Altitude:</p>
-                            <p>{{currScene!.geoPos.alt}}</p>
-                        </li>
-                    </ul>
+                        <ul class="geoPos">
+                            <li>
+                                <p>Node: {{currScene!.geoPos.nodeName}}</p>
+                            </li>
+                            <li>
+                                <p>Latitude:</p>
+                                <p>{{currScene!.geoPos.lat}}</p>
+                            </li>
+                            <li>
+                                <p>Longitude:</p>
+                                <p>{{currScene!.geoPos.long}}</p>
+                            </li>
+                            <li>
+                                <p>Altitude:</p>
+                                <p>{{currScene!.geoPos.alt}}</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        
+                    </div>
+                    <div class="section"></div>
                 </div>
+            </tab>
 
-                <div class="section">
+            <tab name="Position" [isActive]="true">
+                <scene-position id="scene-pos"
+                formControlName="position"
+                [isAutoMode]="isAutoMode">
+                </scene-position>
+            </tab>
+
+            <tab name="Options">
+                <scene-options formControlName="options">
+                </scene-options>
+            </tab>
+            
+            <tab name="Transition">
+                <div class="transition">
+                    <p>How long it takes OpenSpace to fly to the selected target</p>
                     
+                    <input class="input" 
+                    formControlName="transistion" type="text" 
+                    placeholder="Transition Duration" name="transistion" id="transition"/>
+            
+                    <!-- <p class="error" *ngIf="!transitionControl.valid">The field is digits only</p> -->
                 </div>
-                <div class="section"></div>
-            </div>
-        </tab>
+            </tab>
 
-        <tab name="Position" [isActive]="true">
-            <scene-position id="scene-pos"
-            [isAutoMode]="isAutoMode">
-            </scene-position>
-        </tab>
+            <tab name="Script">
+                <textarea id="script" class="input" 
+                cols="30" rows="20"
+                formControlName="script"
+                placeholder="Script Text">
+                </textarea>
+            </tab>       
+        </tabs>
 
-        <tab name="Options">
-            <scene-options 
-            [(ngModel)]="currScene!.sceneOptions"
-            (ngModelChange)="onChange()">
-            </scene-options>
-        </tab>
-        
-        <tab name="Transition">
-            <div class="transition">
-                <p>How long it takes OpenSpace to fly to the selected target</p>
-                
-                <input class="input" 
-                [formControl]="transitionControl" type="text" 
-                placeholder="Transition Duration" name="transistion" id="transition"/>
-        
-                <p class="error" *ngIf="!transitionControl.valid">The field is digits only</p>
-            </div>
-        </tab>
+        <div id="options">
+            <button id="reset" (click)="resetScene()">Reset</button>
+        </div>
+    </form>
 
-        <tab name="Script">
-            <textarea id="script" class="input" 
-             cols="30" rows="20"
-             [(ngModel)]="currScene!.script" 
-             (ngModelChange)="onChange()"
-             placeholder="Script Text">
-            </textarea>
-        </tab>       
-    </tabs>
-
-    <div id="options">
-        <button id="reset" (click)="resetScene()">Reset</button>
-    </div>
 </ng-template>
 
 
@@ -127,7 +127,7 @@
 </ng-template>
 
 <ng-template #x>
-    <svg (click)="currScene!.title=''" id="x" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg (click)="sceneForm.controls.title.reset()" id="x" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>

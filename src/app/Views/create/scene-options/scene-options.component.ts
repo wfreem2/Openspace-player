@@ -1,11 +1,12 @@
 import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isEqual } from 'lodash';
-import { BehaviorSubject, distinctUntilChanged, filter, first, map, of, skip, startWith, Subject, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map, of, skip, Subject, switchMap, takeUntil } from 'rxjs';
 import { SceneOptions } from 'src/app/Interfaces/SceneOptions';
+import { SceneOptionsForm, TrailOptionsForm } from 'src/app/Interfaces/ShowForm';
 import { SceneGraphNode } from 'src/app/Services/openspace.service';
 import { SortingType } from 'src/app/Shared/sorting-selector/sorting-selector.component';
-import { isElementOrChildClicked, toggleClass } from 'src/app/Utils/utils';
+import { toggleClass } from 'src/app/Utils/utils';
 
 @Component({
   selector: 'scene-options',
@@ -22,7 +23,6 @@ import { isElementOrChildClicked, toggleClass } from 'src/app/Utils/utils';
 
 
 export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAccessor {
-
   
   @ViewChildren('sortOpt') sortOptions!: QueryList<ElementRef>
   @ViewChild('filter') filterMenu!: ElementRef
@@ -33,24 +33,24 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   
   private $unsub = new Subject<any>()
   private touched: boolean = false
+  private disabled: boolean = false
   
   
   sceneOptions!: SceneOptions
   
   query = new Subject<string>()
-
-  isFilterShowing: boolean = false
   $currSorting = new BehaviorSubject<SortingType>(SortingType.None)
+
   
-  optionsForm = new FormGroup({
-    keepCameraPosition: new FormControl<boolean>(true),
-    enabledTrails: new FormArray<FormGroup<OptionsGrp>>([])
+  optionsForm = new FormGroup<SceneOptionsForm>({
+    keepCameraPosition: new FormControl<boolean>(true, {nonNullable: true}),
+    enabledTrails: new FormArray<FormGroup<TrailOptionsForm>>([])
   })
 
-  filteredTrails = new FormArray<FormGroup<OptionsGrp>>([])
+  filteredTrails = new FormArray<FormGroup<TrailOptionsForm>>([])
 
 
-  constructor(private renderer: Renderer2) { 
+  constructor() { 
     this.initFormGroup()
 
     this.$currSorting.asObservable()
@@ -69,17 +69,22 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
 
     this.optionsForm.valueChanges
     .pipe(
-      skip(1),
       filter(v => !!v),
-      distinctUntilChanged( (a, b) => isEqual(a, b)),
       map(v => {
         v.enabledTrails =  v.enabledTrails?.filter( t => t.isEnabled)
         return v
       }),
+      distinctUntilChanged( (a, b) => isEqual(a, b)),
       takeUntil(this.$unsub)
     )
-    .subscribe( v => {
+    .subscribe(v => {
       console.log('value', v)
+
+      if(!this.touched){
+        this.touched = true
+        this.onTouch(v)
+      }
+
       this.onChange(v)
     })
   }
@@ -90,8 +95,8 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
     Object.keys(SceneGraphNode)
     .map(node => { return { node: <SceneGraphNode> node , isEnabled: false} })
     .forEach(t => {
-      
-      const group = new FormGroup<OptionsGrp>({
+
+      const group = new FormGroup<TrailOptionsForm>({
         trail: new FormControl(t.node, {nonNullable: true}),
         isEnabled: new FormControl(t.isEnabled, {nonNullable: true})
       })
@@ -114,6 +119,11 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
 
     const { enabledTrails } = this.optionsForm.controls
 
+    if(!options.enabledTrails.length){ 
+      this.deselectAllTrails()
+      return
+    }
+
     enabledTrails.value.forEach( t => {
       t.isEnabled = options.enabledTrails.find(trail => t.trail === trail) ? true : t.isEnabled 
     })
@@ -121,7 +131,7 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
 
   registerOnChange(fn: any): void { this.onChange = fn }
   registerOnTouched(fn: any): void { this.onTouch = fn }
-  setDisabledState?(isDisabled: boolean): void { }
+  setDisabledState?(isDisabled: boolean): void { this.disabled = isDisabled }
 
 
   sort(sorting: SortingType): void{
@@ -197,14 +207,5 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
     })
   }
 
-
   get SortingType() { return SortingType }
 }
-
-interface OptionsGrp{
-  trail: FormControl<SceneGraphNode>,
-  isEnabled: FormControl<boolean>
-}
-
-
-type TrailOption = {node: SceneGraphNode, isEnabled: boolean}
