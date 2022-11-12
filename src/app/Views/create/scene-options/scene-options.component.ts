@@ -62,15 +62,14 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
       map(query => query.toLowerCase()),
       switchMap(query => of(this.search(query))),
       takeUntil(this.$unsub),
-      map(v => [...v])
+      map(v => [...v]) //Deep copy to not affect original list
     )
     .subscribe( v => this.filteredTrails.controls = v )
 
 
     this.optionsForm.valueChanges
     .pipe(
-      skip(1),
-      filter(v => !!v),
+      // filter(v => !!v),
       map(v => {
         v.enabledTrails =  v.enabledTrails?.filter(t => t.isEnabled)
         return { 
@@ -78,11 +77,11 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
           enabledTrails: v.enabledTrails?.map(t => t.trail)
         } as SceneOptions
       }),
-      distinctUntilChanged( (a, b) => isEqual(a, b)),
+      // distinctUntilChanged( (a, b) => isEqual(a, b)),
       takeUntil(this.$unsub)
     )
     .subscribe(v => {
-      console.log('value', v)
+      // console.log('value', v)
 
       if(!this.touched){
         this.touched = true
@@ -119,23 +118,20 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
 
     this.optionsForm.patchValue({
       keepCameraPosition: options.keepCameraPosition,
-    })
+    }, {emitEvent: false})
 
     
-    if(!options.enabledTrails.length){ 
-      this.deselectAllTrails()
-      return
-    }
+    this.deselectAllTrails(false)
 
     const { enabledTrails } = this.optionsForm.controls
     
-    enabledTrails.controls.forEach( ctrl => {
+    enabledTrails.controls.forEach( (ctrl, idx) => {
       const { value } = ctrl
       value.isEnabled = options.enabledTrails.find(trail => value.trail === trail) ? true : value.isEnabled
 
       ctrl.patchValue(
         { isEnabled: value.isEnabled },
-        { emitEvent: false }
+        { emitEvent: false}
       )
     })
   }
@@ -206,11 +202,11 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
 
   }
 
-  deselectAllTrails(){
+  deselectAllTrails(emitEvent: boolean = true){
     const { controls } = this.filteredTrails
     controls.forEach( (t, idx) => {
       if(idx === controls.length - 1){
-        t.controls['isEnabled'].setValue(false) 
+        t.controls['isEnabled'].setValue(false, {emitEvent: emitEvent}) 
         return
       }
 

@@ -67,7 +67,7 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
         lat: geoPos.lat,
         long: geoPos.long,
         nodeName: geoPos.nodeName
-      })
+      }, {emitEvent: false})
     })
       
     this.geoPosForm.valueChanges

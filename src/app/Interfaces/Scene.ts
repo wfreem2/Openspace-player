@@ -6,7 +6,7 @@ export interface Scene{
     id: number,
     title: string,
     geoPos: GeoPosition,
-    sceneOptions: SceneOptions,
+    options: SceneOptions,
     navState?: NavigationState,
     script?: string,
     duration?: number

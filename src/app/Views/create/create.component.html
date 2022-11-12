@@ -20,7 +20,7 @@
     </div>
 
     <div class="scene-creator">
-        <ng-container *ngIf="currScene then sceneTabs; else noScene"></ng-container>
+        <ng-container *ngIf="selectedFormService.$selectedScene | async then sceneTabs; else noScene"></ng-container>
     </div>
 
     <div class="scene-list">
@@ -31,7 +31,6 @@
 
         <creator-scene-list 
         [scenes]="show.scenes"
-        (deleteClickedEvent)="onDelete($event)"
         (listDragDropEvent)="isSaved=false">
         </creator-scene-list>
     </div>
@@ -81,7 +80,7 @@
 
             <tab name="Position" [isActive]="true">
                 <scene-position id="scene-pos"
-                formControlName="position"
+                formControlName="geoPos"
                 [isAutoMode]="isAutoMode">
                 </scene-position>
             </tab>
@@ -116,7 +115,6 @@
             <button id="reset" (click)="resetScene()">Reset</button>
         </div>
     </form>
-
 </ng-template>
 
 

@@ -5,8 +5,8 @@ import { SceneOptions } from "./SceneOptions";
 
 
 export interface SceneForm{
-    title: FormControl<string | null>,
-    position: FormControl<GeoPosition>,
+    title: FormControl<string>,
+    geoPos: FormControl<GeoPosition>,
     options: FormControl<SceneOptions>,
     transistion: FormControl<number | null>,
     script: FormControl<string | null>

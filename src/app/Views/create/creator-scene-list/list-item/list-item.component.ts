@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { isElementOrChildClicked } from 'src/app/Utils/utils';
 
@@ -21,8 +21,8 @@ export class ListItemComponent implements OnInit {
   isCtxShowing: boolean = false
 
   constructor() { } 
-  ngOnInit(): void { }
   
+  ngOnInit(): void { }
 
   onClickOutsideOf(target: HTMLElement){
     const isMoreClicked = isElementOrChildClicked(this.more.nativeElement, target)

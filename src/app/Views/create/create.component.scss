@@ -63,7 +63,6 @@ $grid-bd: solid 2px var(--gray);
     padding: 1rem;
     grid-column: 2;
     grid-row: 2;
-
     form{
         display: grid;
         justify-items: center;
@@ -96,7 +95,6 @@ $grid-bd: solid 2px var(--gray);
             gap: 1rem;
         }
     }
-
     //Button for resetting scene
     #reset{
         @extend %bare;

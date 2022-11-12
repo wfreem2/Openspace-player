@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { SelectedSceneService } from '../selected-scene.service';
 import { ListItemComponent } from './list-item/list-item.component';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import { first, pipe } from 'rxjs';
+import { map, mergeMap, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'creator-scene-list',
@@ -12,19 +12,40 @@ import { first, pipe } from 'rxjs';
   styleUrls: ['./creator-scene-list.component.scss']
 })
 
-export class CreatorSceneListComponent implements OnInit{
+export class CreatorSceneListComponent implements OnInit, AfterViewInit, OnDestroy{
 
   @ViewChildren(ListItemComponent) items!: QueryList<ListItemComponent>
 
+
   @Input() scenes!: Scene[]
   @Output() deleteClickedEvent = new EventEmitter<Scene>()
-  @Output() listDragDropEvent = new EventEmitter()
+  @Output() listDragDropEvent = new EventEmitter<Scene[]>()
+
+  private $unsub = new Subject<void>()
 
   constructor(private selectedSceneService: SelectedSceneService,
-    private cdRef : ChangeDetectorRef) { 
-    this.selectedSceneService.$newSceneAdded
-    .asObservable()
-    .subscribe(_ => this.setAllInactive())
+    private cdRef : ChangeDetectorRef) { }
+
+
+  ngOnDestroy(): void {
+    this.$unsub.next()
+  }
+
+  ngAfterViewInit(): void {
+    
+    this.selectedSceneService.$selectedScene
+    .pipe(
+      takeUntil(this.$unsub),
+      mergeMap(s => 
+        this.items.changes
+        .pipe(map( () => this.items.find(i => i.scene === s) ))
+      )
+    )
+    .subscribe(item => {
+      this.setAllInactive()
+      if(item){ item.isActive = true }
+      this.cdRef.detectChanges()
+    })
   }
 
   ngOnInit(): void { }
@@ -47,7 +68,7 @@ export class CreatorSceneListComponent implements OnInit{
 
   onDuplicateClicked(item: ListItemComponent): void{
     const { scene } = item
-    const duplicate: Scene = cloneDeep(scene)
+    const duplicate: Scene= cloneDeep(scene)
 
     let id = 1
     let newTitle = duplicate.title + ` (${id})`
@@ -63,28 +84,15 @@ export class CreatorSceneListComponent implements OnInit{
     }
 
     duplicate.title = newTitle
-    duplicate.id += 1
+    // duplicate.id += 1
 
-    this.scenes.push(duplicate)
-    this.setScene(duplicate)
-
-    
+    // this.scenes.push(duplicate)
     //Set the newest (duplicated) list item to active
-    this.items.changes
-    .pipe(first())
-    .subscribe(c => {
-      const activeItem = this.items.find(i => i.isActive)
-      activeItem!.isActive = false
-      
-      const last: ListItemComponent = c.last
-      last.isActive = true
-
-      this.cdRef.detectChanges()
-    })
+    this.setScene(duplicate)
   }
 
   onDrop(event: CdkDragDrop<Scene[]>){
     moveItemInArray(this.scenes, event.previousIndex, event.currentIndex)
-    this.listDragDropEvent.emit()
+    this.listDragDropEvent.emit(this.scenes)
   }
 }
