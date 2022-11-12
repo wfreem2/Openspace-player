@@ -20,7 +20,7 @@
     </div>
 
     <div class="scene-creator">
-        <ng-container *ngIf="selectedFormService.$selectedScene | async then sceneTabs; else noScene"></ng-container>
+        <ng-container *ngIf="selectedSceneService.$selectedScene | async then sceneTabs; else noScene"></ng-container>
     </div>
 
     <div class="scene-list">
@@ -98,7 +98,7 @@
                     formControlName="transistion" type="text" 
                     placeholder="Transition Duration" name="transistion" id="transition"/>
             
-                    <!-- <p class="error" *ngIf="!transitionControl.valid">The field is digits only</p> -->
+                    <p class="error" *ngIf="sceneForm.controls['transistion'].errors?.['pattern']">The field is digits only</p>
                 </div>
             </tab>
 

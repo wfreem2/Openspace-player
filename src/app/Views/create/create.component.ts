@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { distinctUntilChanged, first, map, pairwise, pluck, startWith, Subject, takeUntil, tap } from 'rxjs';
 import { ShowService } from 'src/app/Services/show.service';
 import { Show } from 'src/app/Interfaces/Show';
-import { SelectedSceneService as SelectedFormService } from './selected-scene.service';
+import { SelectedSceneService as SelectedSceneService } from './selected-scene.service';
 import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
 import { ScenePositionComponent } from './scene-position/scene-position.component';
 import { NotificationService } from 'src/app/Services/notification.service';
@@ -26,8 +26,6 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   @ViewChild(ScenePositionComponent) scenePositionComponent!: ScenePositionComponent
 
-  private id: number = 0
-  private currId: number = 0
 
   private $unSub = new Subject<void>()
   private readonly saveInterval = 1000 * 60 * 2 //2 minutes  
@@ -38,8 +36,6 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   isSaved: boolean = true
   isAutoMode:boolean = false
-
-  currForm!: FormGroup<SceneForm>
 
   // private readonly autoSaveInterval = setInterval( () => this.saveShow(), this.saveInterval )
   sceneForm = this.fb.group<SceneForm>({
@@ -54,18 +50,13 @@ export class CreateComponent implements OnInit, OnDestroy {
   private readonly DEFAULT_SCENE = this.sceneForm.getRawValue()
 
   constructor(private route: ActivatedRoute, public showService: ShowService,
-     public selectedFormService: SelectedFormService,private notiService: NotificationService,
+     public selectedSceneService: SelectedSceneService,private notiService: NotificationService,
      private fb: FormBuilder) {
 
     this.route.params
     .pipe(
       pluck('id'),
       map(id => showService.getShowById(parseInt(id))! ),
-      tap(show => {
-        //If at least on scene, set the id to highest id to avoid conflicting ids
-        if(!show.scenes.length){ return }
-        this.id = show.scenes.reduce((id, s) => Math.max(id, s.id), 0)
-      }),
       first()
     )
     .subscribe(show => this.show = show)
@@ -74,13 +65,10 @@ export class CreateComponent implements OnInit, OnDestroy {
     .pipe(
       distinctUntilChanged( (a, b) => isEqual(a, b))
     )
-    .subscribe(v =>merge(this.currScene, v))
+    .subscribe(v => merge(this.currScene, v))
 
-    this.selectedFormService.$selectedScene
-    .pipe(
-      takeUntil(this.$unSub),
-      // tap(console.log),
-    )
+    this.selectedSceneService.$selectedScene
+    .pipe(takeUntil(this.$unSub))
     .subscribe( (s: Scene) => {
       const existing = this.show.scenes.find(scene => scene.id === this.currScene?.id)
 
@@ -108,12 +96,10 @@ export class CreateComponent implements OnInit, OnDestroy {
         transistion: s.duration || null
       }, 
       {emitEvent: false})
-
     })
   }
 
   newScene(): void{
-   
     const id = this.show.scenes.reduce((a, b) => Math.max(a, b.id), 0) + 1
     const rawScene = cloneDeep(this.DEFAULT_SCENE)
 
@@ -127,7 +113,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     }
 
     this.show.scenes.push(newScene)
-    this.selectedFormService.setScene(newScene)
+    this.selectedSceneService.setScene(newScene)
   }
 
   ngOnInit(): void { }
