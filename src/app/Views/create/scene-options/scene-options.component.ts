@@ -69,7 +69,6 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
 
     this.optionsForm.valueChanges
     .pipe(
-      // filter(v => !!v),
       map(v => {
         v.enabledTrails =  v.enabledTrails?.filter(t => t.isEnabled)
         return { 
@@ -77,11 +76,9 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
           enabledTrails: v.enabledTrails?.map(t => t.trail)
         } as SceneOptions
       }),
-      // distinctUntilChanged( (a, b) => isEqual(a, b)),
       takeUntil(this.$unsub)
     )
     .subscribe(v => {
-      // console.log('value', v)
 
       if(!this.touched){
         this.touched = true
@@ -113,9 +110,9 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
 
   writeValue(obj: any): void {
     const options = obj as SceneOptions
-
-    if(!options){ return }
-
+    
+    if(!this.instanceOfOptions(options)){ return }
+    
     this.optionsForm.patchValue({
       keepCameraPosition: options.keepCameraPosition,
     }, {emitEvent: false})
@@ -140,6 +137,9 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   registerOnTouched(fn: any): void { this.onTouch = fn }
   setDisabledState?(isDisabled: boolean): void { this.disabled = isDisabled }
 
+  private instanceOfOptions(obj: any): obj is SceneOptions{
+    return 'enabledTrails' in obj && 'keepCameraPosition' in obj
+  }
 
   sort(sorting: SortingType): void{
     const { controls } = this.filteredTrails
@@ -192,12 +192,10 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   selectAllTrails(){
     const { controls } = this.filteredTrails
     controls.forEach( (t, idx) => {
-      if(idx === controls.length-1){
-        t.controls['isEnabled'].setValue(true) 
-        return
-      }
-
-      t.controls['isEnabled'].setValue(true, {emitEvent: false}) 
+      t.controls['isEnabled'].setValue(
+        true,
+        {emitEvent: idx === controls.length-1}
+      ) 
     })
 
   }
@@ -205,12 +203,10 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   deselectAllTrails(emitEvent: boolean = true){
     const { controls } = this.filteredTrails
     controls.forEach( (t, idx) => {
-      if(idx === controls.length - 1){
-        t.controls['isEnabled'].setValue(false, {emitEvent: emitEvent}) 
-        return
-      }
-
-      t.controls['isEnabled'].setValue(false, {emitEvent: false}) 
+      t.controls['isEnabled'].setValue(
+        false,
+        {emitEvent: idx === controls.length - 1 && emitEvent}
+      ) 
     })
   }
 

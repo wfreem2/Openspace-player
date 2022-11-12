@@ -54,8 +54,8 @@ export class CreateComponent implements OnInit, OnDestroy {
   private readonly DEFAULT_SCENE = this.sceneForm.getRawValue()
 
   constructor(private route: ActivatedRoute, public showService: ShowService,
-     public selectedFormService: SelectedFormService, private openSpaceService: OpenspaceService,
-     private notiService: NotificationService, private fb: FormBuilder) {
+     public selectedFormService: SelectedFormService,private notiService: NotificationService,
+     private fb: FormBuilder) {
 
     this.route.params
     .pipe(
@@ -72,12 +72,9 @@ export class CreateComponent implements OnInit, OnDestroy {
     
     this.sceneForm.valueChanges
     .pipe(
-      // distinctUntilChanged( (a, b) => isEqual(a, b))
+      distinctUntilChanged( (a, b) => isEqual(a, b))
     )
-    .subscribe(v =>{
-      console.log('valueChanges', v)
-      merge(this.currScene, v)
-    })
+    .subscribe(v =>merge(this.currScene, v))
 
     this.selectedFormService.$selectedScene
     .pipe(

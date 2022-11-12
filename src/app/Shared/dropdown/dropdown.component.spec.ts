@@ -1,5 +1,6 @@
 import { ElementRef, Renderer2 } from "@angular/core"
 import { ComponentFixture, TestBed } from "@angular/core/testing"
+import { testControlValueImplementation } from "src/app/Utils/test-utils"
 import { SortingSelectorComponent, SortingType } from "../sorting-selector/sorting-selector.component"
 import { DropdownComponent } from "./dropdown.component"
 
@@ -20,7 +21,7 @@ describe("Dropdown component", () => {
             providers: [{provide: ElementRef, useClass: MockElementRef}, Renderer2]
         })
         .compileComponents()
-        .then(_ => {
+        .then( () => {
             fixture = TestBed.createComponent(DropdownComponent)
             component = fixture.componentInstance
             component.items = items
@@ -117,16 +118,8 @@ describe("Dropdown component", () => {
         })
     })
 
-    it('should properly implement ControlValueAccessor', () => {
-        const onChange  = () => { console.log('change') }
-        const onTouch  = () => { console.log('touch') }
-    
-        component.registerOnChange(onChange)
-        component.registerOnTouched(onTouch)
-    
-        expect(component.onChange).toEqual(onChange)
-        expect(component.onTouch).toEqual(onTouch)
-    })
+    it('should properly implement ControlValueAccessor', () => testControlValueImplementation(component))
+
 
     it('empty search query should return entire list', () => {
 

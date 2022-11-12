@@ -23,7 +23,6 @@ import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.ser
 export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
   @Input() isAutoMode: boolean = false
   
-  pathNavOptions: SceneGraphNode[] = []
   
   private listener!: Subscription
   private $unSub = new Subject<any>()
@@ -31,6 +30,7 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
   private readonly numRegex = /^-?\d*\.?\d*$/
   
   readonly $isAutoMode = new BehaviorSubject<boolean>(this.isAutoMode)
+  readonly pathNavOptions: SceneGraphNode[] = Object.values(SceneGraphNode)
 
   geoPosForm = new FormGroup<GeoPosForm>({
     alt: new FormControl<number>(0.0, [ Validators.required, Validators.pattern(this.numRegex) ]),
@@ -44,8 +44,6 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
   
   constructor(private openSpaceService: OpenspaceService, private notiService: NotificationService) { 
 
-    this.pathNavOptions = Object.values(SceneGraphNode)
-    
     this.$isAutoMode.asObservable()
     .pipe(takeUntil(this.$unSub))
     .subscribe(isAuto => {
@@ -74,9 +72,8 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
     .pipe(
       filter( () => this.lat!.valid && this.long!.valid && this.alt!.valid ),
       map(_=> this.geoPosForm.getRawValue() as GeoPosition),
-      tap( v => this.onChange(v) )
     )
-    .subscribe(v => { })  
+    .subscribe(v => this.onChange(v))  
   }
   
   get alt(){ return this.geoPosForm.get('alt') }
@@ -101,7 +98,11 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
   writeValue(obj: any): void {
     const geoPos = obj as GeoPosition
 
-    if(geoPos){ this.$geoPos.next(geoPos) }
+    if(this.isinstanceofGeoPos(geoPos)){ this.$geoPos.next(geoPos) }
+  }
+
+  private isinstanceofGeoPos(obj: any): obj is GeoPosition{
+    return 'lat' in obj && 'long' in obj && 'alt' in obj && 'nodeName' in obj
   }
 
   registerOnChange(fn: any): void { this.onChange = fn }
