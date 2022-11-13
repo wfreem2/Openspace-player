@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, FormRecord, UntypedFormControl, Va
 import { Scene } from 'src/app/Interfaces/Scene';
 import { cloneDeep, isEqual, merge } from "lodash"
 import { ActivatedRoute } from '@angular/router';
-import { distinctUntilChanged, first, map, pairwise, pluck, startWith, Subject, takeUntil, tap } from 'rxjs';
+import { distinctUntilChanged, filter, first, map, pairwise, pluck, startWith, Subject, takeUntil, tap } from 'rxjs';
 import { ShowService } from 'src/app/Services/show.service';
 import { Show } from 'src/app/Interfaces/Show';
 import { SelectedSceneService as SelectedSceneService } from './selected-scene.service';
@@ -63,12 +63,25 @@ export class CreateComponent implements OnInit, OnDestroy {
     
     this.sceneForm.valueChanges
     .pipe(
-      distinctUntilChanged( (a, b) => isEqual(a, b))
+      distinctUntilChanged( (a, b) => isEqual(a, b)),
+      map(v => {
+        return {
+          title: v.title,
+          geoPos: v.geoPos,
+          options: v.options,
+          duration: v.transistion,
+          script: v.script
+        }
+      }),
+      tap( () => this.isSaved = false)
     )
-    .subscribe(v => merge(this.currScene, v))
+    .subscribe( v => merge(this.currScene, v) )  
 
     this.selectedSceneService.$selectedScene
-    .pipe(takeUntil(this.$unSub))
+    .pipe(
+      takeUntil(this.$unSub),
+      filter(s => !!s)
+    )
     .subscribe( (s: Scene) => {
       const existing = this.show.scenes.find(scene => scene.id === this.currScene?.id)
 
@@ -126,7 +139,6 @@ export class CreateComponent implements OnInit, OnDestroy {
   onChange(): void{ this.isSaved = false }
 
   saveShow(): void{
-    this.saveScene()
     this.showService.save(this.show) 
 
     this.isSaved=true
@@ -137,33 +149,14 @@ export class CreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  async saveScene(): Promise<void>{
-
-  }
-
   onDelete(scene: Scene){
-    //If the user is editing the scene and deletes it, reset current scene
-    if(this.currScene!.id === scene.id){ this.setDefaultState() }
-
     this.show.scenes = this.show.scenes.filter(s => s.id !== scene.id)
+    this.currScene = undefined
   }
-
 
   resetScene(): void{
     this.sceneForm.reset()
     this.isAutoMode = false
   }
-
-
-  private setDefaultState(): void{
-    this.currScene = undefined
-    this.isAutoMode = false
-  }
-
-  get isSceneValid(): boolean{
-    const { lat, long, alt, } = this.currScene!.geoPos
-    return lat !== null && long !== null && alt !== null
-  }
-
 }
 

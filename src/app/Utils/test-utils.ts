@@ -48,3 +48,27 @@ export function getFakeScenes(N: number = 5): Scene[]{
 
     return scenes
 }
+
+export function getFakeScene(id: number): Scene{
+    const title = faker.address.cityName()
+    const geoPos: GeoPosition = {
+        alt: Math.random(),
+        lat: Math.random(),
+        long: Math.random(),
+        nodeName: sampleSize(Object.values(SceneGraphNode), 1)[0]
+    }
+    const options: SceneOptions = {
+        enabledTrails: sampleSize(Object.values(SceneGraphNode), 5),
+        keepCameraPosition: faker.datatype.boolean()
+    } 
+
+    const duration = Math.random()
+    const script = faker.lorem.sentence()
+
+    return {
+        id: id, title: title, geoPos: geoPos, options: options,
+        script: script,
+        duration: duration,
+    }
+
+}

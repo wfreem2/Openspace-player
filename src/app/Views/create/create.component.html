@@ -7,7 +7,7 @@
 
         <div>
             <button id="save" class="btn primary" (click)="saveShow()"
-            [disabled]="!show.title.trim()">
+            [disabled]="!show.title.trim() || isSaved">
                 <p>Save</p>
                 <img src="assets/icons/save.svg" class="icon" alt="">
             </button>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="scene-creator">
-        <ng-container *ngIf="selectedSceneService.$selectedScene | async then sceneTabs; else noScene"></ng-container>
+        <ng-container *ngIf="currScene then sceneTabs; else noScene"></ng-container>
     </div>
 
     <div class="scene-list">
@@ -31,6 +31,7 @@
 
         <creator-scene-list 
         [scenes]="show.scenes"
+        (deleteClickedEvent)="onDelete($event)"
         (listDragDropEvent)="isSaved=false">
         </creator-scene-list>
     </div>

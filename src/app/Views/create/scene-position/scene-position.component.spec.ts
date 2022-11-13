@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing"
 import { FormControlStatus, FormsModule, ReactiveFormsModule } from "@angular/forms"
 import { sampleSize } from "lodash"
-import { of } from "rxjs"
+import { of, throwError } from "rxjs"
 import { GeoPosition } from "src/app/Interfaces/GeoPosition"
 import { NotificationService } from "src/app/Services/notification.service"
 import { OpenspaceService, SceneGraphNode } from "src/app/Services/openspace.service"
@@ -14,9 +14,9 @@ describe('Scene-Positon component', () => {
     let component: ScenePositionComponent
     let fixture: ComponentFixture<ScenePositionComponent>
 
+    const fakeOpenSpaceService = jasmine.createSpyObj('OpenSpaceService', ['listenCurrentPosition'])
     
     beforeEach( async () => {
-        const fakeOpenSpaceService = jasmine.createSpyObj('OpenSpaceService', ['listenCurrentPosition'])
         const $fakeObs =  of({
             alt: Math.random(),
             lat: Math.random(),
@@ -109,5 +109,23 @@ describe('Scene-Positon component', () => {
 
     it('should properly implement ControlValueAccessor', () => testControlValueImplementation(component))
 
+    it('openspace.listenCurrentPosition() error should set autoMode to false', () => {
+        fakeOpenSpaceService.listenCurrentPosition.and.returnValue( throwError( () => 'Error!'))
 
+        //To trigger change detection
+        component.$isAutoMode.next(true)
+        fixture.detectChanges()
+
+        expect(component.isAutoMode).toBeFalse()
+    })
+
+    it('openspace.listenCurrentPosition() error should enable form', () => {
+        fakeOpenSpaceService.listenCurrentPosition.and.returnValue( throwError( () => 'Error!'))
+
+        //To trigger change detection
+        component.$isAutoMode.next(true)
+        fixture.detectChanges()
+
+        expect(component.geoPosForm.enabled).toBeTrue()
+    })
 })

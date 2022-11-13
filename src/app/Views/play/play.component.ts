@@ -86,7 +86,7 @@ export class PlayComponent implements OnInit {
           break
 
         default: //Some trails enabled
-          enabledTrails.forEach(trial => this.openSpaceService.setTrail(trial, true))
+          enabledTrails.forEach(trial => this.openSpaceService.setTrailVisibility(trial, true))
           break
       }
 

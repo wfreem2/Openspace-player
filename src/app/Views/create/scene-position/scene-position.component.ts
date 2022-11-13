@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
-import { tap, BehaviorSubject, filter, map, Subject, Subscription, takeUntil, catchError, of } from 'rxjs';
+import { tap, BehaviorSubject, filter, map, Subject, Subscription, takeUntil, catchError, of, throttleTime } from 'rxjs';
 import { GeoPosition } from 'src/app/Interfaces/GeoPosition';
 import { GeoPosForm } from 'src/app/Interfaces/ShowForm';
 import { NotificationType } from 'src/app/Interfaces/ToastNotification';
@@ -48,10 +48,11 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
     .pipe(takeUntil(this.$unSub))
     .subscribe(isAuto => {
       this.isAutoMode = isAuto
-      this.setGeoListener(isAuto)
-        
+      
       if(isAuto){ this.geoPosForm.disable() }
       else{ this.geoPosForm.enable() }
+      
+      this.setGeoListener(isAuto)
     })
 
     this.$geoPos.asObservable()
@@ -73,7 +74,7 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
       filter( () => this.lat!.valid && this.long!.valid && this.alt!.valid ),
       map(_=> this.geoPosForm.getRawValue() as GeoPosition),
     )
-    .subscribe(v => this.onChange(v))  
+    .subscribe( v => this.onChange(v) )
   }
   
   get alt(){ return this.geoPosForm.get('alt') }
@@ -109,10 +110,6 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
   registerOnTouched(fn: any): void { this.onTouch = fn }
   setDisabledState?(isDisabled: boolean): void { }
 
-  clear(): void {
-    this.geoPosForm.reset()
-  }
-
   private async setGeoListener(isAuto: boolean){
 
     if(!isAuto && !!this.listener){ 
@@ -125,14 +122,17 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
     .listenCurrentPosition()
     .pipe(
       catchError(_ => {
-        console.log('err')
-        this.notiService.showNotification({title: "Cannot enable auto mode, Openspace is disconnected", type: NotificationType.ERROR})
+        this.notiService.showNotification({
+          title: "Cannot enable auto mode, Openspace is disconnected", 
+          type: NotificationType.ERROR
+        })
 
         this.isAutoMode = false
         this.geoPosForm.enable()
 
         return this.$geoPos
-      })
+      }),
+      throttleTime(500)
     )
     .subscribe(pos => this.$geoPos.next(pos))
   }

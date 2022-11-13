@@ -12,7 +12,7 @@
         
         <list-item class="item" [scene]="s" 
         (itemClickedEvent)="onItemClicked($event)"
-        (deleteClickedEvent)="deleteClickedEvent.emit(s)"
+        (deleteClickedEvent)="onDeleteClicked($event)"
         (duplicateClickedEvent)="onDuplicateClicked($event)">
         </list-item>
     </div>

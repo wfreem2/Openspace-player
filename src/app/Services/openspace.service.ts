@@ -32,7 +32,7 @@ export class OpenspaceService {
   private async onDisconnect(){
     this._isConnected.next(false)
     this.notiService.showNotification({ 
-      title: 'Openspace is disconnected',
+      title: 'Openspace is Disconnected',
       type: NotificationType.WARNING
     })
   }
@@ -40,7 +40,14 @@ export class OpenspaceService {
   private async onConnect(api: any){
     this.openspace = await api.library()
     this._isConnected.next(true)
+
+    this.notiService.showNotification({ 
+      title: 'Openspace is Connected',
+      type: NotificationType.SUCCESS
+    })
   }
+
+  connect(): void{ this.o.connect() }
 
   isConnected(): Observable<boolean>{
     return this._isConnected.asObservable()
@@ -54,7 +61,6 @@ export class OpenspaceService {
       this.openspace.globebrowsing.flyToGeo(globe, lat, long, alt, duration)
     }
   }
-
 
   async getCurrentPosition(): Promise<GeoPosition>{
 
@@ -80,16 +86,16 @@ export class OpenspaceService {
     )
   }
 
-  setTrail(trail: SceneGraphNode, value: boolean): void{
-    if(value === true){ this.isAllTrailsDisabled = false}
+  setTrailVisibility(trail: SceneGraphNode, isVisible: boolean): void{
+    if(isVisible === true){ this.isAllTrailsDisabled = false }
     else{ this.isAllTrailsEnabled = false }
 
     if(trail === SceneGraphNode.Sun){ //Sun does not have trail option
-      this.openspace.setPropertyValueSingle("Scene.SunOrbit.Renderable.Enabled", value)
+      this.openspace.setPropertyValueSingle("Scene.SunOrbit.Renderable.Enabled", isVisible)
       return
     }
 
-    this.openspace.setPropertyValueSingle(`Scene.${trail}Trail.Renderable.Enabled`, value) 
+    this.openspace.setPropertyValueSingle(`Scene.${trail}Trail.Renderable.Enabled`, isVisible) 
   }
 
   async getNavigationState(): Promise<NavigationState>{
@@ -102,7 +108,7 @@ export class OpenspaceService {
 
   public disableAllNodeTrails(): void{
     if(!this.isAllTrailsDisabled){
-      this.nodes.forEach(node => this.setTrail(node, false))
+      this.nodes.forEach(node => this.setTrailVisibility(node, false))
     }
     
     this.isAllTrailsDisabled = true
@@ -110,7 +116,7 @@ export class OpenspaceService {
 
   public enableAllNodeTrails(): void{
     if(!this.isAllTrailsEnabled){
-      this.nodes.forEach(node => this.setTrail(node, true))    
+      this.nodes.forEach(node => this.setTrailVisibility(node, true))    
     }
 
     this.isAllTrailsEnabled =  true

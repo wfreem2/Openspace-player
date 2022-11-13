@@ -27,12 +27,9 @@ export class CreatorSceneListComponent implements OnInit, AfterViewInit, OnDestr
     private cdRef : ChangeDetectorRef) { }
 
 
-  ngOnDestroy(): void {
-    this.$unsub.next()
-  }
+  ngOnDestroy(): void { this.$unsub.next() }
 
   ngAfterViewInit(): void {
-    
     this.selectedSceneService.$selectedScene
     .pipe(
       takeUntil(this.$unsub),
@@ -58,36 +55,40 @@ export class CreatorSceneListComponent implements OnInit, AfterViewInit, OnDestr
     this.setScene(scene)
   }
 
+  
+  private setAllInactive(): void{
+    this.items.forEach(i => i.isActive = false)
+  }
+  
+  onDeleteClicked( {scene}: ListItemComponent): void{
+    this.deleteClickedEvent.emit(scene)
+  }
+  
   private setScene(scene: Scene){
     this.selectedSceneService.setScene(scene)
   }
 
-  setAllInactive(): void{
-    this.items.forEach(i => i.isActive = false)
-  }
-
   onDuplicateClicked(item: ListItemComponent): void{
     const { scene } = item
-    const duplicate: Scene= cloneDeep(scene)
+    const duplicate: Scene = cloneDeep(scene)
 
     let id = 1
-    let newTitle = duplicate.title + ` (${id})`
+    let newTitle = duplicate.title + ` (${id++})`
     let existingCopy = this.scenes.find(s => s.title === newTitle)
 
     /*
      While there is a scene with the same name (user duplicated already)
      increment a number to append behind the title to make it unique
     */
-    while(existingCopy){
-      newTitle = duplicate.title + `(${id++})`
+    while(!!existingCopy){
+      newTitle = duplicate.title + ` (${id++})`
       existingCopy = this.scenes.find(s => s.title === newTitle)
     }
 
     duplicate.title = newTitle
-    // duplicate.id += 1
-
-    // this.scenes.push(duplicate)
-    //Set the newest (duplicated) list item to active
+    duplicate.id = this.scenes.reduce( (a, b) => Math.max(a, b.id), 1) + 1 
+    
+    this.scenes.push(duplicate)
     this.setScene(duplicate)
   }
 

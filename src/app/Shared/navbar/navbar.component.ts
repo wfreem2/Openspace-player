@@ -19,8 +19,6 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  connect(): void {
-   
-  }
+  connect(): void { this.openSpaceService.connect() }
 
 }
