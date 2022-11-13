@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ShowService } from './show.service';
 
@@ -7,11 +7,10 @@ import { ShowService } from './show.service';
   providedIn: 'root'
 })
 export class PlayerGuard implements CanActivate {
-  constructor(private showService: ShowService){ }
+  constructor(private showService: ShowService, private router: Router){ }
   
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
+    Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
       const id: number = parseInt(route.params['id'])
 
@@ -19,6 +18,7 @@ export class PlayerGuard implements CanActivate {
          return true 
       }
       
+      this.router.navigate(['/shows'])
       return false
   }
   

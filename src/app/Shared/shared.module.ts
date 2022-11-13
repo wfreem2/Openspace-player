@@ -11,6 +11,7 @@ import { DropdownComponent } from './dropdown/dropdown.component';
 import { SortingSelectorComponent } from './sorting-selector/sorting-selector.component';
 import { ClickedoutsideofDirective } from '../Directives/clickoutsideof.directive';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { ConfirmPopupComponent } from './confirm-popup/confirm-popup.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
     SortingSelectorComponent,
     ClickedoutsideofDirective,
     NotificationsComponent,
+    ConfirmPopupComponent,
   ],
   imports: [
     CommonModule,
@@ -41,7 +43,8 @@ import { NotificationsComponent } from './notifications/notifications.component'
     DropdownComponent,
     SortingSelectorComponent,
     ClickedoutsideofDirective,
-    NotificationsComponent
+    NotificationsComponent,
+    ConfirmPopupComponent,
   ]
 })
 export class SharedModule { }

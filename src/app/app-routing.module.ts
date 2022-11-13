@@ -8,7 +8,7 @@ import { YourShowsComponent } from './Views/home/your-shows/your-shows.component
 import { PlayComponent } from './Views/play/play.component';
 import { PlaygroundComponent } from './Views/playground/playground.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', redirectTo: 'shows', pathMatch: 'full' },
   { path: 'creator/:id', component: CreateComponent, canActivate: [ShowCreatorGuard] },
   { path: 'player/:id', component: PlayComponent, canActivate: [PlayerGuard] },

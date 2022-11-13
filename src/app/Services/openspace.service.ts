@@ -12,25 +12,24 @@ import { NotificationService } from './notification.service';
 
 export class OpenspaceService {
 
-  openspace: any
-  _isConnected = new BehaviorSubject<boolean>(false)
-  o = api('localhost', 4682)
+  private openspace: any
   private nodes!: SceneGraphNode[]
 
-  private isAllTrailsDisabled: boolean = false
-  private isAllTrailsEnabled: boolean = false
+  private readonly client = api('localhost', 4682)
+  private readonly _isConnected = new BehaviorSubject<boolean>(false)
 
   constructor(private notiService: NotificationService) {
-    this.o.onConnect(async () => await this.onConnect(this.o))
-    this.o.onDisconnect(async () => await this.onDisconnect())
+    this.client.onConnect(async () => await this.onConnect(this.client))
+    this.client.onDisconnect(async () => await this.onDisconnect())
 
-    this.o.connect()
+    this.client.connect()
 
-    this.nodes = Object.keys(SceneGraphNode).map(n => <SceneGraphNode> n)
+    this.nodes = Object.values(SceneGraphNode)
   }
 
   private async onDisconnect(){
     this._isConnected.next(false)
+
     this.notiService.showNotification({ 
       title: 'Openspace is Disconnected',
       type: NotificationType.WARNING
@@ -47,23 +46,21 @@ export class OpenspaceService {
     })
   }
 
-  connect(): void{ this.o.connect() }
+  connect(): void{ this.client.connect() }
 
-  isConnected(): Observable<boolean>{
-    return this._isConnected.asObservable()
-  }
+  isConnected(): Observable<boolean>{  return this._isConnected.asObservable() }
   
   flyToGeo(lat: Number, long: Number, alt: Number, globe: string='', duration?: number): void{
+    
     if(!duration){
       this.openspace.globebrowsing.flyToGeo(globe, lat, long, alt)
+      return
     }
-    else{
-      this.openspace.globebrowsing.flyToGeo(globe, lat, long, alt, duration)
-    }
+
+    this.openspace.globebrowsing.flyToGeo(globe, lat, long, alt, duration)
   }
 
   async getCurrentPosition(): Promise<GeoPosition>{
-
     const pos = await this.openspace.globebrowsing.getGeoPositionForCamera()
     const anchor = await this.getCurrentAnchor()
 
@@ -75,21 +72,14 @@ export class OpenspaceService {
     }
   } 
   
-  flyTo(path: SceneGraphNode){
-    this.openspace.pathnavigation.flyTo(path.toString())
-  }
+  flyTo(path: SceneGraphNode){ this.openspace.pathnavigation.flyTo(path.toString()) }
 
   listenCurrentPosition(): Observable<GeoPosition>{
     return interval(100)
-    .pipe(
-      mergeMap(async _ => await this.getCurrentPosition())
-    )
+    .pipe( mergeMap( async () => await this.getCurrentPosition() ) )
   }
 
   setTrailVisibility(trail: SceneGraphNode, isVisible: boolean): void{
-    if(isVisible === true){ this.isAllTrailsDisabled = false }
-    else{ this.isAllTrailsEnabled = false }
-
     if(trail === SceneGraphNode.Sun){ //Sun does not have trail option
       this.openspace.setPropertyValueSingle("Scene.SunOrbit.Renderable.Enabled", isVisible)
       return
@@ -108,14 +98,10 @@ export class OpenspaceService {
 
   disableAllNodeTrails(): void{
     this.nodes.forEach(node => this.setTrailVisibility(node, false))
-    
-    this.isAllTrailsDisabled = true
   }
 
   enableAllNodeTrails(): void{
     this.nodes.forEach(node => this.setTrailVisibility(node, true))    
-
-    this.isAllTrailsEnabled =  true
   }
 
   async getCurrentAnchor(): Promise<SceneGraphNode>{

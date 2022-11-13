@@ -13,7 +13,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(private openSpaceService: OpenspaceService) { 
     
-    openSpaceService._isConnected
+    openSpaceService.isConnected()
     .subscribe(status => this.isConnected = status)
   }
 

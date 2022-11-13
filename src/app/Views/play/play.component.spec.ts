@@ -140,7 +140,7 @@ describe('Play Component', () => {
 
         expect(fakeOpenSpaceService.disableAllNodeTrails).toHaveBeenCalled()
     })
-    it('#execute() should call disableNodeTrails when options are provided', () => {
+    it('#execute() should call setTrailVisibility when some trails are enabled', () => {
         const sceneToExecute = component.scenes[0]
         sceneToExecute.scene.options.enabledTrails = sampleSize(Object.values(SceneGraphNode), 10)
         
