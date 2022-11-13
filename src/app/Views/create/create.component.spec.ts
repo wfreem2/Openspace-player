@@ -16,7 +16,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ListItemComponent } from "./creator-scene-list/list-item/list-item.component"
 import { sampleSize } from "lodash"
 import { Scene } from "src/app/Interfaces/Scene"
-import { OpenspaceService } from "src/app/Services/openspace.service"
 
 describe('CreateComponent', () => {
     let component: CreateComponent

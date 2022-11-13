@@ -49,7 +49,6 @@ describe('Scene-Positon component', () => {
             nodeName: sampleSize(Object.values(SceneGraphNode), 1)[0]
         }
 
-
         component.writeValue(expectedGeo)
         fixture.detectChanges()
 
@@ -90,7 +89,6 @@ describe('Scene-Positon component', () => {
         expect(component.geoPosForm.status).toEqual(expectedStatus)
     })
 
-
     it('lat, long, and alt controls with values that are not numbers should have invalid status', () => {
 
         const badGeoPosition = {
@@ -120,7 +118,7 @@ describe('Scene-Positon component', () => {
     })
 
     it('openspace.listenCurrentPosition() error should enable form', () => {
-        fakeOpenSpaceService.listenCurrentPosition.and.returnValue( throwError( () => 'Error!'))
+        fakeOpenSpaceService.listenCurrentPosition.and.returnValue( throwError( () => 'Error!' ))
 
         //To trigger change detection
         component.$isAutoMode.next(true)

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, pluck } from 'rxjs';
+import { map, pluck, tap } from 'rxjs';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { Show } from 'src/app/Interfaces/Show';
 import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
@@ -34,7 +34,7 @@ export class PlayComponent implements OnInit {
       if(!show){ return } 
   
       this.show = show
-      console.log(show.scenes)
+      // console.log(show.scenes)
       
       this.scenes = show.scenes.map(s => { 
         return { scene: s, isActive: false}
@@ -64,23 +64,21 @@ export class PlayComponent implements OnInit {
   }
 
   private execute(scene: Scene): void{
-    console.log(scene)
+    // console.log(scene)
     
-    const { navState, options: sceneOptions, duration } = scene
+    const { navState, options, duration } = scene
     const { lat, long, alt, nodeName } = scene.geoPos
 
     this.openSpaceService.flyToGeo(lat, long, alt, nodeName, duration)
 
-    if(sceneOptions){
-      const { enabledTrails, keepCameraPosition } = sceneOptions
+    if(options){
+      const { enabledTrails, keepCameraPosition } = options
       
       if(keepCameraPosition && navState){ this.openSpaceService.setNavigationState(navState) }
+      
+      this.openSpaceService.disableAllNodeTrails()
 
       switch(enabledTrails.length){
-        case 0: //No trails enabled 
-          this.openSpaceService.disableAllNodeTrails()
-          break
-          
         case Object.keys(SceneGraphNode).length: //All trails enabled
           this.openSpaceService.enableAllNodeTrails()
           break

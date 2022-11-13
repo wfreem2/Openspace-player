@@ -106,18 +106,14 @@ export class OpenspaceService {
     this.openspace.navigation.setNavigationState(state)
   }
 
-  public disableAllNodeTrails(): void{
-    if(!this.isAllTrailsDisabled){
-      this.nodes.forEach(node => this.setTrailVisibility(node, false))
-    }
+  disableAllNodeTrails(): void{
+    this.nodes.forEach(node => this.setTrailVisibility(node, false))
     
     this.isAllTrailsDisabled = true
   }
 
-  public enableAllNodeTrails(): void{
-    if(!this.isAllTrailsEnabled){
-      this.nodes.forEach(node => this.setTrailVisibility(node, true))    
-    }
+  enableAllNodeTrails(): void{
+    this.nodes.forEach(node => this.setTrailVisibility(node, true))    
 
     this.isAllTrailsEnabled =  true
   }

@@ -134,6 +134,9 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
       }),
       throttleTime(500)
     )
-    .subscribe(pos => this.$geoPos.next(pos))
+    .subscribe(pos => {
+      this.$geoPos.next(pos)
+      this.onChange(pos)
+    })
   }
 }
