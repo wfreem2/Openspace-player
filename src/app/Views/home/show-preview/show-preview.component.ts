@@ -12,15 +12,22 @@ export class ShowPreviewComponent implements OnInit {
   @Output() closeBtnClicked = new EventEmitter()
   @Input() show!: Show
 
+  isConfirmShowing: boolean = false
+
   constructor(private showService: ShowService) {} 
 
   ngOnInit(): void { }
 
+  showPrompt(): void{
+    this.isConfirmShowing = true    
+  }
 
-  delete(): void{
+  
+  onConfirm(): void {
     this.showService.removeShowById(this.show.id)
+    this.isConfirmShowing = false
     this.closeBtnClicked.emit()
   }
 
-
+  onCancel(): void { this.isConfirmShowing = false }
 }

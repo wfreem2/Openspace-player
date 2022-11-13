@@ -63,6 +63,7 @@ $grid-bd: solid 2px var(--gray);
     padding: 1rem;
     grid-column: 2;
     grid-row: 2;
+
     form{
         display: grid;
         justify-items: center;
@@ -95,6 +96,7 @@ $grid-bd: solid 2px var(--gray);
             gap: 1rem;
         }
     }
+
     //Button for resetting scene
     #reset{
         @extend %bare;
@@ -109,17 +111,39 @@ $grid-bd: solid 2px var(--gray);
 
 // List of created scenes
 .scene-list{
-    @extend %flx-col;
     grid-column: 1;
+    @extend %flx-col;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
     background: #fafafb;
-    border-right: solid 2px var(--gray);
+    border-right: $grid-bd;
 
-    & > div:first-child{
+    & > div:nth-child(2){
         @extend %align-center;
         justify-content: space-between;
         gap: 1rem;
+    }
+
+    .search-bar{
+        display: grid;
+        align-items: center;
+        grid-template-columns: max-content 1fr max-content;
+        column-gap: 0.75rem;
+        padding: 0.5rem;
+        margin: 0 -1rem;
+        border-bottom: $grid-bd;
+    
+        
+        svg{ color: #807d7d; }
+        input{ font-size: 1.2rem; }
+    
+    }
+    
+    
+    #filter-icon{
+        cursor: pointer;
+        color: #807d7d;
+        &:hover{ color: var(--txt-color); }
     }
 }
 

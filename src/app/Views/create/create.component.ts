@@ -33,11 +33,12 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   show!: Show
   currScene?: Scene
+  query: string = ''
 
   isSaved: boolean = true
   isAutoMode:boolean = false
+  isConfirmShowing: boolean = false
 
-  // private readonly autoSaveInterval = setInterval( () => this.saveShow(), this.saveInterval )
   sceneForm = this.fb.group<SceneForm>({
     script: this.fb.control<string | null>(null),
     transistion: this.fb.control<number | null>(null, Validators.pattern(/^[0-9]*$/)),
@@ -46,8 +47,9 @@ export class CreateComponent implements OnInit, OnDestroy {
     geoPos: this.fb.nonNullable.control<GeoPosition>({lat: 0, long: 0, alt: 0, nodeName: SceneGraphNode.Earth }),
     options: this.fb.nonNullable.control<SceneOptions>({keepCameraPosition: true, enabledTrails: []})
   })
-
+  
   private readonly DEFAULT_SCENE = this.sceneForm.getRawValue()
+  private readonly autoSaveInterval = setInterval( () => this.saveShow(), this.saveInterval )
 
   constructor(private route: ActivatedRoute, public showService: ShowService,
      public selectedSceneService: SelectedSceneService,private notiService: NotificationService,
@@ -133,7 +135,7 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void { 
     this.$unSub.next()
-    // clearInterval(this.autoSaveInterval)
+    clearInterval(this.autoSaveInterval)
   }
 
   onChange(): void{ this.isSaved = false }
@@ -149,10 +151,22 @@ export class CreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  onDelete(scene: Scene){
-    this.show.scenes = this.show.scenes.filter(s => s.id !== scene.id)
+  onDelete(){ this.isConfirmShowing = true }
+  onCancel(): void{ this.isConfirmShowing = false }
+
+  onConfirm(): void{
+    this.show.scenes = this.show.scenes.filter(s => s.id !== this.currScene!.id)
+    
+    this.notiService.showNotification({
+      title: `Scene: ${this.currScene?.title} deleted`,
+      type: NotificationType.SUCCESS
+    })
+
     this.currScene = undefined
+    this.isConfirmShowing = false
   }
+
+
 
   resetScene(): void{
     this.sceneForm.reset()

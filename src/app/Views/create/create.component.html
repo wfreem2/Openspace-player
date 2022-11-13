@@ -24,19 +24,32 @@
     </div>
 
     <div class="scene-list">
+        <div class="search-bar">
+            <ng-container [ngTemplateOutlet]="searchIcon"></ng-container>
+            <input id="search" type="text" class="bare"
+             placeholder="Search shows" [(ngModel)]="query">
+            <ng-container [ngTemplateOutlet]="filterIcon"></ng-container>
+        </div>
+
         <div>
             <p class="title">Scenes ({{show.scenes.length}})</p>
             <button class="btn primary" (click)="newScene()">New Scene</button>
         </div>
 
         <creator-scene-list 
-        [scenes]="show.scenes"
-        (deleteClickedEvent)="onDelete($event)"
+        [scenes]="show.scenes | searchScenes: query"
+        (deleteClickedEvent)="onDelete()"
         (listDragDropEvent)="isSaved=false">
         </creator-scene-list>
     </div>
 </div>
 
+<confirm-popup *ngIf="isConfirmShowing"
+(confirmClickedEvent)="onConfirm()"
+(cancelClickedEvent)="onCancel()"
+ prompt="Delete the selected scene?"
+>
+</confirm-popup>
 
 
 <ng-template #sceneTabs>
@@ -130,5 +143,19 @@
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+</ng-template>
+
+
+<ng-template #searchIcon>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+</ng-template>
+<ng-template #filterIcon>
+    <svg id="filter-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter">
+        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
     </svg>
 </ng-template>

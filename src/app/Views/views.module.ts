@@ -13,6 +13,7 @@ import { SceneOptionsComponent } from './create/scene-options/scene-options.comp
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TabsComponent } from './create/tabs/tabs.component';
 import { TabComponent } from './create/tabs/tab/tab.component';
+import { SearchScenesPipe } from './create/search-scenes.pipe';
 
 
 
@@ -30,6 +31,7 @@ import { TabComponent } from './create/tabs/tab/tab.component';
     SceneOptionsComponent,
     TabsComponent,
     TabComponent,
+    SearchScenesPipe,
   ],
   imports: [
     SharedModule,

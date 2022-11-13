@@ -15,8 +15,9 @@ h1{
 }
 
 .header{
-    @extend %align-center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr minmax(1fr, max-content);
+    
     padding: 0.5rem;
     gap: 1rem;
     border-bottom: solid 2px var(--gray);
@@ -24,6 +25,9 @@ h1{
     .btn{
         cursor: pointer;
         text-decoration: none;
+        grid-column: 2;
+        max-width: 8rem;
+        justify-self: flex-end
     }
 }
 
@@ -46,15 +50,13 @@ h1{
 
 
 .search-bar{
-    @extend %align-center;
-    gap: 0.75rem;
-    min-width: 25rem;
-    max-width: 30rem;
+    grid-column: 1;
+    display: grid;
+    align-items: center;
+    grid-template-columns: max-content 1fr max-content;
+    column-gap: 0.75rem;
 
-    input{
-        width: 100%;
-        font-size: 1.2rem;
-    }
+    input{ font-size: 1.2rem; }
 
     svg{ color: #807d7d; }
 

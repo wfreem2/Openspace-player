@@ -3,7 +3,7 @@
         <ng-container [ngTemplateOutlet]="rightArrow"></ng-container>
     </button>
 
-    <a id="delete" (click)="delete()">
+    <a id="delete" (click)="showPrompt()">
         Delete
         <ng-container [ngTemplateOutlet]="del"></ng-container>
     </a>
@@ -17,13 +17,17 @@
 
 <p id="description">Some show description</p>
 
-
 <div class="steps">
     <h2>Scenes: ({{show.scenes.length}})</h2>
     <scene-list id="scene-list" [scenes]="show.scenes"></scene-list>
 </div>
 
 <a id="play" [routerLink]="['/player', show.id]" class="btn primary">Play</a>
+
+<confirm-popup *ngIf="isConfirmShowing"
+prompt="Are you sure?" 
+(confirmClickedEvent)="onConfirm()"
+(cancelClickedEvent)="onCancel()"></confirm-popup>
 
 <ng-template #rightArrow>
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -40,6 +44,7 @@
         <polygon points="10 8 16 12 10 16 10 8"></polygon>
     </svg>
 </ng-template>
+
 <ng-template #edit>
     <svg
      xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"

@@ -55,16 +55,12 @@
     width: 100%;
     height: 3px;
     background: var(--color-primary);
-    animation: expand 14s forwards ;
+    animation: expand 8.5s forwards;
 }
 
 @keyframes expand {
 
-    from{
-        max-width: 0px;
-    }
-    to{
-        max-width: 25rem;
-    }
+    from{ max-width: 0px; }
+    to{ max-width: 25rem; }
     
 }

@@ -1,5 +1,6 @@
 <router-outlet></router-outlet>
-<show-preview @slideInOut
+<show-preview *ngIf="isPreviewing"
+ @slideInOut
  [show]="show"
- (closeBtnClicked)="isPreviewing=false"
- *ngIf="isPreviewing"></show-preview>
+ (closeBtnClicked)="isPreviewing=false">
+</show-preview>
