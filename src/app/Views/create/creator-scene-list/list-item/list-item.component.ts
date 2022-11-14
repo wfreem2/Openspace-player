@@ -32,6 +32,7 @@ export class ListItemComponent implements OnInit {
 
   onDeleteClicked(): void{
     this.deleteClickedEvent.emit(this)
+    this.isCtxShowing = false
   }
 
   onDuplicateClicked(): void{
