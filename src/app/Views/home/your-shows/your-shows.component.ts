@@ -12,6 +12,8 @@ import { ShowService } from 'src/app/Services/show.service';
 export class YourShowsComponent implements OnInit {
 
   shows!: Show[]
+  query: string = ''
+
 
   constructor(showService: ShowService, public showPreviewService: ShowPreviewService) { 
     showService.getAllShows()

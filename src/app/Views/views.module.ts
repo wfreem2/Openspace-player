@@ -14,6 +14,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TabsComponent } from './create/tabs/tabs.component';
 import { TabComponent } from './create/tabs/tab/tab.component';
 import { SearchScenesPipe } from './create/search-scenes.pipe';
+import { SearchShowsPipe } from './home/your-shows/search-shows.pipe';
 
 
 
@@ -32,6 +33,7 @@ import { SearchScenesPipe } from './create/search-scenes.pipe';
     TabsComponent,
     TabComponent,
     SearchScenesPipe,
+    SearchShowsPipe,
   ],
   imports: [
     SharedModule,

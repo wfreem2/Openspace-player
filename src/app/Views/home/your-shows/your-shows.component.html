@@ -1,7 +1,8 @@
 <div class="header">
     <div class="search-bar">
         <ng-container [ngTemplateOutlet]="searchIcon"></ng-container>
-        <input id="search" type="text" class="bare" placeholder="Search shows">
+        <input id="search" type="text" class="bare" placeholder="Search shows"
+        [(ngModel)]="query">
         <ng-container [ngTemplateOutlet]="filterIcon"></ng-container>
     </div>
 
@@ -12,7 +13,8 @@
 
 <ng-template #list>
     <div class="list-wrapper">
-        <shows-list [shows]="shows" (cardClicked)="showPreviewService.previewShow($event)"></shows-list>
+        <shows-list [shows]="shows | searchShows: query" 
+        (cardClicked)="showPreviewService.previewShow($event)"></shows-list>
     </div>
 </ng-template>
 

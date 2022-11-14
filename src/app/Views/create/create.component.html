@@ -47,8 +47,7 @@
 <confirm-popup *ngIf="isConfirmShowing"
 (confirmClickedEvent)="onConfirm()"
 (cancelClickedEvent)="onCancel()"
- prompt="Delete the selected scene?"
->
+prompt="Delete the selected scene?">
 </confirm-popup>
 
 
@@ -65,7 +64,6 @@
                 <div class="summary">
                     <div class="section">
                         <p class="title">GeoPosition</p>
-
                         <ul class="geoPos">
                             <li>
                                 <p>Node: {{currScene?.geoPos?.nodeName}}</p>
@@ -86,9 +84,27 @@
                     </div>
 
                     <div class="section">
-                        
+                        <p class="title">Enabled Trails</p>
+                        <ul class="enabledTrails">
+                            <li *ngFor="let trail of currScene?.options?.enabledTrails">
+                                {{trail}}
+                            </li>
+                            <li *ngIf="!currScene?.options?.enabledTrails?.length">
+                                No trails enabled
+                            </li>
+                        </ul>
                     </div>
-                    <div class="section"></div>
+                    <div class="section" id="duration">
+                        <p class="title">Transition Duration</p>
+                        <ul>
+                            <li *ngIf="sceneForm.controls.transistion.value">
+                                {{sceneForm.controls.transistion.value}} seconds
+                            </li>
+                            <li *ngIf="!sceneForm.controls.transistion.value">
+                                Default Transition
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </tab>
 
@@ -131,7 +147,6 @@
     </form>
 </ng-template>
 
-
 <ng-template #noScene>
     <div id="no-scene">
         <h1>No Scene Selected</h1>
@@ -146,13 +161,13 @@
     </svg>
 </ng-template>
 
-
 <ng-template #searchIcon>
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
         <circle cx="11" cy="11" r="8"></circle>
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
     </svg>
 </ng-template>
+
 <ng-template #filterIcon>
     <svg id="filter-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter">

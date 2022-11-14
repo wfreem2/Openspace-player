@@ -21,6 +21,7 @@ describe('Play Component', () => {
         dateCreated: new Date(),
         scenes: []
     }
+    
     let fakeShowService: any
     let fakeOpenSpaceService: any
 

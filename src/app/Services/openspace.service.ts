@@ -13,7 +13,7 @@ import { NotificationService } from './notification.service';
 export class OpenspaceService {
 
   private openspace: any
-  private nodes!: SceneGraphNode[]
+  private nodes: SceneGraphNode[] = Object.values(SceneGraphNode)
 
   private readonly client = api('localhost', 4682)
   private readonly _isConnected = new BehaviorSubject<boolean>(false)
@@ -23,8 +23,6 @@ export class OpenspaceService {
     this.client.onDisconnect(async () => await this.onDisconnect())
 
     this.client.connect()
-
-    this.nodes = Object.values(SceneGraphNode)
   }
 
   private async onDisconnect(){
@@ -72,7 +70,11 @@ export class OpenspaceService {
     }
   } 
   
-  flyTo(path: SceneGraphNode){ this.openspace.pathnavigation.flyTo(path.toString()) }
+  flyTo(path: SceneGraphNode): void{ this.openspace.pathnavigation.flyTo(path.toString()) }
+
+  resetAnchor(): void{
+    this.openspace.navigation.retargetAnchor()
+  }
 
   listenCurrentPosition(): Observable<GeoPosition>{
     return interval(100)

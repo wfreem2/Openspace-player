@@ -122,7 +122,7 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
 
     const { enabledTrails } = this.optionsForm.controls
     
-    enabledTrails.controls.forEach( (ctrl, idx) => {
+    enabledTrails.controls.forEach(ctrl=> {
       const { value } = ctrl
       value.isEnabled = options.enabledTrails.find(trail => value.trail === trail) ? true : value.isEnabled
 
