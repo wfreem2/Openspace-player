@@ -140,6 +140,7 @@ describe('Play Component', () => {
 
         expect(fakeOpenSpaceService.disableAllNodeTrails).toHaveBeenCalled()
     })
+
     it('#execute() should call setTrailVisibility when some trails are enabled', () => {
         const sceneToExecute = component.scenes[0]
         sceneToExecute.scene.options.enabledTrails = sampleSize(Object.values(SceneGraphNode), 10)
@@ -150,4 +151,27 @@ describe('Play Component', () => {
         expect(fakeOpenSpaceService.setTrailVisibility).toHaveBeenCalled()
     })
 
+    it('next button should be disabled when last scene is active', () => {
+        const lastScene = component.scenes[component.scenes.length-1]
+
+        component.setScene(lastScene)
+        fixture.detectChanges()
+
+        const el: HTMLElement = fixture.nativeElement
+        const btn: HTMLButtonElement = el.querySelector('#next')!
+
+        expect(btn.disabled).toBeTrue()
+    })
+
+    it('back button should be disabled when first scene is active', () => {
+        const firstScene = component.scenes[0]
+
+        component.setScene(firstScene)
+        fixture.detectChanges()
+
+        const el: HTMLElement = fixture.nativeElement
+        const btn: HTMLButtonElement = el.querySelector('#back')!
+
+        expect(btn.disabled).toBeTrue()
+    })
 })

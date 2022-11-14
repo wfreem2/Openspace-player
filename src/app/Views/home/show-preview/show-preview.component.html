@@ -25,9 +25,10 @@
 <a id="play" [routerLink]="['/player', show.id]" class="btn primary">Play</a>
 
 <confirm-popup *ngIf="isConfirmShowing"
-prompt="Are you sure?" 
+prompt="Delete Show: {{show.title}}?" 
 (confirmClickedEvent)="onConfirm()"
-(cancelClickedEvent)="onCancel()"></confirm-popup>
+(cancelClickedEvent)="onCancel()">
+</confirm-popup>
 
 <ng-template #rightArrow>
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"

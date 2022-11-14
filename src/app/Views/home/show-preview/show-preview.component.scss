@@ -2,13 +2,12 @@
 
 :host{
     @extend %max-WH, %flx-col, %glass;
-    gap: 1.2rem;
+    gap: 1rem;
     position: fixed;
     z-index: 2;
     top: 0;
     right: 0;
     max-width: 30rem;
-    // background: #ffffff;
     box-shadow: var(--shadow);
     border-radius: unset;
     border-top-left-radius: var(--bd-radius);
@@ -81,10 +80,7 @@
     }
 }
 
-#description{
-    min-height: 5rem;
-    color: #7a7777;
-}
+#description{ color: #7a7777; }
 
 #scene-list{
     max-width: 25rem;
@@ -94,6 +90,6 @@
 
 .steps{
     @extend %flx-col;
+    overflow-y: auto;
     gap: 1rem;
-    min-height: 20rem;
 }

@@ -16,13 +16,16 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ListItemComponent } from "./creator-scene-list/list-item/list-item.component"
 import { sampleSize } from "lodash"
 import { Scene } from "src/app/Interfaces/Scene"
+import { SearchScenesPipe } from "./search-scenes.pipe"
+import { ConfirmPopupComponent } from "src/app/Shared/confirm-popup/confirm-popup.component"
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 
 describe('CreateComponent', () => {
     let component: CreateComponent
     let fixture: ComponentFixture<CreateComponent>
     let fakeShowService: any
     
-    const fakeRoute = {params: of({id: 1}) }
+    const fakeRoute = { params: of({id: 1}) }
     
     const fakeShow: Show = {
         id: 1,
@@ -40,7 +43,8 @@ describe('CreateComponent', () => {
         TestBed.configureTestingModule({
             declarations: [
                 CreateComponent, ScenePositionComponent, ListItemComponent,
-                CreatorSceneListComponent, SceneOptionsComponent,
+                CreatorSceneListComponent, SceneOptionsComponent, SearchScenesPipe,
+                ConfirmPopupComponent
             ],
             providers: [
                 {provide: ActivatedRoute, useValue: fakeRoute},
@@ -48,7 +52,7 @@ describe('CreateComponent', () => {
                 SelectedSceneService,
                 NotificationService, FormBuilder
             ],
-            imports: [ReactiveFormsModule, FormsModule, RouterTestingModule, DragDropModule]
+            imports: [ReactiveFormsModule, FormsModule, RouterTestingModule, DragDropModule, BrowserAnimationsModule]
         })
         .compileComponents()
         .then( () => {
@@ -137,11 +141,20 @@ describe('CreateComponent', () => {
         expect(component.isSaved).toBeTrue()
     })
 
-    it('#onDelete() should remove scene from list', () => {
+    it('#onDelete() should show confirmation popup', () => {
+        component.onDelete()
+        fixture.detectChanges()
+        
+        expect(component.isConfirmShowing).toBeTrue()
+    })
+
+    it('#onConfirm() should remove scene from list', () => {
         const { scenes } = component.show
         const sceneToDelete = sampleSize(scenes, 1)[0]
+        
+        component.currScene = sceneToDelete
 
-        component.onDelete(sceneToDelete)
+        component.onConfirm()
         fixture.detectChanges()
         
         const deletedScene = component.show.scenes.find(s => s === sceneToDelete)
@@ -164,5 +177,4 @@ describe('CreateComponent', () => {
         expect(component.sceneForm.getRawValue()).toEqual(defaultVal)
         expect(component.isAutoMode).toEqual(false)
     })
-
 })

@@ -4,7 +4,9 @@
 </div>
 
 <ul class="list">
-    <li *ngFor="let s of scenes" class="item" [class.active]="s.isActive" (click)="setScene(s)">
+    <li *ngFor="let s of scenes" class="item" 
+    [class.active]="s.isActive" 
+    (click)="setScene(s)">
         {{s.scene.title}}
     </li>
 </ul>
@@ -15,12 +17,12 @@
     <textarea class="input" [textContent]="currScene?.scene?.script" disabled></textarea>
 
     <div class="btns">
-        <button class="btn secondary" (click)="setScene(scenes[currIdx!-1])"
+        <button id="back" class="btn secondary" (click)="setScene(scenes[currIdx!-1])"
         [disabled]="!currScene || currIdx === 0">
             <ng-container [ngTemplateOutlet]="left"></ng-container>
             Back
         </button>
-        <button class="btn primary" (click)="setScene(scenes[currIdx!+1])"
+        <button id="next" class="btn primary" (click)="setScene(scenes[currIdx!+1])"
             [disabled]="!currScene || currIdx === scenes.length-1">
             Next
             <ng-container [ngTemplateOutlet]="right"></ng-container>
