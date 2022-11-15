@@ -164,7 +164,9 @@ describe('CreateComponent', () => {
     })
 
     it('#onConfirm() should set isSaved to false', () => {
-        component.onDelete()
+        component.currScene = getFakeScene(1)
+
+        component.onConfirm()
         fixture.detectChanges()
         
         expect(component.isSaved).toBeFalse()
