@@ -1,9 +1,10 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing"
+import { ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testing"
 import { ActivatedRoute } from "@angular/router"
 import { RouterTestingModule } from "@angular/router/testing"
 import { sampleSize } from "lodash"
 import { of } from "rxjs"
 import { Show } from "src/app/Interfaces/Show"
+import { NotificationService } from "src/app/Services/notification.service"
 import { OpenspaceService, SceneGraphNode } from "src/app/Services/openspace.service"
 import { ShowService } from "src/app/Services/show.service"
 import { getFakeScenes } from "src/app/Utils/test-utils"
@@ -30,7 +31,7 @@ describe('Play Component', () => {
         fakeShowService.getShowById.and.returnValue(fakeShow)
         
         fakeOpenSpaceService = jasmine.createSpyObj('OpenSpaceService', 
-        ['flyToGeo', 'getCurrentPosition', 'disableAllNodeTrails', 
+        ['flyToGeo', 'getCurrentPosition', 'disableAllNodeTrails', 'isConnected', 
         'enableAllNodeTrails', 'setTrailVisibility', 'setNavigationState'])
 
         TestBed.configureTestingModule({
@@ -38,7 +39,8 @@ describe('Play Component', () => {
             providers: [
                 {provide: ActivatedRoute, useValue: fakeRoute},
                 {provide: ShowService, useValue: fakeShowService},
-                {provide: OpenspaceService, useValue: fakeOpenSpaceService}
+                {provide: OpenspaceService, useValue: fakeOpenSpaceService},
+                NotificationService
             ],
             imports: [RouterTestingModule]
         })
@@ -152,6 +154,20 @@ describe('Play Component', () => {
         expect(fakeOpenSpaceService.setTrailVisibility).toHaveBeenCalled()
     })
 
+    it('#execute() should show error notification when error playing scene', () => {
+        const sceneToExecute = component.scenes[0]
+        
+        const service = fixture.debugElement.injector.get(NotificationService)
+        const spy = spyOn(service, 'showNotification').and.callThrough()
+        
+        fakeOpenSpaceService.flyToGeo.and.throwError()
+        fakeOpenSpaceService.isConnected.and.returnValue(of(false))
+
+        component.setScene(sceneToExecute) 
+
+        expect(spy).toHaveBeenCalled()
+    })
+
     it('next button should be disabled when last scene is active', () => {
         const lastScene = component.scenes[component.scenes.length-1]
 
@@ -175,4 +191,6 @@ describe('Play Component', () => {
 
         expect(btn.disabled).toBeTrue()
     })
+
+
 })

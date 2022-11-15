@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, pluck, tap } from 'rxjs';
+import { filter, first, map, pluck, tap } from 'rxjs';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { Show } from 'src/app/Interfaces/Show';
+import { NotificationType } from 'src/app/Interfaces/ToastNotification';
+import { NotificationService } from 'src/app/Services/notification.service';
 import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
 import { ShowService } from 'src/app/Services/show.service';
 
@@ -22,19 +24,16 @@ export class PlayComponent implements OnInit {
 
 
   constructor(private route: ActivatedRoute, private showService: ShowService,
-     private openSpaceService: OpenspaceService) {
+     private openSpaceService: OpenspaceService, private notiService: NotificationService) {
     
     this.route.params
     .pipe(
       pluck('id'),
       map(id => parseInt(id)),
-      map(id => showService.getShowById(id)),
+      map(id => showService.getShowById(id)!),
     )
     .subscribe(show => {
-      if(!show){ return } 
-  
       this.show = show
-      // console.log(show.scenes)
       
       this.scenes = show.scenes.map(s => { 
         return { scene: s, isActive: false}
@@ -62,32 +61,44 @@ export class PlayComponent implements OnInit {
   }
 
   private execute(scene: Scene): void{
-    // console.log(scene)
-    
-    const { navState, options, duration } = scene
-    const { lat, long, alt, nodeName } = scene.geoPos
+  
+    try{
+      const { navState, options, duration } = scene
+      const { lat, long, alt, nodeName } = scene.geoPos
 
-    this.openSpaceService.flyToGeo(lat, long, alt, nodeName, duration)
+      this.openSpaceService.flyToGeo(lat, long, alt, nodeName, duration)
 
-    if(options){
-      const { enabledTrails, keepCameraPosition } = options
-      
-      if(keepCameraPosition && navState){ this.openSpaceService.setNavigationState(navState) }
-      
-      this.openSpaceService.disableAllNodeTrails()
+      if(options){
+        const { enabledTrails, keepCameraPosition } = options
+        
+        if(keepCameraPosition && navState){ this.openSpaceService.setNavigationState(navState) }
+        
+        this.openSpaceService.disableAllNodeTrails()
 
-      switch(enabledTrails.length){
-        case Object.keys(SceneGraphNode).length: //All trails enabled
-          this.openSpaceService.enableAllNodeTrails()
-          break
+        switch(enabledTrails.length){
+          case Object.keys(SceneGraphNode).length: //All trails enabled
+            this.openSpaceService.enableAllNodeTrails()
+            break
 
-        default: //Some trails enabled
-          enabledTrails.forEach(trial => this.openSpaceService.setTrailVisibility(trial, true))
-          break
+          default: //Some trails enabled
+            enabledTrails.forEach(trial => this.openSpaceService.setTrailVisibility(trial, true))
+            break
+        }
       }
-
     }
-
+    catch(_){
+      this.openSpaceService.isConnected()
+      .pipe(
+        filter(status => !status),
+        first()
+      )
+      .subscribe( () => {
+        this.notiService.showNotification({
+          title: 'Failed to play scene. Openspace is not connected.',
+          type: NotificationType.ERROR
+        })
+      })
+    }
   }
 
 
