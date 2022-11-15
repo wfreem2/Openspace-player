@@ -1,5 +1,4 @@
 <button class="bare wrapper" [ngSwitch]="sortingType" (click)="toggleSorting()">
-
     <ng-container [ngTemplateOutlet]="none" *ngSwitchCase="SortingType.None"></ng-container>
     <p *ngSwitchCase="SortingType.None">A-Z</p>
     

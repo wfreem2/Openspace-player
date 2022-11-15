@@ -163,6 +163,13 @@ describe('CreateComponent', () => {
         expect(component.currScene).toBeFalsy()
     })
 
+    it('#onConfirm() should set isSaved to false', () => {
+        component.onDelete()
+        fixture.detectChanges()
+        
+        expect(component.isSaved).toBeFalse()
+    })
+
     it('#resetScene() should reset form to default values', () => {
 
         const defaultVal = component.sceneForm.getRawValue()

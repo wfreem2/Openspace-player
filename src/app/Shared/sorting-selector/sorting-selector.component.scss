@@ -17,6 +17,10 @@
 
 p{ color: inherit; }
 
+p, svg{
+    pointer-events: none;
+}
+
 .active{
     color: var(--color-primary);
 }

@@ -164,6 +164,7 @@ export class CreateComponent implements OnInit, OnDestroy {
 
     this.currScene = undefined
     this.isConfirmShowing = false
+    this.isSaved = false
   }
 
 

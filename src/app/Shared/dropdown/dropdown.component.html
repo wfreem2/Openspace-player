@@ -14,7 +14,7 @@
         </sorting-selector>
     </div>
     <ul class="items">
-        <li *ngFor="let i of filteredSelectableItems" (click)="selectItem(i);"
+        <li *ngFor="let i of filteredSelectableItems" (click)="selectItem(i)"
             [class.selected]="i.isSelected">
             <ng-container [ngTemplateOutlet]="check" *ngIf="i.isSelected"></ng-container>
             {{i.item}}

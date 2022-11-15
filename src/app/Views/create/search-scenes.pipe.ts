@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Scene } from 'src/app/Interfaces/Scene';
 
 @Pipe({
-  name: 'searchScenes'
+  name: 'searchScenes',
+  pure: false
 })
 export class SearchScenesPipe implements PipeTransform {
 

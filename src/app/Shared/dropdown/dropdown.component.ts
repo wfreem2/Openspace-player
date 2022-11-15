@@ -43,7 +43,7 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
   private $unSub = new Subject<any>()
 
   constructor(private hostRef: ElementRef, private render: Renderer2) { 
-    // render.listen('window', 'click', this.onHostClick.bind(this))`
+    render.listen('window', 'click', this.onHostClick.bind(this))
 
     this.query.asObservable()
     .pipe(
@@ -55,14 +55,10 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
   }
 
   private onHostClick(event: Event){
-    
     const hostClicked = isElementOrChildClicked(this.hostRef.nativeElement, 
       event.target as HTMLElement)
       
-    const selectorClicked = isElementOrChildClicked(this.sortingSelector.nativeElement, 
-      event.target as HTMLElement)
-        
-    if(!hostClicked && !selectorClicked){ this.isCollapsed = true}
+    if(!hostClicked){ this.isCollapsed = true}
   }
 
   ngOnDestroy(): void { this.$unSub.next(undefined) }
@@ -160,8 +156,6 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
         })
         break
     }
-
-
   }
 
   moveToTop(item: SelectableItem){
