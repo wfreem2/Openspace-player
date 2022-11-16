@@ -14,6 +14,7 @@ import { NotificationType } from 'src/app/Interfaces/ToastNotification';
 import { SceneForm } from 'src/app/Interfaces/ShowForm';
 import { GeoPosition } from 'src/app/Interfaces/GeoPosition';
 import { SceneOptions } from 'src/app/Interfaces/SceneOptions';
+import { SceneExecutorService } from 'src/app/Services/scene-executor.service';
 
 
 @Component({
@@ -53,7 +54,8 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute, public showService: ShowService,
      public selectedSceneService: SelectedSceneService,private notiService: NotificationService,
-     private fb: FormBuilder) {
+     private fb: FormBuilder, private openSpaceService: OpenspaceService, 
+     private sceneExecutor: SceneExecutorService) {
 
     this.route.params
     .pipe(
@@ -168,10 +170,30 @@ export class CreateComponent implements OnInit, OnDestroy {
   }
 
 
-
   resetScene(): void{
     this.sceneForm.reset()
     this.isAutoMode = false
+  }
+
+
+  preview(scene: Scene): void{
+  
+    try{
+      this.sceneExecutor.execute(scene)
+    }
+    catch(_){
+      this.openSpaceService.isConnected()
+      .pipe(
+        filter(status => !status),
+        first()
+      )
+      .subscribe( () => {
+        this.notiService.showNotification({
+          title: 'Failed to play scene. Openspace is not connected.',
+          type: NotificationType.ERROR
+        })
+      })
+    }
   }
 }
 

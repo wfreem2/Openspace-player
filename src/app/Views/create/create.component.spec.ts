@@ -19,12 +19,14 @@ import { Scene } from "src/app/Interfaces/Scene"
 import { SearchScenesPipe } from "./search-scenes.pipe"
 import { ConfirmPopupComponent } from "src/app/Shared/confirm-popup/confirm-popup.component"
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
+import { SceneExecutorService } from "src/app/Services/scene-executor.service"
 
 describe('CreateComponent', () => {
     let component: CreateComponent
     let fixture: ComponentFixture<CreateComponent>
-    let fakeShowService: any
     
+    let fakeShowService: any
+    let fakeExecutorService: any
     const fakeRoute = { params: of({id: 1}) }
     
     const fakeShow: Show = {
@@ -35,6 +37,7 @@ describe('CreateComponent', () => {
     }
     
     beforeEach( async () => {
+        fakeExecutorService = jasmine.createSpyObj('SceneExecutorService', ['execute'])
         fakeShowService = jasmine.createSpyObj('ShowService', ['getShowById', 'save'])
         
         fakeShowService.getShowById.and.returnValue(fakeShow)
@@ -49,6 +52,7 @@ describe('CreateComponent', () => {
             providers: [
                 {provide: ActivatedRoute, useValue: fakeRoute},
                 {provide: ShowService, useValue: fakeShowService},
+                {provide: SceneExecutorService, useValue: fakeExecutorService},
                 SelectedSceneService,
                 NotificationService, FormBuilder
             ],
@@ -185,5 +189,17 @@ describe('CreateComponent', () => {
         component.resetScene()
         expect(component.sceneForm.getRawValue()).toEqual(defaultVal)
         expect(component.isAutoMode).toEqual(false)
+    })
+
+    it('#preview() should show error notification when error previewing scene', () => {
+        const sceneToExecute = component.show.scenes[0]
+        
+        const service = fixture.debugElement.injector.get(NotificationService)
+        const spy = spyOn(service, 'showNotification').and.callThrough()
+        
+        fakeExecutorService.execute.and.throwError()
+
+        component.preview(sceneToExecute) 
+        expect(spy).toHaveBeenCalled()
     })
 })

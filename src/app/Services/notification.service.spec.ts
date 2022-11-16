@@ -17,6 +17,7 @@ describe("NotificationService", () => {
         notiService = new NotificationService() 
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000 * 20
     })
+    
     afterEach( () => jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTime )
 
     it('should show all notifications ',  (done) => {
