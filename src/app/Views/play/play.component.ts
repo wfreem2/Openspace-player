@@ -51,6 +51,8 @@ export class PlayComponent implements OnInit {
 
   setScene(playableScene: PlayableScene): void{
 
+    if(playableScene === this.currScene){ return }
+
     if(this.currScene){ this.currScene.isActive = false }
 
     playableScene.isActive = true

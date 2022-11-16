@@ -87,6 +87,18 @@ describe('Play Component', () => {
         expect(component.currScene).toEqual(secondScene)   
     })
 
+    it('#setScene() should not set provided scene to active if it is the current scene', () => {
+
+        const scene = component.scenes[0]
+
+        component.setScene(scene)
+        fixture.detectChanges()
+
+        component.setScene(scene)
+
+        expect(scene.isActive).toBeTrue()
+    })
+
     it('#play() should set first scene to active', () => {
         const expectedScene = component.scenes[0]
 
