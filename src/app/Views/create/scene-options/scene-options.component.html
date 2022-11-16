@@ -1,20 +1,5 @@
 <form [formGroup]="optionsForm">
-    <div class="section" id="camera" #s1>
-        <div>
-            <p class="title">Camera</p>
-            <ng-container *ngTemplateOutlet="chevron; context: {el: s1}"></ng-container>
-        </div>
-
-        <ul class="options">
-            <li class="option">
-                <label for="camera">Keep Camera Position</label>
-                <input type="checkbox" name="camera" id="zoom"
-                formControlName="keepCameraPosition">
-            </li>
-        </ul>
-    </div>
-
-    <div class="section" id="trails" #s2>
+      <div class="section" id="trails" #s2>
         <div>
             <p class="title">Trails</p>
             <ng-container *ngTemplateOutlet="chevron; context: {el: s2}"></ng-container>

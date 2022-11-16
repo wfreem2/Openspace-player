@@ -19,12 +19,14 @@ import { Scene } from "src/app/Interfaces/Scene"
 import { SearchScenesPipe } from "./search-scenes.pipe"
 import { ConfirmPopupComponent } from "src/app/Shared/confirm-popup/confirm-popup.component"
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
+import { SceneExecutorService } from "src/app/Services/scene-executor.service"
 
 describe('CreateComponent', () => {
     let component: CreateComponent
     let fixture: ComponentFixture<CreateComponent>
-    let fakeShowService: any
     
+    let fakeShowService: any
+    let fakeExecutorService: any
     const fakeRoute = { params: of({id: 1}) }
     
     const fakeShow: Show = {
@@ -35,6 +37,7 @@ describe('CreateComponent', () => {
     }
     
     beforeEach( async () => {
+        fakeExecutorService = jasmine.createSpyObj('SceneExecutorService', ['execute'])
         fakeShowService = jasmine.createSpyObj('ShowService', ['getShowById', 'save'])
         
         fakeShowService.getShowById.and.returnValue(fakeShow)
@@ -49,6 +52,7 @@ describe('CreateComponent', () => {
             providers: [
                 {provide: ActivatedRoute, useValue: fakeRoute},
                 {provide: ShowService, useValue: fakeShowService},
+                {provide: SceneExecutorService, useValue: fakeExecutorService},
                 SelectedSceneService,
                 NotificationService, FormBuilder
             ],
@@ -141,20 +145,20 @@ describe('CreateComponent', () => {
         expect(component.isSaved).toBeTrue()
     })
 
-    it('#onDelete() should show confirmation popup', () => {
-        component.onDelete()
+    it('#onDeleteClicked() should show confirmation popup', () => {
+        component.onDeleteClicked()
         fixture.detectChanges()
         
         expect(component.isConfirmShowing).toBeTrue()
     })
 
-    it('#onConfirm() should remove scene from list', () => {
+    it('#deleteScene() should remove scene from list', () => {
         const { scenes } = component.show
         const sceneToDelete = sampleSize(scenes, 1)[0]
         
         component.currScene = sceneToDelete
 
-        component.onConfirm()
+        component.deleteScene()
         fixture.detectChanges()
         
         const deletedScene = component.show.scenes.find(s => s === sceneToDelete)
@@ -163,10 +167,10 @@ describe('CreateComponent', () => {
         expect(component.currScene).toBeFalsy()
     })
 
-    it('#onConfirm() should set isSaved to false', () => {
+    it('#deleteScene() should set isSaved to false', () => {
         component.currScene = getFakeScene(1)
 
-        component.onConfirm()
+        component.deleteScene()
         fixture.detectChanges()
         
         expect(component.isSaved).toBeFalse()
@@ -185,5 +189,32 @@ describe('CreateComponent', () => {
         component.resetScene()
         expect(component.sceneForm.getRawValue()).toEqual(defaultVal)
         expect(component.isAutoMode).toEqual(false)
+    })
+
+    it('#onDeleteClicked() should show confirmPopup', () => {
+        component.onDeleteClicked()
+        expect(component.isConfirmShowing).toBeTrue()
+    })
+
+    it('#onResetClicked() should show confirmPopup', () => {
+        component.onResetClicked()
+        expect(component.isConfirmShowing).toBeTrue()
+    })
+
+    it('#onCancel should hide confirmPopup', () =>{
+        component.onCancel()
+        expect(component.isConfirmShowing).toBeFalse()
+    })
+
+    it('#preview() should show error notification when error previewing scene', () => {
+        const sceneToExecute = component.show.scenes[0]
+        
+        const service = fixture.debugElement.injector.get(NotificationService)
+        const spy = spyOn(service, 'showNotification').and.callThrough()
+        
+        fakeExecutorService.execute.and.throwError()
+
+        component.preview(sceneToExecute) 
+        expect(spy).toHaveBeenCalled()
     })
 })

@@ -6,6 +6,7 @@ import { Show } from 'src/app/Interfaces/Show';
 import { NotificationType } from 'src/app/Interfaces/ToastNotification';
 import { NotificationService } from 'src/app/Services/notification.service';
 import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
+import { SceneExecutorService } from 'src/app/Services/scene-executor.service';
 import { ShowService } from 'src/app/Services/show.service';
 
 @Component({
@@ -24,7 +25,8 @@ export class PlayComponent implements OnInit {
 
 
   constructor(private route: ActivatedRoute, private showService: ShowService,
-     private openSpaceService: OpenspaceService, private notiService: NotificationService) {
+     private openSpaceService: OpenspaceService, private notiService: NotificationService,
+     private sceneExecutor: SceneExecutorService) {
     
     this.route.params
     .pipe(
@@ -51,6 +53,8 @@ export class PlayComponent implements OnInit {
 
   setScene(playableScene: PlayableScene): void{
 
+    if(playableScene === this.currScene){ return }
+
     if(this.currScene){ this.currScene.isActive = false }
 
     playableScene.isActive = true
@@ -63,28 +67,7 @@ export class PlayComponent implements OnInit {
   private execute(scene: Scene): void{
   
     try{
-      const { navState, options, duration } = scene
-      const { lat, long, alt, nodeName } = scene.geoPos
-
-      this.openSpaceService.flyToGeo(lat, long, alt, nodeName, duration)
-
-      if(options){
-        const { enabledTrails, keepCameraPosition } = options
-        
-        if(keepCameraPosition && navState){ this.openSpaceService.setNavigationState(navState) }
-        
-        this.openSpaceService.disableAllNodeTrails()
-
-        switch(enabledTrails.length){
-          case Object.keys(SceneGraphNode).length: //All trails enabled
-            this.openSpaceService.enableAllNodeTrails()
-            break
-
-          default: //Some trails enabled
-            enabledTrails.forEach(trial => this.openSpaceService.setTrailVisibility(trial, true))
-            break
-        }
-      }
+      this.sceneExecutor.execute(scene)
     }
     catch(_){
       this.openSpaceService.isConnected()

@@ -6,6 +6,7 @@ import { of } from "rxjs"
 import { Show } from "src/app/Interfaces/Show"
 import { NotificationService } from "src/app/Services/notification.service"
 import { OpenspaceService, SceneGraphNode } from "src/app/Services/openspace.service"
+import { SceneExecutorService } from "src/app/Services/scene-executor.service"
 import { ShowService } from "src/app/Services/show.service"
 import { getFakeScenes } from "src/app/Utils/test-utils"
 import { PlayComponent } from "./play.component"
@@ -25,8 +26,11 @@ describe('Play Component', () => {
     
     let fakeShowService: any
     let fakeOpenSpaceService: any
+    let fakeExecutorService: any
 
     beforeEach( async () => { 
+        fakeExecutorService = jasmine.createSpyObj('SceneExecutorService', ['execute'])
+        
         fakeShowService = jasmine.createSpyObj('ShowService', ['getShowById'])
         fakeShowService.getShowById.and.returnValue(fakeShow)
         
@@ -40,6 +44,7 @@ describe('Play Component', () => {
                 {provide: ActivatedRoute, useValue: fakeRoute},
                 {provide: ShowService, useValue: fakeShowService},
                 {provide: OpenspaceService, useValue: fakeOpenSpaceService},
+                {provide: SceneExecutorService, useValue: fakeExecutorService},
                 NotificationService
             ],
             imports: [RouterTestingModule]
@@ -87,6 +92,18 @@ describe('Play Component', () => {
         expect(component.currScene).toEqual(secondScene)   
     })
 
+    it('#setScene() should not set provided scene to active if it is the current scene', () => {
+
+        const scene = component.scenes[0]
+
+        component.setScene(scene)
+        fixture.detectChanges()
+
+        component.setScene(scene)
+
+        expect(scene.isActive).toBeTrue()
+    })
+
     it('#play() should set first scene to active', () => {
         const expectedScene = component.scenes[0]
 
@@ -96,75 +113,17 @@ describe('Play Component', () => {
         expect(component.currScene).toEqual(expectedScene)
     })
 
-    it('#execute() should setNavigationState with keepCameraPosition true and navState not undefined', () => {
-        const sceneToExecute = component.scenes[0]
-        
-        sceneToExecute.scene.options.keepCameraPosition = true
-        sceneToExecute.scene.navState = {
-            Anchor: sampleSize(Object.values(SceneGraphNode), 1)[0],
-            Pitch: Math.random(),
-            Position: [Math.random(), Math.random(), Math.random()],
-            Up: [Math.random(), Math.random(), Math.random()],
-            Yaw: Math.random()
-        }
-        
-        component.setScene(sceneToExecute)
-        fixture.detectChanges()
-
-        expect(fakeOpenSpaceService.setNavigationState).toHaveBeenCalled()
-    })
-    
-    it('#execute() should call flyToGeo', () => {
-        const sceneToExecute = component.scenes[0]
-        
-        component.setScene(sceneToExecute)
-        fixture.detectChanges()
-
-        expect(fakeOpenSpaceService.flyToGeo).toHaveBeenCalled()
-    })
-
-    it('#execute() should call enableAllNodeTrails when all trails are enabled', () => {
-        const sceneToExecute = component.scenes[0]
-        
-        sceneToExecute.scene.options.enabledTrails = Object.values(SceneGraphNode)
-        
-        component.setScene(sceneToExecute)
-        fixture.detectChanges()
-
-        expect(fakeOpenSpaceService.enableAllNodeTrails).toHaveBeenCalled()
-    })
-
-    it('#execute() should call disableNodeTrails when options are provided', () => {
-        const sceneToExecute = component.scenes[0]
-        
-        
-        component.setScene(sceneToExecute)
-        fixture.detectChanges()
-
-        expect(fakeOpenSpaceService.disableAllNodeTrails).toHaveBeenCalled()
-    })
-
-    it('#execute() should call setTrailVisibility when some trails are enabled', () => {
-        const sceneToExecute = component.scenes[0]
-        sceneToExecute.scene.options.enabledTrails = sampleSize(Object.values(SceneGraphNode), 10)
-        
-        component.setScene(sceneToExecute)
-        fixture.detectChanges()
-
-        expect(fakeOpenSpaceService.setTrailVisibility).toHaveBeenCalled()
-    })
-
     it('#execute() should show error notification when error playing scene', () => {
         const sceneToExecute = component.scenes[0]
         
         const service = fixture.debugElement.injector.get(NotificationService)
         const spy = spyOn(service, 'showNotification').and.callThrough()
         
-        fakeOpenSpaceService.flyToGeo.and.throwError()
         fakeOpenSpaceService.isConnected.and.returnValue(of(false))
 
-        component.setScene(sceneToExecute) 
+        fakeExecutorService.execute.and.throwError()
 
+        component.setScene(sceneToExecute) 
         expect(spy).toHaveBeenCalled()
     })
 

@@ -19,6 +19,7 @@ export class CreatorSceneListComponent implements OnInit, AfterViewInit, OnDestr
 
   @Input() scenes!: Scene[]
   @Output() deleteClickedEvent = new EventEmitter<Scene>()
+  @Output() duplicateClickedEvent = new EventEmitter<Scene[]>()
   @Output() listDragDropEvent = new EventEmitter<Scene[]>()
 
   private $unsub = new Subject<void>()
@@ -90,6 +91,7 @@ export class CreatorSceneListComponent implements OnInit, AfterViewInit, OnDestr
     
     this.scenes.push(duplicate)
     this.setScene(duplicate)
+    this.duplicateClickedEvent.emit(this.scenes)
   }
 
   onDrop(event: CdkDragDrop<Scene[]>){

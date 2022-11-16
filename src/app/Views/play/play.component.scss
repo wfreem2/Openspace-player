@@ -5,8 +5,8 @@
     @extend %max-WH;
     background: #ffffff;
     display: grid;
-    grid-template-columns: minmax(max-content, 18rem) 1fr;
     grid-template-rows: max-content 1fr;
+    grid-template-columns: minmax(max-content, 18rem) 1fr;
 }
 
 
@@ -23,7 +23,8 @@
     border-bottom: solid 2px var(--gray);
 
     .btn{
-        width: 12rem;
+        width: 15rem;
+        height: 3rem;
     }
 }
 
@@ -40,15 +41,20 @@
     grid-column: 2;
 
     display: grid;
-    grid-template-rows: minmax(3rem, max-content) 1fr max-content;
+    grid-template-rows: minmax(3rem, max-content) minmax(auto, 40rem) max-content;
     row-gap: 2rem;
     padding: 0.8rem;
 
-    max-width: 70rem;
+    h1{
+        font-size: 2.5rem;
+        text-align: center;
+    }
 
     .input{
         resize: none;
         min-height: 10rem;
+        max-width: 80rem;
+        justify-self: center;
     }
 
     .btns{

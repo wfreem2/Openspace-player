@@ -38,7 +38,7 @@ export class OpenspaceService {
     this.openspace = await api.library()
     this._isConnected.next(true)
 
-    this.notiService.showNotification({ 
+    this.notiService.showNotification({
       title: 'Openspace is Connected',
       type: NotificationType.SUCCESS
     })
@@ -68,7 +68,7 @@ export class OpenspaceService {
       alt: pos[3],
       nodeName: anchor
     }
-  } 
+  }
   
   flyTo(path: SceneGraphNode): void{ this.openspace.pathnavigation.flyTo(path.toString()) }
 
@@ -144,5 +144,6 @@ export enum SceneGraphNode{
  Kerberos="Kerberos", 
  Nix="Nix", 
  Styx="Styx",
- Sun="Sun"
+ Sun="Sun",
+ ISS="ISS"
 }

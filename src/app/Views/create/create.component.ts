@@ -14,6 +14,7 @@ import { NotificationType } from 'src/app/Interfaces/ToastNotification';
 import { SceneForm } from 'src/app/Interfaces/ShowForm';
 import { GeoPosition } from 'src/app/Interfaces/GeoPosition';
 import { SceneOptions } from 'src/app/Interfaces/SceneOptions';
+import { SceneExecutorService } from 'src/app/Services/scene-executor.service';
 
 
 @Component({
@@ -29,7 +30,9 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   private $unSub = new Subject<void>()
   private readonly saveInterval = 1000 * 60 * 2 //2 minutes  
-
+  
+  onConfirmFn = () => {}
+  confirmPrompt = ''
 
   show!: Show
   currScene?: Scene
@@ -48,12 +51,14 @@ export class CreateComponent implements OnInit, OnDestroy {
     options: this.fb.nonNullable.control<SceneOptions>({keepCameraPosition: true, enabledTrails: []})
   })
   
+
   private readonly DEFAULT_SCENE = this.sceneForm.getRawValue()
   private readonly autoSaveInterval = setInterval( () => this.saveShow(), this.saveInterval )
 
   constructor(private route: ActivatedRoute, public showService: ShowService,
      public selectedSceneService: SelectedSceneService,private notiService: NotificationService,
-     private fb: FormBuilder) {
+     private fb: FormBuilder, private openSpaceService: OpenspaceService, 
+     private sceneExecutor: SceneExecutorService) {
 
     this.route.params
     .pipe(
@@ -151,10 +156,25 @@ export class CreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  onDelete(){ this.isConfirmShowing = true }
   onCancel(): void{ this.isConfirmShowing = false }
 
-  onConfirm(): void{
+  onDeleteClicked(){ 
+    this.confirmPrompt = 'Delete the selected scene?'
+    this.isConfirmShowing = true 
+    this.onConfirmFn = this.deleteScene.bind(this)
+  }
+
+  onResetClicked(): void{
+    this.confirmPrompt = 'Reset the selected scene?'
+    this.isConfirmShowing = true
+    this.onConfirmFn = this.resetScene.bind(this)
+  }
+
+  onDuplicateClicked(scenes: Scene[]){
+    this.show.scenes = scenes
+  }
+
+  deleteScene(): void{
     this.show.scenes = this.show.scenes.filter(s => s.id !== this.currScene!.id)
     
     this.notiService.showNotification({
@@ -167,11 +187,35 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.isSaved = false
   }
 
-
-
   resetScene(): void{
     this.sceneForm.reset()
     this.isAutoMode = false
+    this.isConfirmShowing = false
+  }
+
+  onDragDrop(scenes: Scene[]){
+    console.log('scenes', scenes)
+    console.log('show', this.show.scenes)
+  }
+
+  preview(scene: Scene): void{
+  
+    try{
+      this.sceneExecutor.execute(scene)
+    }
+    catch(_){
+      this.openSpaceService.isConnected()
+      .pipe(
+        filter(status => !status),
+        first()
+      )
+      .subscribe( () => {
+        this.notiService.showNotification({
+          title: 'Failed to play scene. Openspace is not connected.',
+          type: NotificationType.ERROR
+        })
+      })
+    }
   }
 }
 
