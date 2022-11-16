@@ -6,4 +6,4 @@ OpenspacePlayer is a web application designed to help create planetatrium shows 
 
 ## Build Status [![wfreem2](https://circleci.com/gh/wfreem2/Openspace-player.svg?style=svg)](https://app.circleci.com/pipelines/github/wfreem2/Openspace-player)
 
-## Security Status (Synk)
+## Security Status (Synk) ![Known Vulnerabilities](https://snyk.io/test/github/wfreem2/Openspace-player/badge.svg)
