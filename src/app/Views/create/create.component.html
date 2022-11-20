@@ -38,16 +38,16 @@
 
         <creator-scene-list 
         [scenes]="show.scenes | searchScenes: query"
-        (deleteClickedEvent)="onDelete()"
+        (deleteClickedEvent)="onDeleteClicked()"
         (listDragDropEvent)="isSaved=false">
         </creator-scene-list>
     </div>
 </div>
 
 <confirm-popup *ngIf="isConfirmShowing"
-(confirmClickedEvent)="onConfirm()"
+(confirmClickedEvent)="onConfirmFn()"
 (cancelClickedEvent)="onCancel()"
-prompt="Delete the selected scene?">
+[prompt]="confirmPrompt">
 </confirm-popup>
 
 
@@ -142,7 +142,7 @@ prompt="Delete the selected scene?">
         </tabs>
 
         <div id="options">
-            <button id="reset" (click)="resetScene()">Reset</button>
+            <button id="reset" (click)="onResetClicked()">Reset</button>
             <button id="preview" class="btn secondary" (click)="preview(currScene!)">Preview</button>
         </div>
     </form>

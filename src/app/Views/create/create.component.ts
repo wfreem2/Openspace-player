@@ -30,7 +30,9 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   private $unSub = new Subject<void>()
   private readonly saveInterval = 1000 * 60 * 2 //2 minutes  
-
+  
+  onConfirmFn = () => {}
+  confirmPrompt = ''
 
   show!: Show
   currScene?: Scene
@@ -49,6 +51,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     options: this.fb.nonNullable.control<SceneOptions>({keepCameraPosition: true, enabledTrails: []})
   })
   
+
   private readonly DEFAULT_SCENE = this.sceneForm.getRawValue()
   private readonly autoSaveInterval = setInterval( () => this.saveShow(), this.saveInterval )
 
@@ -153,10 +156,21 @@ export class CreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  onDelete(){ this.isConfirmShowing = true }
   onCancel(): void{ this.isConfirmShowing = false }
 
-  onConfirm(): void{
+  onDeleteClicked(){ 
+    this.confirmPrompt = 'Delete the selected scene?'
+    this.isConfirmShowing = true 
+    this.onConfirmFn = this.deleteScene.bind(this)
+  }
+
+  onResetClicked(): void{
+    this.confirmPrompt = 'Reset the selected scene?'
+    this.isConfirmShowing = true
+    this.onConfirmFn = this.resetScene.bind(this)
+  }
+
+  deleteScene(): void{
     this.show.scenes = this.show.scenes.filter(s => s.id !== this.currScene!.id)
     
     this.notiService.showNotification({
@@ -169,10 +183,10 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.isSaved = false
   }
 
-
   resetScene(): void{
     this.sceneForm.reset()
     this.isAutoMode = false
+    this.isConfirmShowing = false
   }
 
 

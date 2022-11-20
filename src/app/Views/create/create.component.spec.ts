@@ -145,20 +145,20 @@ describe('CreateComponent', () => {
         expect(component.isSaved).toBeTrue()
     })
 
-    it('#onDelete() should show confirmation popup', () => {
-        component.onDelete()
+    it('#onDeleteClicked() should show confirmation popup', () => {
+        component.onDeleteClicked()
         fixture.detectChanges()
         
         expect(component.isConfirmShowing).toBeTrue()
     })
 
-    it('#onConfirm() should remove scene from list', () => {
+    it('#deleteScene() should remove scene from list', () => {
         const { scenes } = component.show
         const sceneToDelete = sampleSize(scenes, 1)[0]
         
         component.currScene = sceneToDelete
 
-        component.onConfirm()
+        component.deleteScene()
         fixture.detectChanges()
         
         const deletedScene = component.show.scenes.find(s => s === sceneToDelete)
@@ -167,10 +167,10 @@ describe('CreateComponent', () => {
         expect(component.currScene).toBeFalsy()
     })
 
-    it('#onConfirm() should set isSaved to false', () => {
+    it('#deleteScene() should set isSaved to false', () => {
         component.currScene = getFakeScene(1)
 
-        component.onConfirm()
+        component.deleteScene()
         fixture.detectChanges()
         
         expect(component.isSaved).toBeFalse()
@@ -189,6 +189,21 @@ describe('CreateComponent', () => {
         component.resetScene()
         expect(component.sceneForm.getRawValue()).toEqual(defaultVal)
         expect(component.isAutoMode).toEqual(false)
+    })
+
+    it('#onDeleteClicked() should show confirmPopup', () => {
+        component.onDeleteClicked()
+        expect(component.isConfirmShowing).toBeTrue()
+    })
+
+    it('#onResetClicked() should show confirmPopup', () => {
+        component.onResetClicked()
+        expect(component.isConfirmShowing).toBeTrue()
+    })
+
+    it('#onCancel should hide confirmPopup', () =>{
+        component.onCancel()
+        expect(component.isConfirmShowing).toBeFalse()
     })
 
     it('#preview() should show error notification when error previewing scene', () => {
