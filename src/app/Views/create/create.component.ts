@@ -189,6 +189,10 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.isConfirmShowing = false
   }
 
+  onDragDrop(scenes: Scene[]){
+    console.log('scenes', scenes)
+    console.log('show', this.show.scenes)
+  }
 
   preview(scene: Scene): void{
   

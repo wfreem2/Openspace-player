@@ -39,7 +39,7 @@
         <creator-scene-list 
         [scenes]="show.scenes | searchScenes: query"
         (deleteClickedEvent)="onDeleteClicked()"
-        (listDragDropEvent)="isSaved=false">
+        (listDragDropEvent)="isSaved=false; show.scenes=$event;">
         </creator-scene-list>
     </div>
 </div>
