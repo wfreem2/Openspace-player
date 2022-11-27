@@ -38,6 +38,7 @@
 
         <creator-scene-list 
         [scenes]="show.scenes | searchScenes: query"
+        (duplicateClickedEvent)="onDuplicateClicked($event)"
         (deleteClickedEvent)="onDeleteClicked()"
         (listDragDropEvent)="isSaved=false; show.scenes=$event;">
         </creator-scene-list>

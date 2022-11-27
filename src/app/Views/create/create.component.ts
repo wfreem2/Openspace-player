@@ -170,6 +170,10 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.onConfirmFn = this.resetScene.bind(this)
   }
 
+  onDuplicateClicked(scenes: Scene[]){
+    this.show.scenes = scenes
+  }
+
   deleteScene(): void{
     this.show.scenes = this.show.scenes.filter(s => s.id !== this.currScene!.id)
     
