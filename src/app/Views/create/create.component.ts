@@ -29,7 +29,6 @@ export class CreateComponent implements OnInit, OnDestroy {
 
 
   private $unSub = new Subject<void>()
-  private readonly saveInterval = 1000 * 60 * 2 //2 minutes  
   
   onConfirmFn = () => {}
   confirmPrompt = ''
@@ -44,7 +43,7 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   sceneForm = this.fb.group<SceneForm>({
     script: this.fb.control<string | null>(null),
-    transistion: this.fb.control<number | null>(null, Validators.pattern(/^[0-9]*$/)),
+    transistion: this.fb.control<number | null>(null, Validators.pattern(/^[0-9]*.[0-9]*$/)),
     
     title: this.fb.nonNullable.control<string>('New Scene', [Validators.required]),
     geoPos: this.fb.nonNullable.control<GeoPosition>({lat: 0, long: 0, alt: 0, nodeName: SceneGraphNode.Earth }),
@@ -53,7 +52,6 @@ export class CreateComponent implements OnInit, OnDestroy {
   
 
   private readonly DEFAULT_SCENE = this.sceneForm.getRawValue()
-  private readonly autoSaveInterval = setInterval( () => this.saveShow(), this.saveInterval )
 
   constructor(private route: ActivatedRoute, public showService: ShowService,
      public selectedSceneService: SelectedSceneService,private notiService: NotificationService,
@@ -140,14 +138,15 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void { 
     this.$unSub.next()
-    clearInterval(this.autoSaveInterval)
   }
 
   onChange(): void{ this.isSaved = false }
 
   saveShow(): void{
-    this.showService.save(this.show) 
 
+    if(!this.sceneForm.valid){ return }
+    
+    this.showService.save(this.show) 
     this.isSaved=true
     this.notiService.showNotification({title: 'Show Saved', type: NotificationType.SUCCESS})
    
@@ -170,8 +169,8 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.onConfirmFn = this.resetScene.bind(this)
   }
 
-  onDuplicateClicked(scenes: Scene[]){
-    this.show.scenes = scenes
+  onDuplicateClicked(scenes: Scene){
+    this.show.scenes.push(scenes)
   }
 
   deleteScene(): void{
@@ -193,10 +192,6 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.isConfirmShowing = false
   }
 
-  onDragDrop(scenes: Scene[]){
-    console.log('scenes', scenes)
-    console.log('show', this.show.scenes)
-  }
 
   preview(scene: Scene): void{
   

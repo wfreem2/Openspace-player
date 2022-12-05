@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { SelectedSceneService } from '../selected-scene.service';
 import { ListItemComponent } from './list-item/list-item.component';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { map, mergeMap, Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -16,10 +16,10 @@ export class CreatorSceneListComponent implements OnInit, AfterViewInit, OnDestr
 
   @ViewChildren(ListItemComponent) items!: QueryList<ListItemComponent>
 
-
+  query: string = ''
   @Input() scenes!: Scene[]
   @Output() deleteClickedEvent = new EventEmitter<Scene>()
-  @Output() duplicateClickedEvent = new EventEmitter<Scene[]>()
+  @Output() duplicateClickedEvent = new EventEmitter<Scene>()
   @Output() listDragDropEvent = new EventEmitter<Scene[]>()
 
   private $unsub = new Subject<void>()
@@ -89,9 +89,8 @@ export class CreatorSceneListComponent implements OnInit, AfterViewInit, OnDestr
     duplicate.title = newTitle
     duplicate.id = this.scenes.reduce( (a, b) => Math.max(a, b.id), 1) + 1 
     
-    this.scenes.push(duplicate)
+    this.duplicateClickedEvent.emit(duplicate)
     this.setScene(duplicate)
-    this.duplicateClickedEvent.emit(this.scenes)
   }
 
   onDrop(event: CdkDragDrop<Scene[]>){

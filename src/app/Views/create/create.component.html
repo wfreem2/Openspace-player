@@ -7,7 +7,7 @@
 
         <div>
             <button id="save" class="btn primary" (click)="saveShow()"
-            [disabled]="!show.title.trim() || isSaved">
+            [disabled]="!show.title.trim() || isSaved || !sceneForm.valid">
                 <p>Save</p>
                 <img src="assets/icons/save.svg" class="icon" alt="">
             </button>
@@ -24,23 +24,18 @@
     </div>
 
     <div class="scene-list">
-        <div class="search-bar">
-            <ng-container [ngTemplateOutlet]="searchIcon"></ng-container>
-            <input id="search" type="text" class="bare"
-             placeholder="Search shows" [(ngModel)]="query">
-            <ng-container [ngTemplateOutlet]="filterIcon"></ng-container>
-        </div>
+       
 
         <div>
             <p class="title">Scenes ({{show.scenes.length}})</p>
             <button class="btn primary" (click)="newScene()">New Scene</button>
         </div>
 
-        <creator-scene-list 
-        [scenes]="show.scenes | searchScenes: query"
+        <creator-scene-list
+        [scenes]="show.scenes"
         (duplicateClickedEvent)="onDuplicateClicked($event)"
         (deleteClickedEvent)="onDeleteClicked()"
-        (listDragDropEvent)="isSaved=false; show.scenes=$event;">
+        (listDragDropEvent)="isSaved=false;">
         </creator-scene-list>
     </div>
 </div>
@@ -123,7 +118,9 @@
             
             <tab name="Transition">
                 <div class="transition">
-                    <p>How long it takes OpenSpace to fly to the selected target</p>
+                    <p>How long it takes OpenSpace to fly to the selected target 
+                        <span style="color: #999595;">(in seconds)</span>
+                    </p>
                     
                     <input class="input" 
                     formControlName="transistion" type="text" 
@@ -156,19 +153,14 @@
 </ng-template>
 
 <ng-template #x>
-    <svg (click)="sceneForm.controls.title.reset()" id="x" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg (click)="sceneForm.controls.title.setValue('')" id="x" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>
     </svg>
 </ng-template>
 
-<ng-template #searchIcon>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-    </svg>
-</ng-template>
+
 
 <ng-template #filterIcon>
     <svg id="filter-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"

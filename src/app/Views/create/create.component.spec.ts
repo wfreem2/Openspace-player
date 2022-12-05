@@ -145,6 +145,18 @@ describe('CreateComponent', () => {
         expect(component.isSaved).toBeTrue()
     })
 
+    it('#saveShow() should not save form if the form is invalid', () => {
+        
+        component.sceneForm.controls.transistion.setErrors({'pattern': true})
+        component.sceneForm.updateValueAndValidity()
+        
+        fixture.detectChanges()
+        component.saveShow()
+
+        expect(fakeShowService.save).not.toHaveBeenCalled()
+        expect(component.isSaved).toEqual(false)
+    })
+
     it('#onDeleteClicked() should show confirmation popup', () => {
         component.onDeleteClicked()
         fixture.detectChanges()

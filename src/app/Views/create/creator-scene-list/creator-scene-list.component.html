@@ -1,6 +1,11 @@
-<div class="list" cdkDropList [cdkDropListData]="scenes" (cdkDropListDropped)="onDrop($event)">
+<div class="search-bar">
+    <ng-container [ngTemplateOutlet]="searchIcon"></ng-container>
+    <input id="search" type="text" class="bare"
+     placeholder="Search Scenes" [(ngModel)]="query">
+</div>
 
-    <div class="wrapper" *ngFor="let s of scenes" cdkDrag>
+<div class="list" cdkDropList [cdkDropListData]="scenes" (cdkDropListDropped)="onDrop($event)">
+    <div class="wrapper" *ngFor="let s of scenes | searchScenes: query" cdkDrag>
 
         <div class="custom-placeholder" *cdkDragPlaceholder=""></div>
         
@@ -17,3 +22,10 @@
         </list-item>
     </div>
 </div>
+
+<ng-template #searchIcon>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+</ng-template>

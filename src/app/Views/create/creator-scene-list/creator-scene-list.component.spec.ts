@@ -5,6 +5,7 @@ import { ListItemComponent } from "./list-item/list-item.component"
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CreatorSceneListComponent } from "./creator-scene-list.component";
 import { getFakeScenes } from "src/app/Utils/test-utils";
+import { SearchScenesPipe } from "src/app/Views/create/search-scenes.pipe";
 
 describe('Creator-Scene-List Component', () => {
     let component: CreatorSceneListComponent
@@ -13,7 +14,7 @@ describe('Creator-Scene-List Component', () => {
 
     beforeEach( async () =>{
         TestBed.configureTestingModule({
-            declarations: [CreatorSceneListComponent, ListItemComponent],
+            declarations: [CreatorSceneListComponent, ListItemComponent, SearchScenesPipe],
             providers: [ChangeDetectorRef, SelectedSceneService],
             imports: [DragDropModule]
         })
