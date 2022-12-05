@@ -229,4 +229,15 @@ describe('CreateComponent', () => {
         component.preview(sceneToExecute) 
         expect(spy).toHaveBeenCalled()
     })
+
+    xit('#saveToDisk() should show notification', () => {
+        spyOn(URL, 'createObjectURL').and.returnValue('')
+        const service = fixture.debugElement.injector.get(NotificationService)
+        
+        component.saveToDisk()
+
+        const spy = spyOn(service, 'showNotification').and.callFake( () => {})
+        expect(spy).toHaveBeenCalled()
+
+    })
 })

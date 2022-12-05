@@ -27,7 +27,6 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   @ViewChild(ScenePositionComponent) scenePositionComponent!: ScenePositionComponent
 
-
   private $unSub = new Subject<void>()
   
   onConfirmFn = () => {}
@@ -136,9 +135,7 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void { }
 
-  ngOnDestroy(): void { 
-    this.$unSub.next()
-  }
+  ngOnDestroy(): void { this.$unSub.next() }
 
   onChange(): void{ this.isSaved = false }
 
@@ -211,6 +208,25 @@ export class CreateComponent implements OnInit, OnDestroy {
         })
       })
     }
+  }
+
+  saveToDisk(): void{
+    const a = document.createElement('a')
+    const showString = JSON.stringify(this.show)
+    const file = new Blob([showString], {type: 'application/json'})
+    const fileTitle = this.show.title + '.json'
+
+    a.href = URL.createObjectURL(file)
+    a.download = fileTitle
+    a.click()
+
+    URL.revokeObjectURL(a.href)
+
+    this.notiService.showNotification({
+      title: 'Show saved to ' + fileTitle,
+      type: NotificationType.SUCCESS
+    })
+
   }
 }
 

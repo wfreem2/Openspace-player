@@ -12,7 +12,8 @@
                 <img src="assets/icons/save.svg" class="icon" alt="">
             </button>
 
-            <button id="Export" class="btn primary" [disabled]="true">
+            <button id="export" #export class="btn secondary" (click)="saveToDisk()"
+                [disabled]=" !show.title.trim() || !sceneForm.valid">
                 <p>Export</p>
                 <img src="assets/icons/export.svg" class="icon" alt="">
             </button>
@@ -25,7 +26,6 @@
 
     <div class="scene-list">
        
-
         <div>
             <p class="title">Scenes ({{show.scenes.length}})</p>
             <button class="btn primary" (click)="newScene()">New Scene</button>
