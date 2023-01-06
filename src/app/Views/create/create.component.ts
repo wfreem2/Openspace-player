@@ -70,16 +70,24 @@ export class CreateComponent implements OnInit, OnDestroy {
       distinctUntilChanged( (a, b) => isEqual(a, b)),
       map(v => {
         return {
-          title: v.title,
-          geoPos: v.geoPos,
-          options: v.options,
-          duration: v.transistion,
-          script: v.script
+          title: v.title!,
+          geoPos: v.geoPos!,
+          options: v.options!,
+          duration: v.transistion!,
+          script: v.script!
         }
       }),
-      tap( () => this.isSaved = false)
+      tap( () => this.isSaved = false),
     )
-    .subscribe( v => merge(this.currScene, v) )  
+    .subscribe( v => {
+      this.currScene = 
+      {
+        ...v,
+        id: this.currScene!.id
+      }
+
+      console.log(this.currScene)
+    })  
 
     this.selectedSceneService.$selectedScene
     .pipe(
