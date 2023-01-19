@@ -1,8 +1,13 @@
-@use '/src/styles';
+@import '/src/scss/variables.scss';
 
-:host{
+main{
     @extend %max-WH;
     display: grid;
     grid-template-rows: minmax(5rem, auto) 0px 2fr;
+
+    &.full{
+        grid-template-rows: 0rem 1fr;
+    }
 }
+
 

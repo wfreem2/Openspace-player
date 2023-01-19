@@ -1,4 +1,4 @@
-@use '/src/styles';
+@import '/src/scss/variables.scss';
 
 :host{
     @extend %max-W;
@@ -14,8 +14,8 @@
     background: #ffffff;
     // height: 2.5rem;
     padding: 0.75rem;
-    border-radius: var(--bd-radius);
-    border: solid 2px var(--gray);
+    border-radius: $bd-rad;
+    border: solid 2px $gray;
 
     &.disabled{
         cursor: unset;
@@ -26,11 +26,11 @@
     }
     
     &.active{
-        border-color: var(--color-primary);
+        border-color: $clr-accent;
     }
 
     &:not(.active):hover{
-        border-color: var(--color-primary);
+        border-color: $clr-accent;
     }
 }   
 
@@ -49,8 +49,8 @@ $H: 25rem;
     height: $H;
     max-height: $H;
     background: #ffffff;
-    border: solid 2px var(--gray);
-    border-radius: var(--bd-radius);
+    border: solid 2px $gray;
+    border-radius: $bd-rad;
 
     &.collapsed{
         pointer-events: none;
@@ -71,7 +71,7 @@ $H: 25rem;
         gap: 1rem;
         height: 2.5rem;
         padding: 0.75rem;
-        border-radius: var(--bd-radius);
+        border-radius: $bd-rad;
         
         svg{
             width: 18px;
@@ -80,11 +80,11 @@ $H: 25rem;
 
         &.selected{
             color: #ffffff;
-            background: var(--color-primary);
+            background: $clr-accent;
         }
 
         &:not(.selected):hover{
-            background: var(--gray);
+            background: $gray;
         }
 
         &:not(:last-child){
@@ -101,7 +101,7 @@ $H: 25rem;
     grid-template-columns: max-content 1fr max-content;
     padding: 0 0.5rem;
     column-gap: 0.5rem;
-    border-bottom: solid 2px var(--gray);
+    border-bottom: solid 2px $gray;
     height: 3rem;
 
     input{
@@ -117,7 +117,7 @@ $H: 25rem;
 
     #filter-icon{
         cursor: pointer;
-        &:hover{ color: var(--color-primary); }
+        &:hover{ color: $clr-accent; }
     }
 }
 

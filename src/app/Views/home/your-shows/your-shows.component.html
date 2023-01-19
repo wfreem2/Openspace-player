@@ -1,7 +1,7 @@
 <div class="header">
     <div class="search-bar">
         <ng-container [ngTemplateOutlet]="searchIcon"></ng-container>
-        <input id="search" type="text" class="bare" placeholder="Search shows"
+        <input id="search" type="text"  placeholder="Search shows"
         [(ngModel)]="query">
         <ng-container [ngTemplateOutlet]="filterIcon"></ng-container>
     </div>
@@ -20,8 +20,7 @@
 
 <ng-template #empty>
     <div class="empty-wrapper">
-        <img src="assets/empty.svg" alt="empty">
-        <h3>No Shows Yet. <a routerLink="/creator/new">Create One</a> to get started.</h3>
+        <h2>No Shows Yet. <a id="create" routerLink="/creator/new">Create One</a> to get started.</h2>
     </div>
 </ng-template>
 

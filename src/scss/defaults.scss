@@ -1,0 +1,30 @@
+*{
+    box-sizing: border-box;
+    font-family: $font-family, 'Roboto';
+    transition: color 0.2s, background 0.2s, transform 0.2s, border-color 0.2s;
+}
+
+html, body{
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: $clr-primary;
+}
+
+ul{ @include reset-list; }
+
+p, h1, h2, h3{
+    margin: 0;
+    padding: 0;
+    color: $txt-color;
+}
+
+
+button, input{
+    transition: $transistion;
+}
+
+img{ object-fit: cover; }
+
+svg{ @extend %svg-M; }

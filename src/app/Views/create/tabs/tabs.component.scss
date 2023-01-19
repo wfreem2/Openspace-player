@@ -1,4 +1,4 @@
-@use '/src/styles';
+@import '/src/scss/variables.scss';
 
 :host{
     display: grid;
@@ -23,8 +23,8 @@
         min-width: 7rem;
         
         &.active, &:hover{
+            @extend %shadow;
             background: #ffffff;
-            box-shadow: var(--shadow);
         }
     }
 

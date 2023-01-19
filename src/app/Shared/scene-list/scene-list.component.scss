@@ -1,4 +1,4 @@
-@use '/src/styles';
+@import '/src/scss/variables.scss';
 
 
 :host{
@@ -35,10 +35,10 @@ ul{
     }
     
     &:not(.active):hover{
-        background: var(--gray);
+        background: $gray;
     }
 
     &.active{
-        background: var(--gray);
+        background: $gray;
     }
 }

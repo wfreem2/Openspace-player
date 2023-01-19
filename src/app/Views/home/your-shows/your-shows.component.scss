@@ -1,4 +1,4 @@
-@use '/src/styles';
+@import '/src/scss/variables.scss';
 
 :host{
     @extend %max-WH;
@@ -20,7 +20,7 @@ h1{
     
     padding: 0.5rem;
     gap: 1rem;
-    border-bottom: solid 2px var(--gray);
+    border-bottom: solid 2px $gray;
 
     .btn{
         cursor: pointer;
@@ -44,13 +44,13 @@ h1{
         max-height: 20rem; 
     }
 
-    a{
-        cursor: pointer;
-        text-decoration: none;
-        color: var(--color-primary);
-    }
 }
 
+#create{
+    cursor: pointer;
+    text-decoration: none;
+    color: $clr-accent;
+}
 
 .search-bar{
     grid-column: 1;
@@ -65,7 +65,7 @@ h1{
     svg{ color: #807d7d; }
 
     &:focus-within, &:hover{
-        border-color: var(--color-primary);
+        border-color: $clr-accent;
     }
 }
 
@@ -75,6 +75,6 @@ h1{
     color: #807d7d;
 
     &:hover{
-        color: var(--txt-color); 
+        color: $txt-color; 
     }
 }

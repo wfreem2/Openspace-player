@@ -22,12 +22,6 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
 
   @Input() items!: any[]
   
-  @ViewChild('selector', {read: ElementRef}) set content(content: ElementRef){
-    if(content){ this.sortingSelector = content }
-  }
-  
-  private sortingSelector!: ElementRef
-
   onChange: any = () => {}
   onTouch: any = () => {}
   
@@ -105,6 +99,8 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
       this.onTouch(item.item)
       this.isTouched = true
     }
+
+    this.isCollapsed = true
   } 
 
   private setItem(item: any): void{
@@ -124,38 +120,12 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
 
   onSortSelected(sortingType: SortingType): void{
 
-    switch(sortingType){
-      case SortingType.None:
-        this.filteredSelectableItems = [...this.selectableItems]
-        break
-      case SortingType.Ascending:
-        this.filteredSelectableItems.sort( (a, b) =>{
-          if(a.item.toString() < b.item.toString()){
-            return -1
-          }
-
-          if(a.item.toString() > b.item.toString()){
-            return 1
-          }
-
-          return 0
-        })
-        break
-
-      case SortingType.Descending:
-        this.filteredSelectableItems.sort( (a, b) =>{
-          if(a.item.toString() < b.item.toString()){
-            return 1
-          }
-
-          if(a.item.toString() > b.item.toString()){
-            return -1
-          }
-
-          return 0
-        })
-        break
+    if(sortingType === SortingType.None){
+      this.filteredSelectableItems = [...this.selectableItems]
+      return
     }
+
+    this.filteredSelectableItems.sort( this.sortFn(sortingType) )
   }
 
   moveToTop(item: SelectableItem){
@@ -167,6 +137,33 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
     //Set the first item as selected by default
     this.selectedItem = this.selectableItems[0]
     this.selectedItem.isSelected = true
+  }
+
+  private sortFn(type: SortingType){
+    if(type === SortingType.Ascending) {
+      return (a: SelectableItem, b: SelectableItem) =>{
+
+        if(a.item.toString() < b.item.toString()){
+          return -1
+        }
+        if(a.item.toString() > b.item.toString()){
+          return 1
+        }
+        return 0
+      }
+    }
+
+    return (a: SelectableItem, b: SelectableItem) =>{
+      if(a.item.toString() < b.item.toString()){
+        return 1
+      }
+
+      if(a.item.toString() > b.item.toString()){
+        return -1
+      }
+
+      return 0
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-@use '/src/styles';
+@import '/src/scss/variables.scss';
 
 $W: 95%;
 
@@ -9,7 +9,7 @@ $W: 95%;
     min-width: 10rem;
     min-height: 10rem;
     max-width: 100rem;
-    border-radius: var(--bd-radius);
+    border-radius: $bd-rad;
 }
 
 
@@ -20,7 +20,7 @@ $W: 95%;
     gap: 1rem;
     padding: 1rem;
     width: 100%;
-    // border-bottom: solid 2px var(--gray);
+    // border-bottom: solid 2px $gray;
     // width: 80%;
 }
 

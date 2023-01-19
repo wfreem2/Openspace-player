@@ -1,4 +1,5 @@
-@use '/src/styles';
+@import '/src/scss/mixins.scss';
+@import '/src/scss/variables.scss';
 
 :host{
     @extend %align-center, %flx-col;
@@ -20,7 +21,7 @@
 #header{
     padding: 0.5rem;
     grid-column: 1 / span 2;
-    border-bottom: solid 2px var(--gray);
+    border-bottom: solid 2px $gray;
 
     display: grid;
     grid-template-columns: 1fr max-content;
@@ -53,7 +54,7 @@
 
 
 
-$grid-bd: solid 2px var(--gray);
+$grid-bd: solid 2px $gray;
 
 .title{ font-size: 1.5rem; }
 
@@ -81,7 +82,7 @@ $grid-bd: solid 2px var(--gray);
             border-bottom: $grid-bd;
             
             &:hover, &:focus-within{
-                border-color: var(--color-primary);
+                border-color: $clr-accent;
             }
 
             #x{ 
@@ -99,12 +100,12 @@ $grid-bd: solid 2px var(--gray);
 
     //Button for resetting scene
     #reset{
-        @extend %bare;
+        @include reset-input;
         cursor: pointer;
         font-size: 1rem;
         color: #a8aabc;
     
-        &:hover{ color: var(--txt-color); }
+        &:hover{ color: $txt-color; }
     }
 }
 
@@ -129,7 +130,7 @@ $grid-bd: solid 2px var(--gray);
     #filter-icon{
         cursor: pointer;
         color: #807d7d;
-        &:hover{ color: var(--txt-color); }
+        &:hover{ color: $txt-color; }
     }
 }
 

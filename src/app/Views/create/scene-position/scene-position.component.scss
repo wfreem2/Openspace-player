@@ -1,4 +1,4 @@
-@use '/src/styles';
+@import '/src/scss/variables.scss';
 
 :host{
     @extend %max-W, %flx-col, %align-center;
@@ -71,7 +71,7 @@
     align-self: center;
     max-width: 25rem;
     background: #d0e4ff;
-    color: var(--color-primary);
+    color: $clr-accent;
 }
 
 #mode-set{
@@ -85,7 +85,7 @@
         width: 50%;
         padding: 0.5rem 0.5rem;
         border: solid 2px #7c7e88;
-        border-radius: var(--bd-radius);
+        border-radius: $bd-rad;
         
         &:not(.active):hover{
             cursor: pointer;
@@ -95,8 +95,8 @@
         
         &.active{
             color: #ffffff;
-            border-color: var(--color-secondary);
-            background: var(--color-secondary);
+            border-color: $clr-secondary;
+            background: $clr-secondary;
         }
     }
 

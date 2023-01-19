@@ -1,0 +1,65 @@
+%input{
+    font-size: 1rem;
+    padding: 0.5rem;
+    border: solid 2px $gray;
+    border-radius: 8px;
+}
+
+input[type=text], input[type=password]{
+    @include reset-input;
+    @extend %input;
+}
+
+
+.floating-input{
+    @extend %input;
+    position: relative;
+
+    input[type=text], input[type=password]{
+        @include reset-input;
+        padding: 0rem;
+        height: 1.5rem;
+        margin-top: 12px;
+
+        &:focus ~ span, &:not(:placeholder-shown) ~ span{
+            top: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        &:focus ~ span{ color: $clr-accent; }
+    }
+
+    span{
+        position: absolute;
+        pointer-events: none;
+        transform: translate(0, -50%);
+        left: 0.5rem;
+        top: 50%;
+        transition: 0.2s ease all;
+        color: #9e9ea0;
+    }
+
+    &.error{
+        color: $clr-err;
+    }
+}
+
+//Default text input style
+.input{
+    @extend %max-W;
+    transition: border-color 0.2s;
+    font-size: 1rem;
+    background: #ffffff;
+    padding: 0.5rem 1rem;
+    border-radius: $bd-rad;
+    border: solid 2px $gray;
+    
+    &:not(:disabled):hover, &:not(:disabled):focus-within{
+        border-color: $clr-accent;
+    }
+
+    &:disabled{
+        background: shade($gray, 30%);
+        border-color: shade($gray, 40%);
+    }
+}

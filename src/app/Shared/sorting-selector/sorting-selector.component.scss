@@ -1,4 +1,4 @@
-@use '/src/styles';
+@import '/src/scss/variables.scss';
 
 .wrapper{
     cursor: pointer;
@@ -10,8 +10,8 @@
     width: max-content;
 
     &:hover{
-        svg{ color: var(--color-hover); }
-        p{ color: var(--color-hover); }
+        svg{ color: shade($clr-accent, 30%); }
+        p{ color: shade($clr-accent, 30%); }
     }
 }
 
@@ -22,5 +22,5 @@ p, svg{
 }
 
 .active{
-    color: var(--color-primary);
+    color: $clr-accent;
 }

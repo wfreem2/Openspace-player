@@ -7,11 +7,10 @@
 <div class="items-wrapper" [class.collapsed]="isCollapsed" *ngIf="!isDisabled">
     <div class="search">
         <ng-container [ngTemplateOutlet]="searchIcon"></ng-container>
-        <input type="text" class="bare" placeholder="Node Name" ngModel
+        <input type="text"  placeholder="Node Name" ngModel
         (ngModelChange)="query.next($event)">
 
-        <sorting-selector #selector (sortingChangedEvent)="onSortSelected($event)">
-        </sorting-selector>
+        <sorting-selector (sortingChangedEvent)="onSortSelected($event)"></sorting-selector>
     </div>
     <ul class="items">
         <li *ngFor="let i of filteredSelectableItems" (click)="selectItem(i)"

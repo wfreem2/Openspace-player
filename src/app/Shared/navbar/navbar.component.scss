@@ -1,4 +1,5 @@
-@use '/src/styles';
+@import '/src/scss/variables.scss';
+@import '/src/scss/mixins.scss';
 
 :host{
     @extend %align-center, %glass;
@@ -6,7 +7,7 @@
     box-shadow: unset;
     gap: 1rem;
     padding: 0.5rem;
-    border-bottom: solid 2px var(--gray);
+    border-bottom: solid 2px $gray;
 }
 
 #links{
@@ -19,18 +20,18 @@
         text-decoration: none;
         min-width: 8rem;
         padding: 0.75rem 2rem;
-        color: var(--txt-color);
-        border-radius: var(--bd-radius); 
+        color: $txt-color;
+        border-radius: $bd-rad; 
         text-align: center;
 
         &:hover:not(.active){
             transform: translateY(-2px);
             color: #ffffff;
-            background: var(--color-primary);
+            background: $clr-accent;
         }
 
         &.active{
-            color: var(--color-primary);
+            color: $clr-accent;
             background: #d0e4ff;
         }
     }
@@ -59,7 +60,8 @@
 
 
 #refresh-btn{
-    @extend %bare, %align-center, %just-center;
+    @include reset-input;
+    @extend %align-center, %just-center;
     cursor: pointer;
     transition: background 0.2s;
     width: 2.5rem;
@@ -68,9 +70,9 @@
     padding: 0.5rem;
 
     &:hover{
-        background: var(--gray);
+        background: $gray;
 
-        svg{ stroke: var(--txt-color); }
+        svg{ stroke: $txt-color; }
     }
 
     // Refresh icon
@@ -86,8 +88,8 @@
 // Status icon
 .status{
     font-weight: bold;
-    border-radius: var(--bd-radius);
-    color: var(--txt-color);
+    border-radius: $bd-rad;
+    color: $txt-color;
 }
 
 @keyframes spin { 

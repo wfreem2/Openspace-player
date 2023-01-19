@@ -1,4 +1,4 @@
-@use '/src/styles';
+@import '/src/scss/variables.scss';
 
 
 :host{
@@ -61,10 +61,10 @@ ul{
         gap: 1rem;
     }
 
-    border-bottom: solid 2px var(--gray);
+    border-bottom: solid 2px $gray;
     
     &:not(:last-child){
-        border-top: solid 2px var(--gray);
+        border-top: solid 2px $gray;
     }
 }
 
@@ -80,7 +80,7 @@ ul{
     margin: 0.5rem 0;
     .bare{
         cursor: pointer;
-        color: var(--color-primary);
+        color: $clr-accent;
         font-size: 1rem;
 
         &:hover{
@@ -97,8 +97,8 @@ ul{
     grid-template-columns: max-content 1fr max-content;
     column-gap: 0.5rem;
     
-    border-top: solid 2px var(--gray);
-    border-bottom: solid 2px var(--gray);
+    border-top: solid 2px $gray;
+    border-bottom: solid 2px $gray;
     height: 3rem;
     margin: 0 -0.5rem;
 
@@ -115,7 +115,7 @@ ul{
 
     #filter-icon{
         cursor: pointer;
-        &:hover{ color: var(--color-primary); }
+        &:hover{ color: $clr-accent; }
     }
 }
 
@@ -138,12 +138,12 @@ ul{
         cursor: pointer;
         padding: 0.5rem;
         font-size: 0.9rem;
-        border-radius: var(--bd-radius);
+        border-radius: $bd-rad;
 
-        svg{ color: var(--txt-color); }
+        svg{ color: $txt-color; }
         
         &:hover{
-            background: var(--gray);
+            background: $gray;
         }
 
         &:not(:last-child){
@@ -152,7 +152,7 @@ ul{
 
         &.active{
             color: #ffffff;
-            background: var(--color-primary);
+            background: $clr-accent;
             
             svg{ color: #ffffff; }
         }

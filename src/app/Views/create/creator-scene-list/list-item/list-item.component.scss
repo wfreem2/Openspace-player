@@ -1,4 +1,4 @@
-@use '/src/styles';
+@import '/src/scss/variables.scss';
 
 
 :host{
@@ -13,13 +13,13 @@
     padding: 0.5rem;
 
     &:hover{
-        background: var(--gray);
+        background: $gray;
     }
     
     &.active{
         p{ color: #ffffff; }
         svg{ color: #ffffff; }
-        background-color: var(--color-secondary);
+        background-color: $clr-secondary;
     }
 
     & > div:first-child{
@@ -48,17 +48,17 @@ svg{
     width: 8rem;
     height: max-content;
     background: #ffffff;
-    border-radius: var(--bd-radius);
+    border-radius: $bd-rad;
 
     div{
         @extend %max-W, %align-center;
         cursor: pointer;
         justify-content: space-between;
         padding: 0.5rem;
-        border-radius: var(--bd-radius);
+        border-radius: $bd-rad;
 
         &:hover{
-            background: var(--gray);
+            background: $gray;
         }
     }
 

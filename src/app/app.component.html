@@ -1,3 +1,5 @@
-<navbar></navbar>
-<router-outlet></router-outlet>
-<notifications></notifications>
+<main [class.full]="!isNavShowing">
+    <navbar *ngIf="isNavShowing"></navbar>
+    <router-outlet></router-outlet>
+    <notifications></notifications>
+</main>

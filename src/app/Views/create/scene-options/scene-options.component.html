@@ -7,13 +7,13 @@
 
         <div class="search">
             <ng-container [ngTemplateOutlet]="searchIcon"></ng-container>
-            <input type="text" class="bare" placeholder="Node Name" #i (input)="query.next(i.value)">
+            <input type="text"  placeholder="Node Name" #i (input)="query.next(i.value)">
             <sorting-selector (sortingChangedEvent)="sort($event)"></sorting-selector>
         </div>
 
         <div class="select-opts">
-            <button class="bare" (click)="selectAllTrails()">Select All</button>
-            <button class="bare" (click)="deselectAllTrails()">Deselect All</button>
+            <button  (click)="selectAllTrails()">Select All</button>
+            <button  (click)="deselectAllTrails()">Deselect All</button>
         </div>
 
         <ul class="options" formArrayName="enabledTrails">

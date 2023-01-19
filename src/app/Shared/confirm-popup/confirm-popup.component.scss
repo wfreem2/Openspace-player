@@ -1,4 +1,4 @@
-@use '/src/styles';
+@import '/src/scss/variables.scss';
 
 :host{
     @extend %max-WH, %align-center, %just-center;

@@ -1,16 +1,15 @@
-@use '/src/styles';
+@import '/src/scss/variables.scss';
 
 :host{
-    @extend %max-WH, %flx-col, %glass;
+    @extend %max-WH, %flx-col, %glass, %shadow;
     gap: 1rem;
     position: fixed;
     z-index: 2;
     top: 0;
     right: 0;
     max-width: 30rem;
-    box-shadow: var(--shadow);
     border-radius: unset;
-    border-top-left-radius: var(--bd-radius);
+    border-top-left-radius: $bd-rad;
     padding-left: 1rem;
 }
 
@@ -22,7 +21,7 @@
     padding: 0 0.5rem 0 0;
 
     #close{
-        @extend %bare, %align-center, %just-center;
+        @extend %align-center, %just-center;
         cursor: pointer;
         width: 2rem;
         height: 2rem;
@@ -30,20 +29,20 @@
         overflow: hidden;
 
         &:hover{
-            background: var(--gray);
+            background: $gray;
         }
     }
 
     #edit{
-        @extend %bare, %align-center;
+        @extend %align-center;
         cursor: pointer;
         gap: 0.5rem;
         text-decoration: none;
-        color: var(--txt-color);
+        color: $txt-color;
         font-size: 1rem;
         padding: 0.25rem 1.5rem;
         border-radius: 8px;
-        border: solid 2px var(--gray);
+        border: solid 2px $gray;
 
         svg{
             width: 1rem;
@@ -51,8 +50,8 @@
         }
 
         &:hover{    
-            color: var(--color-primary);
-            border-color: var(--color-primary);
+            color: $clr-accent;
+            border-color: $clr-accent;
         }   
     }
 
@@ -85,7 +84,7 @@
 #scene-list{
     max-width: 25rem;
     margin-left: 1rem;
-    border-left: solid 2px var(--gray);
+    border-left: solid 2px $gray;
 }
 
 .steps{

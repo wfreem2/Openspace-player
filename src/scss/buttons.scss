@@ -1,0 +1,52 @@
+// Default button style
+.btn{
+    @include reset-input;
+    @extend %align-center, %just-center;
+    padding: 0.5rem 1rem;
+    color: #ffffff;
+    border-radius: $bd-rad;
+    border: solid 2px transparent;
+    gap: 0.5rem;
+    font-size: 1rem;
+
+    
+    &:not(:disabled){
+        &:active{
+            transform: translateY(2px);
+        }
+            
+        &.primary{
+            @extend .btn;
+            background: $clr-accent;
+
+            &:hover{
+                background: shade($clr-accent, 30%);
+            }
+        }
+
+        &.secondary{
+            @extend .btn;
+            color: $clr-accent;
+            background: #ffffff;
+            border: solid 2px $clr-accent;
+
+            &:hover{
+                color: #ffffff;
+                background: $clr-accent;
+            }
+        }
+    }
+
+    &:disabled{
+        cursor: not-allowed; 
+
+        &.primary{
+            background: tint($clr-accent, 50%);
+        }
+
+        &.secondary{
+            background: tint($clr-secondary, 30%);
+        }
+    }
+    
+}
