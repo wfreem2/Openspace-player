@@ -1,11 +1,9 @@
 <div class="creator">
     <div id="header">
-        <input name="title" class="input" type="text" 
-         placeholder="Show Title"
-         [(ngModel)]="show.title"
-         (ngModelChange)="onChange()"/>
+       
+        <creator-header [show]="show" [menu]="menu" (titleChange)="onChange()"></creator-header>
 
-        <div>
+        <!-- <div>
             <button id="save" class="btn primary" (click)="saveShow()"
             [disabled]="!show.title.trim() || isSaved || !sceneForm.valid">
                 <p>Save</p>
@@ -17,11 +15,11 @@
                 <p>Export</p>
                 <img src="assets/icons/export.svg" class="icon" alt="">
             </button>
-        </div>
+        </div> -->
     </div>
 
     <div class="scene-creator">
-        <ng-container *ngIf="currScene then sceneTabs; else noScene"></ng-container>
+        <ng-container *ngIf="(createService.currScene$ | async) then sceneTabs; else noScene"></ng-container>
     </div>
 
     <div class="scene-list">
@@ -40,7 +38,7 @@
     </div>
 </div>
 
-<confirm-popup *ngIf="isConfirmShowing"
+<confirm-popup *ngIf="createService.isConfirmShowing$ | async"
 (confirmClickedEvent)="onConfirmFn()"
 (cancelClickedEvent)="onCancel()"
 [prompt]="confirmPrompt">

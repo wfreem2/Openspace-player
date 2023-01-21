@@ -1,10 +1,11 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, merge } from 'lodash';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { SelectedSceneService } from '../selected-scene.service';
 import { ListItemComponent } from './list-item/list-item.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { map, mergeMap, Subject, takeUntil } from 'rxjs';
+import { distinctUntilChanged, map, mergeMap, Subject, takeUntil } from 'rxjs';
+import { CreateService } from '../create.service';
 
 @Component({
   selector: 'creator-scene-list',
@@ -25,7 +26,7 @@ export class CreatorSceneListComponent implements OnInit, AfterViewInit, OnDestr
   private $unsub = new Subject<void>()
 
   constructor(private selectedSceneService: SelectedSceneService,
-    private cdRef : ChangeDetectorRef) { }
+    private cdRef : ChangeDetectorRef, public createService: CreateService) { }
 
 
   ngOnDestroy(): void { this.$unsub.next() }
@@ -46,14 +47,25 @@ export class CreatorSceneListComponent implements OnInit, AfterViewInit, OnDestr
     })
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.createService.currSceneUpdated
+    .pipe( distinctUntilChanged() )
+    .subscribe( scene => {
+      console.log('scene updated');
+      
+      const existing = this.scenes.find(s => s.id === scene?.id)
+      merge(existing, scene)
+    })
+
+  }
 
   onItemClicked(item: ListItemComponent): void{
     const { scene } = item
     this.items.forEach(i => i.isActive = false)
 
     item.isActive = true
-    this.setScene(scene)
+    this.createService.setCurrentScene(scene)
+    // this.setScene(scene)
   }
 
   

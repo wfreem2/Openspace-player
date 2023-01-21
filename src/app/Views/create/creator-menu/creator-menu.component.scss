@@ -1,0 +1,35 @@
+@import '/src/scss/variables.scss';
+@import '/src/scss/mixins.scss';
+@import '/src/scss/func.scss';
+
+.menu{
+    @extend %align-center, %max-W;
+    gap: 1rem;
+    padding: 0.25rem;
+}
+
+.item{
+    @extend %align-center, %just-center;
+    cursor: pointer;
+    position: relative;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    
+    &.active, &:hover{
+        background: $gray;
+    }
+}
+
+.dropdown{
+    @extend %card, %flx-col;
+    position: absolute;
+    z-index: 99;
+    left: 0;
+    top: 110%;
+    min-width: 10rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    gap: 0.5rem;
+    padding: 0.25rem;
+    background: #ffffff;
+}

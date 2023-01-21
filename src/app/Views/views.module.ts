@@ -15,6 +15,9 @@ import { TabsComponent } from './create/tabs/tabs.component';
 import { TabComponent } from './create/tabs/tab/tab.component';
 import { SearchScenesPipe } from './create/search-scenes.pipe';
 import { SearchShowsPipe } from './home/your-shows/search-shows.pipe';
+import { CreatorHeaderComponent } from './create/creator-header/creator-header.component';
+import { CreatorMenuComponent } from './create/creator-menu/creator-menu.component';
+import { CreatorMenuItemComponent } from './create/creator-menu-item/creator-menu-item.component';
 
 
 
@@ -34,6 +37,9 @@ import { SearchShowsPipe } from './home/your-shows/search-shows.pipe';
     TabComponent,
     SearchScenesPipe,
     SearchShowsPipe,
+    CreatorHeaderComponent,
+    CreatorMenuComponent,
+    CreatorMenuItemComponent,
   ],
   imports: [
     SharedModule,

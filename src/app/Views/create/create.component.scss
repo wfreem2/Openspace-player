@@ -8,7 +8,7 @@
 }
 
 .creator{
-    @extend %flx, %max-WH;
+    @extend %max-WH;
     display: grid;
     grid-template-columns: minmax(16rem, auto)  1fr;
     grid-template-rows: max-content 1fr;

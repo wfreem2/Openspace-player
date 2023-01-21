@@ -12,6 +12,8 @@ import { SortingSelectorComponent } from './sorting-selector/sorting-selector.co
 import { ClickedoutsideofDirective } from '../Directives/clickoutsideof.directive';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { ConfirmPopupComponent } from './confirm-popup/confirm-popup.component';
+import { IconsModule } from '../icons.module';
+import { SelectallOnclickDirective } from '../Directives/selectall-onclick.directive';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { ConfirmPopupComponent } from './confirm-popup/confirm-popup.component';
     ClickedoutsideofDirective,
     NotificationsComponent,
     ConfirmPopupComponent,
+    SelectallOnclickDirective,
   ],
   imports: [
     CommonModule,
@@ -33,6 +36,7 @@ import { ConfirmPopupComponent } from './confirm-popup/confirm-popup.component';
     BrowserAnimationsModule,
   ],
   exports:[
+    IconsModule,
     CommonModule,
     ShowsListComponent,
     NavbarComponent,
@@ -45,6 +49,7 @@ import { ConfirmPopupComponent } from './confirm-popup/confirm-popup.component';
     ClickedoutsideofDirective,
     NotificationsComponent,
     ConfirmPopupComponent,
+    SelectallOnclickDirective
   ]
 })
 export class SharedModule { }

@@ -7,6 +7,7 @@ import { ShowService } from './Services/show.service';
 import { SharedModule } from './Shared/shared.module';
 import { ViewsModule } from './Views/views.module';
 
+
 @NgModule({
   declarations: [
     AppComponent,
