@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isEqual } from 'lodash';
-import { BehaviorSubject, distinctUntilChanged, filter, map, of, skip, Subject, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, skip, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { SceneOptions } from 'src/app/Interfaces/SceneOptions';
 import { SceneOptionsForm, TrailOptionsForm } from 'src/app/Interfaces/ShowForm';
 import { SceneGraphNode } from 'src/app/Services/openspace.service';
@@ -48,7 +48,7 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   })
 
   filteredTrails = new FormArray<FormGroup<TrailOptionsForm>>([])
-
+  filteredTrails$!: Observable<FormGroup<TrailOptionsForm>[]>
 
   constructor() { 
     this.initFormGroup()
@@ -66,6 +66,16 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
     )
     .subscribe( v => this.filteredTrails.controls = v )
 
+
+    this.filteredTrails$ =    
+    this.query.asObservable()
+    .pipe(
+      startWith(''),
+      map(query => query.toLowerCase()),
+      switchMap(query => of(this.search(query))),
+      takeUntil(this.$unsub),
+      map(v => [...v] as FormGroup<TrailOptionsForm>[] ) //Deep copy to not affect original list
+    )
 
     this.optionsForm.valueChanges
     .pipe(

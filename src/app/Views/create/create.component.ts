@@ -110,35 +110,7 @@ export class CreateComponent implements OnInit, OnDestroy {
       this.isSaved = false
       console.log('form changed')
     })
-
-  /*   this.createService.currSceneUpdated
-    .pipe( 
-      takeUntil(this.$unSub),
-      tap( () => {
-        const existing = this.show.scenes.find(scene => scene.id === this.currScene?.id)
-
-        if(!existing){ return } 
-    
-        const rawScene = this.sceneForm.getRawValue()
-
-        const newScene = {
-          title: rawScene.title,
-          geoPos: rawScene.geoPos,
-          options: rawScene.options,
-          duration: rawScene.transistion || undefined,
-          script: rawScene.script || undefined
-        }
-
-        merge(existing, newScene) 
-      })
-    )
-    .subscribe( s => {
-
-      
-
-    }) */
   }
-
 
   newScene(): void{
     const id = this.show.scenes.reduce((a, b) => Math.max(a, b.id), 0) + 1
@@ -155,7 +127,6 @@ export class CreateComponent implements OnInit, OnDestroy {
 
     this.show.scenes.push(newScene)
     this.createService.setCurrentScene(newScene)
-    this.selectedSceneService.setScene(newScene)
   }
 
   ngOnInit(): void { 
@@ -204,7 +175,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  onCancel(): void{ this.isConfirmShowing = false }
+  onCancel(): void{ this.createService.setIsConfirmShowing(false) }
 
   onDeleteClicked(){ 
     this.confirmPrompt = 'Delete the selected scene?'
