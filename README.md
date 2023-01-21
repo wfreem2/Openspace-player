@@ -1,3 +1,4 @@
+![alt](https://wallpapercave.com/wp/wp5050259.jpg)
 # OpenspacePlayer ![wfreem2](https://badgen.net/badge/Angular/14.2.8/red)
 
 OpenspacePlayer is a web application designed to help create planetatrium shows utilizing [OpenSpace](https://www.openspaceproject.com/) in a user-friendly interface.
