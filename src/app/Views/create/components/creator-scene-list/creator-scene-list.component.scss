@@ -23,6 +23,12 @@
 
 }
 
+.header{
+    // border-right: $grid-bd;
+    @extend %align-center;
+    justify-content: space-between;
+    gap: 1rem;
+}
 
 .list{
     @extend %flx-col, %max-H;

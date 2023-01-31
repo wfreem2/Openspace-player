@@ -6,9 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, first, map, Observable, Subject, takeUntil, tap, withLatestFrom } from 'rxjs';
 import { ShowService } from 'src/app/Services/show.service';
 import { Show } from 'src/app/Interfaces/Show';
-import { SelectedSceneService as SelectedSceneService } from './selected-scene.service';
 import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
-import { ScenePositionComponent } from './scene-position/scene-position.component';
 import { NotificationService } from 'src/app/Services/notification.service';
 import { NotificationType } from 'src/app/Interfaces/ToastNotification';
 import { SceneForm } from 'src/app/Interfaces/ShowForm';
@@ -16,7 +14,9 @@ import { GeoPosition } from 'src/app/Interfaces/GeoPosition';
 import { SceneOptions } from 'src/app/Interfaces/SceneOptions';
 import { SceneExecutorService } from 'src/app/Services/scene-executor.service';
 import { CreatorMenuItem } from 'src/app/Interfaces/CreatorMenuItem';
-import { CreateService } from './create.service';
+import { CreateService } from './services/create.service';
+import { ScenePositionComponent } from './components/scene-position/scene-position.component';
+import { SelectedSceneService } from './services/selected-scene.service';
 
 @Component({
   selector: 'app-create',
@@ -28,8 +28,39 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   @ViewChild(ScenePositionComponent) scenePositionComponent!: ScenePositionComponent
 
-  private $unSub = new Subject<void>()
-  
+
+  // #region observable sources
+    readonly $setScene = new BehaviorSubject<Scene | null>(null)
+    readonly $setSaveDisabled = new BehaviorSubject<boolean>(false)
+    readonly $setConfirmVisibility = new Subject<boolean>()
+
+    private $unSub = new Subject<void>()
+  // #endregion
+
+  // #region observable subscribers
+    readonly $selectedScene = this.$setScene
+    .asObservable()
+    .pipe(
+      tap( s => {
+        if(s == null){ return }
+
+        this.sceneForm.setValue(
+          {
+            title: s.title,
+            geoPos: s.geoPos,
+            options: s.options,
+            script: s.script || '',
+            transistion: s.duration || null
+          }, 
+          { emitEvent: false }
+        )
+      })  
+    )
+    
+    readonly $isConfirmShowing = this.$setConfirmVisibility.asObservable()
+    readonly $isSaveDisabled = this.$setSaveDisabled.asObservable()
+  // #endregion
+
   onConfirmFn = () => {}
   confirmPrompt = ''
 
@@ -39,7 +70,6 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   isSaved: boolean = true
   isAutoMode:boolean = false
-  isConfirmShowing: boolean = false
 
 
   sceneForm = this.fb.group<SceneForm>({
@@ -54,9 +84,8 @@ export class CreateComponent implements OnInit, OnDestroy {
   menu!: CreatorMenuItem[]
 
 
-  currScene$!: Observable<Scene | null>
   
-  private readonly DEFAULT_SCENE = this.sceneForm.getRawValue()
+  readonly DEFAULT_SCENE = this.sceneForm.getRawValue()
 
   constructor(private route: ActivatedRoute, public showService: ShowService, public createService: CreateService,
      public selectedSceneService: SelectedSceneService, private notiService: NotificationService,
@@ -71,63 +100,36 @@ export class CreateComponent implements OnInit, OnDestroy {
     )
     .subscribe(show => this.show = show)
     
-    this.currScene$ = this.createService.currScene$.pipe(
-      tap( s => {
-        if(s == null){ return }
-
-        this.sceneForm.setValue(
-          {
-            title: s.title,
-            geoPos: s.geoPos,
-            options: s.options,
-            script: s.script || '',
-            transistion: s.duration || null
-          }, 
-          { emitEvent: false }
-        )
-      })
-    )
     
     this.sceneForm.valueChanges
     .pipe(
-      withLatestFrom(this.currScene$),
       takeUntil(this.$unSub),
-      distinctUntilChanged( (a, b) => isEqual(a, b)),
-      map( ([formVal, scene]) => {
-        return {
-          id: scene!.id,
-          title: formVal.title!,
-          geoPos: formVal.geoPos!,
-          options: formVal.options!,
-          duration: formVal.transistion!,
-          script: formVal.script!
-        }
+      withLatestFrom(this.$selectedScene),
+      // distinctUntilChanged( (a, b) => isEqual(a, b)),
+      map( ([formVal, selectedScene]) => {
+        return [
+          {
+            id: selectedScene!.id,
+            title: formVal.title!,
+            geoPos: formVal.geoPos!,
+            options: formVal.options!,
+            duration: formVal.transistion!,
+            script: formVal.script!
+          },
+          selectedScene
+        ]
       }),
+      tap( () => {
+        this.isSaved = false
+        this.$setSaveDisabled.next(!this.sceneForm.valid)
+
+        console.log('form changed')
+      })
     )
-    .subscribe( scene => {
-      this.createService.setIsSaveDisabled(this.sceneForm.invalid)
-      this.createService.updateCurrentScene(scene)
-      this.isSaved = false
-      console.log('form changed')
-    })
+    .subscribe( ([updated, original]) => merge(original, updated) )
   }
 
-  newScene(): void{
-    const id = this.show.scenes.reduce((a, b) => Math.max(a, b.id), 0) + 1
-    const rawScene = cloneDeep(this.DEFAULT_SCENE)
 
-    const newScene: Scene = {
-      id: id,
-      title: rawScene.title,
-      geoPos: rawScene.geoPos,
-      options: rawScene.options,
-      duration: rawScene.transistion || undefined,
-      script: rawScene.script || undefined
-    }
-
-    this.show.scenes.push(newScene)
-    this.createService.setCurrentScene(newScene)
-  }
 
   ngOnInit(): void { 
     this.menu = [
@@ -138,13 +140,13 @@ export class CreateComponent implements OnInit, OnDestroy {
             name: 'Save',
             hotKey: ['S'],
             callBack: this.saveShow.bind(this),
-            isDisabled: this.createService.isSaveDisabled$
+            isDisabled: this.$isSaveDisabled
           },
           {
             name: 'Export',
             hotKey: ['E'],
             callBack: this.saveToDisk.bind(this),
-            isDisabled: this.createService.isSaveDisabled$
+            isDisabled: this.$isSaveDisabled
           },
           {
             name: 'Duplicate Show',
@@ -179,13 +181,13 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   onDeleteClicked(){ 
     this.confirmPrompt = 'Delete the selected scene?'
-    this.isConfirmShowing = true 
+    this.$setConfirmVisibility.next(true)
     this.onConfirmFn = this.deleteScene.bind(this)
   }
 
   onResetClicked(): void{
     this.confirmPrompt = 'Reset the selected scene?'
-    this.isConfirmShowing = true
+    this.$setConfirmVisibility.next(true)
     this.onConfirmFn = this.resetScene.bind(this)
   }
 
@@ -202,14 +204,15 @@ export class CreateComponent implements OnInit, OnDestroy {
     })
 
     this.currScene = undefined
-    this.isConfirmShowing = false
+    this.$setConfirmVisibility.next(false)
+
     this.isSaved = false
   }
 
   resetScene(): void{
     this.sceneForm.reset()
     this.isAutoMode = false
-    this.isConfirmShowing = false
+    this.$setConfirmVisibility.next(false)
   }
 
   preview(scene: Scene): void{

@@ -1,36 +1,17 @@
 <div class="creator">
     <div id="header">
-       
         <creator-header [show]="show" [menu]="menu" (titleChange)="onChange()"></creator-header>
-
-        <!-- <div>
-            <button id="save" class="btn primary" (click)="saveShow()"
-            [disabled]="!show.title.trim() || isSaved || !sceneForm.valid">
-                <p>Save</p>
-                <img src="assets/icons/save.svg" class="icon" alt="">
-            </button>
-
-            <button id="export" #export class="btn secondary" (click)="saveToDisk()"
-                [disabled]=" !show.title.trim() || !sceneForm.valid">
-                <p>Export</p>
-                <img src="assets/icons/export.svg" class="icon" alt="">
-            </button>
-        </div> -->
     </div>
 
     <div class="scene-creator">
-        <ng-container *ngIf="(createService.currScene$ | async) then sceneTabs; else noScene"></ng-container>
+        <ng-container *ngIf="($selectedScene | async) then sceneTabs; else noScene"></ng-container>
     </div>
 
     <div class="scene-list">
-       
-        <div>
-            <p class="title">Scenes ({{show.scenes.length}})</p>
-            <button class="btn primary" (click)="newScene()">New Scene</button>
-        </div>
-
         <creator-scene-list
         [scenes]="show.scenes"
+        [defaultScene]="DEFAULT_SCENE"
+        (itemClickedEvent)="$setScene.next($event)"
         (duplicateClickedEvent)="onDuplicateClicked($event)"
         (deleteClickedEvent)="onDeleteClicked()"
         (listDragDropEvent)="isSaved=false;">
@@ -38,7 +19,7 @@
     </div>
 </div>
 
-<confirm-popup *ngIf="createService.isConfirmShowing$ | async"
+<confirm-popup *ngIf="$isConfirmShowing | async"
 (confirmClickedEvent)="onConfirmFn()"
 (cancelClickedEvent)="onCancel()"
 [prompt]="confirmPrompt">

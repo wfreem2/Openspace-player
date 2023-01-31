@@ -1,3 +1,8 @@
+<div class="header">
+    <p class="title">Scenes ({{scenes.length}})</p>
+    <button class="btn primary" (click)="newScene()">New Scene</button>
+</div>
+
 <div class="search-bar">
     <ng-container [ngTemplateOutlet]="searchIcon"></ng-container>
     <input id="search" type="text" 
@@ -16,7 +21,8 @@
         </svg>
         
         <list-item class="item" [scene]="s" 
-        (itemClickedEvent)="onItemClicked($event)"
+        [isActive]="($currScene | async) === s"
+        (itemClickedEvent)="$setScene.next($event)"
         (deleteClickedEvent)="onDeleteClicked($event)"
         (duplicateClickedEvent)="onDuplicateClicked($event)">
         </list-item>

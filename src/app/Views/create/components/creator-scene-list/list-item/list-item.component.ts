@@ -14,8 +14,8 @@ export class ListItemComponent implements OnInit {
   @Input() isActive: boolean = false
   @Input() scene!: Scene
 
-  @Output() itemClickedEvent = new EventEmitter<ListItemComponent>()
-  @Output() deleteClickedEvent = new EventEmitter<ListItemComponent>()
+  @Output() itemClickedEvent = new EventEmitter<Scene>()
+  @Output() deleteClickedEvent = new EventEmitter<Scene>()
   @Output() duplicateClickedEvent = new EventEmitter<ListItemComponent>()
 
   isCtxShowing: boolean = false
@@ -31,7 +31,7 @@ export class ListItemComponent implements OnInit {
   }
 
   onDeleteClicked(): void{
-    this.deleteClickedEvent.emit(this)
+    this.deleteClickedEvent.emit(this.scene)
     this.isCtxShowing = false
   }
 
@@ -42,6 +42,6 @@ export class ListItemComponent implements OnInit {
 
   onItemClick(): void{
     if(this.isActive){ return }
-    this.itemClickedEvent.emit(this)
+    this.itemClickedEvent.emit(this.scene)
   }
 }

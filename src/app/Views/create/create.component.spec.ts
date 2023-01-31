@@ -16,7 +16,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ListItemComponent } from "./creator-scene-list/list-item/list-item.component"
 import { sampleSize } from "lodash"
 import { Scene } from "src/app/Interfaces/Scene"
-import { SearchScenesPipe } from "./search-scenes.pipe"
+import { SearchScenesPipe } from "./pipes/search-scenes.pipe"
 import { ConfirmPopupComponent } from "src/app/Shared/confirm-popup/confirm-popup.component"
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { SceneExecutorService } from "src/app/Services/scene-executor.service"

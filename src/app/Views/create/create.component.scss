@@ -118,13 +118,6 @@ $grid-bd: solid 2px $gray;
     padding: 0.5rem 1rem;
     background: #fafafb;
     border-right: $grid-bd;
-
-    & > div:nth-child(1){
-        @extend %align-center;
-        justify-content: space-between;
-        gap: 1rem;
-    }
-
     
     
     #filter-icon{
