@@ -65,7 +65,6 @@ export class CreateComponent implements OnInit, OnDestroy {
   confirmPrompt = ''
 
   show!: Show
-  currScene?: Scene
   query: string = ''
 
   isSaved: boolean = true
@@ -196,16 +195,17 @@ export class CreateComponent implements OnInit, OnDestroy {
   }
 
   deleteScene(): void{
-    this.show.scenes = this.show.scenes.filter(s => s.id !== this.currScene!.id)
+    const scene = this.$setScene.getValue()
+    
+    this.show.scenes = this.show.scenes.filter(s => s.id !== scene!.id)
     
     this.notiService.showNotification({
-      title: `Scene: ${this.currScene?.title} deleted`,
+      title: `Scene: ${scene!.title} deleted`,
       type: NotificationType.SUCCESS
     })
 
-    this.currScene = undefined
     this.$setConfirmVisibility.next(false)
-
+    this.$setScene.next(null)
     this.isSaved = false
   }
 

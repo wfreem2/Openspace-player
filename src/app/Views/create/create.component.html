@@ -27,7 +27,7 @@
 
 
 <ng-template #sceneTabs>
-    <form [formGroup]="sceneForm">
+    <form [formGroup]="sceneForm" *ngIf="$selectedScene | async as currScene">
         <div class="scene-title">
             <input name="title" type="text" class="bare title" 
             formControlName="title" placeholder="Scene Title">

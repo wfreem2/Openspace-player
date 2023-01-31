@@ -12,7 +12,7 @@ import { CreateService } from '../../services/create.service';
   styleUrls: ['./creator-scene-list.component.scss']
 })
 
-export class CreatorSceneListComponent implements OnInit, AfterViewInit, OnDestroy{
+export class CreatorSceneListComponent implements OnInit, OnDestroy{
 
   @ViewChildren(ListItemComponent) items!: QueryList<ListItemComponent>
 
@@ -39,22 +39,6 @@ export class CreatorSceneListComponent implements OnInit, AfterViewInit, OnDestr
 
   ngOnDestroy(): void { this.$unsub.next() }
 
-  ngAfterViewInit(): void {
-    /* this.selectedSceneService.$selectedScene
-    .pipe(
-      takeUntil(this.$unsub),
-      mergeMap(s => 
-        this.items.changes
-        .pipe(map( () => this.items.find(i => i.scene === s) ))
-      )
-    )
-    .subscribe(item => {
-      this.setAllInactive()
-      if(item){ item.isActive = true }
-      this.cdRef.detectChanges()
-    }) */
-  }
-
   ngOnInit(): void {
     this.createService.currSceneUpdated
     .pipe( distinctUntilChanged() )
@@ -66,7 +50,6 @@ export class CreatorSceneListComponent implements OnInit, AfterViewInit, OnDestr
     })
 
   }
-  
 
   newScene(): void{
     const id = this.scenes.reduce( (a, b) => Math.max(a, b.id), 0 ) + 1
