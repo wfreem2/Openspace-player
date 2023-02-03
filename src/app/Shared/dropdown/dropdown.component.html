@@ -1,12 +1,12 @@
 <div class="header" [class.disabled]="isDisabled" [class.active]="!isCollapsed" 
     (click)="isCollapsed = !isCollapsed; moveToTop(selectedItem)">
     <p>{{selectedItem.item}}</p>
-    <ng-container [ngTemplateOutlet]="chevron"></ng-container>
+    <i-tabler name="chevron-down" id="chevron" [class.rotated]="!isCollapsed"></i-tabler>
 </div>
 
 <div class="items-wrapper" [class.collapsed]="isCollapsed" *ngIf="!isDisabled">
     <div class="search">
-        <ng-container [ngTemplateOutlet]="searchIcon"></ng-container>
+        <i-tabler class="icon" name="search"></i-tabler>
         <input type="text"  placeholder="Node Name" ngModel
         (ngModelChange)="query.next($event)">
 
@@ -15,31 +15,8 @@
     <ul class="items">
         <li *ngFor="let i of filteredSelectableItems" (click)="selectItem(i)"
             [class.selected]="i.isSelected">
-            <ng-container [ngTemplateOutlet]="check" *ngIf="i.isSelected"></ng-container>
+            <i-tabler *ngIf="i.isSelected" name="check" class="icon"></i-tabler>
             {{i.item}}
         </li>
     </ul>
 </div>
-
-<ng-template #chevron>
-    <svg id="chevron" [class.rotated]="!isCollapsed"
-        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="chevron feather feather-chevron-down">
-        <polyline points="6 9 12 15 18 9"></polyline>
-    </svg>
-</ng-template>
-
-<ng-template #check>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check">
-        <polyline points="20 6 9 17 4 12"></polyline>
-    </svg>
-</ng-template>
-
-<ng-template #searchIcon>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-    </svg>
-</ng-template>

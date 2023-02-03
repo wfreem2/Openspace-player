@@ -1,4 +1,5 @@
 @import '/src/scss/variables.scss';
+@import '/src/scss/mixins.scss';
 
 :host{
     @extend %max-WH, %flx-col, %glass, %shadow;
@@ -21,6 +22,7 @@
     padding: 0 0.5rem 0 0;
 
     #close{
+        @include reset-input;
         @extend %align-center, %just-center;
         cursor: pointer;
         width: 2rem;

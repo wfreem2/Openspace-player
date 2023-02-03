@@ -41,9 +41,13 @@ export class CreateComponent implements OnInit, OnDestroy {
     readonly $selectedScene = this.$setScene
     .asObservable()
     .pipe(
+      distinctUntilChanged(),
       tap( s => {
         if(s == null){ return }
+        console.log('selected', s)
+        console.log('show', this.show.scenes);
 
+        
         this.sceneForm.setValue(
           {
             title: s.title,
@@ -66,6 +70,7 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   show!: Show
   query: string = ''
+  menu!: CreatorMenuItem[]
 
   isSaved: boolean = true
   isAutoMode:boolean = false
@@ -80,7 +85,6 @@ export class CreateComponent implements OnInit, OnDestroy {
     options: this.fb.nonNullable.control<SceneOptions>({keepCameraPosition: true, enabledTrails: []})
   })
   
-  menu!: CreatorMenuItem[]
 
 
   
@@ -104,7 +108,6 @@ export class CreateComponent implements OnInit, OnDestroy {
     .pipe(
       takeUntil(this.$unSub),
       withLatestFrom(this.$selectedScene),
-      // distinctUntilChanged( (a, b) => isEqual(a, b)),
       map( ([formVal, selectedScene]) => {
         return [
           {
@@ -115,17 +118,29 @@ export class CreateComponent implements OnInit, OnDestroy {
             duration: formVal.transistion!,
             script: formVal.script!
           },
-          selectedScene
+          selectedScene as Scene
         ]
       }),
       tap( () => {
         this.isSaved = false
         this.$setSaveDisabled.next(!this.sceneForm.valid)
 
-        console.log('form changed')
+        console.log('form changed');
+        console.log(this.sceneForm.value)
+        
       })
     )
-    .subscribe( ([updated, original]) => merge(original, updated) )
+    .subscribe( ([updated,]) => { 
+      let original = this.show.scenes.find(s => s.id === updated!.id)!
+      
+      Object.assign(original, updated)
+      // original = { ...updated }
+
+      console.log('original', original.options)
+      console.log('update', updated.options)
+      console.log('show', this.show.scenes);
+      
+    })
   }
 
 
@@ -168,7 +183,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     if(!this.sceneForm.valid){ return }
     
     this.showService.save(this.show) 
-    this.isSaved=true
+    this.isSaved = true
     this.notiService.showNotification({title: 'Show Saved', type: NotificationType.SUCCESS})
    
     if(this.scenePositionComponent){

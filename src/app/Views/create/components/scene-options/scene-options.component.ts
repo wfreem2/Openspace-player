@@ -71,9 +71,9 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
     this.query.asObservable()
     .pipe(
       startWith(''),
+      takeUntil(this.$unsub),
       map(query => query.toLowerCase()),
       switchMap(query => of(this.search(query))),
-      takeUntil(this.$unsub),
       map(v => [...v] as FormGroup<TrailOptionsForm>[] ) //Deep copy to not affect original list
     )
 

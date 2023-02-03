@@ -1,25 +1,26 @@
-<form [formGroup]="optionsForm">
-      <div class="section" id="trails" #s2>
+<form id="opts-form" [formGroup]="optionsForm">
+    <div class="section" id="trails" #s2>
         <div>
             <p class="title">Trails</p>
             <ng-container *ngTemplateOutlet="chevron; context: {el: s2}"></ng-container>
         </div>
 
         <div class="search">
-            <ng-container [ngTemplateOutlet]="searchIcon"></ng-container>
+            <i-tabler name="search" class="icon"></i-tabler>
             <input type="text"  placeholder="Node Name" #i (input)="query.next(i.value)">
             <sorting-selector (sortingChangedEvent)="sort($event)"></sorting-selector>
         </div>
 
         <div class="select-opts">
-            <button  (click)="selectAllTrails()">Select All</button>
-            <button  (click)="deselectAllTrails()">Deselect All</button>
+            <button (click)="selectAllTrails()">Select All</button>
+            <button (click)="deselectAllTrails()">Deselect All</button>
         </div>
 
-        <ul class="options" formArrayName="enabledTrails">
-            <li class="option" *ngFor="let option of filteredTrails$ | async" [formGroup]="option">
-                <label for="{{option.controls['trail'].value}}">{{option.controls['trail'].value}} Trail</label>
-                <input type="checkbox" name="{{option.controls['trail'].value}}"  formControlName="isEnabled">
+        <ul class="options-list" formArrayName="enabledTrails">
+            <li class="option" [class.active]="option.controls.isEnabled.value"
+             *ngFor="let option of filteredTrails$ | async" [formGroup]="option">
+                <label for="{{option.controls.trail.value}}">{{option.controls.trail.value}} Trail</label>
+                <input type="checkbox" name="{{option.controls.trail.value}}"  formControlName="isEnabled">
             </li>
         </ul>
     </div>
@@ -31,28 +32,5 @@
         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
         class="chevron feather feather-chevron-down">
         <polyline points="6 9 12 15 18 9"></polyline>
-    </svg>
-</ng-template>
-
-<ng-template #searchIcon>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-    </svg>
-</ng-template>
-
-<ng-template #arrowUp>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up">
-        <line x1="12" y1="19" x2="12" y2="5"></line>
-        <polyline points="5 12 12 5 19 12"></polyline>
-    </svg>
-</ng-template>
-<ng-template #arrowDown>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down">
-        <line x1="12" y1="5" x2="12" y2="19"></line>
-        <polyline points="19 12 12 19 5 12"></polyline>
     </svg>
 </ng-template>

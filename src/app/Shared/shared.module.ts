@@ -34,6 +34,7 @@ import { SelectallOnclickDirective } from '../Directives/selectall-onclick.direc
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    IconsModule
   ],
   exports:[
     IconsModule,

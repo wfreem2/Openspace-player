@@ -9,7 +9,6 @@ import { PlaygroundComponent } from './playground/playground.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SearchScenesPipe } from './create/pipes/search-scenes.pipe';
 import { SearchShowsPipe } from './home/your-shows/search-shows.pipe';
-import { CreatorHeaderComponent } from './create/components/creator-header/creator-header.component';
 import { CreatorMenuItemComponent } from './create/components/creator-menu-item/creator-menu-item.component';
 import { CreatorMenuComponent } from './create/components/creator-menu/creator-menu.component';
 import { CreatorSceneListComponent } from './create/components/creator-scene-list/creator-scene-list.component';
@@ -37,7 +36,6 @@ import { TabsComponent } from './create/components/tabs/tabs.component';
     TabComponent,
     SearchScenesPipe,
     SearchShowsPipe,
-    CreatorHeaderComponent,
     CreatorMenuComponent,
     CreatorMenuItemComponent,
   ],

@@ -5,11 +5,6 @@
     border-radius: 8px;
 }
 
-input[type=text], input[type=password]{
-    @include reset-input;
-    @extend %input;
-}
-
 
 .floating-input{
     @extend %input;
@@ -46,13 +41,14 @@ input[type=text], input[type=password]{
 
 //Default text input style
 .input{
+    @include reset-input;
     @extend %max-W;
     transition: border-color 0.2s;
     font-size: 1rem;
     background: #ffffff;
     padding: 0.5rem 1rem;
-    border-radius: $bd-rad;
     border: solid 2px $gray;
+    border-radius: $bd-rad;
     
     &:not(:disabled):hover, &:not(:disabled):focus-within{
         border-color: $clr-accent;

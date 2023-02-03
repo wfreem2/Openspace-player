@@ -1,7 +1,15 @@
 <div class="creator">
-    <div id="header">
-        <creator-header [show]="show" [menu]="menu" (titleChange)="onChange()"></creator-header>
+    <div class="header">
+        <a routerLink="/" id="back">
+            <i-tabler name="arrow-bar-to-left" class="ico"></i-tabler>
+            Home
+        </a>
+        <input name="title" class="title input" type="text" selectallOnclick
+        placeholder="Show Title" [(ngModel)]="show.title"/>  
+        
+        <creator-menu id="menu" [menuItems]="menu"></creator-menu>
     </div>
+
 
     <div class="scene-creator">
         <ng-container *ngIf="($selectedScene | async) then sceneTabs; else noScene"></ng-container>
@@ -27,13 +35,15 @@
 
 
 <ng-template #sceneTabs>
-    <form [formGroup]="sceneForm" *ngIf="$selectedScene | async as currScene">
+    <form id="scene-form" [formGroup]="sceneForm" *ngIf="$selectedScene | async as currScene">
         <div class="scene-title">
-            <input name="title" type="text" class="bare title" 
+            <input name="title" type="text" class="title" 
             formControlName="title" placeholder="Scene Title">
-            <ng-container [ngTemplateOutlet]="x"></ng-container>
+            <i-tabler name="x" id="x" (click)="sceneForm.controls.title.setValue('')" ></i-tabler>
         </div>
-        
+
+        <!-- <scene-options formControlName="options"></scene-options> -->
+
         <tabs>
             <tab name="Summary">
                 <div class="summary">
@@ -91,8 +101,7 @@
             </tab>
 
             <tab name="Options">
-                <scene-options formControlName="options">
-                </scene-options>
+                <scene-options formControlName="options"></scene-options>
             </tab>
             
             <tab name="Transition">
@@ -101,9 +110,9 @@
                         <span style="color: #999595;">(in seconds)</span>
                     </p>
                     
-                    <input class="input" 
-                    formControlName="transistion" type="text" 
-                    placeholder="Transition Duration" name="transistion" id="transition"/>
+                    <input class="input" type="text" name="transistion"
+                    formControlName="transistion"
+                    placeholder="Transition Duration" id="transition"/>
             
                     <p class="error" *ngIf="sceneForm.controls['transistion'].errors?.['pattern']">The field is digits only</p>
                 </div>
@@ -119,8 +128,8 @@
         </tabs>
 
         <div id="options">
-            <button id="reset" (click)="onResetClicked()">Reset</button>
-            <button id="preview" class="btn secondary" (click)="preview(currScene!)">Preview</button>
+            <button id="reset" type="button" (click)="onResetClicked()">Reset</button>
+            <button id="preview" type="button" *ngIf="$selectedScene | async as scene" class="btn secondary" (click)="preview(scene)">Preview</button>
         </div>
     </form>
 </ng-template>
@@ -129,21 +138,4 @@
     <div id="no-scene">
         <h1>No Scene Selected</h1>
     </div>
-</ng-template>
-
-<ng-template #x>
-    <svg (click)="sceneForm.controls.title.setValue('')" id="x" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-    </svg>
-</ng-template>
-
-
-
-<ng-template #filterIcon>
-    <svg id="filter-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter">
-        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-    </svg>
 </ng-template>

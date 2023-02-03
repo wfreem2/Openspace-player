@@ -17,7 +17,7 @@ export class TabsComponent implements OnInit, AfterContentInit {
     let activeTabs = this.tabs.filter(t=> t.isActive)
     
     //Set first tab to active by default
-    if(activeTabs.length === 0) { this.selectTab(this.tabs.first) }
+    if(!activeTabs.length) { this.selectTab(this.tabs.first) }
   }
 
   

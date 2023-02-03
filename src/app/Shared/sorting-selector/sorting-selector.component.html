@@ -1,6 +1,6 @@
-<button class="bare wrapper" [ngSwitch]="sortingType" (click)="toggleSorting()">
+<button class="wrapper" [ngSwitch]="sortingType" (click)="toggleSorting()">
     <ng-container [ngTemplateOutlet]="none" *ngSwitchCase="SortingType.None"></ng-container>
-    <p *ngSwitchCase="SortingType.None">A-Z</p>
+    <p *ngSwitchCase="SortingType.None">None</p>
     
     <ng-container [ngTemplateOutlet]="asc" *ngSwitchCase="SortingType.Ascending"></ng-container>
     <p *ngSwitchCase="SortingType.Ascending" class="active">A-Z</p>

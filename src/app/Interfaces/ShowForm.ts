@@ -23,8 +23,8 @@ export interface TrailOptionsForm{
 }
 
 export interface GeoPosForm{
-    alt: FormControl<number | null>
-    lat: FormControl<number | null>
-    long: FormControl<number | null>
-    nodeName: FormControl<SceneGraphNode | null>
+    alt: FormControl<number>
+    lat: FormControl<number>
+    long: FormControl<number>
+    nodeName: FormControl<SceneGraphNode>
 }

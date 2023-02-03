@@ -3,7 +3,7 @@ import { cloneDeep, merge } from 'lodash';
 import { Scene } from 'src/app/Interfaces/Scene';
 import { ListItemComponent } from './list-item/list-item.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { distinctUntilChanged, filter, Subject, tap } from 'rxjs';
+import { distinctUntilChanged, filter, ReplaySubject, Subject, tap } from 'rxjs';
 import { CreateService } from '../../services/create.service';
 
 @Component({
@@ -27,7 +27,7 @@ export class CreatorSceneListComponent implements OnInit, OnDestroy{
   @Output() listDragDropEvent = new EventEmitter<Scene[]>()
 
   private $unsub = new Subject<void>()
-  $setScene = new Subject<Scene>()
+  $setScene = new ReplaySubject<Scene>()
 
   $currScene = this.$setScene.pipe( 
     filter(scene => !!scene),

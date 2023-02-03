@@ -1,6 +1,6 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
-import { tap, BehaviorSubject, filter, map, Subject, Subscription, takeUntil, catchError, of, throttleTime } from 'rxjs';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, NonNullableFormBuilder, Validators } from '@angular/forms';
+import { BehaviorSubject, filter, map, Subject, Subscription, takeUntil, catchError, throttleTime } from 'rxjs';
 import { GeoPosition } from 'src/app/Interfaces/GeoPosition';
 import { GeoPosForm } from 'src/app/Interfaces/ShowForm';
 import { NotificationType } from 'src/app/Interfaces/ToastNotification';
@@ -25,24 +25,25 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
   
   
   private listener!: Subscription
-  private $unSub = new Subject<any>()
+  private $unSub = new Subject<void>()
   private readonly $geoPos = new Subject<GeoPosition>()
   private readonly numRegex = /^-?\d*\.?\d*$/
   
   readonly $isAutoMode = new BehaviorSubject<boolean>(this.isAutoMode)
   readonly pathNavOptions: SceneGraphNode[] = Object.values(SceneGraphNode)
 
-  geoPosForm = new FormGroup<GeoPosForm>({
-    alt: new FormControl<number>(0.0, [ Validators.required, Validators.pattern(this.numRegex) ]),
-    lat: new FormControl<number>(0.0, [ Validators.required, Validators.pattern(this.numRegex) ]),
-    long: new FormControl<number>(0.0, [ Validators.required, Validators.pattern(this.numRegex) ]),
-    nodeName: new FormControl<SceneGraphNode>(SceneGraphNode.Earth, Validators.required),
+  geoPosForm = this.fb.group<GeoPosForm>({
+    alt: this.fb.control<number>(0.0, [ Validators.required, Validators.pattern(this.numRegex) ]),
+    lat: this.fb.control<number>(0.0, [ Validators.required, Validators.pattern(this.numRegex) ]),
+    long: this.fb.control<number>(0.0, [ Validators.required, Validators.pattern(this.numRegex) ]),
+    nodeName: this.fb.control<SceneGraphNode>(SceneGraphNode.Earth, Validators.required),
   })
 
   onChange: any = () => {}
   onTouch: any = () => {}
   
-  constructor(private openSpaceService: OpenspaceService, private notiService: NotificationService) { 
+  constructor(private openSpaceService: OpenspaceService, private notiService: NotificationService,
+      private fb: NonNullableFormBuilder) { 
 
     this.$isAutoMode.asObservable()
     .pipe(takeUntil(this.$unSub))
@@ -84,7 +85,8 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
   ngOnInit(): void { }
 
   ngOnDestroy(): void {
-    this.$unSub.next(undefined)
+    this.$unSub.next()
+    this.$unSub.unsubscribe()
     this.setGeoListener(false) 
   }
 
@@ -97,9 +99,9 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
   }
 
   writeValue(obj: any): void {
-    const geoPos = obj as GeoPosition
 
-    if(this.isinstanceofGeoPos(geoPos)){ this.$geoPos.next(geoPos) }
+    if(this.isinstanceofGeoPos(obj)){ this.$geoPos.next(obj) }
+
   }
 
   private isinstanceofGeoPos(obj: any): obj is GeoPosition{

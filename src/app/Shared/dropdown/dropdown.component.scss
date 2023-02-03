@@ -1,4 +1,6 @@
 @import '/src/scss/variables.scss';
+@import '/src/scss/mixins.scss';
+@import '/src/scss/func.scss';
 
 :host{
     @extend %max-W;
@@ -49,7 +51,7 @@ $H: 25rem;
     height: $H;
     max-height: $H;
     background: #ffffff;
-    border: solid 2px $gray;
+    border: solid 2px tint($clr-accent, 50%);
     border-radius: $bd-rad;
 
     &.collapsed{
@@ -73,11 +75,6 @@ $H: 25rem;
         padding: 0.75rem;
         border-radius: $bd-rad;
         
-        svg{
-            width: 18px;
-            height: 18px;
-        }
-
         &.selected{
             color: #ffffff;
             background: $clr-accent;
@@ -105,11 +102,12 @@ $H: 25rem;
     height: 3rem;
 
     input{
+        @include reset-input;
         @extend %max-W;
         font-size: 1rem;
     }
 
-    svg{
+    .icon{
         color: #b8b5b5;
         width: 1.2rem;
         height: 1.2rem;

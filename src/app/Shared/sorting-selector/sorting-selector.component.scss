@@ -1,6 +1,8 @@
 @import '/src/scss/variables.scss';
+@import '/src/scss/mixins.scss';
 
 .wrapper{
+    @include reset-input;
     cursor: pointer;
     display: grid;
     grid-template-columns: max-content 1fr;

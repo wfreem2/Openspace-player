@@ -17,8 +17,11 @@
     }
     
     &.active{
+        @extend %shadow;
+        
         p{ color: #ffffff; }
         svg{ color: #ffffff; }
+
         background-color: $clr-secondary;
     }
 
@@ -28,9 +31,9 @@
     }
 }
 
-svg{
-    width: 1.2rem;
-    height: 1.2rem;
+.icon{
+    width: 1.3rem;
+    height: 1.3rem;
 }
 
 
@@ -62,5 +65,7 @@ svg{
         }
     }
 
-    #delete{ color: red; }
+    #delete{ 
+        color: red; 
+    }
 }
