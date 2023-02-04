@@ -62,7 +62,6 @@ export class CreateComponent implements OnInit, OnDestroy {
     readonly $isSaveDisabled = this.$setSaveDisabled.asObservable()
   // #endregion
 
-  onConfirmFn = () => {}
   confirmPrompt = ''
 
   show!: Show
@@ -138,8 +137,6 @@ export class CreateComponent implements OnInit, OnDestroy {
     })
   }
 
-
-
   ngOnInit(): void { 
     this.menu = [
       {
@@ -171,6 +168,10 @@ export class CreateComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void { this.$unSub.next() }
 
 
+  get formValue(){
+    return this.sceneForm.getRawValue()
+  }
+
   onChange(): void{ this.isSaved = false }
 
   saveShow(): void{
@@ -189,15 +190,11 @@ export class CreateComponent implements OnInit, OnDestroy {
   onCancel(): void{ this.createService.setIsConfirmShowing(false) }
 
   onDeleteClicked(){ 
-    this.confirmPrompt = 'Delete the selected scene?'
     this.$setConfirmVisibility.next(true)
-    this.onConfirmFn = this.deleteScene.bind(this)
   }
 
   onResetClicked(): void{
-    this.confirmPrompt = 'Reset the selected scene?'
     this.$setConfirmVisibility.next(true)
-    this.onConfirmFn = this.resetScene.bind(this)
   }
 
   onDuplicateClicked(scenes: Scene){

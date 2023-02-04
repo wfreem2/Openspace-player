@@ -2,7 +2,7 @@
     <div class="header">
         <a routerLink="/" id="back">
             <i-tabler name="arrow-bar-to-left" class="ico"></i-tabler>
-            Home
+            Back to Home
         </a>
         <input name="title" class="title input" type="text" selectallOnclick
         placeholder="Show Title" [(ngModel)]="show.title"/>  
@@ -27,22 +27,24 @@
     </div>
 </div>
 
-<confirm-popup *ngIf="$isConfirmShowing | async"
-(confirmClickedEvent)="onConfirmFn()"
-(cancelClickedEvent)="onCancel()"
-[prompt]="confirmPrompt">
-</confirm-popup>
+<modal title="Delete Scene?" *ngIf="$isConfirmShowing | async"
+    (closedEvent)="$setConfirmVisibility.next(false)">
+    <div *ngIf="$selectedScene | async as scene" class="modal-content">
+        <p class="prompt"> Deleting scene <b>{{scene.title}}</b> cannot be undone.</p>
+        <button class="btn secondary" (click)="$setConfirmVisibility.next(false)">No, Cancel</button>
+        <button class="btn primary" (click)="deleteScene()">Yes, Delete</button>
+    </div>
+</modal>
+
 
 
 <ng-template #sceneTabs>
-    <form id="scene-form" [formGroup]="sceneForm" *ngIf="$selectedScene | async as currScene">
+    <form id="scene-form" [formGroup]="sceneForm" *ngIf="$selectedScene | async">
         <div class="scene-title">
             <input name="title" type="text" class="title" 
             formControlName="title" placeholder="Scene Title">
             <i-tabler name="x" id="x" (click)="sceneForm.controls.title.setValue('')" ></i-tabler>
         </div>
-
-        <!-- <scene-options formControlName="options"></scene-options> -->
 
         <tabs>
             <tab name="Summary">
@@ -51,30 +53,31 @@
                         <p class="title">GeoPosition</p>
                         <ul class="geoPos">
                             <li>
-                                <p>Node: {{currScene?.geoPos?.nodeName}}</p>
+                                <p>Node: </p>
+                                <p>{{formValue.geoPos.nodeName}}</p>
                             </li>
                             <li>
                                 <p>Latitude:</p>
-                                <p>{{currScene?.geoPos?.lat}}</p>
+                                <p>{{formValue.geoPos.lat}}</p>
                             </li>
                             <li>
                                 <p>Longitude:</p>
-                                <p>{{currScene?.geoPos?.long}}</p>
+                                <p>{{formValue.geoPos.long}}</p>
                             </li>
                             <li>
                                 <p>Altitude:</p>
-                                <p>{{currScene?.geoPos?.alt}}</p>
+                                <p>{{formValue.geoPos.alt}}</p>
                             </li>
                         </ul>
                     </div>
 
                     <div class="section">
-                        <p class="title">Enabled Trails</p>
+                        <p class="title">Enabled Trails ({{formValue.options.enabledTrails.length}})</p>
                         <ul class="enabledTrails">
-                            <li *ngFor="let trail of currScene.options.enabledTrails">
+                            <li *ngFor="let trail of formValue.options.enabledTrails">
                                 {{trail}}
                             </li>
-                            <li *ngIf="!currScene.options.enabledTrails.length">
+                            <li *ngIf="!formValue.options.enabledTrails.length">
                                 No trails enabled
                             </li>
                         </ul>
@@ -82,10 +85,10 @@
                     <div class="section" id="duration">
                         <p class="title">Transition Duration</p>
                         <ul>
-                            <li *ngIf="currScene.duration">
-                                {{currScene.duration}} seconds
+                            <li *ngIf="formValue.transistion">
+                                {{formValue.transistion}} seconds
                             </li>
-                            <li *ngIf="!currScene.duration">
+                            <li *ngIf="!formValue.transistion">
                                 Default Transition
                             </li>
                         </ul>

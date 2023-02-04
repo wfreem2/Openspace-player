@@ -14,6 +14,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { ConfirmPopupComponent } from './confirm-popup/confirm-popup.component';
 import { IconsModule } from '../icons.module';
 import { SelectallOnclickDirective } from '../Directives/selectall-onclick.directive';
+import { ModalComponent } from './modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { SelectallOnclickDirective } from '../Directives/selectall-onclick.direc
     NotificationsComponent,
     ConfirmPopupComponent,
     SelectallOnclickDirective,
+    ModalComponent,
   ],
   imports: [
     CommonModule,
@@ -50,7 +52,8 @@ import { SelectallOnclickDirective } from '../Directives/selectall-onclick.direc
     ClickedoutsideofDirective,
     NotificationsComponent,
     ConfirmPopupComponent,
-    SelectallOnclickDirective
+    SelectallOnclickDirective,
+    ModalComponent,
   ]
 })
 export class SharedModule { }

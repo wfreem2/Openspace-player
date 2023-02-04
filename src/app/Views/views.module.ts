@@ -19,7 +19,6 @@ import { TabComponent } from './create/components/tabs/tab/tab.component';
 import { TabsComponent } from './create/components/tabs/tabs.component';
 
 
-
 @NgModule({
   declarations: [
     HomeComponent,
@@ -41,11 +40,12 @@ import { TabsComponent } from './create/components/tabs/tabs.component';
   ],
   imports: [
     SharedModule,
-    DragDropModule
+    DragDropModule,
   ],
   exports: [
     HomeComponent,
     CreateComponent,
-  ]
+  ],
+
 })
 export class ViewsModule { }

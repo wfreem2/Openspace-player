@@ -55,7 +55,7 @@
     }
 
     &:disabled{
-        background: shade($gray, 30%);
+        background: shade($gray, 5%);
         border-color: shade($gray, 40%);
     }
 }

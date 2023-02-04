@@ -1,5 +1,6 @@
 @import '/src/scss/variables.scss';
 @import '/src/scss/mixins.scss';
+@import '/src/scss/func.scss';
 
 :host{
     @extend %align-center, %glass;
@@ -32,7 +33,7 @@
 
         &.active{
             color: $clr-accent;
-            background: #d0e4ff;
+            background: tint($clr-accent, 80%);
         }
     }
 }

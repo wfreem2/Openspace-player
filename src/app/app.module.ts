@@ -16,7 +16,7 @@ import { ViewsModule } from './Views/views.module';
     BrowserModule,
     AppRoutingModule,
     SharedModule,
-    ViewsModule
+    ViewsModule,
   ],
   providers: [ShowService],
   bootstrap: [AppComponent]

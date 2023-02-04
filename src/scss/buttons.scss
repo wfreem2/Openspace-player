@@ -31,8 +31,9 @@
             border: solid 2px $clr-accent;
 
             &:hover{
-                color: #ffffff;
-                background: $clr-accent;
+                $clr: shade($clr-accent, 50%);
+                color: $clr;
+                border-color: $clr;
             }
         }
     }
