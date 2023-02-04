@@ -12,13 +12,13 @@
         </div>
 
         <div class="select-opts">
-            <button (click)="selectAllTrails()">Select All</button>
-            <button (click)="deselectAllTrails()">Deselect All</button>
+            <button (click)="_$selectAll.next()">Select All</button>
+            <button (click)="_$deselectAll.next()">Deselect All</button>
         </div>
 
         <ul class="options-list" formArrayName="enabledTrails">
             <li class="option" [class.active]="option.controls.isEnabled.value"
-             *ngFor="let option of filteredTrails$ | async" [formGroup]="option">
+             *ngFor="let option of $filteredTrails | async" [formGroup]="option">
                 <label for="{{option.controls.trail.value}}">{{option.controls.trail.value}} Trail</label>
                 <input type="checkbox" name="{{option.controls.trail.value}}"  formControlName="isEnabled">
             </li>

@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { isEqual } from 'lodash';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, skip, startWith, Subject, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, of, tap, skip, startWith, Subject, switchMap, takeUntil, ReplaySubject, withLatestFrom } from 'rxjs';
 import { SceneOptions } from 'src/app/Interfaces/SceneOptions';
 import { SceneOptionsForm, TrailOptionsForm } from 'src/app/Interfaces/ShowForm';
 import { SceneGraphNode } from 'src/app/Services/openspace.service';
@@ -31,62 +30,67 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   onChange: any = () => {}
   onTouch: any = () => {}
   
-  private $unsub = new Subject<any>()
+  private $unsub = new Subject<void>()
   private touched: boolean = false
   private disabled: boolean = false
   
   
   sceneOptions!: SceneOptions
   
-  query = new Subject<string>()
+  _$selectAll = new Subject<void>()
+  _$deselectAll = new Subject<void>()
+  
+  query = new BehaviorSubject<string>('')
   $currSorting = new BehaviorSubject<SortingType>(SortingType.None)
-
+  _filteredTrails = new BehaviorSubject<FormGroup<TrailOptionsForm>[]>([])
+  
+  $filteredTrails!: Observable<FormGroup<TrailOptionsForm>[]>
   
   optionsForm = new FormGroup<SceneOptionsForm>({
     keepCameraPosition: new FormControl<boolean>(true, {nonNullable: true}),
     enabledTrails: new FormArray<FormGroup<TrailOptionsForm>>([])
   })
-
-  filteredTrails = new FormArray<FormGroup<TrailOptionsForm>>([])
-  filteredTrails$!: Observable<FormGroup<TrailOptionsForm>[]>
-
+  
   constructor() { 
     this.initFormGroup()
 
     this.$currSorting.asObservable()
     .pipe(takeUntil(this.$unsub))
     .subscribe(sorting => this.sort(sorting))
-   
-    this.query.asObservable()
-    .pipe(
-      map(query => query.toLowerCase()),
-      switchMap(query => of(this.search(query))),
-      takeUntil(this.$unsub),
-      map(v => [...v]) //Deep copy to not affect original list
-    )
-    .subscribe( v => this.filteredTrails.controls = v )
 
 
-    this.filteredTrails$ =    
-    this.query.asObservable()
+    this.$filteredTrails =   
+    combineLatest([this._filteredTrails, this.query]) 
     .pipe(
-      startWith(''),
       takeUntil(this.$unsub),
-      map(query => query.toLowerCase()),
-      switchMap(query => of(this.search(query))),
-      map(v => [...v] as FormGroup<TrailOptionsForm>[] ) //Deep copy to not affect original list
+      switchMap( ([ctrls, query]) => of(this.search(query.toLowerCase(), ctrls))),
+      map( ctrls => [...ctrls] as FormGroup<TrailOptionsForm>[] ) //Deep copy to not affect original list
+    ) 
+
+    this._$selectAll.asObservable()
+    .pipe(
+      takeUntil(this.$unsub),
+      withLatestFrom(this.$filteredTrails)
     )
+    .subscribe( ([, ctrls]) => this.selectAllTrails(ctrls) )
+
+    this._$deselectAll.asObservable()
+    .pipe(
+      takeUntil(this.$unsub),
+      withLatestFrom(this.$filteredTrails)
+    )
+    .subscribe( ([, ctrls]) => this.deselectAllTrails(ctrls) )
 
     this.optionsForm.valueChanges
     .pipe(
+      takeUntil(this.$unsub),
       map(v => {
         v.enabledTrails =  v.enabledTrails?.filter(t => t.isEnabled)
         return { 
           keepCameraPosition: v.keepCameraPosition,
           enabledTrails: v.enabledTrails?.map(t => t.trail)
         } as SceneOptions
-      }),
-      takeUntil(this.$unsub)
+      })
     )
     .subscribe(v => {
 
@@ -102,7 +106,8 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   private initFormGroup(): void{
     const { enabledTrails } = this.optionsForm.controls
 
-    Object.keys(SceneGraphNode)
+    Object
+    .keys(SceneGraphNode)
     .map(node => { return { node: <SceneGraphNode> node , isEnabled: false} })
     .forEach(t => {
 
@@ -116,7 +121,7 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   }
 
   ngOnInit(): void { }
-  ngOnDestroy(): void { this.$unsub.next(undefined) }
+  ngOnDestroy(): void { this.$unsub.next() }
 
   writeValue(obj: any): void {
     const options = obj as SceneOptions
@@ -128,7 +133,7 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
     }, {emitEvent: false})
 
     
-    this.deselectAllTrails(false)
+    this.deselectAllTrails(this._filteredTrails.getValue(), false)
 
     const { enabledTrails } = this.optionsForm.controls
     
@@ -152,73 +157,63 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   }
 
   sort(sorting: SortingType): void{
-    const { controls } = this.filteredTrails
+    let controls = this._filteredTrails.getValue()
     
     switch(sorting){
         case SortingType.Ascending:
-          controls.sort( (a, b) =>{
-
-            const firstVal = a.controls['trail'].value
-            const secondVal = b.controls['trail'].value
-
-            if(firstVal < secondVal){ return -1 }
-            if(firstVal > secondVal){ return 1 }
-
-            return 0
-          })
+          controls.sort(this.sortFn)
           break
         
         case SortingType.Descending:
-          controls.sort( (a, b) =>{
-            const firstVal = a.controls['trail'].value
-            const secondVal = b.controls['trail'].value
-
-            if(firstVal < secondVal){ return 1 }
-            if(firstVal > secondVal){ return -1 }
-
-            return 0
-          })
+          controls.sort(this.sortFn).reverse()
           break
 
         case SortingType.None:
-          this.filteredTrails.controls = [...this.optionsForm.controls.enabledTrails.controls]
+          controls = [...this.optionsForm.controls.enabledTrails.controls]
           break
     }
-  }
-
-  private search(query: string): FormGroup[] {
-    const { enabledTrails } = this.optionsForm.controls
-
-    const filtered = enabledTrails.controls.filter(value => {
-      const trail: SceneGraphNode = value.controls['trail'].value
-      return trail.toLowerCase().includes(query)
-    })
     
-    return filtered
+    this._filteredTrails.next(controls)
   }
 
   toggleClass(element: any): void{ toggleClass(element, 'collapsed') }
 
-  selectAllTrails(){
-    const { controls } = this.filteredTrails
-    controls.forEach( (t, idx) => {
+  selectAllTrails(ctrls: FormGroup<TrailOptionsForm>[]): void{
+    ctrls.forEach( (t, idx) => {
       t.controls['isEnabled'].setValue(
         true,
-        {emitEvent: idx === controls.length-1}
+        {emitEvent: idx === ctrls.length-1}
       ) 
     })
-
   }
 
-  deselectAllTrails(emitEvent: boolean = true){
-    const { controls } = this.filteredTrails
-    controls.forEach( (t, idx) => {
+  deselectAllTrails(ctrls: FormGroup<TrailOptionsForm>[], emitEvent: boolean = true): void{
+    ctrls.forEach( (t, idx) => {
       t.controls['isEnabled'].setValue(
         false,
-        {emitEvent: idx === controls.length - 1 && emitEvent}
+        {emitEvent: idx === ctrls.length - 1 && emitEvent}
       ) 
     })
   }
 
   get SortingType() { return SortingType }
+  
+  private search(query: string, ctrls: FormGroup<TrailOptionsForm>[]): FormGroup[] {
+
+    return ctrls.filter(value => {
+      const trail: SceneGraphNode = value.controls['trail'].value
+      return trail.toLowerCase().includes(query)
+    })
+    
+  }
+
+  private sortFn(a: FormGroup<TrailOptionsForm>, b: FormGroup<TrailOptionsForm>): number{
+    const firstVal = a.controls['trail'].value
+    const secondVal = b.controls['trail'].value
+
+    if(firstVal < secondVal){ return -1 }
+    if(firstVal > secondVal){ return 1 }
+
+    return 0
+  }
 }

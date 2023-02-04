@@ -44,10 +44,7 @@ export class CreateComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       tap( s => {
         if(s == null){ return }
-        console.log('selected', s)
-        console.log('show', this.show.scenes);
-
-        
+    
         this.sceneForm.setValue(
           {
             title: s.title,
@@ -132,9 +129,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     )
     .subscribe( ([updated,]) => { 
       let original = this.show.scenes.find(s => s.id === updated!.id)!
-      
       Object.assign(original, updated)
-      // original = { ...updated }
 
       console.log('original', original.options)
       console.log('update', updated.options)
