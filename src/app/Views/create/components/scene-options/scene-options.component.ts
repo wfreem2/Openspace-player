@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, of, tap, skip, startWith, Subject, switchMap, takeUntil, ReplaySubject, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, of, Subject, switchMap, takeUntil, withLatestFrom } from 'rxjs';
 import { SceneOptions } from 'src/app/Interfaces/SceneOptions';
 import { SceneOptionsForm, TrailOptionsForm } from 'src/app/Interfaces/ShowForm';
 import { SceneGraphNode } from 'src/app/Services/openspace.service';

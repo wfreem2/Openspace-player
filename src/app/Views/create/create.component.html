@@ -71,10 +71,10 @@
                     <div class="section">
                         <p class="title">Enabled Trails</p>
                         <ul class="enabledTrails">
-                            <li *ngFor="let trail of currScene?.options?.enabledTrails">
+                            <li *ngFor="let trail of currScene.options.enabledTrails">
                                 {{trail}}
                             </li>
-                            <li *ngIf="!currScene?.options?.enabledTrails?.length">
+                            <li *ngIf="!currScene.options.enabledTrails.length">
                                 No trails enabled
                             </li>
                         </ul>
@@ -82,10 +82,10 @@
                     <div class="section" id="duration">
                         <p class="title">Transition Duration</p>
                         <ul>
-                            <li *ngIf="sceneForm.controls.transistion.value">
-                                {{sceneForm.controls.transistion.value}} seconds
+                            <li *ngIf="currScene.duration">
+                                {{currScene.duration}} seconds
                             </li>
-                            <li *ngIf="!sceneForm.controls.transistion.value">
+                            <li *ngIf="!currScene.duration">
                                 Default Transition
                             </li>
                         </ul>
@@ -114,7 +114,9 @@
                     formControlName="transistion"
                     placeholder="Transition Duration" id="transition"/>
             
-                    <p class="error" *ngIf="sceneForm.controls['transistion'].errors?.['pattern']">The field is digits only</p>
+                    <p class="error" *ngIf="sceneForm.controls['transistion'].errors?.['pattern']">
+                        This field is digits only
+                    </p>
                 </div>
             </tab>
 

@@ -75,7 +75,7 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   sceneForm = this.fb.group<SceneForm>({
     script: this.fb.control<string | null>(null),
-    transistion: this.fb.control<number | null>(null, Validators.pattern(/^[0-9]*.[0-9]*$/)),
+    transistion: this.fb.control<number | null>(null, Validators.pattern(/^[0-9]*\.?[0-9]*$/)),
     
     title: this.fb.nonNullable.control<string>('New Scene', [Validators.required]),
     geoPos: this.fb.nonNullable.control<GeoPosition>({lat: 0, long: 0, alt: 0, nodeName: SceneGraphNode.Earth }),

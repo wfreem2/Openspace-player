@@ -177,7 +177,9 @@ $grid-bd: solid 2px $gray;
 }
 
 .summary{
-    @extend %flx-col;
+    @extend %max-H;
+    display: grid;
+    grid-template-rows: max-content minmax(0, 1fr) max-content;
     gap: 1rem;
 
     ul{ padding-left: 1rem }
@@ -199,7 +201,6 @@ $grid-bd: solid 2px $gray;
 
     .enabledTrails{
         overflow-y: auto;
-        max-height: 30rem;
     }
 }
 
