@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { tap, Observable, Subject, takeUntil } from 'rxjs';
-import { CreatorSubMenuItem } from 'src/app/Interfaces/CreatorMenuItem';
+import { CreatorSubMenuItem } from 'src/app/Models/CreatorMenuItem';
 import { OsService } from 'src/app/Services/os.service';
 
 @Component({

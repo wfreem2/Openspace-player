@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as api from 'openspace-api-js'
 import { BehaviorSubject, interval, mergeMap, Observable } from 'rxjs';
-import { GeoPosition } from '../Interfaces/GeoPosition';
-import { NavigationState } from '../Interfaces/NavigationState';
-import { NotificationType } from '../Interfaces/ToastNotification';
+import { GeoPosition } from '../Models/GeoPosition';
+import { NavigationState } from '../Models/NavigationState';
+import { NotificationType } from '../Models/ToastNotification';
 import { NotificationService } from './notification.service';
 
 @Injectable({

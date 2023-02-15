@@ -1,5 +1,5 @@
 import { bufferCount } from "rxjs"
-import { NotificationType, ToastNotifcation } from "../Interfaces/ToastNotification"
+import { NotificationType, ToastNotifcation } from "../Models/ToastNotification"
 import { NotificationService } from "./notification.service"
 
 

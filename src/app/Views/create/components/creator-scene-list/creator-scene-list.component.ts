@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { cloneDeep, merge } from 'lodash';
-import { Scene } from 'src/app/Interfaces/Scene';
+import { Scene } from 'src/app/Models/Scene';
 import { ListItemComponent } from './list-item/list-item.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { distinctUntilChanged, filter, ReplaySubject, Subject, tap } from 'rxjs';

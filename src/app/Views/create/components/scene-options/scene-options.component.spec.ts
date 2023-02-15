@@ -2,7 +2,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testin
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms"
 import { sample, sampleSize } from "lodash"
 import { map } from "rxjs"
-import { SceneOptions } from "src/app/Interfaces/SceneOptions"
+import { SceneOptions } from "src/app/Models/SceneOptions"
 import { SceneGraphNode } from "src/app/Services/openspace.service"
 import { SortingSelectorComponent, SortingType } from "src/app/Shared/sorting-selector/sorting-selector.component"
 import { testControlValueImplementation } from "src/app/Utils/test-utils"

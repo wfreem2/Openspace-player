@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil, tap } from 'rxjs';
 import { SlideInOut } from 'src/app/Animations/animations';
-import { Show } from 'src/app/Interfaces/Show';
+import { Show } from 'src/app/Models/Show';
 import { ShowPreviewService } from 'src/app/Views/home/show-preview.service';
 
 @Component({

@@ -2,7 +2,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testin
 import { FormBuilder, FormsModule, ReactiveFormsModule } from "@angular/forms"
 import { ActivatedRoute } from "@angular/router"
 import { of } from "rxjs"
-import { Show } from "src/app/Interfaces/Show"
+import { Show } from "src/app/Models/Show"
 import { NotificationService } from "src/app/Services/notification.service"
 import { ShowService } from "src/app/Services/show.service"
 import { getFakeScene, getFakeScenes } from "src/app/Utils/test-utils"
@@ -15,7 +15,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ListItemComponent } from "./creator-scene-list/list-item/list-item.component"
 import { sampleSize } from "lodash"
-import { Scene } from "src/app/Interfaces/Scene"
+import { Scene } from "src/app/Models/Scene"
 import { SearchScenesPipe } from "./pipes/search-scenes.pipe"
 import { ConfirmPopupComponent } from "src/app/Shared/confirm-popup/confirm-popup.component"
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"

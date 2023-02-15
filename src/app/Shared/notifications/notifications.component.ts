@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ScaleInOut } from 'src/app/Animations/animations';
-import { NotificationType, ToastNotifcation } from 'src/app/Interfaces/ToastNotification';
+import { NotificationType, ToastNotifcation } from 'src/app/Models/ToastNotification';
 import { NotificationService } from 'src/app/Services/notification.service';
 
 @Component({

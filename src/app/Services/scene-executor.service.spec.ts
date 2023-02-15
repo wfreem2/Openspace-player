@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { sampleSize } from 'lodash';
-import { Scene } from '../Interfaces/Scene';
+import { Scene } from '../Models/Scene';
 import { getFakeScene } from '../Utils/test-utils';
 import { OpenspaceService, SceneGraphNode } from './openspace.service';
 

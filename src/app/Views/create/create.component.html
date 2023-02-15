@@ -32,7 +32,16 @@
     <div *ngIf="$selectedScene | async as scene" class="modal-content">
         <p class="prompt"> Deleting scene <b>{{scene.title}}</b> cannot be undone.</p>
         <button class="btn secondary" (click)="$setConfirmVisibility.next(false)">No, Cancel</button>
-        <button class="btn primary" (click)="deleteScene()">Yes, Delete</button>
+        <button class="btn primary" id="delete" (click)="deleteScene()">Yes, Delete</button>
+    </div>
+</modal>
+
+<modal title="Reset Scene?" *ngIf="$isResetShowing | async"
+    (closedEvent)="$setResetVisibility.next(false)">
+    <div *ngIf="$selectedScene | async as scene" class="modal-content">
+        <p class="prompt"> Reset scene <b>{{scene.title}}</b> to default valuesr?</p>
+        <button class="btn secondary" (click)="$setResetVisibility.next(false)">No, Cancel</button>
+        <button class="btn primary" (click)="resetScene()">Yes, Reset</button>
     </div>
 </modal>
 

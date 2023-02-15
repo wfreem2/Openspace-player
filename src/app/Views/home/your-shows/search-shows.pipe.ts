@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Show } from 'src/app/Interfaces/Show';
+import { Show } from 'src/app/Models/Show';
 
 @Pipe({
   name: 'searchShows'

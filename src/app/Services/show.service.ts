@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { merge } from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Show } from '../Interfaces/Show';
+import { Show } from '../Models/Show';
 
 @Injectable({
   providedIn: 'root'

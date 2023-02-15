@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { Show } from 'src/app/Interfaces/Show';
+import { Show } from 'src/app/Models/Show';
 
 @Component({
   selector: 'show-card',

@@ -1,9 +1,9 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, filter, map, Subject, Subscription, takeUntil, catchError, throttleTime } from 'rxjs';
-import { GeoPosition } from 'src/app/Interfaces/GeoPosition';
-import { GeoPosForm } from 'src/app/Interfaces/ShowForm';
-import { NotificationType } from 'src/app/Interfaces/ToastNotification';
+import { GeoPosition } from 'src/app/Models/GeoPosition';
+import { GeoPosForm } from 'src/app/Models/ShowForm';
+import { NotificationType } from 'src/app/Models/ToastNotification';
 import { NotificationService } from 'src/app/Services/notification.service';
 import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
 

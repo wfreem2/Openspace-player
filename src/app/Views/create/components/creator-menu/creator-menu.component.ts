@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CreatorMenuItem, CreatorSubMenuItem } from 'src/app/Interfaces/CreatorMenuItem';
+import { CreatorMenuItem, CreatorSubMenuItem } from 'src/app/Models/CreatorMenuItem';
 
 @Component({
   selector: 'creator-menu',

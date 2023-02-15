@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Scene } from 'src/app/Interfaces/Scene';
+import { Scene } from 'src/app/Models/Scene';
 
 @Pipe({
   name: 'searchScenes',

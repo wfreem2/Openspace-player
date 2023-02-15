@@ -1,19 +1,19 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Scene } from 'src/app/Interfaces/Scene';
+import { Scene } from 'src/app/Models/Scene';
 import { cloneDeep, isEqual, merge } from "lodash";
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, first, map, Observable, Subject, takeUntil, tap, withLatestFrom } from 'rxjs';
 import { ShowService } from 'src/app/Services/show.service';
-import { Show } from 'src/app/Interfaces/Show';
+import { Show } from 'src/app/Models/Show';
 import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
 import { NotificationService } from 'src/app/Services/notification.service';
-import { NotificationType } from 'src/app/Interfaces/ToastNotification';
-import { SceneForm } from 'src/app/Interfaces/ShowForm';
-import { GeoPosition } from 'src/app/Interfaces/GeoPosition';
-import { SceneOptions } from 'src/app/Interfaces/SceneOptions';
+import { NotificationType } from 'src/app/Models/ToastNotification';
+import { SceneForm } from 'src/app/Models/ShowForm';
+import { GeoPosition } from 'src/app/Models/GeoPosition';
+import { SceneOptions } from 'src/app/Models/SceneOptions';
 import { SceneExecutorService } from 'src/app/Services/scene-executor.service';
-import { CreatorMenuItem } from 'src/app/Interfaces/CreatorMenuItem';
+import { CreatorMenuItem } from 'src/app/Models/CreatorMenuItem';
 import { CreateService } from './services/create.service';
 import { ScenePositionComponent } from './components/scene-position/scene-position.component';
 import { SelectedSceneService } from './services/selected-scene.service';
@@ -32,6 +32,7 @@ export class CreateComponent implements OnInit, OnDestroy {
   // #region observable sources
     readonly $setScene = new BehaviorSubject<Scene | null>(null)
     readonly $setSaveDisabled = new BehaviorSubject<boolean>(false)
+    readonly $setResetVisibility = new Subject<boolean>()
     readonly $setConfirmVisibility = new Subject<boolean>()
 
     private $unSub = new Subject<void>()
@@ -59,6 +60,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     )
     
     readonly $isConfirmShowing = this.$setConfirmVisibility.asObservable()
+    readonly $isResetShowing = this.$setResetVisibility.asObservable()
     readonly $isSaveDisabled = this.$setSaveDisabled.asObservable()
   // #endregion
 
@@ -194,7 +196,7 @@ export class CreateComponent implements OnInit, OnDestroy {
   }
 
   onResetClicked(): void{
-    this.$setConfirmVisibility.next(true)
+    this.$setResetVisibility.next(true)
   }
 
   onDuplicateClicked(scenes: Scene){
@@ -219,7 +221,7 @@ export class CreateComponent implements OnInit, OnDestroy {
   resetScene(): void{
     this.sceneForm.reset()
     this.isAutoMode = false
-    this.$setConfirmVisibility.next(false)
+    this.$setResetVisibility.next(false)
   }
 
   preview(scene: Scene): void{

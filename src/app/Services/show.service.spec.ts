@@ -1,5 +1,5 @@
 import { first, map } from "rxjs"
-import { Show } from "../Interfaces/Show"
+import { Show } from "../Models/Show"
 import { ShowService } from "./show.service"
 
 describe("ShowService", () => {

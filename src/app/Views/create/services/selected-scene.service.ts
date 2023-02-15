@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { filter, Subject } from 'rxjs';
-import { Scene } from 'src/app/Interfaces/Scene';
+import { Scene } from 'src/app/Models/Scene';
 
 @Injectable({
   providedIn: 'root'

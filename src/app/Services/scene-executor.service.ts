@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Scene } from '../Interfaces/Scene';
+import { Scene } from '../Models/Scene';
 import { OpenspaceService, SceneGraphNode } from './openspace.service';
 
 @Injectable({

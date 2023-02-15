@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker"
 import { sampleSize } from "lodash"
-import { GeoPosition } from "../Interfaces/GeoPosition"
-import { Scene } from "../Interfaces/Scene"
-import { SceneOptions } from "../Interfaces/SceneOptions"
+import { GeoPosition } from "../Models/GeoPosition"
+import { Scene } from "../Models/Scene"
+import { SceneOptions } from "../Models/SceneOptions"
 import { SceneGraphNode } from "../Services/openspace.service"
 
 export function testControlValueImplementation(component: any){

@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Scene } from 'src/app/Interfaces/Scene';
+import { Scene } from 'src/app/Models/Scene';
 import { isElementOrChildClicked } from 'src/app/Utils/utils';
 
 @Component({

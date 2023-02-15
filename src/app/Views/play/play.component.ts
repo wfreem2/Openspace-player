@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { filter, first, map, pluck, tap } from 'rxjs';
-import { Scene } from 'src/app/Interfaces/Scene';
-import { Show } from 'src/app/Interfaces/Show';
-import { NotificationType } from 'src/app/Interfaces/ToastNotification';
+import { Scene } from 'src/app/Models/Scene';
+import { Show } from 'src/app/Models/Show';
+import { NotificationType } from 'src/app/Models/ToastNotification';
 import { NotificationService } from 'src/app/Services/notification.service';
 import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
 import { SceneExecutorService } from 'src/app/Services/scene-executor.service';

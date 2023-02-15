@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs';
-import { Show } from 'src/app/Interfaces/Show';
+import { Show } from 'src/app/Models/Show';
 import { ShowPreviewService } from 'src/app/Views/home/show-preview.service';
 import { ShowService } from 'src/app/Services/show.service';
 
