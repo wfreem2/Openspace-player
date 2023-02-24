@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Scene } from 'src/app/Models/Scene';
-import { cloneDeep, isEqual, merge } from "lodash";
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, first, map, Observable, Subject, takeUntil, tap, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, first, map, Subject, takeUntil, tap, withLatestFrom } from 'rxjs';
 import { ShowService } from 'src/app/Services/show.service';
 import { Show } from 'src/app/Models/Show';
 import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
@@ -16,7 +15,6 @@ import { SceneExecutorService } from 'src/app/Services/scene-executor.service';
 import { CreatorMenuItem } from 'src/app/Models/CreatorMenuItem';
 import { CreateService } from './services/create.service';
 import { ScenePositionComponent } from './components/scene-position/scene-position.component';
-import { SelectedSceneService } from './services/selected-scene.service';
 
 @Component({
   selector: 'app-create',
@@ -88,8 +86,8 @@ export class CreateComponent implements OnInit, OnDestroy {
   
   readonly DEFAULT_SCENE = this.sceneForm.getRawValue()
 
-  constructor(private route: ActivatedRoute, public showService: ShowService, public createService: CreateService,
-     public selectedSceneService: SelectedSceneService, private notiService: NotificationService,
+  constructor(private route: ActivatedRoute, public showService: ShowService,
+     private notiService: NotificationService,
      private fb: FormBuilder, private openSpaceService: OpenspaceService, 
      private sceneExecutor: SceneExecutorService) {
 
@@ -106,6 +104,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     .pipe(
       takeUntil(this.$unSub),
       withLatestFrom(this.$selectedScene),
+      filter( ([, selectedScene]) => !!selectedScene),
       map( ([formVal, selectedScene]) => {
         return [
           {
@@ -120,16 +119,16 @@ export class CreateComponent implements OnInit, OnDestroy {
         ]
       }),
       tap( () => {
-        this.isSaved = false
+        this.isSaved = !this.sceneForm.valid
         this.$setSaveDisabled.next(!this.sceneForm.valid)
 
         console.log('form changed');
         console.log(this.sceneForm.value)
-        
       })
     )
     .subscribe( ([updated,]) => { 
-      let original = this.show.scenes.find(s => s.id === updated!.id)!
+      let original = this.show.scenes.find(s => s.id === updated.id )!
+      
       Object.assign(original, updated)
 
       console.log('original', original.options)
@@ -179,6 +178,7 @@ export class CreateComponent implements OnInit, OnDestroy {
   saveShow(): void{
 
     if(!this.sceneForm.valid){ return }
+    console.log('Saving', this.sceneForm.valid);
     
     this.showService.save(this.show) 
     this.isSaved = true
@@ -189,7 +189,6 @@ export class CreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  onCancel(): void{ this.createService.setIsConfirmShowing(false) }
 
   onDeleteClicked(){ 
     this.$setConfirmVisibility.next(true)

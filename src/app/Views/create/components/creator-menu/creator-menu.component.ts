@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CreatorMenuItem, CreatorSubMenuItem } from 'src/app/Models/CreatorMenuItem';
+import { CreatorMenuItem } from 'src/app/Models/CreatorMenuItem';
 
 @Component({
   selector: 'creator-menu',
@@ -8,7 +8,7 @@ import { CreatorMenuItem, CreatorSubMenuItem } from 'src/app/Models/CreatorMenuI
 })
 export class CreatorMenuComponent implements OnInit {
 
-  @Input() menuItems!: CreatorMenuItem[]
+  @Input() menuItems: CreatorMenuItem[] = []
   
 
   items!:{ menuItem: CreatorMenuItem, isShowing: boolean }[]

@@ -1,10 +1,9 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
-import { cloneDeep, merge } from 'lodash';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { cloneDeep } from 'lodash';
 import { Scene } from 'src/app/Models/Scene';
 import { ListItemComponent } from './list-item/list-item.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { distinctUntilChanged, filter, ReplaySubject, Subject, tap } from 'rxjs';
-import { CreateService } from '../../services/create.service';
+import { filter, ReplaySubject, Subject, tap } from 'rxjs';
 
 @Component({
   selector: 'creator-scene-list',
@@ -29,27 +28,18 @@ export class CreatorSceneListComponent implements OnInit, OnDestroy{
   private $unsub = new Subject<void>()
   $setScene = new ReplaySubject<Scene>()
 
-  $currScene = this.$setScene.pipe( 
+  $currScene = this.$setScene
+  .pipe( 
     filter(scene => !!scene),
-    tap(scene => this.itemClickedEvent.emit(scene) )
+    tap( scene => this.itemClickedEvent.emit(scene) )
   )
   
-  constructor(private cdRef : ChangeDetectorRef, public createService: CreateService) { }
+  constructor(private cdRef : ChangeDetectorRef) { }
 
 
   ngOnDestroy(): void { this.$unsub.next() }
 
-  ngOnInit(): void {
-    this.createService.currSceneUpdated
-    .pipe( distinctUntilChanged() )
-    .subscribe( scene => {
-      console.log('scene updated');
-      
-      const existing = this.scenes.find(s => s.id === scene?.id)
-      merge(existing, scene)
-    })
-
-  }
+  ngOnInit(): void { }
 
   newScene(): void{
     const id = this.scenes.reduce( (a, b) => Math.max(a, b.id), 0 ) + 1

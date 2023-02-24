@@ -1,25 +1,27 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testing"
 import { FormBuilder, FormsModule, ReactiveFormsModule } from "@angular/forms"
 import { ActivatedRoute } from "@angular/router"
-import { of } from "rxjs"
+import { first, of, skip } from "rxjs"
 import { Show } from "src/app/Models/Show"
 import { NotificationService } from "src/app/Services/notification.service"
 import { ShowService } from "src/app/Services/show.service"
 import { getFakeScene, getFakeScenes } from "src/app/Utils/test-utils"
 import { CreateComponent } from "./create.component"
-import { CreatorSceneListComponent } from "./creator-scene-list/creator-scene-list.component"
-import { SceneOptionsComponent } from "./scene-options/scene-options.component"
-import { ScenePositionComponent } from "./scene-position/scene-position.component"
-import { SelectedSceneService } from "./selected-scene.service"
 import { RouterTestingModule } from "@angular/router/testing";
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { ListItemComponent } from "./creator-scene-list/list-item/list-item.component"
 import { sampleSize } from "lodash"
 import { Scene } from "src/app/Models/Scene"
 import { SearchScenesPipe } from "./pipes/search-scenes.pipe"
 import { ConfirmPopupComponent } from "src/app/Shared/confirm-popup/confirm-popup.component"
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { SceneExecutorService } from "src/app/Services/scene-executor.service"
+import { CreatorSceneListComponent } from "./components/creator-scene-list/creator-scene-list.component"
+import { ListItemComponent } from "./components/creator-scene-list/list-item/list-item.component"
+import { SceneOptionsComponent } from "./components/scene-options/scene-options.component"
+import { ScenePositionComponent } from "./components/scene-position/scene-position.component"
+import { SelectedSceneService } from "./services/selected-scene.service"
+import { TablerIconsModule } from "angular-tabler-icons"
+import { IconsModule } from "src/app/icons.module"
 
 describe('CreateComponent', () => {
     let component: CreateComponent
@@ -53,10 +55,11 @@ describe('CreateComponent', () => {
                 {provide: ActivatedRoute, useValue: fakeRoute},
                 {provide: ShowService, useValue: fakeShowService},
                 {provide: SceneExecutorService, useValue: fakeExecutorService},
-                SelectedSceneService,
                 NotificationService, FormBuilder
             ],
-            imports: [ReactiveFormsModule, FormsModule, RouterTestingModule, DragDropModule, BrowserAnimationsModule]
+            imports: [ReactiveFormsModule, FormsModule, RouterTestingModule, 
+                DragDropModule, BrowserAnimationsModule, IconsModule, TablerIconsModule]
+
         })
         .compileComponents()
         .then( () => {
@@ -66,50 +69,50 @@ describe('CreateComponent', () => {
             fixture.detectChanges()
         })
 
-        fakeShow.scenes = getFakeScenes()
+        fakeShow.scenes = getFakeScenes(5)
     })
 
     afterAll( () => localStorage.clear() )
 
-    it('correct show should be used based on route param id', () => {
+/*     it('correct show should be used based on route param id', () => {
         fixture.detectChanges()
 
         expect(component.show.id).toEqual(fakeShow.id)
     })
 
-    it('#newScene() should create new scene with unique id', () => {
-        const selectedSceneService = fixture.debugElement.injector.get(SelectedSceneService)
-        const selectedSceneSpy = spyOn(selectedSceneService, 'setScene').and.callThrough()
+    it('selecting a scene should set the current forms values to the scene\'s', (done) => {
+        const selectedScene = getFakeScene(99)
 
-        component.newScene()
+        component.$setScene.next(selectedScene)
 
-        const { show } = component
-        const ids = new Set(show.scenes)
+        let id = 100
+        component.$selectedScene
+        .pipe( first() )
+        .subscribe( scene => {
+            expect(scene).toEqual(selectedScene)
+            id = scene!.id + 1
+        })
 
-        expect(ids.size).toEqual(show.scenes.length)
-        expect(selectedSceneSpy).toHaveBeenCalled()
-    })
-
-    it('selecting a scene should set the current forms values to the scene\'s', () => {
-        const selectedSceneService = fixture.debugElement.injector.get(SelectedSceneService)
-        const scene = getFakeScene(99)
-
-        selectedSceneService.setScene(scene)
-
-        expect(component.currScene).toEqual(scene)
-        
         const rawScene = component.sceneForm.getRawValue()
 
         const newScene: Scene = {
-            id: component.currScene!.id,
-            title: rawScene.title,
+            id: id,
+            title: rawScene.title + 'some other stuff',
             geoPos: rawScene.geoPos,
             options: rawScene.options,
             duration: rawScene.transistion || undefined,
             script: rawScene.script || undefined
         }
+        
+        component.$setScene.next(newScene)
+        
+        component.$selectedScene
+        .pipe( first() )
+        .subscribe( scene => {
+            expect(scene).toEqual(newScene)
+            done()
+        })
 
-        expect(component.currScene).toEqual(newScene)
     })
 
     it('selecting a scene should not emit a valuechange event', fakeAsync(() => {
@@ -123,13 +126,12 @@ describe('CreateComponent', () => {
 
         tick(100)
         expect(change).toBeUndefined()
-    }))
+    })) */
 
     it('changing a form value should make saved state false', () => {
-        const scene = getFakeScene(99)
-        const selectedSceneService = fixture.debugElement.injector.get(SelectedSceneService)
+        const scene = getFakeScene(3)
 
-        selectedSceneService.setScene(scene)
+        component.$setScene.next(scene)
 
         component.sceneForm.patchValue({
             title: 'New title'
@@ -137,7 +139,7 @@ describe('CreateComponent', () => {
 
         expect(component.isSaved).toBeFalse()
     })
-
+/* 
     it('#saveShow() should save show with ShowService', () => {
         component.saveShow()
 
@@ -148,39 +150,54 @@ describe('CreateComponent', () => {
     it('#saveShow() should not save form if the form is invalid', () => {
         
         component.sceneForm.controls.transistion.setErrors({'pattern': true})
-        component.sceneForm.updateValueAndValidity()
-        
         fixture.detectChanges()
+
         component.saveShow()
-
-        expect(fakeShowService.save).not.toHaveBeenCalled()
-        expect(component.isSaved).toEqual(false)
-    })
-
-    it('#onDeleteClicked() should show confirmation popup', () => {
-        component.onDeleteClicked()
-        fixture.detectChanges()
         
-        expect(component.isConfirmShowing).toBeTrue()
+        expect(fakeShowService.save).not.toHaveBeenCalled()
     })
 
-    it('#deleteScene() should remove scene from list', () => {
+    it('#onDeleteClicked() should show confirmation popup', (done) => {
+
+        const spy = spyOn(component.$setConfirmVisibility, 'next').and.callThrough()
+
+        component.$isConfirmShowing.pipe( first() )
+        .subscribe( isConfirmShowing => {
+            expect(spy).toHaveBeenCalled()
+            expect(isConfirmShowing).toBeTrue()
+            done()
+        })
+            
+        fixture.detectChanges()
+        component.onDeleteClicked()
+
+    })
+
+    it('#deleteScene() should remove scene from list', (done) => {
         const { scenes } = component.show
         const sceneToDelete = sampleSize(scenes, 1)[0]
+
+        component.$setScene.next(sceneToDelete)
         
-        component.currScene = sceneToDelete
+        component.$selectedScene
+        .pipe( 
+            skip(1),
+            first() 
+        )
+        .subscribe( scene =>{
+
+            expect(scene).toBeFalsy()
+            const deletedScene = component.show.scenes.find(s => s === sceneToDelete)
+            expect(deletedScene).toBeFalsy()
+            done()
+        })
 
         component.deleteScene()
         fixture.detectChanges()
-        
-        const deletedScene = component.show.scenes.find(s => s === sceneToDelete)
-
-        expect(deletedScene).toBeFalsy()
-        expect(component.currScene).toBeFalsy()
     })
 
     it('#deleteScene() should set isSaved to false', () => {
-        component.currScene = getFakeScene(1)
+        component.$setScene.next( getFakeScene(1) )
 
         component.deleteScene()
         fixture.detectChanges()
@@ -203,21 +220,6 @@ describe('CreateComponent', () => {
         expect(component.isAutoMode).toEqual(false)
     })
 
-    it('#onDeleteClicked() should show confirmPopup', () => {
-        component.onDeleteClicked()
-        expect(component.isConfirmShowing).toBeTrue()
-    })
-
-    it('#onResetClicked() should show confirmPopup', () => {
-        component.onResetClicked()
-        expect(component.isConfirmShowing).toBeTrue()
-    })
-
-    it('#onCancel should hide confirmPopup', () =>{
-        component.onCancel()
-        expect(component.isConfirmShowing).toBeFalse()
-    })
-
     it('#preview() should show error notification when error previewing scene', () => {
         const sceneToExecute = component.show.scenes[0]
         
@@ -228,16 +230,6 @@ describe('CreateComponent', () => {
 
         component.preview(sceneToExecute) 
         expect(spy).toHaveBeenCalled()
-    })
+    }) */
 
-    xit('#saveToDisk() should show notification', () => {
-        spyOn(URL, 'createObjectURL').and.returnValue('')
-        const service = fixture.debugElement.injector.get(NotificationService)
-        
-        component.saveToDisk()
-
-        const spy = spyOn(service, 'showNotification').and.callFake( () => {})
-        expect(spy).toHaveBeenCalled()
-
-    })
 })

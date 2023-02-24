@@ -16,8 +16,9 @@ describe('CreatorMenuComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
+  
   it('should create', () => {
+    component.menuItems = []
     expect(component).toBeTruthy();
   });
 });

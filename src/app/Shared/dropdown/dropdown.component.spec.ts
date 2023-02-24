@@ -1,5 +1,7 @@
 import { ElementRef, Renderer2 } from "@angular/core"
 import { ComponentFixture, TestBed } from "@angular/core/testing"
+import { TablerIconComponent, TablerIconsModule } from "angular-tabler-icons"
+import { IconsModule } from "src/app/icons.module"
 import { testControlValueImplementation } from "src/app/Utils/test-utils"
 import { SortingSelectorComponent, SortingType } from "../sorting-selector/sorting-selector.component"
 import { DropdownComponent } from "./dropdown.component"
@@ -17,8 +19,9 @@ describe("Dropdown component", () => {
 
     beforeEach(async () => { 
         TestBed.configureTestingModule({
-            declarations: [DropdownComponent, SortingSelectorComponent],
-            providers: [{provide: ElementRef, useClass: MockElementRef}, Renderer2]
+            declarations: [DropdownComponent, SortingSelectorComponent, TablerIconComponent],
+            providers: [{provide: ElementRef, useClass: MockElementRef}, Renderer2],
+            imports: [IconsModule, TablerIconsModule]
         })
         .compileComponents()
         .then( () => {

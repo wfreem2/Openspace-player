@@ -14,6 +14,12 @@ describe('CreatorMenuItemComponent', () => {
 
     fixture = TestBed.createComponent(CreatorMenuItemComponent);
     component = fixture.componentInstance;
+    component.menuItem = { 
+      name: 'name',
+      isDisabled: false,
+      callBack: () => { },
+      hotKey: []   
+    }
     fixture.detectChanges();
   });
 

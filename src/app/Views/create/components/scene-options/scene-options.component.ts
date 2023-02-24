@@ -59,7 +59,7 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
     .subscribe(sorting => this.sort(sorting))
 
 
-    this.$filteredTrails =   
+    this.$filteredTrails =
     combineLatest([this._filteredTrails, this.query]) 
     .pipe(
       takeUntil(this.$unsub),

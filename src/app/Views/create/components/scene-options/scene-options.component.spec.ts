@@ -1,7 +1,8 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testing"
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms"
 import { sample, sampleSize } from "lodash"
-import { map } from "rxjs"
+import { first, map, skip, take } from "rxjs"
+import { IconsModule } from "src/app/icons.module"
 import { SceneOptions } from "src/app/Models/SceneOptions"
 import { SceneGraphNode } from "src/app/Services/openspace.service"
 import { SortingSelectorComponent, SortingType } from "src/app/Shared/sorting-selector/sorting-selector.component"
@@ -32,7 +33,7 @@ describe('Scene-options component', () => {
     beforeEach( async () => {
         TestBed.configureTestingModule({
             declarations: [SceneOptionsComponent, SortingSelectorComponent],
-            imports: [ReactiveFormsModule, FormsModule]
+            imports: [ReactiveFormsModule, FormsModule, IconsModule]
         })
         .compileComponents()
         .then( () => {
@@ -105,7 +106,7 @@ describe('Scene-options component', () => {
             done()
         })
         
-        component.selectAllTrails()
+        component._$selectAll.next()
         fixture.detectChanges()
     })
 
@@ -119,7 +120,7 @@ describe('Scene-options component', () => {
             done()
         })
         
-        component.deselectAllTrails()
+        component._$deselectAll.next()
         fixture.detectChanges()
     })
 
@@ -143,33 +144,57 @@ describe('Scene-options component', () => {
         })
     })
 
-    it('#sort() should sort controls ascending with SortingType.Ascending', () => {
+    it('#sort() should sort controls ascending with SortingType.Ascending', (done) => {
         
-        const expectedSort = component.filteredTrails.controls.sort(sortingFn)
+        const expectedSort = component._filteredTrails.getValue().sort(sortingFn)
+
+        component.$filteredTrails
+        .pipe( 
+            skip(1), //Skip first emission (default list)
+            first() 
+        )
+        .subscribe( value => {
+            expect(value).toEqual(expectedSort)
+            done()
+        })
 
         component.sort(SortingType.Ascending)
-
-        expect(component.filteredTrails.controls).toEqual(expectedSort)
     })
 
-    it('#sort() should sort controls descending with SortingType.Descending', () => {
+    it('#sort() should sort controls descending with SortingType.Descending', (done) => {
         
-        const expectedSort = component.filteredTrails.controls.sort(sortingFn).reverse()
+        const expectedSort = component._filteredTrails.getValue().sort(sortingFn).reverse()
+        
+        component.$filteredTrails
+        .pipe( 
+            skip(1), //Skip first emission (default list)
+            first() 
+        )
+        .subscribe( value => {
+            expect(value).toEqual(expectedSort)
+            done()
+        })
 
         component.sort(SortingType.Descending)
-
-        expect(component.filteredTrails.controls).toEqual(expectedSort)
     })
 
-    it('#sort() should sort controls with original sorting with SortingType.None', () => {
+    it('#sort() should sort controls with original sorting with SortingType.None', (done) => {
         
         const expectedSort = component.optionsForm.controls.enabledTrails.controls
+
+        component.$filteredTrails
+        .pipe( 
+            skip(3), //Skip first emission (default list) and Sorting.Descending & Ascending
+        )
+        .subscribe( value => {
+            expect(value).toEqual(expectedSort)
+            done()
+        })
 
         component.sort(SortingType.Descending)
         component.sort(SortingType.Ascending)
         component.sort(SortingType.None)
 
-        expect(component.filteredTrails.controls).toEqual(expectedSort)
     })
 
     it('should properly implement ControlValueAccessor', () => testControlValueImplementation(component))
