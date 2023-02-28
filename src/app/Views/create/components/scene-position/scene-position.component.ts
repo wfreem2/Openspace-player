@@ -6,6 +6,7 @@ import { GeoPosForm } from 'src/app/Models/ShowForm';
 import { NotificationType } from 'src/app/Models/ToastNotification';
 import { NotificationService } from 'src/app/Services/notification.service';
 import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
+import { BaseComponent } from 'src/app/Shared/base/base.component';
 
 @Component({
   selector: 'scene-position',
@@ -20,12 +21,11 @@ import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.ser
   ]
 })
 
-export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
+export class ScenePositionComponent extends BaseComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
   @Input() isAutoMode: boolean = false
   
   
   private listener!: Subscription
-  private $unSub = new Subject<void>()
   private readonly $geoPos = new Subject<GeoPosition>()
   private readonly numRegex = /^-?\d*\.?\d*$/
   
@@ -45,8 +45,10 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
   constructor(private openSpaceService: OpenspaceService, private notiService: NotificationService,
       private fb: NonNullableFormBuilder) { 
 
+    super()
+    
     this.$isAutoMode.asObservable()
-    .pipe(takeUntil(this.$unSub))
+    .pipe(takeUntil(this.$unsub))
     .subscribe(isAuto => {
       this.isAutoMode = isAuto
       
@@ -59,7 +61,7 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
     this.$geoPos.asObservable()
     .pipe(
       filter(geoPos => !!geoPos),
-      takeUntil(this.$unSub)
+      takeUntil(this.$unsub)
     )
     .subscribe(geoPos => {
       this.geoPosForm.setValue({
@@ -84,9 +86,8 @@ export class ScenePositionComponent implements OnInit, OnDestroy, OnChanges, Con
 
   ngOnInit(): void { }
 
-  ngOnDestroy(): void {
-    this.$unSub.next()
-    this.$unSub.unsubscribe()
+  override ngOnDestroy(): void {
+    super.ngOnDestroy()
     this.setGeoListener(false) 
   }
 

@@ -15,6 +15,7 @@ import { SceneExecutorService } from 'src/app/Services/scene-executor.service';
 import { CreatorMenuItem } from 'src/app/Models/CreatorMenuItem';
 import { CreateService } from './services/create.service';
 import { ScenePositionComponent } from './components/scene-position/scene-position.component';
+import { BaseComponent } from 'src/app/Shared/base/base.component';
 
 @Component({
   selector: 'app-create',
@@ -22,7 +23,7 @@ import { ScenePositionComponent } from './components/scene-position/scene-positi
   styleUrls: ['./create.component.scss']
 })
 
-export class CreateComponent implements OnInit, OnDestroy {
+export class CreateComponent extends BaseComponent implements OnInit, OnDestroy {
 
   @ViewChild(ScenePositionComponent) scenePositionComponent!: ScenePositionComponent
 
@@ -33,7 +34,6 @@ export class CreateComponent implements OnInit, OnDestroy {
     readonly $setResetVisibility = new Subject<boolean>()
     readonly $setConfirmVisibility = new Subject<boolean>()
 
-    private $unSub = new Subject<void>()
   // #endregion
 
   // #region observable subscribers
@@ -86,11 +86,11 @@ export class CreateComponent implements OnInit, OnDestroy {
   
   readonly DEFAULT_SCENE = this.sceneForm.getRawValue()
 
-  constructor(private route: ActivatedRoute, public showService: ShowService,
-     private notiService: NotificationService,
-     private fb: FormBuilder, private openSpaceService: OpenspaceService, 
-     private sceneExecutor: SceneExecutorService) {
-
+  constructor(
+    private route: ActivatedRoute, public showService: ShowService,
+    private notiService: NotificationService, private fb: FormBuilder,
+    private openSpaceService: OpenspaceService, private sceneExecutor: SceneExecutorService) {
+    super()
     this.route.params
     .pipe(
       map(params => params?.['id']),
@@ -102,7 +102,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     
     this.sceneForm.valueChanges
     .pipe(
-      takeUntil(this.$unSub),
+      takeUntil(this.$unsub),
       withLatestFrom(this.$selectedScene),
       filter( ([, selectedScene]) => !!selectedScene),
       map( ([formVal, selectedScene]) => {
@@ -130,11 +130,6 @@ export class CreateComponent implements OnInit, OnDestroy {
       let original = this.show.scenes.find(s => s.id === updated.id )!
       
       Object.assign(original, updated)
-
-      console.log('original', original.options)
-      console.log('update', updated.options)
-      console.log('show', this.show.scenes);
-      
     })
   }
 
@@ -165,9 +160,6 @@ export class CreateComponent implements OnInit, OnDestroy {
       },
     ]
   }
-
-  ngOnDestroy(): void { this.$unSub.next() }
-
 
   get formValue(){
     return this.sceneForm.getRawValue()
