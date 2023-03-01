@@ -13,7 +13,6 @@ import { GeoPosition } from 'src/app/Models/GeoPosition';
 import { SceneOptions } from 'src/app/Models/SceneOptions';
 import { SceneExecutorService } from 'src/app/Services/scene-executor.service';
 import { CreatorMenuItem } from 'src/app/Models/CreatorMenuItem';
-import { CreateService } from './services/create.service';
 import { ScenePositionComponent } from './components/scene-position/scene-position.component';
 import { BaseComponent } from 'src/app/Shared/base/base.component';
 
@@ -81,8 +80,6 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     options: this.fb.nonNullable.control<SceneOptions>({keepCameraPosition: true, enabledTrails: []})
   })
   
-
-
   
   readonly DEFAULT_SCENE = this.sceneForm.getRawValue()
 
@@ -90,7 +87,9 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     private route: ActivatedRoute, public showService: ShowService,
     private notiService: NotificationService, private fb: FormBuilder,
     private openSpaceService: OpenspaceService, private sceneExecutor: SceneExecutorService) {
+      
     super()
+
     this.route.params
     .pipe(
       map(params => params?.['id']),
@@ -156,8 +155,12 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
             callBack: () => {},
             isDisabled: false
           }
-        ]
+        ],
       },
+      {
+        name: 'Edit',
+        subMenus: []
+      }
     ]
   }
 
@@ -170,7 +173,6 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
   saveShow(): void{
 
     if(!this.sceneForm.valid){ return }
-    console.log('Saving', this.sceneForm.valid);
     
     this.showService.save(this.show) 
     this.isSaved = true
@@ -180,7 +182,6 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
       this.scenePositionComponent.$isAutoMode.next(false)
     }
   }
-
 
   onDeleteClicked(){ 
     this.$setConfirmVisibility.next(true)

@@ -49,8 +49,14 @@
     padding: 0.5rem 1rem;
     border: solid 2px $gray;
     border-radius: $bd-rad;
-    
-    &:not(:disabled):hover, &:not(:disabled):focus-within{
+
+    &:invalid, &.ng-invalid{
+        color: #71080c;
+        background: #fce7e8;
+        border-color: #e21017;
+    }
+
+    &:not(:disabled):valid:hover, &:not(:disabled):valid:focus-within{
         border-color: $clr-accent;
     }
 

@@ -36,11 +36,6 @@
         text-align: center;
         font-size: 1.2rem;
         max-width: 20rem;
-        border: solid 2px shade($gray, 10%);
-    
-        &:focus-within, &:hover{
-            border-color: $clr-accent;
-        }
     }
 
     
@@ -70,15 +65,14 @@
 
 
 
-
-$grid-bd: solid 2px $gray;
-
 .title{ font-size: 1.5rem; }
 
 
 .scene-creator, .scene-list{
     background: #fafafb;
 }
+
+$grid-bd: solid 2px $gray;
 
 // Scene creation
 .scene-creator{

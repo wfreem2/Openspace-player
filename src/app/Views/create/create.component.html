@@ -5,6 +5,7 @@
             Back to Home
         </a>
         <input name="title" class="title input" type="text" selectallOnclick
+        [class.invalid]="!show.title.length" required 
         placeholder="Show Title" [(ngModel)]="show.title"/>  
         
         <creator-menu id="menu" [menuItems]="menu"></creator-menu>
