@@ -66,14 +66,19 @@ export class OpenspaceService {
       lat: pos[1],
       long: pos[2],
       alt: pos[3],
-      nodeName: anchor
+      node: anchor
     }
   }
   
-  flyTo(path: SceneGraphNode): void{ this.openspace.pathnavigation.flyTo(path.toString()) }
+  flyTo(node: SceneGraphNode): void{ this.openspace.pathnavigation.flyTo(node.toString()) }
 
   resetAnchor(): void{
     this.openspace.navigation.retargetAnchor()
+  }
+
+
+  async getPropertyValue(): Promise<string>{
+    return await this.openspace.getPropertyValue("Scene.Phobos.Renderable.Type")
   }
 
   listenCurrentPosition(): Observable<GeoPosition>{
@@ -81,13 +86,27 @@ export class OpenspaceService {
     .pipe( mergeMap( async () => await this.getCurrentPosition() ) )
   }
 
-  setTrailVisibility(trail: SceneGraphNode, isVisible: boolean): void{
-    if(trail === SceneGraphNode.Sun){ //Sun does not have trail option
-      this.openspace.setPropertyValueSingle("Scene.SunOrbit.Renderable.Enabled", isVisible)
-      return
-    }
+  setTrailVisibility(node: SceneGraphNode, isVisible: boolean): void{
 
-    this.openspace.setPropertyValueSingle(`Scene.${trail}Trail.Renderable.Enabled`, isVisible) 
+    const trail = this.nodeToTrail(node)
+    
+    this.openspace.setPropertyValueSingle(`Scene.${trail}.Renderable.Enabled`, isVisible) 
+  }
+
+  private nodeToTrail(node: SceneGraphNode): string{
+    return node in NodeToTrailMap ? NodeToTrailMap[node] : `${node.toString()}Trail`
+  }
+
+  private nodeToRenderable(node: SceneGraphNode): string{
+    return node in NodeToRenderableMap ? NodeToRenderableMap[node] : node.toString()
+  }
+
+  async getRenderableType(node: SceneGraphNode): Promise<RenderableType>{
+    const renderable = this.nodeToRenderable(node)
+
+    const type = await this.openspace.getPropertyValue(`Scene.${renderable}.Renderable.Type`)   
+    
+    return <RenderableType> type['1']
   }
 
   async getNavigationState(): Promise<NavigationState>{
@@ -107,9 +126,9 @@ export class OpenspaceService {
   }
 
   async getCurrentAnchor(): Promise<SceneGraphNode>{
-    const anchor = (await this.openspace.getPropertyValue('NavigationHandler.OrbitalNavigator.Anchor'))['1']
+    const anchor: SceneGraphNode = (await this.openspace.getPropertyValue('NavigationHandler.OrbitalNavigator.Anchor'))['1']
 
-    return <SceneGraphNode> anchor
+    return anchor
   }
 }
 
@@ -146,4 +165,23 @@ export enum SceneGraphNode{
  Styx="Styx",
  Sun="Sun",
  ISS="ISS"
+}
+
+interface NodeMap {
+  [key: string | SceneGraphNode]: string
+}
+
+export const NodeToTrailMap: NodeMap = {
+  Sun: "SunOrbit",
+  ISS: "ISS_trail"
+}
+
+export const NodeToRenderableMap: NodeMap = {
+  Sun: "SunOrbit",
+  ISS: "ISSModel"
+}
+
+export enum RenderableType{
+  RENDERABLEMODEL="RenderableModel",
+  RENDERABLEGLOBE="RenderableGlobe"
 }

@@ -27,7 +27,7 @@ export function getFakeScenes(N: number = 5): Scene[]{
             alt: Math.random(),
             lat: Math.random(),
             long: Math.random(),
-            nodeName: sampleSize(Object.values(SceneGraphNode), 1)[0]
+            node: sampleSize(Object.values(SceneGraphNode), 1)[0]
         }
         const options: SceneOptions = {
             enabledTrails: sampleSize(Object.values(SceneGraphNode), 5),
@@ -55,7 +55,7 @@ export function getFakeScene(id: number): Scene{
         alt: Math.random(),
         lat: Math.random(),
         long: Math.random(),
-        nodeName: sampleSize(Object.values(SceneGraphNode), 1)[0]
+        node: sampleSize(Object.values(SceneGraphNode), 1)[0]
     }
     const options: SceneOptions = {
         enabledTrails: sampleSize(Object.values(SceneGraphNode), 5),

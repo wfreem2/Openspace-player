@@ -27,14 +27,14 @@
         </div>
         <div class="section">
             <label for="alt">Altitude:</label>
-            <input name="alt" class="input" formControlName="alt"            
+            <input name="alt" class="input" formControlName="alt"
             placeholder="Altitude">
             <ng-container *ngIf="alt!.errors?.['required']" [ngTemplateOutlet]="required"></ng-container>
             <ng-container *ngIf="alt!.errors?.['pattern']" [ngTemplateOutlet]="pattern"></ng-container>
         </div>
         <div class="section">
             <label for="node">Node:</label>
-            <dropdown [items]="pathNavOptions" name="pathnav" formControlName="nodeName"></dropdown>
+            <dropdown [items]="pathNavOptions" name="pathnav" formControlName="node"></dropdown>
         </div>
     </form>
 </div>

@@ -76,7 +76,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     transistion: this.fb.control<number | null>(null, Validators.pattern(/^[0-9]*\.?[0-9]*$/)),
     
     title: this.fb.nonNullable.control<string>('New Scene', [Validators.required]),
-    geoPos: this.fb.nonNullable.control<GeoPosition>({lat: 0, long: 0, alt: 0, nodeName: SceneGraphNode.Earth }),
+    geoPos: this.fb.nonNullable.control<GeoPosition>({lat: 0, long: 0, alt: 0, node: SceneGraphNode.Earth }),
     options: this.fb.nonNullable.control<SceneOptions>({keepCameraPosition: true, enabledTrails: []})
   })
   
@@ -94,7 +94,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     .pipe(
       map(params => params?.['id']),
       map(id => showService.getShowById(parseInt(id))! ),
-      first()
+      first(),
     )
     .subscribe(show => this.show = show)
     
@@ -120,9 +120,6 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
       tap( () => {
         this.isSaved = !this.sceneForm.valid
         this.$setSaveDisabled.next(!this.sceneForm.valid)
-
-        console.log('form changed');
-        console.log(this.sceneForm.value)
       })
     )
     .subscribe( ([updated,]) => { 

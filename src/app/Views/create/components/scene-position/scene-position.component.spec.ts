@@ -21,7 +21,7 @@ describe('Scene-Positon component', () => {
             alt: Math.random(),
             lat: Math.random(),
             long: Math.random(),
-            nodeName: sampleSize(Object.values(SceneGraphNode), 1)[0]
+            node: sampleSize(Object.values(SceneGraphNode), 1)[0]
         } as GeoPosition)
 
         fakeOpenSpaceService.listenCurrentPosition.and.returnValue($fakeObs)
@@ -46,7 +46,7 @@ describe('Scene-Positon component', () => {
             alt: Math.random(),
             lat: Math.random(),
             long: Math.random(),
-            nodeName: sampleSize(Object.values(SceneGraphNode), 1)[0]
+            node: sampleSize(Object.values(SceneGraphNode), 1)[0]
         }
 
         component.writeValue(expectedGeo)
