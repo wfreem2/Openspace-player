@@ -3,14 +3,12 @@
     Loading
 </div>
 
-<ng-container *ngIf="$isConnected | async as connected">
-     <p class="status connected" *ngIf="connected">
-         <i-tabler class="icon" name="circle-check"></i-tabler>
-         Connected
-     </p>
+<p class="status connected" *ngIf="($isConnected | async)">
+    <i-tabler class="icon" name="circle-check"></i-tabler>
+    Connected
+</p>
 
-     <p class="status disconnected" *ngIf="!connected">
-         <i-tabler class="icon" name="circle-x"></i-tabler>
-        Disconnected
-     </p>
-</ng-container>
+<p class="status disconnected" *ngIf="!($isConnected | async) && !($loading | async)">
+    <i-tabler class="icon" name="circle-x"></i-tabler>
+    Disconnected
+</p>
