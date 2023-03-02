@@ -76,11 +76,6 @@ export class OpenspaceService {
     this.openspace.navigation.retargetAnchor()
   }
 
-
-  async getPropertyValue(): Promise<string>{
-    return await this.openspace.getPropertyValue("Scene.Phobos.Renderable.Type")
-  }
-
   listenCurrentPosition(): Observable<GeoPosition>{
     return interval(100)
     .pipe( mergeMap( async () => await this.getCurrentPosition() ) )
@@ -104,13 +99,22 @@ export class OpenspaceService {
   async getRenderableType(node: SceneGraphNode): Promise<RenderableType>{
     const renderable = this.nodeToRenderable(node)
 
-    const type = await this.openspace.getPropertyValue(`Scene.${renderable}.Renderable.Type`)   
+    const type = await this.getPropertyValue(`Scene.${renderable}.Renderable.Type`)   
     
-    return <RenderableType> type['1']
+    return <RenderableType> type
   }
 
+  setTime(time: Date): void{
+    this.openspace.time.setTime( time.toISOString() )
+  }
+
+  async getTime(): Promise<Date>{
+    return new Date( this.retrieveValue(await this.openspace.time.UTC()) )
+  }
+
+
   async getNavigationState(): Promise<NavigationState>{
-    return (await this.openspace.navigation.getNavigationState())['1']
+    return this.retrieveValue((await this.openspace.navigation.getNavigationState()))
   }
 
   setNavigationState(state: NavigationState){
@@ -126,9 +130,17 @@ export class OpenspaceService {
   }
 
   async getCurrentAnchor(): Promise<SceneGraphNode>{
-    const anchor: SceneGraphNode = (await this.openspace.getPropertyValue('NavigationHandler.OrbitalNavigator.Anchor'))['1']
+    const anchor = await this.getPropertyValue<SceneGraphNode>('NavigationHandler.OrbitalNavigator.Anchor')
 
     return anchor
+  }
+
+  private async getPropertyValue<T>(valueURI: string): Promise<T>{
+    return <T> this.retrieveValue(await this.openspace.getPropertyValue(valueURI))
+  }
+
+  private retrieveValue(openspaceObj: { '1': any }){
+    return openspaceObj['1']
   }
 }
 

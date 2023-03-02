@@ -19,7 +19,6 @@ export class ConnectionStatusComponent extends BaseComponent implements OnInit {
 
   constructor(private openspaceService: OpenspaceService) { 
     super() 
-    // this.$isConnected.subscribe( () => this.$loading.next(false) )
   }
 
   ngOnInit(): void { }

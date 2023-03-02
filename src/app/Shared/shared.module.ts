@@ -56,6 +56,7 @@ import { ConnectionStatusComponent } from './connection-status/connection-status
     ConfirmPopupComponent,
     SelectallOnclickDirective,
     ModalComponent,
+    ConnectionStatusComponent,
   ]
 })
 export class SharedModule { }

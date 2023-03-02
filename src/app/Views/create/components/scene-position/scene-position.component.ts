@@ -29,7 +29,7 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
   private readonly $geoPos = new Subject<GeoPosition>()
   
   readonly $isAutoMode = new BehaviorSubject<boolean>(this.isAutoMode)
-  readonly pathNavOptions: SceneGraphNode[] = Object.values(SceneGraphNode)
+  readonly pathNavOptions = Object.values(SceneGraphNode)
 
   public $nodeCanHaveGeo = new Subject<boolean>()
   public $isDisconnected = this.openSpaceService.isConnected()
@@ -70,7 +70,6 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
       takeUntil(this.$unsub)
     )
     .subscribe(geoPos => {
-
       this.geoPosForm.setValue({
         alt: geoPos.alt,
         lat: geoPos.lat,

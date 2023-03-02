@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Scene } from 'src/app/Models/Scene';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, distinctUntilChanged, filter, first, map, Subject, takeUntil, tap, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, concatMap, distinctUntilChanged, filter, first, map, Subject, takeUntil, tap, withLatestFrom } from 'rxjs';
 import { ShowService } from 'src/app/Services/show.service';
 import { Show } from 'src/app/Models/Show';
 import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
@@ -40,9 +40,10 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     .asObservable()
     .pipe(
       distinctUntilChanged(),
-      tap( s => {
+      tap( async s => {
         if(s == null){ return }
-    
+        
+
         this.sceneForm.setValue(
           {
             title: s.title,
@@ -104,7 +105,10 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
       takeUntil(this.$unsub),
       withLatestFrom(this.$selectedScene),
       filter( ([, selectedScene]) => !!selectedScene),
-      map( ([formVal, selectedScene]) => {
+      concatMap( async ([formVal, selectedScene]) => {
+
+        selectedScene!.time = await this.openSpaceService.getTime()
+
         return [
           {
             id: selectedScene!.id,

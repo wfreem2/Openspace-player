@@ -6,12 +6,14 @@
 :host, .status{
     @extend %align-center;
     gap: 0.25rem;
+    width: 10rem;
 }
 
 $clr-loading: #7d69d8;
 $clr-connected: #00ab55;
 
 .status{
+    @extend %just-center, %align-center;
     font-weight: 600;
     color: $txt-color;
     border: solid 2px transparent;
