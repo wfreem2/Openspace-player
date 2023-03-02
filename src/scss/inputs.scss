@@ -56,7 +56,10 @@
         border-color: #e21017;
     }
 
-    &:not(:disabled):valid:hover, &:not(:disabled):valid:focus-within{
+    &:not(:disabled):not(.ng-invalid):hover,
+    &:not(:disabled):not(.ng-invalid):focus-within,
+    &:not(:disabled):valid:hover,
+    &:not(:disabled):valid:focus-within{
         border-color: $clr-accent;
     }
 

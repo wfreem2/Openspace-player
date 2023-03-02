@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as api from 'openspace-api-js'
-import { BehaviorSubject, interval, mergeMap, Observable } from 'rxjs';
+import { interval, mergeMap, Observable, ReplaySubject } from 'rxjs';
 import { GeoPosition } from '../Models/GeoPosition';
 import { NavigationState } from '../Models/NavigationState';
 import { NotificationType } from '../Models/ToastNotification';
@@ -16,13 +16,13 @@ export class OpenspaceService {
   private nodes: SceneGraphNode[] = Object.values(SceneGraphNode)
 
   private readonly client = api('localhost', 4682)
-  private readonly _isConnected = new BehaviorSubject<boolean>(false)
+  private readonly _isConnected = new ReplaySubject<boolean>()
 
   constructor(private notiService: NotificationService) {
     this.client.onConnect(async () => await this.onConnect(this.client))
     this.client.onDisconnect(async () => await this.onDisconnect())
 
-    this.client.connect()
+    this.connect()
   }
 
   private async onDisconnect(){

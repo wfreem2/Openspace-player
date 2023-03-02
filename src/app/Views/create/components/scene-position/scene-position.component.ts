@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NonNullableFormBuilder, Validators } from '@angular/forms';
-import { BehaviorSubject, filter, map, Subject, Subscription, takeUntil, catchError, throttleTime, switchMap, tap, distinctUntilKeyChanged } from 'rxjs';
+import { BehaviorSubject, filter, map, Subject, Subscription, takeUntil, catchError, throttleTime, switchMap, tap, distinctUntilKeyChanged, of, mergeMap, throwError, from, EMPTY } from 'rxjs';
 import { GeoPosition } from 'src/app/Models/GeoPosition';
 import { GeoPosForm } from 'src/app/Models/ShowForm';
 import { NotificationType } from 'src/app/Models/ToastNotification';
@@ -33,6 +33,11 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
   readonly pathNavOptions: SceneGraphNode[] = Object.values(SceneGraphNode)
 
   public $nodeCanHaveGeo = new Subject<boolean>()
+  public $isDisconnected = this.openSpaceService.isConnected()
+  .pipe( 
+    takeUntil(this.$unsub),
+    map(isConnected => !isConnected) 
+  )  
 
   geoPosForm = this.fb.group<GeoPosForm>({
     alt: this.fb.control<number>(0.0, [ Validators.required, Validators.pattern(this.numRegex) ]),
@@ -66,6 +71,7 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
       takeUntil(this.$unsub)
     )
     .subscribe(geoPos => {
+           
       this.geoPosForm.setValue({
         alt: geoPos.alt,
         lat: geoPos.lat,
@@ -80,23 +86,31 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
       takeUntil(this.$unsub),
       distinctUntilKeyChanged('node'),
       map(value => value.node!),
-      switchMap(node => openSpaceService.getRenderableType(node)),
+      switchMap(node => { 
+        return from(this.openSpaceService.getRenderableType(node))
+        .pipe( catchError(() =>  EMPTY) )
+      }),
       map(renderableType => renderableType === RenderableType.RENDERABLEGLOBE),
-      tap(canHaveGeo => this.$nodeCanHaveGeo.next(canHaveGeo))
+      tap(canHaveGeo => this.$nodeCanHaveGeo.next(canHaveGeo)),
     )
-    .subscribe(canHaveGeoPosition => {
-
-      if(!canHaveGeoPosition){
-        this.geoPosForm.controls.alt.disable()
-        this.geoPosForm.controls.lat.disable()
-        this.geoPosForm.controls.long.disable()
-
-        return
+    .subscribe({
+      next: canHaveGeoPosition => {
+       
+        if(!canHaveGeoPosition){
+          this.geoPosForm.controls.alt.disable()
+          this.geoPosForm.controls.lat.disable()
+          this.geoPosForm.controls.long.disable()
+          
+          return
+        }
+        
+        this.geoPosForm.controls.alt.enable()
+        this.geoPosForm.controls.lat.enable()
+        this.geoPosForm.controls.long.enable()
+      },
+      error: () => {
+        console.log('error');
       }
-
-      this.geoPosForm.controls.alt.enable()
-      this.geoPosForm.controls.lat.enable()
-      this.geoPosForm.controls.long.enable()
     })
 
 
@@ -104,14 +118,14 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
     .pipe(
       filter( () => this.lat!.valid && this.long!.valid && this.alt!.valid ),
       map(_=> this.geoPosForm.getRawValue() as GeoPosition),
-      takeUntil(this.$unsub)
+      takeUntil(this.$unsub),
     )
     .subscribe( v => this.onChange(v) )
   }
   
-  get alt(){ return this.geoPosForm.get('alt') }
-  get lat(){ return this.geoPosForm.get('lat') }
-  get long(){ return this.geoPosForm.get('long') }
+  get alt(){ return this.geoPosForm.get('alt')! }
+  get lat(){ return this.geoPosForm.get('lat')! }
+  get long(){ return this.geoPosForm.get('long')! }
 
   ngOnInit(): void { }
 

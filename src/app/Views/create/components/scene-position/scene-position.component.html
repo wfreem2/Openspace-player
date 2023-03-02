@@ -13,31 +13,32 @@
         <div class="section">
             <label for="lat">Latitude:</label>
             <input name="lat" class="input" formControlName="lat"               
-            placeholder="Latitude">
+            placeholder="Latitude" required>
             
-            <ng-container *ngIf="lat!.errors?.['required']" [ngTemplateOutlet]="required"></ng-container>
-            <ng-container *ngIf="lat!.errors?.['pattern']" [ngTemplateOutlet]="pattern"></ng-container>
+            <ng-container *ngIf="lat.errors?.['required']" [ngTemplateOutlet]="required"></ng-container>
+            <ng-container *ngIf="lat.errors?.['pattern']" [ngTemplateOutlet]="pattern"></ng-container>
         </div>
         <div class="section">
             <label for="long">Longitude:</label>
             <input name="long" class="input" formControlName="long"            
-            placeholder="Longitude">
-            <ng-container *ngIf="long!.errors?.['required']" [ngTemplateOutlet]="required"></ng-container>
-            <ng-container *ngIf="long!.errors?.['pattern']" [ngTemplateOutlet]="pattern"></ng-container>
+            placeholder="Longitude" required>
+            <ng-container *ngIf="long.errors?.['required']" [ngTemplateOutlet]="required"></ng-container>
+            <ng-container *ngIf="long.errors?.['pattern']" [ngTemplateOutlet]="pattern"></ng-container>
         </div>
         <div class="section">
             <label for="alt">Altitude:</label>
             <input name="alt" class="input" formControlName="alt"
-            placeholder="Altitude">
-            <ng-container *ngIf="alt!.errors?.['required']" [ngTemplateOutlet]="required"></ng-container>
-            <ng-container *ngIf="alt!.errors?.['pattern']" [ngTemplateOutlet]="pattern"></ng-container>
+            placeholder="Altitude" required>
+            <ng-container *ngIf="alt.errors?.['required']" [ngTemplateOutlet]="required"></ng-container>
+            <ng-container *ngIf="alt.errors?.['pattern']" [ngTemplateOutlet]="pattern"></ng-container>
         </div>
         <div class="section">
             <label for="node">Node:</label>
             <dropdown [items]="pathNavOptions" name="pathnav" formControlName="node"></dropdown>
         </div>
     </form>
-</div>
+    <ng-container *ngIf="$isDisconnected | async" [ngTemplateOutlet]="disconnected"></ng-container>
+</div>  
 
 <ng-template #required>    
     <p class="err-msg">Field is Required</p>
@@ -45,6 +46,18 @@
 
 <ng-template #pattern>
     <p class="err-msg">Field Must be a Number</p>
+</ng-template>
+
+<ng-template #disconnected>
+    <div id="disconnected">
+        <p>
+            ⚠️ It looks like OpenSpace is disconnected
+            You can still work in the scene editor. 
+            However, values such as <b>latitude</b>, <b>longitude</b>, and <b>altitude</b>
+            may cause errors when previewing or playing a scene with nodes that cannot
+            have a Geo-Position.
+        </p>
+    </div>
 </ng-template>
 
 
