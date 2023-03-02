@@ -106,8 +106,9 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
       withLatestFrom(this.$selectedScene),
       filter( ([, selectedScene]) => !!selectedScene),
       concatMap( async ([formVal, selectedScene]) => {
-
-        selectedScene!.time = await this.openSpaceService.getTime()
+        
+        try{ selectedScene!.time = await this.openSpaceService.getTime() }
+        catch{ selectedScene!.time = new Date() }
 
         return [
           {
@@ -122,13 +123,13 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
         ]
       }),
       tap( () => {
-        this.isSaved = !this.sceneForm.valid
+        debugger
+        this.isSaved = false
         this.$setSaveDisabled.next(!this.sceneForm.valid)
       })
     )
     .subscribe( ([updated,]) => { 
       let original = this.show.scenes.find(s => s.id === updated.id )!
-      
       Object.assign(original, updated)
     })
   }
@@ -168,8 +169,6 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
   get formValue(){
     return this.sceneForm.getRawValue()
   }
-
-  onChange(): void{ this.isSaved = false }
 
   saveShow(): void{
 
@@ -222,7 +221,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     try{
       this.sceneExecutor.execute(scene)
     }
-    catch(_){
+    catch{
       this.openSpaceService.isConnected()
       .pipe(
         filter(status => !status),
