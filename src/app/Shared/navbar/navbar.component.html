@@ -10,12 +10,7 @@
 
     <p>Connection Status:</p>
 
-    <div>
-        <p class="status">
-            {{isConnected ? 'Connected': 'Disconnected'}}
-        </p>
-        <div id="circle" [class]="isConnected ? 'connected': 'disconnected'"></div>
-    </div>
+  <connection-status></connection-status>
 </div>
 
 <ng-template #refresh>

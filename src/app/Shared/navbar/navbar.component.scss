@@ -38,25 +38,9 @@
     }
 }
 
-#circle{
-    width: .5rem;
-    height: .5rem;
-    border-radius: 50%;
-
-    &.disconnected{ background: red; }
-    &.connected{ background: green; }
-    &.connecting{ background: orange; }
-}
-
 #status-bar{
     @extend %align-center, %max-H;
     gap: 1rem;
-
-
-    & > div{
-        @extend %align-center;
-        gap: 0.25rem;
-    }
 }
 
 
@@ -84,13 +68,6 @@
             animation: spin 2s infinite linear;
         }
     }
-}
-
-// Status icon
-.status{
-    font-weight: bold;
-    border-radius: $bd-rad;
-    color: $txt-color;
 }
 
 @keyframes spin { 

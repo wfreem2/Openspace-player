@@ -23,8 +23,7 @@ import { BaseComponent } from 'src/app/Shared/base/base.component';
 
 export class ScenePositionComponent extends BaseComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
   @Input() isAutoMode: boolean = false
-  
-  
+    
   private listener!: Subscription
   private readonly numRegex = /^-?\d*\.?\d*$/
   private readonly $geoPos = new Subject<GeoPosition>()
@@ -71,7 +70,7 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
       takeUntil(this.$unsub)
     )
     .subscribe(geoPos => {
-           
+
       this.geoPosForm.setValue({
         alt: geoPos.alt,
         lat: geoPos.lat,
@@ -79,7 +78,6 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
         node: geoPos.node
       }, {emitEvent: false})
     })
-
 
     this.geoPosForm.valueChanges
     .pipe(
