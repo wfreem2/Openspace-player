@@ -5,8 +5,11 @@
             Back to Home
         </a>
         <input name="title" class="title input" type="text" selectallOnclick
+        [class.invalid]="!show.title.length" required 
         placeholder="Show Title" [(ngModel)]="show.title"/>  
         
+        <connection-status id="connection-status"></connection-status>
+
         <creator-menu id="menu" [menuItems]="menu"></creator-menu>
     </div>
 
@@ -63,7 +66,7 @@
                         <ul class="geoPos">
                             <li>
                                 <p>Node: </p>
-                                <p>{{formValue.geoPos.nodeName}}</p>
+                                <p>{{formValue.geoPos.node}}</p>
                             </li>
                             <li>
                                 <p>Latitude:</p>

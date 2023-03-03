@@ -27,7 +27,7 @@ export function getFakeScenes(N: number = 5): Scene[]{
             alt: Math.random(),
             lat: Math.random(),
             long: Math.random(),
-            nodeName: sampleSize(Object.values(SceneGraphNode), 1)[0]
+            node: sampleSize(Object.values(SceneGraphNode), 1)[0]
         }
         const options: SceneOptions = {
             enabledTrails: sampleSize(Object.values(SceneGraphNode), 5),
@@ -41,6 +41,7 @@ export function getFakeScenes(N: number = 5): Scene[]{
             id: id, title: title, geoPos: geoPos, options: options,
             script: (i % 2 === 0) ? script : undefined,
             duration: (i % 2 === 0) ? duration : undefined,
+            time: new Date()
         }
 
         scenes.push(scene)
@@ -55,7 +56,7 @@ export function getFakeScene(id: number): Scene{
         alt: Math.random(),
         lat: Math.random(),
         long: Math.random(),
-        nodeName: sampleSize(Object.values(SceneGraphNode), 1)[0]
+        node: sampleSize(Object.values(SceneGraphNode), 1)[0]
     }
     const options: SceneOptions = {
         enabledTrails: sampleSize(Object.values(SceneGraphNode), 5),
@@ -65,10 +66,12 @@ export function getFakeScene(id: number): Scene{
     const duration = Math.random()
     const script = faker.lorem.sentence()
 
-    return {
+    const scene: Scene = {
         id: id, title: title, geoPos: geoPos, options: options,
         script: script,
         duration: duration,
-    }
-
+        time: new Date()
+    } 
+    
+    return scene
 }

@@ -15,6 +15,7 @@ import { ConfirmPopupComponent } from './confirm-popup/confirm-popup.component';
 import { IconsModule } from '../icons.module';
 import { SelectallOnclickDirective } from '../Directives/selectall-onclick.directive';
 import { ModalComponent } from './modal/modal.component';
+import { ConnectionStatusComponent } from './connection-status/connection-status.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { ModalComponent } from './modal/modal.component';
     ConfirmPopupComponent,
     SelectallOnclickDirective,
     ModalComponent,
+    ConnectionStatusComponent,
   ],
   imports: [
     CommonModule,
@@ -54,6 +56,7 @@ import { ModalComponent } from './modal/modal.component';
     ConfirmPopupComponent,
     SelectallOnclickDirective,
     ModalComponent,
+    ConnectionStatusComponent,
   ]
 })
 export class SharedModule { }

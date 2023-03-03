@@ -26,5 +26,5 @@ export interface GeoPosForm{
     alt: FormControl<number>
     lat: FormControl<number>
     long: FormControl<number>
-    nodeName: FormControl<SceneGraphNode>
+    node: FormControl<SceneGraphNode>
 }

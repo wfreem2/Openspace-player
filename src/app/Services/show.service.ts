@@ -18,6 +18,7 @@ export class ShowService {
       
       try {        
         const shows = JSON.parse(localStorage.getItem('shows')!)
+        
         this._shows.next(shows)
         this.id = this.getUniqueId()
       } 

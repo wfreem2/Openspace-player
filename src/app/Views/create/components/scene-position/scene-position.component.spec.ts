@@ -14,18 +14,20 @@ describe('Scene-Positon component', () => {
     let component: ScenePositionComponent
     let fixture: ComponentFixture<ScenePositionComponent>
 
-    const fakeOpenSpaceService = jasmine.createSpyObj('OpenSpaceService', ['listenCurrentPosition'])
+    const fakeOpenSpaceService: jasmine.SpyObj<OpenspaceService> =
+     jasmine.createSpyObj('OpenSpaceService', ['listenCurrentPosition', 'isConnected'])
     
     beforeEach( async () => {
         const $fakeObs =  of({
             alt: Math.random(),
             lat: Math.random(),
             long: Math.random(),
-            nodeName: sampleSize(Object.values(SceneGraphNode), 1)[0]
+            node: sampleSize(Object.values(SceneGraphNode), 1)[0]
         } as GeoPosition)
 
         fakeOpenSpaceService.listenCurrentPosition.and.returnValue($fakeObs)
-
+        fakeOpenSpaceService.isConnected.and.returnValue(of(true))
+        
         TestBed.configureTestingModule({
             declarations: [ScenePositionComponent, SortingSelectorComponent, DropdownComponent],
             providers: [{provide: OpenspaceService, useValue: fakeOpenSpaceService}, NotificationService],
@@ -46,7 +48,7 @@ describe('Scene-Positon component', () => {
             alt: Math.random(),
             lat: Math.random(),
             long: Math.random(),
-            nodeName: sampleSize(Object.values(SceneGraphNode), 1)[0]
+            node: sampleSize(Object.values(SceneGraphNode), 1)[0]
         }
 
         component.writeValue(expectedGeo)
@@ -95,13 +97,13 @@ describe('Scene-Positon component', () => {
             lat: 'invalid',
             long: '0.33bad',
             alt: 'notgood',
-            nodeName: sampleSize(Object.values(SceneGraphNode), 1)[0]
+            node: sampleSize(Object.values(SceneGraphNode), 1)[0]
         }
 
         component.writeValue(badGeoPosition)
         fixture.detectChanges();
 
-        [component.alt!, component.lat!, component.long!]
+        [component.alt, component.lat, component.long]
         .forEach(ctrl => expect(ctrl.errors!['pattern']).toBeTruthy() )
     })
 

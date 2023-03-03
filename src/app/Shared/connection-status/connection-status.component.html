@@ -1,0 +1,14 @@
+<div class="status loading" *ngIf="$loading | async">
+    <div id="spinner"></div>
+    Loading
+</div>
+
+<div class="status connected" *ngIf="($isConnected | async)">
+    <i-tabler class="icon" name="circle-check"></i-tabler>
+    Connected
+</div>
+
+<div class="status disconnected" *ngIf="!($isConnected | async) && !($loading | async)">
+    <i-tabler class="icon" name="circle-x"></i-tabler>
+    Disconnected
+</div>
