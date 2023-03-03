@@ -2,27 +2,22 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { tap, Observable, Subject, takeUntil } from 'rxjs';
 import { CreatorSubMenuItem } from 'src/app/Models/CreatorMenuItem';
 import { OsService } from 'src/app/Services/os.service';
+import { BaseComponent } from 'src/app/Shared/base/base.component';
 
 @Component({
   selector: 'creator-menu-item',
   templateUrl: './creator-menu-item.component.html',
   styleUrls: ['./creator-menu-item.component.scss']
 })
-export class CreatorMenuItemComponent implements OnInit, OnDestroy {
+export class CreatorMenuItemComponent extends BaseComponent implements OnInit, OnDestroy {
 
   @Input() menuItem!: CreatorSubMenuItem
   @Output() itemClicked = new EventEmitter()
   
   isDisabled: boolean = false
   formattedHotKeys: string = ''
-  private $unsub = new Subject<void>()
 
-  constructor() { }
-
-  ngOnDestroy(): void {
-    this.$unsub.next()
-    this.$unsub.unsubscribe()
-  }
+  constructor() { super() }
 
   ngOnInit(): void { 
     this.formattedHotKeys = this.menuItem.hotKey

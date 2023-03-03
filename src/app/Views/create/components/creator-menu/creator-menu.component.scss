@@ -10,7 +10,6 @@
 
 .item{
     @extend %align-center, %just-center;
-    cursor: pointer;
     position: relative;
     padding: 0.25rem 0.75rem;
     border-radius: 4px;
@@ -20,9 +19,12 @@
     }
 }
 
+.name{ cursor: pointer; }
+
 .dropdown{
     @extend %card, %flx-col;
     position: absolute;
+    cursor: default;
     z-index: 99;
     left: 0;
     top: 110%;

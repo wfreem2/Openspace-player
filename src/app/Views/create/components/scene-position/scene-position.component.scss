@@ -28,21 +28,24 @@
     row-gap: 0.2rem;
 
     label{ font-size: 1.25rem; }
+}
 
+.err-msg{
+    grid-column: 2;
+    color: red;
+    margin-left: 1rem;
+}
 
-    .ng-invalid, .ng-invalid:focus-within{
-        border-color: red;
-    }
-
-    .err-msg{
-        grid-column: 2;
-        color: red;
-        margin-left: 1rem;
-    }
+#disconnected{
+    p{ color: #fc921a; }
+    
+    max-width: 25rem;
+    margin-top: 1rem;
 }
 
 #geoLocation{
     @extend %flx-col;
+    align-items: center;
     gap: 0.75rem;
 }
 

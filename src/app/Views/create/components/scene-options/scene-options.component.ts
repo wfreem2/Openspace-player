@@ -4,6 +4,7 @@ import { BehaviorSubject, combineLatest, map, Observable, of, Subject, switchMap
 import { SceneOptions } from 'src/app/Models/SceneOptions';
 import { SceneOptionsForm, TrailOptionsForm } from 'src/app/Models/ShowForm';
 import { SceneGraphNode } from 'src/app/Services/openspace.service';
+import { BaseComponent } from 'src/app/Shared/base/base.component';
 import { SortingType } from 'src/app/Shared/sorting-selector/sorting-selector.component';
 import { toggleClass } from 'src/app/Utils/utils';
 
@@ -21,7 +22,7 @@ import { toggleClass } from 'src/app/Utils/utils';
 })
 
 
-export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class SceneOptionsComponent extends BaseComponent implements OnInit, OnDestroy, ControlValueAccessor {
   
   @ViewChildren('sortOpt') sortOptions!: QueryList<ElementRef>
   @ViewChild('filter') filterMenu!: ElementRef
@@ -30,7 +31,6 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   onChange: any = () => {}
   onTouch: any = () => {}
   
-  private $unsub = new Subject<void>()
   private touched: boolean = false
   private disabled: boolean = false
   
@@ -52,6 +52,8 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   })
   
   constructor() { 
+    super()
+
     this.initFormGroup()
 
     this.$currSorting.asObservable()
@@ -121,7 +123,6 @@ export class SceneOptionsComponent implements OnInit, OnDestroy, ControlValueAcc
   }
 
   ngOnInit(): void { }
-  ngOnDestroy(): void { this.$unsub.next() }
 
   writeValue(obj: any): void {
     const options = obj as SceneOptions

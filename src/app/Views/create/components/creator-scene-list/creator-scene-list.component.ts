@@ -4,6 +4,7 @@ import { Scene } from 'src/app/Models/Scene';
 import { ListItemComponent } from './list-item/list-item.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { filter, ReplaySubject, Subject, tap } from 'rxjs';
+import { BaseComponent } from 'src/app/Shared/base/base.component';
 
 @Component({
   selector: 'creator-scene-list',
@@ -11,7 +12,7 @@ import { filter, ReplaySubject, Subject, tap } from 'rxjs';
   styleUrls: ['./creator-scene-list.component.scss']
 })
 
-export class CreatorSceneListComponent implements OnInit, OnDestroy{
+export class CreatorSceneListComponent extends BaseComponent implements OnInit, OnDestroy{
 
   @ViewChildren(ListItemComponent) items!: QueryList<ListItemComponent>
 
@@ -25,7 +26,6 @@ export class CreatorSceneListComponent implements OnInit, OnDestroy{
   @Output() itemClickedEvent = new EventEmitter<Scene>()
   @Output() listDragDropEvent = new EventEmitter<Scene[]>()
 
-  private $unsub = new Subject<void>()
   $setScene = new ReplaySubject<Scene>()
 
   $currScene = this.$setScene
@@ -34,10 +34,7 @@ export class CreatorSceneListComponent implements OnInit, OnDestroy{
     tap( scene => this.itemClickedEvent.emit(scene) )
   )
   
-  constructor(private cdRef : ChangeDetectorRef) { }
-
-
-  ngOnDestroy(): void { this.$unsub.next() }
+  constructor(private cdRef : ChangeDetectorRef) { super() }
 
   ngOnInit(): void { }
 

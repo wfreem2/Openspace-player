@@ -2,6 +2,7 @@ import { Component, ElementRef, forwardRef, Input, OnDestroy, OnInit, Renderer2,
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { map, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { isElementOrChildClicked } from 'src/app/Utils/utils';
+import { BaseComponent } from '../base/base.component';
 import { SortingType } from '../sorting-selector/sorting-selector.component';
 
 @Component({
@@ -18,7 +19,7 @@ import { SortingType } from '../sorting-selector/sorting-selector.component';
 })
 
 
-export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class DropdownComponent extends BaseComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
   @Input() items!: any[]
   
@@ -34,14 +35,14 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
   isDisabled: boolean = false
   
   query = new Subject<string>()
-  private $unSub = new Subject<any>()
 
   constructor(private hostRef: ElementRef, private render: Renderer2) { 
-    render.listen('window', 'click', this.onHostClick.bind(this))
+    super()
 
+    render.listen('window', 'click', this.onHostClick.bind(this))
     this.query.asObservable()
     .pipe(
-      takeUntil(this.$unSub),
+      takeUntil(this.$unsub),
       map(query => query.toLowerCase()),
       switchMap(query => of(this.search(query))),
     )
@@ -55,7 +56,6 @@ export class DropdownComponent implements OnInit, OnDestroy, ControlValueAccesso
     if(!hostClicked){ this.isCollapsed = true}
   }
 
-  ngOnDestroy(): void { this.$unSub.next(undefined) }
 
   ngOnInit(): void { 
     this.selectableItems = this.items.map(i => {

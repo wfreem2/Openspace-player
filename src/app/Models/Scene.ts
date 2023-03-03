@@ -9,5 +9,6 @@ export interface Scene{
     options: SceneOptions,
     navState?: NavigationState,
     script?: string,
-    duration?: number
+    duration?: number,
+    time: Date
 }
