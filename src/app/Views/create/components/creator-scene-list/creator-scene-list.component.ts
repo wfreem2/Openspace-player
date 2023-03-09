@@ -32,7 +32,7 @@ export class CreatorSceneListComponent extends BaseComponent implements OnInit, 
 
   ngOnInit(): void { 
     this.$currScene = this.$currentScene
-    .pipe( 
+    .pipe(
       filter(scene => !!scene)
     )
   }

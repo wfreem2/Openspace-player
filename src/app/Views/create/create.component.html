@@ -57,8 +57,8 @@
         </div>
         <button class="btn secondary" (click)="$duplicateScene.next(null)">Cancel</button>
         <button class="btn primary" type="submit" (click)="duplicateScene(scene)" [disabled]="sceneTitleExists(scene.title)">Duplicate</button>
+        <p class="error err-msg" *ngIf="sceneTitleExists(scene.title)">Scene with title <b>{{scene.title}}</b> already exists.</p>
     </div>
-    <p id="title-exists" *ngIf="sceneTitleExists(scene.title)">Scene with title <b>{{scene.title}}</b> already exists.</p>
 </modal>
 
 

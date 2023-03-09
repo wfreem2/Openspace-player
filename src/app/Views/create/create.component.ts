@@ -100,8 +100,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
   constructor(
     private route: ActivatedRoute, public showService: ShowService,
     private notiService: NotificationService, private fb: FormBuilder,
-    private openSpaceService: OpenspaceService, private sceneExecutor: SceneExecutorService,
-    private cdRef: ChangeDetectorRef) {
+    private openSpaceService: OpenspaceService, private sceneExecutor: SceneExecutorService) {
       
     super()
 
@@ -174,7 +173,22 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
       },
       {
         name: 'Edit',
-        subMenus: []
+        subMenus: [
+          {
+            name: 'Duplicate',
+            hotKey: ['D'],
+            callBack: () => {
+              this.$selectedScene
+              .pipe( first() )
+              .subscribe( s => this.$duplicateScene.next(s))
+            },
+            isDisabled: this.$selectedScene
+            .pipe(
+              map( s => s == null),
+              takeUntil(this.$unsub)
+            )
+          },
+        ]
       }
     ]
   }
@@ -211,7 +225,6 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     duplicate.id = scenes.reduce((id, s) => Math.max(id, s.id), 0) + 1
 
     scenes.push(duplicate)
-
     this.$duplicateScene.next(null)
     this.$setScene.next(duplicate)
   }

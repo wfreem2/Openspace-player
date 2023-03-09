@@ -25,7 +25,7 @@ export class CreatorMenuItemComponent extends BaseComponent implements OnInit, O
 
     if (this.menuItem.isDisabled instanceof Observable){
       this.menuItem.isDisabled
-      .pipe( takeUntil(this.$unsub), tap( console.log) )
+      .pipe( takeUntil(this.$unsub) )
       .subscribe( val => this.isDisabled = val)
     }
     else{
