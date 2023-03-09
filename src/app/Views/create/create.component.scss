@@ -210,7 +210,7 @@ $grid-bd: solid 2px $gray;
     grid-template-rows: 1fr max-content;
     justify-items: center;
     align-items: center;
-    gap: 2rem 1rem;
+    gap: 2rem 0.5rem;
 
     .prompt{
         grid-row: 1;
@@ -218,9 +218,7 @@ $grid-bd: solid 2px $gray;
         font-size: 1.2rem;
         color: shade($gray, 50%);
         
-        b{
-            color: $clr-accent;
-        }
+        b{ color: $clr-accent; }
     }
 
     .btn{ width: 10rem; }
@@ -229,6 +227,8 @@ $grid-bd: solid 2px $gray;
         grid-row: 2;
         grid-column: 1;
     }
+
+
     $del-clr: #db1b32;
 
     .primary{
@@ -242,6 +242,19 @@ $grid-bd: solid 2px $gray;
             background: shade($del-clr, 30%);
         }
     }
+
+    &#duplicate{
+        input[type=text], .floating-input{
+            grid-column: 1 / span 2;
+            justify-self: stretch;
+        }
+    }
+}
+
+#title-exists{
+    margin: 1rem;
+    color: $clr-err;
+    text-align: center;
 }
 
 #script{

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Scene } from 'src/app/Models/Scene';
 import { ActivatedRoute } from '@angular/router';
@@ -15,6 +15,7 @@ import { SceneExecutorService } from 'src/app/Services/scene-executor.service';
 import { CreatorMenuItem } from 'src/app/Models/CreatorMenuItem';
 import { ScenePositionComponent } from './components/scene-position/scene-position.component';
 import { BaseComponent } from 'src/app/Shared/base/base.component';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-create',
@@ -32,7 +33,8 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     readonly $setSaveDisabled = new BehaviorSubject<boolean>(false)
     readonly $setResetVisibility = new Subject<boolean>()
     readonly $setConfirmVisibility = new Subject<boolean>()
-
+    readonly $setDuplicateVisibility = new Subject<boolean>()
+    readonly $duplicateScene = new Subject<Scene | null>()
   // #endregion
 
   // #region observable subscribers
@@ -40,7 +42,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     .asObservable()
     .pipe(
       distinctUntilChanged(),
-      tap( async s => {
+      tap( s => {
         if(s == null){ return }
         
 
@@ -60,6 +62,17 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     readonly $isConfirmShowing = this.$setConfirmVisibility.asObservable()
     readonly $isResetShowing = this.$setResetVisibility.asObservable()
     readonly $isSaveDisabled = this.$setSaveDisabled.asObservable()
+    readonly $isDuplicateShowing = this.$duplicateScene.asObservable()
+    .pipe( map(s => {
+      s = cloneDeep(s)
+
+      if(!s){ return s }
+
+      s!.title += ' (1)'
+
+      return s
+    }))
+
   // #endregion
 
   confirmPrompt = ''
@@ -87,7 +100,8 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
   constructor(
     private route: ActivatedRoute, public showService: ShowService,
     private notiService: NotificationService, private fb: FormBuilder,
-    private openSpaceService: OpenspaceService, private sceneExecutor: SceneExecutorService) {
+    private openSpaceService: OpenspaceService, private sceneExecutor: SceneExecutorService,
+    private cdRef: ChangeDetectorRef) {
       
     super()
 
@@ -123,7 +137,6 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
         ]
       }),
       tap( () => {
-        debugger
         this.isSaved = false
         this.$setSaveDisabled.next(!this.sceneForm.valid)
       })
@@ -191,8 +204,16 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     this.$setResetVisibility.next(true)
   }
 
-  onDuplicateClicked(scenes: Scene){
-    this.show.scenes.push(scenes)
+  duplicateScene(scene: Scene){
+    const { scenes } = this.show
+    const duplicate: Scene = cloneDeep(scene)
+
+    duplicate.id = scenes.reduce((id, s) => Math.max(id, s.id), 0) + 1
+
+    scenes.push(duplicate)
+
+    this.$duplicateScene.next(null)
+    this.$setScene.next(duplicate)
   }
 
   deleteScene(): void{
@@ -253,6 +274,10 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
       type: NotificationType.SUCCESS
     })
 
+  }
+
+  sceneTitleExists(title: string): boolean{
+    return this.show.scenes.some(s => s.title.trim() === title.trim())
   }
 }
 

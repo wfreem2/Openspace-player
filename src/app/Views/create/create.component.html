@@ -22,8 +22,8 @@
         <creator-scene-list
         [scenes]="show.scenes"
         [defaultScene]="DEFAULT_SCENE"
-        (itemClickedEvent)="$setScene.next($event)"
-        (duplicateClickedEvent)="onDuplicateClicked($event)"
+        [$currentScene]="$setScene"
+        (duplicateClickedEvent)="$duplicateScene.next($event)"
         (deleteClickedEvent)="onDeleteClicked()"
         (listDragDropEvent)="isSaved=false;">
         </creator-scene-list>
@@ -42,12 +42,24 @@
 <modal title="Reset Scene?" *ngIf="$isResetShowing | async"
     (closedEvent)="$setResetVisibility.next(false)">
     <div *ngIf="$selectedScene | async as scene" class="modal-content">
-        <p class="prompt"> Reset scene <b>{{scene.title}}</b> to default valuesr?</p>
+        <p class="prompt"> Reset scene <b>{{scene.title}}</b> to default values?</p>
         <button class="btn secondary" (click)="$setResetVisibility.next(false)">No, Cancel</button>
         <button class="btn primary" (click)="resetScene()">Yes, Reset</button>
     </div>
 </modal>
 
+<modal title="Duplicate Scene" *ngIf="$isDuplicateShowing | async as scene"
+    (closedEvent)="$duplicateScene.next(null)">
+    <div class="modal-content" id="duplicate">
+        <div class="floating-input">
+            <input class="input" type="text" [(ngModel)]="scene.title" placeholder=" "/>
+            <span>Scene Title</span>
+        </div>
+        <button class="btn secondary" (click)="$duplicateScene.next(null)">Cancel</button>
+        <button class="btn primary" type="submit" (click)="duplicateScene(scene)" [disabled]="sceneTitleExists(scene.title)">Duplicate</button>
+    </div>
+    <p id="title-exists" *ngIf="sceneTitleExists(scene.title)">Scene with title <b>{{scene.title}}</b> already exists.</p>
+</modal>
 
 
 <ng-template #sceneTabs>
