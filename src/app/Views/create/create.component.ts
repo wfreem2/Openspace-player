@@ -163,19 +163,13 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
             callBack: this.saveToDisk.bind(this),
             isDisabled: this.$isSaveDisabled
           },
-          {
-            name: 'Duplicate Show',
-            hotKey: ['SHIFT', 'D'],
-            callBack: () => {},
-            isDisabled: false
-          }
         ],
       },
       {
         name: 'Edit',
         subMenus: [
           {
-            name: 'Duplicate',
+            name: 'Duplicate Scene',
             hotKey: ['D'],
             callBack: () => {
               this.$selectedScene

@@ -1,11 +1,11 @@
 <div class="header">
     <div class="search-bar">
         <i-tabler name="search" class="icon"></i-tabler>
-        <input id="search" type="text"  placeholder="Search shows"
-        [(ngModel)]="query">
+        <input id="search" type="text"  placeholder="Search shows" [(ngModel)]="query">
     </div>
 
     <a routerLink="/creator/new" class="btn primary">New Show</a>
+    <button class="btn secondary">Import</button>
 </div>
 
 <ng-container *ngIf="shows.length then list; else empty"></ng-container>
@@ -19,6 +19,7 @@
 
 <ng-template #empty>
     <div class="empty-wrapper">
+        <img src="/assets/space.svg" alt="">
         <h2>No Shows Yet. <a id="create" routerLink="/creator/new">Create One</a> to get started.</h2>
     </div>
 </ng-template>
