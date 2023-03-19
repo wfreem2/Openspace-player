@@ -13,7 +13,7 @@ export class YourShowsComponent implements OnInit {
 
   shows!: Show[]
   query: string = ''
-
+  showImporter: boolean = false
 
   constructor(showService: ShowService, public showPreviewService: ShowPreviewService) { 
     showService.getAllShows()

@@ -16,6 +16,7 @@ import { IconsModule } from '../icons.module';
 import { SelectallOnclickDirective } from '../Directives/selectall-onclick.directive';
 import { ModalComponent } from './modal/modal.component';
 import { ConnectionStatusComponent } from './connection-status/connection-status.component';
+import { ShowImporterComponent } from './show-importer/show-importer.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { ConnectionStatusComponent } from './connection-status/connection-status
     SelectallOnclickDirective,
     ModalComponent,
     ConnectionStatusComponent,
+    ShowImporterComponent,
   ],
   imports: [
     CommonModule,
@@ -57,6 +59,7 @@ import { ConnectionStatusComponent } from './connection-status/connection-status
     SelectallOnclickDirective,
     ModalComponent,
     ConnectionStatusComponent,
+    ShowImporterComponent,
   ]
 })
 export class SharedModule { }

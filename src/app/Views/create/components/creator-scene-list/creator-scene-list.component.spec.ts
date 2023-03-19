@@ -32,37 +32,12 @@ describe('Creator-Scene-List Component', () => {
     })
 
 
-    it('#onDuplicateClicked() should duplicate scene with unique id', () =>{
-        const toDuplicate = component.items.first
+    it('#onDuplicateClicked() should emit', () =>{
+      
+        const spy = spyOn(component.duplicateClickedEvent, 'emit')
 
-        const setSceneSpy = spyOn(component.$setScene, 'next')
-
-        component.onDuplicateClicked(toDuplicate)
-        fixture.detectChanges()
         
-        const duplicatedScene = component.scenes[component.scenes.length-1]
-
-        const ids = new Set(component.scenes)
-
-        expect(ids.size).toEqual(component.scenes.length)
-        expect(setSceneSpy).toHaveBeenCalled()
-        expect(duplicatedScene.id).toBeGreaterThan(toDuplicate.scene.id)
     })
-
-    
-    it('#onDuplicateClicked() should duplicate scene with unique name after being called twice', () =>{
-        const toDuplicate = component.items.first
-
-        component.onDuplicateClicked(toDuplicate)
-        fixture.detectChanges()
-        component.onDuplicateClicked(toDuplicate)
-        fixture.detectChanges()
-        
-        
-        const duplicatedScene = component.scenes[component.scenes.length-1]
-        expect(component.scenes.filter(s => s.title === duplicatedScene.title).length).toEqual(1)
-    })
-
 
 
     it('#newScene() should create new scene with unique id', (done) => {

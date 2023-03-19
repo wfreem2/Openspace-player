@@ -22,12 +22,16 @@ export class ShowService {
         this._shows.next(shows)
         this.id = this.getUniqueId()
       } 
-      catch (error) { console.log('error parsing cookie')  }
+      catch (error) { console.log('error parsing cookie') }
 
     }
   }
 
-  
+  instanceOfShow(obj: any): obj is Show{
+    return 'title' in obj && 'scenes' in obj && 'dateCreated' in obj
+  }
+
+
   getBlankShow(): Show{
     //Ensure unique ids
     this.id = this.getUniqueId()

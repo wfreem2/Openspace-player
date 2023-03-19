@@ -1,5 +1,6 @@
 import { first, map } from "rxjs"
 import { Show } from "../Models/Show"
+import { getFakeScene, getFakeScenes } from "../Utils/test-utils"
 import { ShowService } from "./show.service"
 
 describe("ShowService", () => {
@@ -100,7 +101,31 @@ describe("ShowService", () => {
         const lastShow = shows[shows.length-1]
         const newShow = showService.getBlankShow()
 
-        expect(newShow.id)
-        .toBeGreaterThan(lastShow.id)
+        expect(newShow.id).toBeGreaterThan(lastShow.id)
+    })
+
+    it('#instanceOfShow should be true', () => {
+        const validShow: Show = {
+            id: 0,
+            scenes: getFakeScenes(3),
+            dateCreated: new Date(),
+            title: 'valid show'
+        }
+
+        const actual = showService.instanceOfShow(validShow)
+
+        expect(actual).toBeTrue()
+    })
+
+    it('#instanceOfShow should be false', () => {
+        const validShow = {
+            scenes: getFakeScenes(3),
+            invalidKEY: new Date(),
+            title: 'valid show'
+        }
+
+        const actual = showService.instanceOfShow(validShow)
+
+        expect(actual).toBeFalse()
     })
 })

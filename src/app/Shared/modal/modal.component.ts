@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class ModalComponent implements OnInit {
 
   @Input() title: string = ''
-  
+  @Input() showCloseBtn: boolean = true
 
   @Output() closedEvent = new EventEmitter<void>()
 

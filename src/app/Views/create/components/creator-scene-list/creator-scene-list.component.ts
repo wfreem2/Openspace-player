@@ -55,8 +55,7 @@ export class CreatorSceneListComponent extends BaseComponent implements OnInit, 
     this.deleteClickedEvent.emit(scene)
   }
 
-  onDuplicateClicked(item: ListItemComponent): void{
-    const { scene } = item
+  onDuplicateClicked({ scene }: ListItemComponent): void{
     this.duplicateClickedEvent.emit(scene)
   }
 

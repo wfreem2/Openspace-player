@@ -183,6 +183,10 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
             )
           },
         ]
+      },
+      {
+        name: 'Help',
+        subMenus: []
       }
     ]
   }

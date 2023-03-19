@@ -1,6 +1,6 @@
 <div class="modal">
     <h2 id="title">{{title}}</h2>
-    <button id="close" (click)="closedEvent.emit()">
+    <button *ngIf="showCloseBtn" id="close" (click)="closedEvent.emit()">
         <i-tabler class="icon" name="x"></i-tabler>
     </button>
 

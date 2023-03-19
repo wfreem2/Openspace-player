@@ -5,12 +5,15 @@
     </div>
 
     <a routerLink="/creator/new" class="btn primary">New Show</a>
-    <button class="btn secondary">Import</button>
+    <button class="btn secondary" (click)="showImporter=true">Import</button>
 </div>
 
 <ng-container *ngIf="shows.length then list; else empty"></ng-container>
 
 <ng-template #list>
+    <show-importer *ngIf="showImporter" (closeImporterEvent)="showImporter=false">
+    </show-importer>
+    
     <div class="list-wrapper">
         <shows-list [shows]="shows | searchShows: query" 
         (cardClicked)="showPreviewService.previewShow($event)"></shows-list>

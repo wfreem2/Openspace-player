@@ -1,0 +1,30 @@
+<modal [showCloseBtn]="false" title="Import Show From File">
+    <div class="modal-content">
+        <div id="dropzone" [class.active]="dropzoneActive"
+            (dragover)="dropzoneActive=true; $event.preventDefault()"
+            (dragleave)="dropzoneActive=false; $event.preventDefault()"
+            (drop)="handleDrop($event)">
+            <div>
+                Drag & Drop or
+                <label for="show-file" id="choose-file">Browse files</label>
+                to upload.
+            </div>
+            <input hidden 
+                name="show" 
+                type="file"
+                id="show-file" accept=".json"
+                ondragover="dropzoneActive=true"
+                ondragleave="dropzoneActive=false"/>
+        </div>
+        <div id="errors" *ngIf="hasErrors">
+            <p>{{errorMsg}}</p>
+        </div>
+        <div id="imported" *ngIf="importedShow">
+            {{importedShow.title}}
+        </div>
+        <div id="actions">
+            <button class="btn secondary" (click)="closeImporterEvent.emit()">Cancel</button>
+            <button class="btn primary" [disabled]="hasErrors || !importedShow">Import</button>
+        </div>  
+    </div>
+</modal>
