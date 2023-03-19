@@ -224,11 +224,13 @@ $grid-bd: solid 2px $gray;
     .btn{ width: 10rem; }
     
     .secondary{
+        justify-self: flex-end;
         grid-row: 2;
         grid-column: 1;
     }
 
     .primary{
+        justify-self: flex-start;
         grid-row: 2;
         grid-column: 2;
     }
