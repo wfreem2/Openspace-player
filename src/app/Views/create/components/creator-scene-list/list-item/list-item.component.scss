@@ -6,9 +6,12 @@
 }
 
 .wrapper{
-    @extend %max-WH, %align-center;
+    @extend %max-WH;
     cursor: pointer;
-    justify-content: space-between;
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr max-content max-content;
+    gap: 0.2rem;
     border-radius: 8px;
     padding: 0.5rem;
 
@@ -21,7 +24,7 @@
         
         p{ color: #ffffff; }
         svg{ color: #ffffff; }
-
+        #exclamation{ fill: #ffffff;}
         background-color: $clr-secondary;
     }
 
@@ -29,12 +32,17 @@
         @extend %align-center;
         gap: 0.5rem;
     }
-}
+    
 
-.icon{
-    width: 1.3rem;
-    height: 1.3rem;
-}
+    #exclamation{ color: $clr-err; }
+
+    .icon{
+        width: 1.3rem;
+        height: 1.3rem;
+    }
+
+}    
+
 
 
 

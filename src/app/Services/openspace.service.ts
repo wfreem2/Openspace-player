@@ -50,7 +50,7 @@ export class OpenspaceService {
   
   flyToGeo({lat, long, alt, time, node}: GeoPosition, duration?: number): void{
     
-    // if(time){}
+    this.setTime(time)
 
     if(!duration){
       this.openspace.globebrowsing.flyToGeo(node, lat, long, alt)

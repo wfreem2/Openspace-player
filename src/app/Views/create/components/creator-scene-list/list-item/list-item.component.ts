@@ -11,6 +11,7 @@ export class ListItemComponent implements OnInit {
 
   @ViewChild('m') more!: ElementRef
 
+  @Input() isInvalid: boolean = false
   @Input() isActive: boolean = false
   @Input() scene!: Scene
 

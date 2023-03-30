@@ -4,7 +4,7 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { IconArrowBarToLeft, IconSearch, IconX, IconFilter,
          IconTrash, IconArrowRight, IconEdit, IconDotsVertical,
          IconCopy, IconCheck, IconChevronDown, IconCircleCheck,
-        IconCircleX, IconFileUpload } from 'angular-tabler-icons/icons';
+        IconCircleX, IconFileUpload, IconExclamationCircle } from 'angular-tabler-icons/icons';
 
 // Select some icons (use an object, not an array)
 const icons = {
@@ -21,7 +21,8 @@ const icons = {
   IconChevronDown,
   IconCircleCheck,
   IconCircleX,
-  IconFileUpload
+  IconFileUpload, 
+  IconExclamationCircle
 };
 
 @NgModule({

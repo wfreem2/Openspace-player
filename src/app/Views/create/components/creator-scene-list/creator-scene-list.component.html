@@ -21,6 +21,7 @@
         </svg>
         
         <list-item class="item" [scene]="s" 
+        [isInvalid]="isSceneInvalid($sceneErrors | async, s)"
         [isActive]="($currScene | async) === s"
         (itemClickedEvent)="$currentScene.next($event)"
         (deleteClickedEvent)="onDeleteClicked($event)"

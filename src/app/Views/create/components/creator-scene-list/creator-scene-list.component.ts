@@ -19,6 +19,7 @@ export class CreatorSceneListComponent extends BaseComponent implements OnInit, 
   query: string = ''
 
   @Input() $currentScene!: Subject<Scene | null>
+  @Input() $sceneErrors!: Observable<Scene[]>
   @Input() scenes!: Scene[]
   @Input('defaultScene') DEFAULT_SCENE: any
 
@@ -62,5 +63,11 @@ export class CreatorSceneListComponent extends BaseComponent implements OnInit, 
   onDrop(event: CdkDragDrop<Scene[]>){
     moveItemInArray(this.scenes, event.previousIndex, event.currentIndex)
     this.listDragDropEvent.emit(this.scenes)
+  }
+
+  isSceneInvalid(scenes: Scene[] | null, scene: Scene){
+    if(scenes === null){ return false }
+    
+    return scenes.some(invalidScene => invalidScene.id === scene.id)
   }
 }

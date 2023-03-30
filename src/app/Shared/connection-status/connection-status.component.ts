@@ -24,9 +24,7 @@ export class ConnectionStatusComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void { }
-
 }
-
 
 export type LoadingState = {
   isLoading: boolean,

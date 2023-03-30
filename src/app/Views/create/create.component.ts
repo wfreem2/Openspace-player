@@ -29,11 +29,13 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
 
 
   // #region observable sources
+    readonly $setSceneErrors = new BehaviorSubject<Scene[]>([])
     readonly $setScene = new BehaviorSubject<Scene | null>(null)
     readonly $setSaveDisabled = new BehaviorSubject<boolean>(false)
     readonly $setResetVisibility = new Subject<boolean>()
     readonly $setConfirmVisibility = new Subject<boolean>()
     readonly $setDuplicateVisibility = new Subject<boolean>()
+    readonly $setExportVisibility = new Subject<boolean>()
     readonly $duplicateScene = new Subject<Scene | null>()
   // #endregion
 
@@ -58,7 +60,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
         )
       })  
     )
-    
+    readonly $isExportShowing = this.$setExportVisibility.asObservable()
     readonly $isConfirmShowing = this.$setConfirmVisibility.asObservable()
     readonly $isResetShowing = this.$setResetVisibility.asObservable()
     readonly $isSaveDisabled = this.$setSaveDisabled.asObservable()
@@ -75,15 +77,15 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
 
   // #endregion
 
-  confirmPrompt = ''
 
   show!: Show
   query: string = ''
   menu!: CreatorMenuItem[]
-
+  sceneErrors: Scene[] = []
   isSaved: boolean = true
   isAutoMode:boolean = false
 
+  exportedShowName: string = ''
 
   sceneForm = this.fb.group<SceneForm>({
     script: this.fb.control<string | null>(null),
@@ -103,7 +105,6 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     private openSpaceService: OpenspaceService, private sceneExecutor: SceneExecutorService) {
       
     super()
-
     this.route.params
     .pipe(
       map(params => params?.['id']),
@@ -118,7 +119,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
       takeUntil(this.$unsub),
       withLatestFrom(this.$selectedScene),
       filter( ([, selectedScene]) => !!selectedScene),
-      concatMap( async ([formVal, selectedScene]) => {
+      map(([formVal, selectedScene]) => {
       
         return [
           {
@@ -132,9 +133,15 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
           selectedScene as Scene
         ]
       }),
-      tap( () => {
+      tap( ([, scene]) => {
         this.isSaved = false
         this.$setSaveDisabled.next(!this.sceneForm.valid)
+        
+        this.sceneErrors = this.sceneForm.valid ? 
+        this.sceneErrors.filter(s => s.id !== scene.id) :
+        [...this.sceneErrors, scene]
+
+        this.$setSceneErrors.next(this.sceneErrors)
       })
     )
     .subscribe( ([updated,]) => { 
@@ -157,7 +164,10 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
           {
             name: 'Export',
             hotKey: ['E'],
-            callBack: this.saveToDisk.bind(this),
+            callBack: () => {
+              this.exportedShowName = this.show.title
+              this.$setExportVisibility.next(true)
+            },
             isDisabled: this.$isSaveDisabled
           },
         ],
@@ -269,7 +279,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     const a = document.createElement('a')
     const showString = JSON.stringify(this.show)
     const file = new Blob([showString], {type: 'application/json'})
-    const fileTitle = this.show.title + '.json'
+    const fileTitle = this.exportedShowName + '.json'
 
     a.href = URL.createObjectURL(file)
     a.download = fileTitle

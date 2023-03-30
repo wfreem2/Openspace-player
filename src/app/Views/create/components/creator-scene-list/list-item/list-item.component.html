@@ -3,6 +3,7 @@
         <p>{{scene.title}}</p>
     </div>
 
+    <i-tabler *ngIf="isInvalid" name="exclamation-circle" class="icon" id="exclamation"></i-tabler>
     <ng-container [ngTemplateOutlet]="more"></ng-container>
 </div>
 

@@ -103,7 +103,9 @@ $grid-bd: solid 2px $gray;
             padding-bottom: 0.5rem;
             border-bottom: $grid-bd;
             
-            &:hover, &:focus-within{
+            &.ng-invalid{ border-color: $clr-err; }
+
+            &:not(.ng-invalid):hover, &:not(.ng-invalid):focus-within{
                 border-color: $clr-accent;
             }
 
@@ -212,7 +214,7 @@ $grid-bd: solid 2px $gray;
     align-items: center;
     gap: 2rem 0.5rem;
 
-    .prompt{
+    .prompt, .input{
         grid-row: 1;
         grid-column: 1 / span 2;
         font-size: 1.2rem;
@@ -243,6 +245,10 @@ $grid-bd: solid 2px $gray;
         &:hover{
             background: shade($del-clr, 30%);
         }
+    }
+
+    & input[name="export-name"]{
+        color: $txt-color;
     }
 
     &#duplicate{

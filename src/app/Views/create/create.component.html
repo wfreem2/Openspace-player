@@ -5,7 +5,7 @@
             Back to Home
         </a>
         <input name="title" class="title input" type="text" selectallOnclick
-        [class.invalid]="!show.title.length" required 
+        [class.invalid]="!show.title.length" required autofocus
         placeholder="Show Title" [(ngModel)]="show.title"/>  
         
         <connection-status id="connection-status"></connection-status>
@@ -22,6 +22,7 @@
         <creator-scene-list
         [scenes]="show.scenes"
         [defaultScene]="DEFAULT_SCENE"
+        [$sceneErrors]="$setSceneErrors.asObservable()"
         [$currentScene]="$setScene"
         (duplicateClickedEvent)="$duplicateScene.next($event)"
         (deleteClickedEvent)="onDeleteClicked()"
@@ -62,13 +63,25 @@
     </div>
 </modal>
 
+<modal title="Export Show" *ngIf="$isExportShowing | async" (closedEvent)="$setExportVisibility.next(false)">
+<!-- <modal title="Export Show" *ngIf="true" (closedEvent)="$setExportVisibility.next(false)"> -->
+    <div class="modal-content" id="export">
+        <div class="prompt">
+            <label for="export-name">File Name</label>
+            <input type="text" class="input" name="export-name" placeholder="e.g, MyAwesomeShow" 
+            selectallOnclick [(ngModel)]="exportedShowName"/>
+        </div>
+        <button class="btn secondary" (click)="$setExportVisibility.next(false)">Cancel</button>
+        <button class="btn primary" (click)="saveToDisk(); $setExportVisibility.next(false)">Export Show</button>
+    </div>
+</modal>
 
 <ng-template #sceneTabs>
-    <form id="scene-form" [formGroup]="sceneForm" *ngIf="$selectedScene | async">
-        <div class="scene-title">
-            <input name="title" type="text" class="title" 
+    <form id="scene-form" [formGroup]="sceneForm" *ngIf="$selectedScene | async as scene">
+        <div class="scene-title" [class.ng-invalid]="!scene.title.trim().length">
+            <input name="title" type="text" class="title" required
             formControlName="title" placeholder="Scene Title">
-            <i-tabler name="x" id="x" (click)="sceneForm.controls.title.setValue('')" ></i-tabler>
+            <i-tabler name="x" id="x" (click)="sceneForm.controls.title.setValue('')"></i-tabler>
         </div>
 
         <tabs>
