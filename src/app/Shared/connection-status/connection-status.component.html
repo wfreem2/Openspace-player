@@ -1,14 +1,14 @@
-<div class="status loading" *ngIf="$loading | async">
+<div class="status loading" *ngIf="($loadingState | async)?.isLoading">
     <div id="spinner"></div>
     Loading
 </div>
 
-<div class="status connected" *ngIf="($isConnected | async)">
+<div class="status connected" *ngIf="!($loadingState | async)?.isLoading && ($loadingState | async)?.isConnected">
     <i-tabler class="icon" name="circle-check"></i-tabler>
     Connected
 </div>
 
-<div class="status disconnected" *ngIf="!($isConnected | async) && !($loading | async)">
+<div class="status disconnected" *ngIf="!($loadingState | async)?.isLoading && !($loadingState | async)?.isConnected">
     <i-tabler class="icon" name="circle-x"></i-tabler>
     Disconnected
 </div>

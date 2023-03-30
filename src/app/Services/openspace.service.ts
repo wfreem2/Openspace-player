@@ -48,25 +48,30 @@ export class OpenspaceService {
 
   isConnected(): Observable<boolean>{  return this._isConnected.asObservable() }
   
-  flyToGeo(lat: Number, long: Number, alt: Number, globe: string='', duration?: number): void{
+  flyToGeo({lat, long, alt, time, node}: GeoPosition, duration?: number): void{
     
+    // if(time){}
+
     if(!duration){
-      this.openspace.globebrowsing.flyToGeo(globe, lat, long, alt)
+      this.openspace.globebrowsing.flyToGeo(node, lat, long, alt)
       return
     }
 
-    this.openspace.globebrowsing.flyToGeo(globe, lat, long, alt, duration)
+    this.openspace.globebrowsing.flyToGeo(node, lat, long, alt, duration)
   }
 
   async getCurrentPosition(): Promise<GeoPosition>{
     const pos = await this.openspace.globebrowsing.getGeoPositionForCamera()
     const anchor = await this.getCurrentAnchor()
+    
+    const time = await this.getTime()
 
     return {
       lat: pos[1],
       long: pos[2],
       alt: pos[3],
-      node: anchor
+      node: anchor,
+      time: time
     }
   }
   

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { tap, BehaviorSubject } from 'rxjs';
+import { tap, BehaviorSubject, takeUntil, startWith, map, Observable, catchError, of } from 'rxjs';
 import { OpenspaceService } from 'src/app/Services/openspace.service';
 import { BaseComponent } from '../base/base.component';
 
@@ -11,11 +11,13 @@ import { BaseComponent } from '../base/base.component';
 
 export class ConnectionStatusComponent extends BaseComponent implements OnInit {
 
-  public $loading = new BehaviorSubject<boolean>(true)
-
-  public $isConnected = this.openspaceService.isConnected()
-  .pipe( tap( () => this.$loading.next(false) ))
-
+  readonly $loadingState: Observable<LoadingState> = this.openspaceService.isConnected()
+  .pipe(
+    map( isConnected => { return { isLoading: false, isConnected: isConnected } }),
+    startWith({ isLoading: true, isConnected: false }),
+    takeUntil(this.$unsub),
+    catchError( () => of({ isLoading: false, isConnected: false }) )
+  )
 
   constructor(private openspaceService: OpenspaceService) { 
     super() 
@@ -23,4 +25,10 @@ export class ConnectionStatusComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void { }
 
+}
+
+
+export type LoadingState = {
+  isLoading: boolean,
+  isConnected: boolean
 }

@@ -90,7 +90,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     transistion: this.fb.control<number | null>(null, Validators.pattern(/^[0-9]*\.?[0-9]*$/)),
     
     title: this.fb.nonNullable.control<string>('New Scene', [Validators.required]),
-    geoPos: this.fb.nonNullable.control<GeoPosition>({lat: 0, long: 0, alt: 0, node: SceneGraphNode.Earth }),
+    geoPos: this.fb.nonNullable.control<GeoPosition>({lat: 0, long: 0, alt: 0, node: SceneGraphNode.Earth, time: new Date() }),
     options: this.fb.nonNullable.control<SceneOptions>({keepCameraPosition: true, enabledTrails: []})
   })
   
@@ -119,10 +119,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
       withLatestFrom(this.$selectedScene),
       filter( ([, selectedScene]) => !!selectedScene),
       concatMap( async ([formVal, selectedScene]) => {
-        
-        try{ selectedScene!.time = await this.openSpaceService.getTime() }
-        catch{ selectedScene!.time = new Date() }
-
+      
         return [
           {
             id: selectedScene!.id,

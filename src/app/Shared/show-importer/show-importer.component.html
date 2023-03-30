@@ -1,4 +1,4 @@
-<modal [showCloseBtn]="false" title="Import Show From File">
+<modal title="Import Show From File" (closedEvent)="closeImporterEvent.emit()">
     <div class="modal-content">
         <div id="dropzone" [class.active]="dropzoneActive"
             (dragover)="dropzoneActive=true; $event.preventDefault()"
