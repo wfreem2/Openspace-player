@@ -30,11 +30,16 @@
         </creator-scene-list>
 
         <show-issues 
-        [invalidScenes]="$setSceneIssues | async"
+        [invalidScenes]="$setSceneIssues.asObservable() | async"
         (goToScene)="$setScene.next($event)">
         </show-issues>
     </div>
 </div>
+
+<manual 
+  *ngIf="$isManualShowing | async"
+  (closedEvent)="$setManualVisibility.next(false)">
+</manual>
 
 <modal title="Delete Scene?" *ngIf="$isConfirmShowing | async"
     (closedEvent)="$setConfirmVisibility.next(false)">

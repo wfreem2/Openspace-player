@@ -37,6 +37,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     readonly $setConfirmVisibility = new Subject<boolean>()
     readonly $setDuplicateVisibility = new Subject<boolean>()
     readonly $setExportVisibility = new Subject<boolean>()
+    readonly $setManualVisibility = new Subject<boolean>()
     readonly $duplicateScene = new Subject<Scene | null>()
   // #endregion
 
@@ -61,6 +62,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
         )
       })  
     )
+    readonly $isManualShowing = this.$setManualVisibility.asObservable()
     readonly $isExportShowing = this.$setExportVisibility.asObservable()
     readonly $isConfirmShowing = this.$setConfirmVisibility.asObservable()
     readonly $isResetShowing = this.$setResetVisibility.asObservable()
@@ -80,12 +82,13 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
 
 
   show!: Show
-  query: string = ''
   menu!: CreatorMenuItem[]
   sceneIssues: SceneIssue[] = []
+  
   isSaved: boolean = true
   isAutoMode:boolean = false
-
+  
+  query: string = ''
   exportedShowName: string = ''
 
   sceneForm = this.fb.group<SceneForm>({
@@ -194,7 +197,14 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
       },
       {
         name: 'Help',
-        subMenus: []
+        subMenus: [
+          {
+            name: 'Manual',
+            hotKey: ['H'],
+            isDisabled: false,
+            callBack: () => this.$setManualVisibility.next(true)
+          }
+        ]
       }
     ]
   }
