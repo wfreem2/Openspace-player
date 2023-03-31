@@ -1,0 +1,19 @@
+<p id="header">Issues ({{invalidScenes?.length}})</p>
+
+<ul class="issues" [class.no-issues]="!invalidScenes?.length">
+    <ng-template [ngIf]="invalidScenes?.length">
+        <li class="issue" *ngFor="let issue of invalidScenes">
+            <p>Scene: <b>{{issue.scene.title}}</b></p>
+            <ul class="error-msgs">
+                <li *ngFor="let msg of issue.issues" class="msg">
+                    <p>
+                        <b>{{msg.charAt(0).toUpperCase() + msg.slice(1)}}</b>
+                    </p>
+                </li>
+            </ul>
+            <button class="go-to" (click)="goTo(issue.scene)">Go-to</button>
+        </li>
+    </ng-template>
+
+    <p *ngIf="!invalidScenes?.length">No Issues</p>
+</ul>

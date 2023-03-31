@@ -22,12 +22,17 @@
         <creator-scene-list
         [scenes]="show.scenes"
         [defaultScene]="DEFAULT_SCENE"
-        [$sceneErrors]="$setSceneErrors.asObservable()"
+        [$sceneIssues]="$setSceneIssues.asObservable()"
         [$currentScene]="$setScene"
         (duplicateClickedEvent)="$duplicateScene.next($event)"
         (deleteClickedEvent)="onDeleteClicked()"
         (listDragDropEvent)="isSaved=false;">
         </creator-scene-list>
+
+        <show-issues 
+        [invalidScenes]="$setSceneIssues | async"
+        (goToScene)="$setScene.next($event)">
+        </show-issues>
     </div>
 </div>
 

@@ -1,0 +1,68 @@
+@import '/src/scss/mixins.scss';
+@import '/src/scss/func.scss';
+@import '/src/scss/variables.scss';
+
+:host{
+    display: grid;
+    grid-template-rows: max-content 1fr;
+    gap: 0.5rem;
+    overflow-y: hidden;
+    min-width: 100%;
+    width: 0;
+}
+
+#header{
+    font-size: 1.5rem;
+}
+
+.issues{
+    @extend %max-W;
+    max-width: 100%;
+    height: 0;
+    min-height: 100%;
+    overflow-y: auto;
+    padding-left: 0.5rem;
+    
+    &.no-issues{
+        @extend %align-center, %just-center;
+    }
+
+    .issue{
+        @extend %max-W;
+        transition: all 0.2s;
+        display: grid;
+        grid-template-columns: 1fr max-content;
+        grid-template-rows: max-content max-content;
+        overflow-y: hidden;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        
+        &:not(:last-child){
+            border-bottom: solid 2px shade($gray, 20%);
+        }
+
+        &:hover{
+            background: tint($clr-accent, 80%);
+        }
+    }
+
+    .error-msgs{
+        grid-row: 2;
+        @extend %flx-col;
+        gap: 0.5rem;
+        max-width: 100%;
+        overflow-y: auto;
+        padding-left: 0.5rem;
+
+        .msg{ color: $clr-err; }
+    }
+}
+
+.go-to{
+    @include reset-input;
+    grid-row: 1;
+    grid-column: 2;
+    cursor: pointer;
+    color: shade($clr-accent, 10%);
+    font-size: 1rem;
+}

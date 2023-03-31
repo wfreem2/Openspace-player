@@ -10,7 +10,7 @@
 .creator{
     @extend %max-WH;
     display: grid;
-    grid-template-columns: minmax(16rem, auto) 1fr;
+    grid-template-columns: minmax(20rem, auto) 1fr;
     grid-template-rows: max-content minmax(0, 1fr);
     overflow-y: auto;
     background: #ffffff;
@@ -141,7 +141,8 @@ $grid-bd: solid 2px $gray;
 // List of created scenes
 .scene-list{
     grid-column: 1;
-    @extend %flx-col;
+    display: grid;
+    grid-template-rows: 1fr minmax(max-content, 30%);
     gap: 0.5rem;
     padding: 0.5rem 1rem;
     border-right: $grid-bd;

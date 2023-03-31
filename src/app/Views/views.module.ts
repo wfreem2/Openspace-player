@@ -17,6 +17,7 @@ import { SceneOptionsComponent } from './create/components/scene-options/scene-o
 import { ScenePositionComponent } from './create/components/scene-position/scene-position.component';
 import { TabComponent } from './create/components/tabs/tab/tab.component';
 import { TabsComponent } from './create/components/tabs/tabs.component';
+import { ShowIssuesComponent } from './create/components/show-issues/show-issues.component';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { TabsComponent } from './create/components/tabs/tabs.component';
     SearchShowsPipe,
     CreatorMenuComponent,
     CreatorMenuItemComponent,
+    ShowIssuesComponent,
   ],
   imports: [
     SharedModule,

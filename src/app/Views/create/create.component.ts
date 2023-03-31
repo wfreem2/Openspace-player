@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { Scene } from 'src/app/Models/Scene';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, concatMap, distinctUntilChanged, filter, first, map, Subject, takeUntil, tap, withLatestFrom } from 'rxjs';
@@ -16,6 +16,7 @@ import { CreatorMenuItem } from 'src/app/Models/CreatorMenuItem';
 import { ScenePositionComponent } from './components/scene-position/scene-position.component';
 import { BaseComponent } from 'src/app/Shared/base/base.component';
 import { cloneDeep } from 'lodash';
+import { SceneIssue } from 'src/app/Models/SceneIssue';
 
 @Component({
   selector: 'app-create',
@@ -29,7 +30,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
 
 
   // #region observable sources
-    readonly $setSceneErrors = new BehaviorSubject<Scene[]>([])
+    readonly $setSceneIssues = new BehaviorSubject<SceneIssue[]>([])
     readonly $setScene = new BehaviorSubject<Scene | null>(null)
     readonly $setSaveDisabled = new BehaviorSubject<boolean>(false)
     readonly $setResetVisibility = new Subject<boolean>()
@@ -81,7 +82,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
   show!: Show
   query: string = ''
   menu!: CreatorMenuItem[]
-  sceneErrors: Scene[] = []
+  sceneIssues: SceneIssue[] = []
   isSaved: boolean = true
   isAutoMode:boolean = false
 
@@ -135,13 +136,13 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
       }),
       tap( ([, scene]) => {
         this.isSaved = false
-        this.$setSaveDisabled.next(!this.sceneForm.valid)
-        
-        this.sceneErrors = this.sceneForm.valid ? 
-        this.sceneErrors.filter(s => s.id !== scene.id) :
-        [...this.sceneErrors, scene]
+        this.$setSaveDisabled.next(!this.isShowValid())
 
-        this.$setSceneErrors.next(this.sceneErrors)
+        const errors = this.sceneIssues.filter(issue => issue.scene.id !== scene.id)
+        
+        this.sceneIssues = this.isShowValid() ? errors : [{scene, issues: this.getSceneIssues()}, ...errors] 
+
+        this.$setSceneIssues.next(this.sceneIssues)
       })
     )
     .subscribe( ([updated,]) => { 
@@ -296,6 +297,21 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
 
   sceneTitleExists(title: string): boolean{
     return this.show.scenes.some(s => s.title.trim() === title.trim())
+  }
+
+  private isShowValid(): boolean{
+    return Object.values(this.sceneForm.controls).every(ctrl => ctrl.valid)
+  }
+
+  private getSceneIssues(){
+    const ctrls = Object.values(this.sceneForm.controls)
+    .filter(ctrl => ctrl.invalid)
+    .map( ctrl => {
+      const formGroup = ctrl.parent!.controls;
+      return Object.keys(formGroup).find(name => ctrl === ctrl.parent?.get(name)) || null;
+    })
+    
+    return ctrls as string[]
   }
 }
 

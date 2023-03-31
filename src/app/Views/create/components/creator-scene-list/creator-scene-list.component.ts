@@ -5,6 +5,7 @@ import { ListItemComponent } from './list-item/list-item.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { filter, Observable, ReplaySubject, Subject, tap } from 'rxjs';
 import { BaseComponent } from 'src/app/Shared/base/base.component';
+import { SceneIssue } from 'src/app/Models/SceneIssue';
 
 @Component({
   selector: 'creator-scene-list',
@@ -19,7 +20,7 @@ export class CreatorSceneListComponent extends BaseComponent implements OnInit, 
   query: string = ''
 
   @Input() $currentScene!: Subject<Scene | null>
-  @Input() $sceneErrors!: Observable<Scene[]>
+  @Input() $sceneIssues!: Observable<SceneIssue[]>
   @Input() scenes!: Scene[]
   @Input('defaultScene') DEFAULT_SCENE: any
 
@@ -65,9 +66,9 @@ export class CreatorSceneListComponent extends BaseComponent implements OnInit, 
     this.listDragDropEvent.emit(this.scenes)
   }
 
-  isSceneInvalid(scenes: Scene[] | null, scene: Scene){
+  isSceneInvalid(scenes: SceneIssue[] | null, scene: Scene){
     if(scenes === null){ return false }
     
-    return scenes.some(invalidScene => invalidScene.id === scene.id)
+    return scenes.some(issue => issue.scene.id === scene.id)
   }
 }
