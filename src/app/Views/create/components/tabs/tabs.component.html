@@ -1,7 +1,9 @@
 <ul class="tabs">
+
     <li class="tab" [class.active]="t.isActive"
         *ngFor="let t of tabs"
         (click)="selectTab(t)">
+        <tabler-icon *ngIf="t.iconName" [name]="t.iconName" class="icon"></tabler-icon>
         {{t.name}}
     </li>
 </ul>

@@ -69,7 +69,7 @@ export class PlayComponent implements OnInit {
     try{
       this.sceneExecutor.execute(scene)
     }
-    catch(_){
+    catch{
       this.openSpaceService.isConnected()
       .pipe(
         filter(status => !status),

@@ -12,6 +12,10 @@ html, body{
     background-color: $clr-primary;
 }
 
+img{
+    object-fit: contain;
+}
+
 ul{ @include reset-list; }
 
 p, h1, h2, h3{

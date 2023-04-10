@@ -16,12 +16,12 @@ $transistion: all 0.2s;
 $bg: #f8fafb;
 $clr-primary: #edf0fd;
 $clr-secondary: #353535;
-$clr-accent: #3C6E71;
-$clr-err: #e20b0b;
-$gray: #e7e8ea;
+$clr-accent: #00728c;
+$clr-err: #be0647;
+$gray: #d1d1dd;
 $txt-color: #262949;
 
-$bd-rad: 8px;
+$bd-rad: 10px;
 
 %flx{ display: flex; }
 %flx-col{ @extend %flx; flex-direction: column; }

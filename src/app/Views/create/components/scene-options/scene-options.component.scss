@@ -28,7 +28,10 @@
 }
 
 
-#opts-form{ @extend %max-H; }
+#opts-form{ 
+    @extend %max-H;
+    overflow-y: hidden;
+ }
 
 .options-list{
     padding: 0 1rem;
@@ -37,7 +40,7 @@
 
 #trails{
     display: grid;
-    grid-template-rows: max-content max-content max-content minmax(0, 1fr);
+    grid-template-rows: max-content max-content max-content 1fr;
     row-gap: 0.5rem;
     
     &.collapsed{
@@ -49,7 +52,7 @@
     @extend %max-H;
     transition: all 0.2s;
     padding: 0.5rem;
-    overflow-y: auto;
+    overflow-y: hidden;
 
     .title{ 
         font-size: 1.85rem; 

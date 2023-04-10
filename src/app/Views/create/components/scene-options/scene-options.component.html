@@ -20,7 +20,7 @@
             <li class="option" [class.active]="option.controls.isEnabled.value"
              *ngFor="let option of $filteredTrails | async" [formGroup]="option">
                 <label for="{{option.controls.trail.value}}">{{option.controls.trail.value}} Trail</label>
-                <input type="checkbox" name="{{option.controls.trail.value}}"  formControlName="isEnabled">
+                <input type="checkbox" name="{{option.controls.trail.value}}" formControlName="isEnabled">
             </li>
         </ul>
     </div>

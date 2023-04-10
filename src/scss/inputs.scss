@@ -55,15 +55,11 @@
     border-radius: $bd-rad;
 
     &:invalid, &.ng-invalid{
-        color: #71080c;
-        background: #fce7e8;
-        border-color: #e21017;
+        border-color: $clr-err;
     }
 
     &:not(:disabled):not(.ng-invalid):hover,
-    &:not(:disabled):not(.ng-invalid):focus-within,
-    &:not(:disabled):valid:hover,
-    &:not(:disabled):valid:focus-within{
+    &:not(:disabled):not(.ng-invalid):focus-within{
         border-color: $clr-accent;
     }
 

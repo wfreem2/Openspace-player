@@ -1,7 +1,7 @@
 @import '/src/scss/variables.scss';
 
 :host{
-    @extend %max-W, %flx-col, %align-center;
+    @extend %max-W, %flx-col;
     gap: 1rem;
     padding: 0.5rem;
     min-height: 15rem;
@@ -11,11 +11,6 @@
         display: flex;
         justify-content: flex-end;
     }
-}
-
-.grid{
-    display: grid;
-    grid-template-columns: 1fr;
 }
 
 .section{
@@ -32,7 +27,7 @@
 
 .err-msg{
     grid-column: 2;
-    color: red;
+    color: $clr-err;
     margin-left: 1rem;
 }
 
@@ -45,7 +40,6 @@
 
 #geoLocation{
     @extend %flx-col;
-    align-items: center;
     gap: 0.75rem;
 }
 

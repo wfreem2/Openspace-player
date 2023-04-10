@@ -67,9 +67,7 @@
 }
 
 
-
 .title{ font-size: 1.5rem; }
-
 
 .scene-creator, .scene-list{
     background: #fafafb;
@@ -186,8 +184,12 @@ $grid-bd: solid 2px $gray;
     .section{
         @extend %flx-col;
         gap: 0.5rem;
-
+        padding: 1rem 0;
         .title{ color: tint($clr-secondary, 40%); }
+    }
+
+    .section:not(:first-child){
+        border-top: solid 2px $gray
     }
 
     .geoPos, .enabledTrails{
@@ -274,4 +276,20 @@ $grid-bd: solid 2px $gray;
     max-width: 50rem;
     min-width: 35rem;
     max-height: 30rem;
+}
+
+.tab-content{
+    display: grid;
+    grid-template-rows: max-content max-content;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+
+    & > .title{
+        font-size: 2rem;
+    }
+
+    & > .desc{
+        max-width: 30rem;
+        color: shade($gray, 40%);
+    }
 }

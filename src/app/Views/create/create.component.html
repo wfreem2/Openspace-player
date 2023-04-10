@@ -95,7 +95,13 @@
         </div>
 
         <tabs>
-            <tab name="Summary">
+            <tab name="Summary" iconName="planet">
+                <div class="tab-content">
+                    <p class="title">Scene Summary</p>
+                    <p class="desc">
+                        View all of the important settings for this scene in one place.
+                    </p>
+                </div>
                 <div class="summary">
                     <div class="section">
                         <p class="title">GeoPosition</p>
@@ -144,19 +150,26 @@
                 </div>
             </tab>
 
-            <tab name="Position" [isActive]="true">
+            <tab name="Position" [isActive]="true" iconName="map-2">
+                <div class="tab-content">
+                    <p class="title">Scene Position</p>
+                    <p class="desc">
+                        Set parameters such as latitude, longitude, and altitude to position the camera
+                        on this scene.
+                    </p>
+                </div>
                 <scene-position id="scene-pos"
                 formControlName="geoPos"
                 [isAutoMode]="isAutoMode">
                 </scene-position>
             </tab>
 
-            <tab name="Options">
+            <tab name="Options" iconName="adjustments-horizontal">
                 <scene-options formControlName="options"></scene-options>
             </tab>
             
-            <tab name="Transition">
-                <div class="transition">
+            <tab name="Transition" iconName="ease-in-out">
+                <div class="tab-content transition">
                     <p>How long it takes OpenSpace to fly to the selected target 
                         <span style="color: #999595;">(in seconds)</span>
                     </p>
@@ -171,7 +184,7 @@
                 </div>
             </tab>
 
-            <tab name="Script">
+            <tab name="Script" iconName="clipboard-text">
                 <textarea id="script" class="input" 
                 cols="30" rows="20"
                 formControlName="script"
