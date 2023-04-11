@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { first, map } from 'rxjs';
 import { Show } from 'src/app/Models/Show';
-import { ShowPreviewService } from 'src/app/Views/home/show-preview.service';
 import { ShowService } from 'src/app/Services/show.service';
 
 @Component({
@@ -46,15 +45,13 @@ export class YourShowsComponent implements OnInit {
   
   selectedPipe: ShowPipe = this.allShows
 
-  constructor(private showService: ShowService, public showPreviewService: ShowPreviewService) { 
+  constructor(private showService: ShowService) { 
     showService.getAllShows()
     .pipe( 
       map(shows => shows.length ? shows : []),
       first()
     )
     .subscribe(shows => this.shows = shows)
-
-
   }
 
   ngOnInit(): void { }

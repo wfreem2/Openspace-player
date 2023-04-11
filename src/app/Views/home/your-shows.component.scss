@@ -3,13 +3,16 @@
 @import '/src/scss/func.scss';
 
 :host{
-    @extend %card, %max-WH;
+    @extend %card, %max-H;
+    justify-self: center;
+    align-self: center;
     display: grid;
     grid-template-rows: max-content max-content 1fr;
     gap: 2rem;
     background: #ffffff;
     padding: 2rem;
     margin: 1rem;
+    width: 95%;
     max-width: 100rem;
     max-height: 50rem;
 }

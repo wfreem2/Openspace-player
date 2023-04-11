@@ -1,14 +1,10 @@
 import { NgModule } from '@angular/core';
-import { HomeComponent } from './home/home.component';
 import { SharedModule } from '../Shared/shared.module';
-import { YourShowsComponent } from './home/your-shows/your-shows.component';
-import { ShowPreviewComponent } from './home/show-preview/show-preview.component';
 import { CreateComponent } from './create/create.component';
 import { PlayComponent } from './play/play.component';
 import { PlaygroundComponent } from './playground/playground.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SearchScenesPipe } from './create/pipes/search-scenes.pipe';
-import { SearchShowsPipe } from './home/your-shows/search-shows.pipe';
 import { CreatorMenuItemComponent } from './create/components/creator-menu-item/creator-menu-item.component';
 import { CreatorMenuComponent } from './create/components/creator-menu/creator-menu.component';
 import { CreatorSceneListComponent } from './create/components/creator-scene-list/creator-scene-list.component';
@@ -18,16 +14,15 @@ import { ScenePositionComponent } from './create/components/scene-position/scene
 import { TabComponent } from './create/components/tabs/tab/tab.component';
 import { TabsComponent } from './create/components/tabs/tabs.component';
 import { ShowIssuesComponent } from './create/components/show-issues/show-issues.component';
-import { ShowsListComponent } from './home/shows-list/shows-list.component';
 import { ShowCardComponent } from './home/show-card/show-card.component';
-import { FilterSortShowPipe } from './home/your-shows/filter-sort-show.pipe';
+import { FilterSortShowPipe } from './home/filter-sort-show.pipe';
+import { SearchShowsPipe } from './home/search-shows.pipe';
+import { YourShowsComponent } from './home/your-shows.component';
 
 
 @NgModule({
   declarations: [
-    HomeComponent,
     YourShowsComponent,
-    ShowPreviewComponent,
     CreateComponent,
     ScenePositionComponent,
     PlayComponent,
@@ -42,7 +37,6 @@ import { FilterSortShowPipe } from './home/your-shows/filter-sort-show.pipe';
     CreatorMenuComponent,
     CreatorMenuItemComponent,
     ShowIssuesComponent,
-    ShowsListComponent,
     ShowCardComponent,
     FilterSortShowPipe
   ],
@@ -51,7 +45,6 @@ import { FilterSortShowPipe } from './home/your-shows/filter-sort-show.pipe';
     DragDropModule,
   ],
   exports: [
-    HomeComponent,
     CreateComponent,
   ],
 

@@ -40,7 +40,7 @@
     
     <div class="list-wrapper">
         <div class="shows">
-            <show-card *ngFor="let s of shows | filterSortShow: selectedPipe"
+            <show-card *ngFor="let s of shows | filterSortShow: selectedPipe | searchShows: query"
             [active]="selectedShow === s"
             [show]="s" (cardClicked)="selectedShow=s"></show-card>
         </div>
@@ -54,7 +54,7 @@
                         <p class="title">{{selectedShow.title}}</p>
 
                         <div class="btns">
-                            <a class="btn secondary" id="edit" [routerLink]="['/creatp', selectedShow.id]">
+                            <a class="btn secondary" id="edit" [routerLink]="['/creator', selectedShow.id]">
                                 <tabler-icon name="edit"></tabler-icon>
                                 Edit
                             </a>
@@ -90,7 +90,7 @@
  (closedEvent)="showDeleteConfirm=false">
     <div class="modal-content">
         <tabler-icon name="trash" id="trash-icon"></tabler-icon>
-        <p class="title">Are you sure you want to delete <b>{{selectedShow}}</b> show?</p>
+        <p class="title">Are you sure you want to delete <b>{{selectedShow?.title}}</b> show?</p>
         <p class="subtitle">This action cannot be undone.</p>
 
         <div class="btns">
