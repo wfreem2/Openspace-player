@@ -28,6 +28,18 @@ export class ShowImporterComponent implements OnInit {
     
     const json = ev.dataTransfer?.files.item(0)
 
+    this.uploadFile(json)
+  }
+  
+  async handleBrowse(ev: Event){
+    const input = ev.target as HTMLInputElement
+
+    const json = input.files?.item(0)
+
+    this.uploadFile(json)
+  }
+
+  async uploadFile(json: File | null | undefined){
     if(json?.type != 'application/json'){
       this.errorMsg = 'Invalid file type. Only JSON files are accepted.'
       this.hasErrors = true
@@ -36,7 +48,7 @@ export class ShowImporterComponent implements OnInit {
     }
     
     const jsonString = await json?.text()
-
+  
     if(!jsonString.trim()){
       this.hasErrors = true
       this.errorMsg = 'JSON file is empty.'
@@ -46,7 +58,7 @@ export class ShowImporterComponent implements OnInit {
     
     try{
       const jsonParsed = JSON.parse(jsonString)
-
+  
       if(!this.showService.instanceOfShow(jsonParsed)){
         debugger
         this.errorMsg = 'JSON data is not a valid show'
@@ -54,14 +66,14 @@ export class ShowImporterComponent implements OnInit {
         
         return
       }
-
+  
       this.importedShow = jsonParsed as Show
       this.importedShow.id = 1
       this.showService.addShow(this.importedShow)
-
+  
       this.hasErrors = false
       this.errorMsg = ''
-
+  
       this.closeImporterEvent.emit()
     }
     catch(error: any){
@@ -71,10 +83,10 @@ export class ShowImporterComponent implements OnInit {
       else{
         this.errorMsg = error
       }
-
+  
       this.hasErrors = true
     }
   }
-  
-  
+
+
 }

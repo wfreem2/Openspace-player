@@ -10,6 +10,7 @@
                 to upload.
             </div>
             <input hidden 
+                (input)="handleBrowse($event)"
                 name="show" 
                 type="file"
                 id="show-file" accept=".json"
