@@ -1,6 +1,9 @@
 <div class="header" [class.disabled]="isDisabled" [class.active]="!isCollapsed" 
     (click)="isCollapsed = !isCollapsed; moveToTop(selectedItem)">
-    <p>{{selectedItem.item}}</p>
+    <div id="selected-item">
+        <tabler-icon name="planet"></tabler-icon>
+        <p>{{selectedItem.item}}</p> 
+    </div>
     <i-tabler name="chevron-down" id="chevron" [class.rotated]="!isCollapsed"></i-tabler>
 </div>
 

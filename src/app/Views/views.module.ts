@@ -18,6 +18,9 @@ import { ScenePositionComponent } from './create/components/scene-position/scene
 import { TabComponent } from './create/components/tabs/tab/tab.component';
 import { TabsComponent } from './create/components/tabs/tabs.component';
 import { ShowIssuesComponent } from './create/components/show-issues/show-issues.component';
+import { ShowsListComponent } from './home/shows-list/shows-list.component';
+import { ShowCardComponent } from './home/show-card/show-card.component';
+import { FilterSortShowPipe } from './home/your-shows/filter-sort-show.pipe';
 
 
 @NgModule({
@@ -39,6 +42,9 @@ import { ShowIssuesComponent } from './create/components/show-issues/show-issues
     CreatorMenuComponent,
     CreatorMenuItemComponent,
     ShowIssuesComponent,
+    ShowsListComponent,
+    ShowCardComponent,
+    FilterSortShowPipe
   ],
   imports: [
     SharedModule,

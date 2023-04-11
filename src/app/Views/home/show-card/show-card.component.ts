@@ -8,6 +8,7 @@ import { Show } from 'src/app/Models/Show';
 })
 export class ShowCardComponent implements OnInit {
   
+  @Input() active: boolean = false
   @Input() show!: Show
   @Output() cardClicked = new EventEmitter<Show>()
 

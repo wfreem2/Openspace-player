@@ -24,9 +24,7 @@ export class ShowPreviewComponent implements OnInit {
 
   
   onConfirm(): void {
-    this.showService.removeShowById(this.show.id)
     this.isConfirmShowing = false
-    this.closeBtnClicked.emit()
   }
 
   onCancel(): void { this.isConfirmShowing = false }

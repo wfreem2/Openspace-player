@@ -4,8 +4,7 @@
     @extend %align-center, %just-center;
     padding: 0.5rem 1rem;
     color: #ffffff;
-    border-radius: $bd-rad;
-    border: solid 2px transparent;
+    border-radius: 6px;
     gap: 0.5rem;
     font-size: 1rem;
 
@@ -26,9 +25,9 @@
 
         &.secondary{
             @extend .btn;
-            color: $clr-accent;
+            color: $txt-color;
             background: #ffffff;
-            border: solid 2px $clr-accent;
+            border: solid 1px $txt-color;
 
             &:hover{
                 $clr: shade($clr-accent, 50%);

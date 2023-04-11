@@ -5,7 +5,7 @@
 
 :host{
     display: block;
-    padding: 0.5rem;
+    // padding: 0.5rem;
     min-width: max-content;
     width: 25rem;
     height: 100%;
@@ -51,7 +51,7 @@
 .section{
     @extend %max-H;
     transition: all 0.2s;
-    padding: 0.5rem;
+    // padding: 0.5rem;
     overflow-y: hidden;
 
     .title{ 
@@ -113,9 +113,8 @@
     border-top: solid 2px $gray;
     border-bottom: solid 2px $gray;
     height: 3rem;
-    margin: 0 -0.5rem;
 
-    input{
+    input[type=text]{
         @include reset-input;
         grid-column: 2;
         font-size: 1rem;

@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ShowsListComponent } from './shows-list/shows-list.component';
-import { ShowCardComponent } from './show-card/show-card.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,8 +19,6 @@ import { ManualComponent } from './manual/manual.component';
 
 @NgModule({
   declarations: [
-    ShowsListComponent,
-    ShowCardComponent,
     NavbarComponent,
     SceneListComponent,
     DropdownComponent,
@@ -47,7 +43,6 @@ import { ManualComponent } from './manual/manual.component';
   exports:[
     IconsModule,
     CommonModule,
-    ShowsListComponent,
     NavbarComponent,
     RouterModule,
     FormsModule,

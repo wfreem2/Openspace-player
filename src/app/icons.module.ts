@@ -5,7 +5,7 @@ import { IconArrowBarToLeft, IconSearch, IconX, IconFilter,
          IconTrash, IconArrowRight, IconEdit, IconDotsVertical,
          IconCopy, IconCheck, IconChevronDown, IconCircleCheck,
          IconCircleX, IconFileUpload, IconExclamationCircle, IconMap2,
-         IconEaseInOut, IconClipboardText, IconAdjustmentsHorizontal,
+         IconEaseInOutControlPoints, IconClipboardText, IconAdjustmentsHorizontal,
         IconPlanet } from 'angular-tabler-icons/icons';
 
 // Select some icons (use an object, not an array)
@@ -26,7 +26,7 @@ const icons = {
   IconFileUpload, 
   IconExclamationCircle, 
   IconMap2,
-  IconEaseInOut,
+  IconEaseInOutControlPoints,
   IconClipboardText,
   IconAdjustmentsHorizontal,
   IconPlanet

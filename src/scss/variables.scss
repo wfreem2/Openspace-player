@@ -1,3 +1,4 @@
+@import './func.scss';
 // Small tablets and large smartphones (landscape view)
 $screen-sm-min: 576px;
 
@@ -13,8 +14,8 @@ $screen-xl-min: 1200px;
 
 $transistion: all 0.2s;
 
-$bg: #f8fafb;
-$clr-primary: #edf0fd;
+$bg: #f8f8fa;
+$clr-primary: #ffffff;
 $clr-secondary: #353535;
 $clr-accent: #00728c;
 $clr-err: #be0647;
@@ -40,12 +41,8 @@ $bd-rad: 10px;
     0px 52px 96px rgba(0, 0, 0, 0.028);
 }
 
-%card{
-    @extend %shadow;
-    border-radius: $bd-rad;
-}
-
 %svg-M{
+  color: inherit;
   width: 1.5rem;
   height: 1.5rem;
 }
@@ -56,4 +53,37 @@ $bd-rad: 10px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur($blur);
   -webkit-backdrop-filter: blur($blur);
+}
+
+%card{
+  background: #ffffff;
+  border-radius: $bd-rad;
+  border: solid 1px $gray;
+}
+
+%subtitle{
+  color: shade($gray, 40%);
+}
+
+%chip{
+  @extend %align-center, %just-center;
+  cursor: pointer;
+  gap: 1rem;
+  height: 2rem;
+  min-width: 5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 24px;
+  color: shade($gray, 50%);
+  background: #ffffff;
+  border: solid 1px $clr-secondary;
+
+  &.active{
+    color: #ffffff;
+    background: $clr-secondary;
+  }
+
+  &:not(.active):hover{
+    color: shade($gray, 80%);
+    background: tint($gray, 40%);
+  }
 }

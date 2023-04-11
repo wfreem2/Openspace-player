@@ -2,24 +2,14 @@
 @import '/src/scss/mixins.scss';
 
 :host{
-    @extend %max-WH, %flx-col, %glass, %shadow;
+    @extend %max-WH, %flx-col;
     gap: 1rem;
-    position: fixed;
-    z-index: 2;
-    top: 0;
-    right: 0;
-    max-width: 30rem;
-    border-radius: unset;
-    border-top-left-radius: $bd-rad;
-    padding-left: 1rem;
 }
 
 #btns{
     display: grid;
-    grid-template-columns: 1fr max-content max-content;
+    grid-template-columns: max-content max-content;
     column-gap: 0.5rem;
-    margin-top: 0.5rem;
-    padding: 0 0.5rem 0 0;
 
     #close{
         @include reset-input;

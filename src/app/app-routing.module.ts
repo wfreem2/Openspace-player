@@ -9,13 +9,10 @@ import { PlayComponent } from './Views/play/play.component';
 import { PlaygroundComponent } from './Views/playground/playground.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'shows', pathMatch: 'full' },
+  { path: '', component: HomeComponent},
   { path: 'creator/:id', component: CreateComponent, canActivate: [ShowCreatorGuard] },
   { path: 'player/:id', component: PlayComponent, canActivate: [PlayerGuard] },
-  {path: 'playground', component: PlaygroundComponent },
-  { path: 'shows', component: HomeComponent, children: [
-    { path: '', component: YourShowsComponent }
-  ]}
+  {path: 'playground', component: PlaygroundComponent }
 
 ];
 

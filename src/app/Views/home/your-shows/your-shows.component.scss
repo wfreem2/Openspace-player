@@ -1,27 +1,26 @@
 @import '/src/scss/variables.scss';
 @import '/src/scss/mixins.scss';
+@import '/src/scss/func.scss';
 
 :host{
-    @extend %max-WH;
-    background: #ffffff;
+    @extend %card, %max-WH;
     display: grid;
-    grid-template-rows: minmax(3rem, max-content) 1fr;
-}
-
-h1{
-    width: 90%;
+    grid-template-rows: max-content max-content 1fr;
+    gap: 2rem;
+    background: #ffffff;
+    padding: 2rem;
+    margin: 1rem;
     max-width: 100rem;
-    font-size: 3rem;
-    font-weight: 400;
+    max-height: 50rem;
 }
 
-.header{
+.actions{
     display: grid;
     grid-template-columns: 1fr max-content max-content;
-    grid-template-rows: 3rem;
+    grid-template-rows: 3rem max-content;
     padding: 0.5rem;
     gap: 1rem;
-    border-bottom: solid 2px $gray;
+    border-bottom: solid 1px $gray;
 
     .btn{
         cursor: pointer;
@@ -53,10 +52,10 @@ h1{
 .search-bar{
     grid-column: 1;
     display: grid;
-    align-items: center;
     grid-template-columns: max-content 1fr;
+    align-items: center;
     column-gap: 0.75rem;
-    max-width: 25rem;
+    max-width: 35rem;
 
     input{ 
         @include reset-input;
@@ -71,11 +70,112 @@ h1{
 }
 
 
-#filter-icon{
-    cursor: pointer;
-    color: #807d7d;
-    
-    &:hover{
-        color: $txt-color; 
+.filters{
+    @extend %align-center;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    .filter{
+        @extend %chip;
+        & > label{
+            cursor: pointer;
+        }
+    }
+}
+
+.list-wrapper{
+    display: grid;
+    grid-template-columns: 1fr max-content 1fr;
+    gap: 1rem;
+
+    & > .hr{
+        height: 100%;
+        width: 1px;
+        background: $gray;
+    }
+
+    & > .shows{
+        @extend %flx-col;
+        gap: 1rem;
+    }
+}
+
+.preview{
+    @extend %align-center, %just-center;
+
+    .selected-show{
+        @extend %max-WH;
+        display: grid;
+        grid-template-rows: max-content max-content 1fr max-content;
+        gap: 2rem;
+        overflow-y: hidden;
+
+        .title{
+            font-size: 2rem;
+        }
+
+        .subtitle{
+            @extend %subtitle;
+            font-size: 1.3rem;
+        }
+
+        .scenes{
+            margin-left: 1rem;
+            overflow-y: auto;
+        }
+
+        .header{
+            @extend %align-center;
+            justify-content: space-between;
+            gap: 1rem;
+        }        
+    }
+}
+
+.btns{
+    @extend %align-center;
+    gap: 1rem;
+
+    .btn{
+        cursor: pointer;
+    }
+
+    .delete{
+        color: #db1b32;
+        border-color: #db1b32;
+    }
+}
+
+.header{
+    .title{
+        font-size: 2.5rem;
+    }
+
+    .desc{
+        @extend %subtitle;
+        max-width: 40rem;
+    }
+}
+
+.modal-content{
+    margin: 1rem;
+    display: grid;
+    grid-template-rows: 1fr max-content max-content max-content;
+    justify-items: center;
+    gap: 1rem;
+
+    #trash-icon{
+        color: #db1b32;
+        width: 4rem;
+        height: 4rem;
+    }
+
+    .subtitle{
+        @extend %subtitle;
+    }
+
+    .delete{
+        color: #ffffff;
+        background: #db1b32;
     }
 }

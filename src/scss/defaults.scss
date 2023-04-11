@@ -9,7 +9,7 @@ html, body{
     padding: 0;
     width: 100vw;
     height: 100vh;
-    background-color: $clr-primary;
+    background-color: $bg;
 }
 
 img{
@@ -24,6 +24,9 @@ p, h1, h2, h3{
     color: $txt-color;
 }
 
+a{
+    text-decoration: none;
+}
 
 button, input{
     transition: $transistion;

@@ -6,7 +6,7 @@
         </a>
         <input name="title" class="title input" type="text" selectallOnclick
         [class.invalid]="!show.title.length" required autofocus
-        placeholder="Show Title" [(ngModel)]="show.title"/>  
+        placeholder="e.g., Tour of the Solar System." [(ngModel)]="show.title"/>  
         
         <connection-status id="connection-status"></connection-status>
 
@@ -165,10 +165,16 @@
             </tab>
 
             <tab name="Options" iconName="adjustments-horizontal">
+                <div class="tab-content">
+                    <p class="title">Scene Options</p>
+                    <p class="desc">
+                        Enable or Disable trails for this scene.
+                    </p>
+                </div>
                 <scene-options formControlName="options"></scene-options>
             </tab>
             
-            <tab name="Transition" iconName="ease-in-out">
+            <tab name="Transition" iconName="ease-in-out-control-points">
                 <div class="tab-content transition">
                     <p>How long it takes OpenSpace to fly to the selected target 
                         <span style="color: #999595;">(in seconds)</span>

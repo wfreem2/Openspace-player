@@ -3,12 +3,15 @@
 @import '/src/scss/func.scss';
 
 :host{
-    @extend %align-center, %glass;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: max-content 1fr max-content;
+    align-items: center;
+    justify-items: center;
     box-shadow: unset;
     gap: 1rem;
     padding: 0.5rem;
     border-bottom: solid 2px $gray;
+    background: $clr-primary
 }
 
 #links{

@@ -36,6 +36,10 @@
     }
 }   
 
+#selected-item{
+    @extend %align-center;
+    gap: 1rem;
+}
 
 #chevron{ &.rotated{ transform: rotate(180deg); } }
 
