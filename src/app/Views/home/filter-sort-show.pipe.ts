@@ -9,7 +9,7 @@ import { ShowPipe } from './your-shows.component';
 export class FilterSortShowPipe implements PipeTransform {
 
   transform(show: Show[], args: ShowPipe): Show[] {
-    return args.transform(show)
+    return args.transform([...show])
   }
 
 }

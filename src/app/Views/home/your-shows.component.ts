@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { first, map } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { first, map, takeUntil } from 'rxjs';
 import { Show } from 'src/app/Models/Show';
 import { ShowService } from 'src/app/Services/show.service';
+import { BaseComponent } from 'src/app/Shared/base/base.component';
 
 @Component({
   selector: 'your-shows',
   templateUrl: './your-shows.component.html',
   styleUrls: ['./your-shows.component.scss']
 })
-export class YourShowsComponent implements OnInit {
+export class YourShowsComponent extends BaseComponent implements OnInit, OnDestroy {
 
   selectedShow?: Show
   shows!: Show[]
@@ -28,14 +29,17 @@ export class YourShowsComponent implements OnInit {
   }
 
   readonly recentShows: ShowPipe = {
-    name: 'favorites',
+    name: 'recent',
     transform: s => s.sort((a, b) => {
 
-      if(a.dateCreated > b.dateCreated){
+      const aDate = new Date(a.dateCreated)
+      const bDate = new Date(b.dateCreated)
+
+      if(aDate > bDate){
         return -1
       }
 
-      if(a.dateCreated < b.dateCreated){
+      if(aDate < bDate){
         return 1
       }
 
@@ -46,10 +50,12 @@ export class YourShowsComponent implements OnInit {
   selectedPipe: ShowPipe = this.allShows
 
   constructor(private showService: ShowService) { 
+    super()
+
     showService.getAllShows()
     .pipe( 
       map(shows => shows.length ? shows : []),
-      first()
+      takeUntil(this.$unsub)
     )
     .subscribe(shows => this.shows = shows)
   }
@@ -58,12 +64,18 @@ export class YourShowsComponent implements OnInit {
 
   deleteShow(): void{
     this.showDeleteConfirm = false
+    console.log(this.selectedShow);
+    
     this.showService.removeShowById(this.selectedShow!.id)
+  }
+
+  applyFilter(pipe: ShowPipe){
+    this.selectedPipe = pipe
   }
 }
 
 
 export interface ShowPipe{
   name: string,
-  transform(show: Show[]): Show[]
+  transform(shows: Show[]): Show[]
 }

@@ -36,9 +36,7 @@
     </div>
 </div>
 
-<manual 
-  *ngIf="$isManualShowing | async"
-  (closedEvent)="$setManualVisibility.next(false)">
+<manual *ngIf="$isManualShowing | async"(closedEvent)="$setManualVisibility.next(false)">
 </manual>
 
 <modal title="Delete Scene?" *ngIf="$isConfirmShowing | async"
@@ -175,14 +173,16 @@
             </tab>
             
             <tab name="Transition" iconName="ease-in-out-control-points">
-                <div class="tab-content transition">
-                    <p>How long it takes OpenSpace to fly to the selected target 
-                        <span style="color: #999595;">(in seconds)</span>
+                <div class="tab-content">
+                    <p class="title">Scene Transistion Duration</p>
+                    <p class="desc">
+                        How long it takes to transistion from one scene to the next.
                     </p>
-                    
+                </div>
+                <div class="tab-content transition">
                     <input class="input" type="text" name="transistion"
                     formControlName="transistion"
-                    placeholder="Transition Duration" id="transition"/>
+                    placeholder="e.g, 5.7" id="transition"/>
             
                     <p class="error" *ngIf="sceneForm.controls['transistion'].errors?.['pattern']">
                         This field is digits only

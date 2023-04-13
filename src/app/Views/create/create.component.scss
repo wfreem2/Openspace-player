@@ -10,8 +10,8 @@
 .creator{
     @extend %max-WH;
     display: grid;
-    grid-template-columns: minmax(20rem, auto) 1fr;
-    grid-template-rows: max-content minmax(0, 1fr);
+    grid-template-columns: minmax(auto, 25rem) 1fr;
+    grid-template-rows: max-content 1fr;
     overflow-y: auto;
     background: #ffffff;
     min-height: 15rem;
@@ -71,6 +71,8 @@
 
 .scene-creator, .scene-list{
     background: #fafafb;
+    height: calc(100vh - 7.125rem);
+    // max-height: calc(100% - 7.125rem);
 }
 
 $grid-bd: solid 2px $gray;
@@ -206,6 +208,7 @@ $grid-bd: solid 2px $gray;
 
     .enabledTrails{
         overflow-y: auto;
+        max-height: 20rem;
     }
 }
 

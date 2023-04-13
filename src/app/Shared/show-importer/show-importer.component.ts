@@ -70,7 +70,8 @@ export class ShowImporterComponent implements OnInit {
       this.importedShow = jsonParsed as Show
       this.importedShow.id = 1
       this.showService.addShow(this.importedShow)
-  
+      this.showService.save(this.importedShow)
+      
       this.hasErrors = false
       this.errorMsg = ''
   

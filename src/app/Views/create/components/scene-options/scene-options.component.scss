@@ -29,13 +29,14 @@
 
 
 #opts-form{ 
-    @extend %max-H;
     overflow-y: hidden;
- }
+    height: 100%;
+}
 
 .options-list{
     padding: 0 1rem;
     overflow-y: auto;
+    max-height: 30rem;
 }
 
 #trails{
@@ -52,7 +53,7 @@
     @extend %max-H;
     transition: all 0.2s;
     // padding: 0.5rem;
-    overflow-y: hidden;
+    overflow-y: auto;
 
     .title{ 
         font-size: 1.85rem; 

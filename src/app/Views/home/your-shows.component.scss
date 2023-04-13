@@ -90,6 +90,7 @@
     display: grid;
     grid-template-columns: 1fr max-content 1fr;
     gap: 1rem;
+    overflow: hidden;
 
     & > .hr{
         height: 100%;
@@ -100,17 +101,19 @@
     & > .shows{
         @extend %flx-col;
         gap: 1rem;
+        padding-right: 0.5rem;
+        overflow-y: auto;
     }
 }
 
 .preview{
     @extend %align-center, %just-center;
-
     .selected-show{
         @extend %max-WH;
         display: grid;
         grid-template-rows: max-content max-content 1fr max-content;
         gap: 2rem;
+        padding: 0.5rem;
         overflow-y: hidden;
 
         .title{
@@ -131,7 +134,13 @@
             @extend %align-center;
             justify-content: space-between;
             gap: 1rem;
-        }        
+        }
+        
+        #play-btn{
+            justify-self: center;
+            width: 15rem;
+            height: 3rem;
+        }
     }
 }
 

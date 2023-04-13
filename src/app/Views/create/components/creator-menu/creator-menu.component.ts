@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { fromEvent, takeUntil, filter, tap } from 'rxjs';
+import { fromEvent, takeUntil, filter, tap, Observable, first } from 'rxjs';
 import { CreatorMenuItem, CreatorSubMenuItem } from 'src/app/Models/CreatorMenuItem';
 import { BaseComponent } from 'src/app/Shared/base/base.component';
 import * as keycode from 'keycode';
@@ -52,7 +52,19 @@ export class CreatorMenuComponent extends BaseComponent implements OnInit {
 
   private keyPressHandler(e: KeyboardEvent){
     const { menu } = this.keyBindings.find( ({ key }) => key === keycode(e))!
-    menu.callBack()    
+
+    if(menu.isDisabled instanceof Observable<boolean>){
+      menu.isDisabled.pipe( first() )
+      .subscribe(isDisabled => {
+        if(!isDisabled){
+          menu.callBack()
+        }
+      })
+
+      return
+    }
+    
+    if(!menu.isDisabled){ menu.callBack() }
   }
 
 }

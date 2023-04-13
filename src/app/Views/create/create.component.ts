@@ -112,10 +112,13 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     this.route.params
     .pipe(
       map(params => params?.['id']),
-      map(id => showService.getShowById(parseInt(id))! ),
+      map(id => showService.getShowById( parseInt(id))! ),
       first(),
     )
-    .subscribe(show => this.show = show)
+    .subscribe(show => {
+      this.show = show
+      this.$setSaveDisabled.next(!this.isScenesValid())
+    })
     
     
     this.sceneForm.valueChanges
@@ -139,11 +142,11 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
       }),
       tap( ([, scene]) => {
         this.isSaved = false
-        this.$setSaveDisabled.next(!this.isShowValid())
+        this.$setSaveDisabled.next(!this.isScenesValid())
 
         const errors = this.sceneIssues.filter(issue => issue.scene.id !== scene.id)
         
-        this.sceneIssues = this.isShowValid() ? errors : [{scene, issues: this.getSceneIssues()}, ...errors] 
+        this.sceneIssues = this.isScenesValid() ? errors : [{scene, issues: this.getSceneIssues()}, ...errors] 
 
         this.$setSceneIssues.next(this.sceneIssues)
       })
@@ -309,14 +312,18 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     return this.show.scenes.some(s => s.title.trim() === title.trim())
   }
 
-  private isShowValid(): boolean{
+  private isScenesValid(): boolean{
     return Object.values(this.sceneForm.controls).every(ctrl => ctrl.valid)
+  }
+
+  private isShowValid(): boolean{
+    return this.isScenesValid() && !!this.show.title
   }
 
   private getSceneIssues(){
     const ctrls = Object.values(this.sceneForm.controls)
     .filter(ctrl => ctrl.invalid)
-    .map( ctrl => {
+    .map(ctrl => {
       const formGroup = ctrl.parent!.controls;
       return Object.keys(formGroup).find(name => ctrl === ctrl.parent?.get(name)) || null;
     })

@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Show } from 'src/app/Models/Show';
 
 @Pipe({
-  name: 'searchShows'
+  name: 'searchShows',
+  pure: false
 })
 export class SearchShowsPipe implements PipeTransform {
 

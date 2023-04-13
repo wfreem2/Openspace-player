@@ -15,17 +15,17 @@
 
     <ul class="filters">
         <li class="filter"
-        (click)="selectedPipe=allShows"
+        (click)="applyFilter(allShows)"
         [class.active]="selectedPipe === allShows">
             All Shows
         </li>
         <li class="filter" 
-        (click)="selectedPipe=favoriteShows"
+        (click)="applyFilter(favoriteShows)"
         [class.active]="selectedPipe === favoriteShows">
             My Favorties
         </li>
         <li class="filter" 
-        (click)="selectedPipe=recentShows"
+        (click)="applyFilter(recentShows)"
         [class.active]="selectedPipe === recentShows">
             Most Recent
         </li>
@@ -34,10 +34,7 @@
 
 <ng-container *ngIf="shows.length then list; else empty"></ng-container>
 
-<ng-template #list>
-    <show-importer *ngIf="showImporter" (closeImporterEvent)="showImporter=false">
-    </show-importer>
-    
+<ng-template #list>  
     <div class="list-wrapper">
         <div class="shows">
             <show-card *ngFor="let s of shows | filterSortShow: selectedPipe | searchShows: query"
@@ -70,7 +67,7 @@
                             {{scene.title}}
                         </li>
                     </ul>
-                    <a class="btn primary" [routerLink]="['/player', selectedShow.id]">Play</a>
+                    <a id="play-btn" class="btn primary" [routerLink]="['/player', selectedShow.id]">Play</a>
                 </div>
             </ng-container>
 
@@ -86,6 +83,9 @@
     </div>
 </ng-template>
 
+<show-importer *ngIf="showImporter" (closeImporterEvent)="showImporter=false">
+</show-importer>
+
 <modal title="Delete Show"  *ngIf="showDeleteConfirm"
  (closedEvent)="showDeleteConfirm=false">
     <div class="modal-content">
@@ -94,8 +94,8 @@
         <p class="subtitle">This action cannot be undone.</p>
 
         <div class="btns">
-            <button class="btn secondary" (click)="deleteShow()">No, Cancel</button>
-            <button class="btn primary delete">Yes, Delete</button>
+            <button class="btn secondary" (click)="showDeleteConfirm=false">No, Cancel</button>
+            <button class="btn primary delete" (click)="deleteShow()">Yes, Delete</button>
         </div>
     </div>
 </modal>
