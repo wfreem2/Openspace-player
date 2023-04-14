@@ -14,11 +14,9 @@ export class SceneExecutorService {
   
     const { navState, options, duration } = scene
     const { node } = scene.geoPos
-
-
     
     this.openSpaceService.getRenderableType(node)
-    .then( renderableType => {
+    .then(renderableType => {
       if(renderableType === RenderableType.RENDERABLEGLOBE){
         this.openSpaceService.flyToGeo(scene.geoPos, duration)
         return

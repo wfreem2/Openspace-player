@@ -15,7 +15,7 @@
     padding: 1rem;
     border-radius: $bd-rad;
     border: solid 2px $gray;
-
+    overflow: auto;
     &.active{
         .content{
             color: $clr-secondary;

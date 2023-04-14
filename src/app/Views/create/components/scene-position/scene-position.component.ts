@@ -43,6 +43,7 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
     lat: this.fb.control<number>(0.0, [ Validators.required, Validators.pattern(this.numRegex) ]),
     long: this.fb.control<number>(0.0, [ Validators.required, Validators.pattern(this.numRegex) ]),
     node: this.fb.control<SceneGraphNode>(SceneGraphNode.Earth, Validators.required),
+    timestamp: this.fb.control<string>(new Date().toISOString())
   })
 
   onChange: any = () => {}
@@ -70,11 +71,14 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
       takeUntil(this.$unsub)
     )
     .subscribe(geoPos => {
+      console.log(geoPos.timestamp);
+      
       this.geoPosForm.setValue({
         alt: geoPos.alt,
         lat: geoPos.lat,
         long: geoPos.long,
-        node: geoPos.node
+        node: geoPos.node,
+        timestamp: geoPos.timestamp
       }, {emitEvent: false})
     })
 

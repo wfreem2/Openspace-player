@@ -96,7 +96,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     transistion: this.fb.control<number | null>(null, Validators.pattern(/^[0-9]*\.?[0-9]*$/)),
     
     title: this.fb.nonNullable.control<string>('New Scene', [Validators.required]),
-    geoPos: this.fb.nonNullable.control<GeoPosition>({lat: 0, long: 0, alt: 0, node: SceneGraphNode.Earth, time: new Date() }),
+    geoPos: this.fb.nonNullable.control<GeoPosition>({lat: 0, long: 0, alt: 0, node: SceneGraphNode.Earth, timestamp: '' }),
     options: this.fb.nonNullable.control<SceneOptions>({keepCameraPosition: true, enabledTrails: []})
   })
   
@@ -109,6 +109,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     private openSpaceService: OpenspaceService, private sceneExecutor: SceneExecutorService) {
       
     super()
+
     this.route.params
     .pipe(
       map(params => params?.['id']),
@@ -312,6 +313,10 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     return this.show.scenes.some(s => s.title.trim() === title.trim())
   }
 
+  onTitleChange(title: string): void{
+    this.$setSaveDisabled.next(!this.isShowValid())
+  }
+
   private isScenesValid(): boolean{
     return Object.values(this.sceneForm.controls).every(ctrl => ctrl.valid)
   }
@@ -320,7 +325,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     return this.isScenesValid() && !!this.show.title.trim()
   }
 
-  private getSceneIssues(){
+  private getSceneIssues(): string[]{
     const ctrls = Object.values(this.sceneForm.controls)
     .filter(ctrl => ctrl.invalid)
     .map(ctrl => {

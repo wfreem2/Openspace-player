@@ -6,7 +6,9 @@
         </a>
         <input name="title" class="title input" type="text" selectallOnclick
         [class.invalid]="!show.title.length" required autofocus
-        placeholder="e.g., Tour of the Solar System." [(ngModel)]="show.title"/>  
+        placeholder="e.g., Tour of the Solar System." 
+        [(ngModel)]="show.title"
+        (ngModelChange)="onTitleChange($event)"/>  
         
         <connection-status id="connection-status"></connection-status>
 

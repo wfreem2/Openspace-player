@@ -5,5 +5,5 @@ export interface GeoPosition{
     long: number,
     alt: number,
     node: SceneGraphNode, 
-    time: Date
+    timestamp: string
 }

@@ -48,30 +48,34 @@ export class OpenspaceService {
 
   isConnected(): Observable<boolean>{  return this._isConnected.asObservable() }
   
-  flyToGeo({lat, long, alt, time, node}: GeoPosition, duration?: number): void{
+  flyToGeo({lat, long, alt, timestamp, node}: GeoPosition, duration?: number): void{
     
-    this.setTime(time)
+    console.log(timestamp);
+    
+    this.setTime(timestamp)
+    this.pauseTime()
 
     if(!duration){
       this.openspace.globebrowsing.flyToGeo(node, lat, long, alt)
-      return
     }
-
-    this.openspace.globebrowsing.flyToGeo(node, lat, long, alt, duration)
+    else{
+      this.openspace.globebrowsing.flyToGeo(node, lat, long, alt, duration)
+    }
   }
 
   async getCurrentPosition(): Promise<GeoPosition>{
     const pos = await this.openspace.globebrowsing.getGeoPositionForCamera()
     const anchor = await this.getCurrentAnchor()
-    
     const time = await this.getTime()
+
+    console.log(time);
 
     return {
       lat: pos[1],
       long: pos[2],
       alt: pos[3],
       node: anchor,
-      time: time
+      timestamp: time
     }
   }
   
@@ -104,19 +108,37 @@ export class OpenspaceService {
   async getRenderableType(node: SceneGraphNode): Promise<RenderableType>{
     const renderable = this.nodeToRenderable(node)
 
-    const type = await this.getPropertyValue(`Scene.${renderable}.Renderable.Type`)   
+    return await this.getPropertyValue<RenderableType>(`Scene.${renderable}.Renderable.Type`)   
+  }
+
+  setTime(timestamp: string): void{
+    this.openspace.time.setTime( timestamp )
+  }
+
+  async getTime(): Promise<string>{
+    const rawValue = this.retrieveValue(await this.openspace.time.currentWallTime())
     
-    return <RenderableType> type
+    console.log( this.parseDate(rawValue) );
+    return this.parseDate(rawValue)
   }
 
-  setTime(time: Date): void{
-    this.openspace.time.setTime( time.toISOString() )
+  private pauseTime(): void{
+    this.openspace.time.setPause(true)
   }
 
-  async getTime(): Promise<Date>{
-    return new Date( this.retrieveValue(await this.openspace.time.UTC()) )
+  private resumeTime(): void{
+    this.openspace.time.setPause(false)
   }
 
+  private parseDate(date: string): string{
+    const firstHalf = date.split('T')[0]
+    const secondHalf = date.split('T')[1]
+
+    const dates = firstHalf.split('-').map(val => parseInt(val))
+    const times = secondHalf.split(':').map(val => parseInt(val))
+
+    return `${dates[0]}-${dates[1]}-${dates[2]}T${times[0]}:${times[1]}:${times[2]}`
+  }
 
   async getNavigationState(): Promise<NavigationState>{
     return this.retrieveValue((await this.openspace.navigation.getNavigationState()))
