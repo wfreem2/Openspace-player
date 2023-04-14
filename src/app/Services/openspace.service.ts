@@ -68,8 +68,6 @@ export class OpenspaceService {
     const anchor = await this.getCurrentAnchor()
     const time = await this.getTime()
 
-    console.log(time);
-
     return {
       lat: pos[1],
       long: pos[2],
@@ -117,8 +115,6 @@ export class OpenspaceService {
 
   async getTime(): Promise<string>{
     const rawValue = this.retrieveValue(await this.openspace.time.currentWallTime())
-    
-    console.log( this.parseDate(rawValue) );
     return this.parseDate(rawValue)
   }
 

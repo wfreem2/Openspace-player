@@ -80,17 +80,6 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
 
   // #endregion
 
-
-  show!: Show
-  menu!: CreatorMenuItem[]
-  sceneIssues: SceneIssue[] = []
-  
-  isSaved: boolean = true
-  isAutoMode:boolean = false
-  
-  query: string = ''
-  exportedShowName: string = ''
-
   sceneForm = this.fb.group<SceneForm>({
     script: this.fb.control<string | null>(null),
     transistion: this.fb.control<number | null>(null, Validators.pattern(/^[0-9]*\.?[0-9]*$/)),
@@ -102,6 +91,24 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
   
   
   readonly DEFAULT_SCENE = this.sceneForm.getRawValue()
+  readonly TABS = {
+    Summary: 'Summary',
+    Position: 'Position',
+    Transistion: 'Transistion',
+    Options: 'Options',
+    Script: 'Script'
+  }
+
+  show!: Show
+  menu!: CreatorMenuItem[]
+  sceneIssues: SceneIssue[] = []
+  
+  isSaved: boolean = true
+  isAutoMode:boolean = false
+  
+  query: string = ''
+  exportedShowName: string = ''
+  selectedTab: string = this.TABS.Summary
 
   constructor(
     private route: ActivatedRoute, public showService: ShowService,

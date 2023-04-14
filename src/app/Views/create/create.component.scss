@@ -85,7 +85,7 @@ $grid-bd: solid 2px $gray;
 
     #scene-form{
         display: grid;
-        grid-template-rows: max-content minmax(0, 1fr) max-content;
+        grid-template-rows: max-content max-content minmax(0, 1fr) max-content;
         justify-items: center;
 
         row-gap: 1rem;
@@ -177,8 +177,9 @@ $grid-bd: solid 2px $gray;
 
 .summary{
     @extend %max-H;
+    justify-self: stretch;
     display: grid;
-    grid-template-rows: max-content minmax(0, 1fr) max-content;
+    grid-template-rows: max-content minmax(10rem, 1fr) max-content;
     gap: 1rem;
 
     ul{ padding-left: 1rem }
@@ -281,11 +282,11 @@ $grid-bd: solid 2px $gray;
     max-height: 30rem;
 }
 
-.tab-content{
+.tab-summary{
+    justify-self: flex-start;
     display: grid;
     grid-template-rows: max-content max-content;
     gap: 0.5rem;
-    margin-bottom: 2rem;
 
     & > .title{
         font-size: 2rem;
@@ -294,5 +295,56 @@ $grid-bd: solid 2px $gray;
     & > .desc{
         max-width: 30rem;
         color: shade($gray, 40%);
+    }
+}
+
+.tab-content{
+    @extend %card, %max-WH;
+    display: grid;
+    grid-template-rows: max-content minmax(0, 1fr);
+    justify-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    overflow-y: auto;
+
+    &.position{
+        overflow-y: unset;
+    }
+}
+
+.tabs{
+    @extend %align-center;
+    background: #ffffff;
+    overflow: hidden;
+    
+    .tab{
+        @extend %align-center, %just-center;
+        cursor: pointer;
+        padding: 0.75rem;
+        min-width: 7rem;
+        height: 2.5rem;
+        gap: 0.5rem;
+        color: shade($gray, 30%);
+        border: solid 1px shade($gray, 10%);
+        
+        &:first-child{
+            border-top-left-radius: $bd-rad;
+            border-bottom-left-radius: $bd-rad;
+        }
+
+        &:last-child{
+            border-top-right-radius: $bd-rad;
+            border-bottom-right-radius: $bd-rad;
+        }
+
+        &:hover{            
+            color: shade($gray, 80%);
+            background: tint($gray, 5%);
+        }
+
+        &.active{
+            color: $clr-accent;
+            border-color: $clr-accent;
+        }
     }
 }

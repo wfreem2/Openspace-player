@@ -94,121 +94,152 @@
             <i-tabler name="x" id="x" (click)="sceneForm.controls.title.setValue('')"></i-tabler>
         </div>
 
-        <tabs>
-            <tab name="Summary" iconName="planet">
-                <div class="tab-content">
-                    <p class="title">Scene Summary</p>
-                    <p class="desc">
-                        View all of the important settings for this scene in one place.
-                    </p>
-                </div>
-                <div class="summary">
-                    <div class="section">
-                        <p class="title">GeoPosition</p>
-                        <ul class="geoPos">
-                            <li>
-                                <p>Node: </p>
-                                <p>{{formValue.geoPos.node}}</p>
-                            </li>
-                            <li>
-                                <p>Latitude:</p>
-                                <p>{{formValue.geoPos.lat}}</p>
-                            </li>
-                            <li>
-                                <p>Longitude:</p>
-                                <p>{{formValue.geoPos.long}}</p>
-                            </li>
-                            <li>
-                                <p>Altitude:</p>
-                                <p>{{formValue.geoPos.alt}}</p>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="section">
-                        <p class="title">Enabled Trails ({{formValue.options.enabledTrails.length}})</p>
-                        <ul class="enabledTrails">
-                            <li *ngFor="let trail of formValue.options.enabledTrails">
-                                {{trail}}
-                            </li>
-                            <li *ngIf="!formValue.options.enabledTrails.length">
-                                No trails enabled
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="section" id="duration">
-                        <p class="title">Transition Duration</p>
-                        <ul>
-                            <li *ngIf="formValue.transistion">
-                                {{formValue.transistion}} seconds
-                            </li>
-                            <li *ngIf="!formValue.transistion">
-                                Default Transition
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </tab>
-
-            <tab name="Position" [isActive]="true" iconName="map-2">
-                <div class="tab-content">
-                    <p class="title">Scene Position</p>
-                    <p class="desc">
-                        Set parameters such as latitude, longitude, and altitude to position the camera
-                        on this scene.
-                    </p>
-                </div>
-                <scene-position id="scene-pos"
-                formControlName="geoPos"
-                [isAutoMode]="isAutoMode">
-                </scene-position>
-            </tab>
-
-            <tab name="Options" iconName="adjustments-horizontal">
-                <div class="tab-content">
-                    <p class="title">Scene Options</p>
-                    <p class="desc">
-                        Enable or Disable trails for this scene.
-                    </p>
-                </div>
-                <scene-options formControlName="options"></scene-options>
-            </tab>
+        <ul class="tabs">
+            <li class="tab" 
+                [class.active]="selectedTab===TABS.Summary"
+                (click)="selectedTab=TABS.Summary">
+                <tabler-icon name="planet" class="icon"></tabler-icon>
+                Summary
+            </li>
+            <li class="tab" 
+                [class.active]="selectedTab===TABS.Position"
+                (click)="selectedTab=TABS.Position">
+                <tabler-icon name="map-2" class="icon"></tabler-icon>
+                Position
+            </li>
+            <li class="tab" 
+                [class.active]="selectedTab===TABS.Options"
+                (click)="selectedTab=TABS.Options">
+                <tabler-icon name="adjustments-horizontal" class="icon"></tabler-icon>
+                Options
+            </li>
+            <li class="tab" 
+                [class.active]="selectedTab===TABS.Transistion"
+                (click)="selectedTab=TABS.Transistion">
+                <tabler-icon name="ease-in-out-control-points" class="icon"></tabler-icon>
+                Transistion
+            </li>
+            <li class="tab" 
+                [class.active]="selectedTab===TABS.Script"
+                (click)="selectedTab=TABS.Script">
+                <tabler-icon name="clipboard-text" class="icon"></tabler-icon>
+                Script
+            </li>
+        </ul>
             
-            <tab name="Transition" iconName="ease-in-out-control-points">
-                <div class="tab-content">
-                    <p class="title">Scene Transistion Duration</p>
-                    <p class="desc">
-                        How long it takes to transistion from one scene to the next.
-                    </p>
-                </div>
-                <div class="tab-content transition">
-                    <input class="input" type="text" name="transistion"
-                    formControlName="transistion"
-                    placeholder="e.g, 5.7" id="transition"/>
-            
-                    <p class="error" *ngIf="sceneForm.controls['transistion'].errors?.['pattern']">
-                        This field is digits only
-                    </p>
-                </div>
-            </tab>
+        <div class="tab-content" [style.display]="selectedTab===TABS.Summary ? '' : 'none'">
+            <div class="tab-summary">
+                <p class="title">Scene Summary</p>
+                <p class="desc">
+                    View all of the important settings for this scene in one place.
+                </p>
+            </div>
 
-            <tab name="Script" iconName="clipboard-text">
-                <div class="tab-content">
-                    <p class="title">Scene Script</p>
-                    <p class="desc">
-                        Here you can a script or some notes that will be shown to you
-                        when this scene is selected in the player.
-                    </p>
+            <div class="summary">
+                <div class="section">
+                    <p class="title">GeoPosition</p>
+                    <ul class="geoPos">
+                        <li>
+                            <p>Node: </p>
+                            <p>{{formValue.geoPos.node}}</p>
+                        </li>
+                        <li>
+                            <p>Latitude:</p>
+                            <p>{{formValue.geoPos.lat}}</p>
+                        </li>
+                        <li>
+                            <p>Longitude:</p>
+                            <p>{{formValue.geoPos.long}}</p>
+                        </li>
+                        <li>
+                            <p>Altitude:</p>
+                            <p>{{formValue.geoPos.alt}}</p>
+                        </li>
+                    </ul>
                 </div>
 
-                <textarea id="script" class="input" 
-                cols="30" rows="20"
-                formControlName="script"
-                placeholder="Script Text">
-                </textarea>
-            </tab>       
-        </tabs>
+                <div class="section">
+                    <p class="title">Enabled Trails ({{formValue.options.enabledTrails.length}})</p>
+                    <ul class="enabledTrails">
+                        <li *ngFor="let trail of formValue.options.enabledTrails">
+                            {{trail}}
+                        </li>
+                        <li *ngIf="!formValue.options.enabledTrails.length">
+                            No trails enabled
+                        </li>
+                    </ul>
+                </div>
+                <div class="section" id="duration">
+                    <p class="title">Transition Duration</p>
+                    <ul>
+                        <li *ngIf="formValue.transistion">
+                            {{formValue.transistion}} seconds
+                        </li>
+                        <li *ngIf="!formValue.transistion">
+                            Default Transition
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content position" [style.display]="selectedTab===TABS.Position ? '' : 'none'">
+            <div class="tab-summary">
+                <p class="title">Scene Position</p>
+                <p class="desc">
+                    Set parameters such as latitude, longitude, and altitude to position the camera
+                    on this scene.
+                </p>
+            </div>
 
+            <scene-position id="scene-pos"
+            formControlName="geoPos"
+            [isAutoMode]="isAutoMode">
+            </scene-position>
+        </div>
+        
+        <div class="tab-content" [style.display]="selectedTab===TABS.Options ? '' : 'none'">
+            <div class="tab-summary">
+                <p class="title">Scene Options</p>
+                <p class="desc">
+                    Enable or Disable trails for this scene.
+                </p>
+            </div>
+            <scene-options formControlName="options"></scene-options>
+        </div>
+        
+        <div class="tab-content" [style.display]="selectedTab===TABS.Transistion ? '' : 'none'">
+            <div class="tab-summary">
+                <p class="title">Scene Transistion Duration</p>
+                <p class="desc">How long it takes to transistion from one scene to the next.</p>
+            </div>
+            <div class="transistion">
+                <input class="input" type="text" name="transistion"
+                formControlName="transistion"
+                placeholder="e.g, 5.7" id="transition"/>
+                
+                <p class="error" *ngIf="sceneForm.controls['transistion'].errors?.['pattern']">
+                    This field is digits only
+                </p>
+            </div>
+        </div>
+
+        <div class="tab-content" [style.display]="selectedTab===TABS.Script ? '' : 'none'">
+            <div class="tab-summary">
+                <p class="title">Scene Script</p>
+                <p class="desc">
+                    Here you can a script or some notes that will be shown to you
+                    when this scene is selected in the player.
+                </p>
+            </div>
+
+            <textarea id="script" class="input" 
+            cols="30" rows="20"
+            formControlName="script"
+            placeholder="Script Text">
+            </textarea>
+        </div>
+        
         <div id="options">
             <button id="reset" type="button" (click)="onResetClicked()">Reset</button>
             <button id="preview" type="button" *ngIf="$selectedScene | async as scene" class="btn secondary" (click)="preview(scene)">Preview</button>

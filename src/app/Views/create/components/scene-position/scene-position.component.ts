@@ -71,8 +71,6 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
       takeUntil(this.$unsub)
     )
     .subscribe(geoPos => {
-      console.log(geoPos.timestamp);
-      
       this.geoPosForm.setValue({
         alt: geoPos.alt,
         lat: geoPos.lat,
