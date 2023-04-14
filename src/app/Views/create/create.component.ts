@@ -117,7 +117,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     )
     .subscribe(show => {
       this.show = show
-      this.$setSaveDisabled.next(!this.isScenesValid())
+      this.$setSaveDisabled.next(!this.isShowValid())
     })
     
     
@@ -142,7 +142,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
       }),
       tap( ([, scene]) => {
         this.isSaved = false
-        this.$setSaveDisabled.next(!this.isScenesValid())
+        this.$setSaveDisabled.next(!this.isShowValid())
 
         const errors = this.sceneIssues.filter(issue => issue.scene.id !== scene.id)
         
@@ -317,7 +317,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
   }
 
   private isShowValid(): boolean{
-    return this.isScenesValid() && !!this.show.title
+    return this.isScenesValid() && !!this.show.title.trim()
   }
 
   private getSceneIssues(){
