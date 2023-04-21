@@ -4,5 +4,6 @@ export interface Show{
     id: number,
     title: string,
     scenes: Scene[],
-    dateCreated: Date
+    dateCreated: Date,
+    isStarred: boolean
 }

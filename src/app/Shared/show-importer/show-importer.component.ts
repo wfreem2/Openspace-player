@@ -13,6 +13,7 @@ export class ShowImporterComponent implements OnInit {
   hasErrors: boolean = false
   importedShow?: Show
   errorMsg: string = ''
+  importedShows: Show[] = []
 
   @Output() closeImporterEvent = new EventEmitter()
 
@@ -53,7 +54,7 @@ export class ShowImporterComponent implements OnInit {
       this.hasErrors = true
       this.errorMsg = 'JSON file is empty.'
     
-      return 
+      return
     }
     
     try{
@@ -69,13 +70,11 @@ export class ShowImporterComponent implements OnInit {
   
       this.importedShow = jsonParsed as Show
       this.importedShow.id = 1
-      this.showService.addShow(this.importedShow)
-      this.showService.save(this.importedShow)
+     
+      this.importedShows.push(this.importedShow)
       
       this.hasErrors = false
-      this.errorMsg = ''
-  
-      this.closeImporterEvent.emit()
+      this.errorMsg = ''  
     }
     catch(error: any){
       if(error instanceof SyntaxError){
@@ -89,5 +88,17 @@ export class ShowImporterComponent implements OnInit {
     }
   }
 
+  removeShow(show: Show): void{
+    this.importedShows = this.importedShows.filter(s => s !== show)
+  } 
+
+  importShows(): void{
+    this.importedShows.forEach(show => {
+      this.showService.addShow(show)
+      this.showService.save(show)
+    })
+
+    this.closeImporterEvent.emit()
+  }
 
 }

@@ -20,12 +20,17 @@
         <div id="errors" *ngIf="hasErrors">
             <p>{{errorMsg}}</p>
         </div>
-        <div id="imported" *ngIf="importedShow">
-            {{importedShow.title}}
+        <div id="imported" *ngIf="importedShows.length">
+            <ul class="imported-shows">
+                <li *ngFor="let show of importedShows" class="flx align-center show">
+                    <p class="title txt-md">{{show.title}}</p>
+                    <button class="delete" (click)="removeShow(show)">Remove</button>
+                </li>
+            </ul>
         </div>
         <div id="actions">
             <button class="btn secondary" (click)="closeImporterEvent.emit()">Cancel</button>
-            <button class="btn primary" [disabled]="hasErrors || !importedShow">Import</button>
+            <button class="btn primary" [disabled]="hasErrors || !importedShows.length" (click)="importShows()">Import</button>
         </div>  
     </div>
 </modal>

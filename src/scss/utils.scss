@@ -1,0 +1,43 @@
+@import './variables.scss';
+@import './func.scss';
+
+// Utility classes
+
+.flx { @extend %flx; }
+
+.flx-col { @extend %flx-col; }
+
+.just-center { @extend %just-center; }
+
+.align-center { @extend %align-center; }
+
+.max-W { @extend %max-W; }
+
+.max-H { @extend %max-H; }
+
+.max-WH { @extend %max-WH; }
+
+.subtitle{
+    color: shade($gray, 40%);
+}
+
+@for $i from 1 through 3{
+    $gap: $i;
+    
+    .gap-#{$gap}{
+        gap: $gap + 0rem;
+    }
+}
+
+.txt-lg{ font-size: 2rem; }
+.txt-md{ font-size: 1.4rem; }
+.txt-sm{ font-size: 1rem; }
+
+.img{
+    width: 100%;
+    height: 100%;
+
+    &-contain{
+        object-fit: contain;
+    }
+}

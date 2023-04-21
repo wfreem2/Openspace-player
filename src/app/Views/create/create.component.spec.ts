@@ -109,7 +109,7 @@ describe('CreateComponent', () => {
             title: rawScene.title + 'some other stuff',
             geoPos: rawScene.geoPos,
             options: rawScene.options,
-            duration: rawScene.transistion || undefined,
+            transistion: rawScene.transistion || undefined,
             script: rawScene.script || undefined,
             time: new Date()
         }

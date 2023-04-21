@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, ValidationErrors, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Scene } from 'src/app/Models/Scene';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, concatMap, distinctUntilChanged, filter, first, map, Subject, takeUntil, tap, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, first, map, skip, Subject, takeUntil, tap, withLatestFrom } from 'rxjs';
 import { ShowService } from 'src/app/Services/show.service';
 import { Show } from 'src/app/Models/Show';
 import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
@@ -17,6 +17,7 @@ import { ScenePositionComponent } from './components/scene-position/scene-positi
 import { BaseComponent } from 'src/app/Shared/base/base.component';
 import { cloneDeep } from 'lodash';
 import { SceneIssue } from 'src/app/Models/SceneIssue';
+import { IssueServerity } from 'src/app/Models/SceneIssue';
 
 @Component({
   selector: 'app-create',
@@ -56,7 +57,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
             geoPos: s.geoPos,
             options: s.options,
             script: s.script || '',
-            transistion: s.duration || null
+            transistion: s.transistion || null
           }, 
           { emitEvent: false }
         )
@@ -89,7 +90,30 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     options: this.fb.nonNullable.control<SceneOptions>({keepCameraPosition: true, enabledTrails: []})
   })
   
-  
+  private readonly sceneValueChanges = this.sceneForm.valueChanges
+  .pipe(
+    withLatestFrom(this.$selectedScene),
+    filter( ([, selectedScene]) => !!selectedScene),
+    map(([formVal, selectedScene]) => {
+      const transistionCtrl = this.sceneForm.controls.transistion
+      const transistion = transistionCtrl.errors ? null : transistionCtrl.value
+
+      return {
+          id: selectedScene!.id,
+          title: formVal.title!,
+          geoPos: formVal.geoPos!,
+          options: formVal.options!,
+          transistion: transistion,
+          script: formVal.script!
+      }
+    }),
+    tap( (scene) => { 
+      let original = this.show.scenes.find(s => s.id === scene.id )!
+      Object.assign(original, scene) 
+    }),
+    takeUntil(this.$unsub),
+  )
+
   readonly DEFAULT_SCENE = this.sceneForm.getRawValue()
   readonly TABS = {
     Summary: 'Summary',
@@ -125,43 +149,20 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     )
     .subscribe(show => {
       this.show = show
-      this.$setSaveDisabled.next(!this.isShowValid())
+      this.$setSaveDisabled.next(true)
     })
     
-    
-    this.sceneForm.valueChanges
-    .pipe(
-      takeUntil(this.$unsub),
-      withLatestFrom(this.$selectedScene),
-      filter( ([, selectedScene]) => !!selectedScene),
-      map(([formVal, selectedScene]) => {
+    // Scene errors
+    this.sceneValueChanges
+    .pipe( takeUntil(this.$unsub) )
+    .subscribe(scene => {
+      this.isSaved = false
+      this.$setSaveDisabled.next(!this.isShowValid())
+
+      const errors = this.sceneIssues.filter(issue => issue.scene.id !== scene.id)
       
-        return [
-          {
-            id: selectedScene!.id,
-            title: formVal.title!,
-            geoPos: formVal.geoPos!,
-            options: formVal.options!,
-            duration: formVal.transistion!,
-            script: formVal.script!
-          },
-          selectedScene as Scene
-        ]
-      }),
-      tap( ([, scene]) => {
-        this.isSaved = false
-        this.$setSaveDisabled.next(!this.isShowValid())
-
-        const errors = this.sceneIssues.filter(issue => issue.scene.id !== scene.id)
-        
-        this.sceneIssues = this.isScenesValid() ? errors : [{scene, issues: this.getSceneIssues()}, ...errors] 
-
-        this.$setSceneIssues.next(this.sceneIssues)
-      })
-    )
-    .subscribe( ([updated,]) => { 
-      let original = this.show.scenes.find(s => s.id === updated.id )!
-      Object.assign(original, updated)
+      this.sceneIssues = this.isScenesValid() ? errors : [{scene, issues: this.getSceneIssues()}, ...errors] 
+      this.$setSceneIssues.next(this.sceneIssues)
     })
   }
 
@@ -183,7 +184,8 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
               this.exportedShowName = this.show.title
               this.$setExportVisibility.next(true)
             },
-            isDisabled: this.$isSaveDisabled
+            //Skip first emission when show loads
+            isDisabled: this.$isSaveDisabled.pipe(skip(1))
           },
         ],
       },
@@ -324,6 +326,18 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     this.$setSaveDisabled.next(!this.isShowValid())
   }
 
+  newScene(): void{
+      const id = this.show.scenes.reduce( (a, b) => Math.max(a, b.id), 0 ) + 1
+      
+      const newScene: Scene = {
+        id: id,
+        ...this.DEFAULT_SCENE
+      }
+  
+      this.show.scenes.push(newScene)
+      this.$setScene.next(newScene)
+  }
+
   private isScenesValid(): boolean{
     return Object.values(this.sceneForm.controls).every(ctrl => ctrl.valid)
   }
@@ -332,15 +346,33 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
     return this.isScenesValid() && !!this.show.title.trim()
   }
 
-  private getSceneIssues(): string[]{
-    const ctrls = Object.values(this.sceneForm.controls)
-    .filter(ctrl => ctrl.invalid)
-    .map(ctrl => {
-      const formGroup = ctrl.parent!.controls;
-      return Object.keys(formGroup).find(name => ctrl === ctrl.parent?.get(name)) || null;
+  private getSceneIssues(): {control: string, errorMsg: string, severityLevel: IssueServerity}[]{
+
+    return Object.entries(this.sceneForm.controls).filter(([, ctrl]) => ctrl.invalid)
+    .map( ([ctrlName, ctrl]) => {
+
+      const { errors } = ctrl
+      let errorMsg = ''
+      let normalizedCtrlName = ctrlName.charAt(0).toUpperCase() + ctrlName.slice(1)
+
+      switch(true){
+        case !!errors?.['pattern']:
+          errorMsg = `${ctrlName.charAt(0).toUpperCase() + ctrlName.slice(1)} has invalid input.`
+          break
+      
+        case !!errors?.['required']:
+          errorMsg = `${ctrlName.charAt(0).toUpperCase() + ctrlName.slice(1)} is required.`
+          break
+      }
+      
+      return {
+          control: normalizedCtrlName,
+          errorMsg: errorMsg,
+          severityLevel: ctrl.hasValidator(Validators.required) ? IssueServerity.ERROR : IssueServerity.WARNING
+      }
     })
-    
-    return ctrls as string[]
+
   }
+  
 }
 

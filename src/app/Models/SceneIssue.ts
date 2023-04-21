@@ -1,6 +1,15 @@
 import { Scene } from "./Scene";
 
 export interface SceneIssue{
-    issues: string[]
-    scene: Scene
+    scene: Scene,
+    issues: {
+        control: string,
+        errorMsg: string,
+        severityLevel: IssueServerity
+    }[]
+}
+
+export enum IssueServerity{
+    WARNING="Warning",
+    ERROR="Error"
 }

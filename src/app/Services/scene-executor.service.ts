@@ -12,19 +12,18 @@ export class SceneExecutorService {
 
   public execute(scene: Scene): void{
   
-    const { navState, options, duration } = scene
+    const { navState, options, transistion } = scene
     const { node } = scene.geoPos
     
     this.openSpaceService.getRenderableType(node)
     .then(renderableType => {
       if(renderableType === RenderableType.RENDERABLEGLOBE){
-        this.openSpaceService.flyToGeo(scene.geoPos, duration)
+        this.openSpaceService.flyToGeo(scene.geoPos, transistion)
         return
       }
 
       this.openSpaceService.flyTo(node)
     })
-    .catch(err => { throw err })
     
 
     if(!options){ return }

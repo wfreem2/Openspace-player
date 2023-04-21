@@ -42,7 +42,7 @@
     grid-column: 2;
 
     display: grid;
-    grid-template-rows: minmax(3rem, max-content) minmax(auto, 40rem) max-content;
+    grid-template-rows: minmax(3rem, max-content) max-content minmax(auto, 40rem) max-content;
     row-gap: 2rem;
     padding: 0.8rem;
 
@@ -69,6 +69,31 @@
             height: 3rem;
         }
     }
+}
+
+.section{
+    justify-self: center;
+    @extend %flx-col;
+    gap: 0.5rem;
+    padding: 1rem 0;
+    .title{ color: tint($clr-secondary, 40%); }
+}
+
+.geoPos, .enabledTrails{
+    @extend %flx-col;
+    gap: 0.5rem;
+
+    li{
+        @extend %align-center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+}
+
+.enabledTrails{
+    overflow-y: auto;
+    max-height: 20rem;
 }
 
 .item{

@@ -40,7 +40,7 @@ export function getFakeScenes(N: number = 5): Scene[]{
         const scene: Scene = {
             id: id, title: title, geoPos: geoPos, options: options,
             script: (i % 2 === 0) ? script : undefined,
-            duration: (i % 2 === 0) ? duration : undefined,
+            transistion: (i % 2 === 0) ? duration : undefined,
             time: new Date()
         }
 
@@ -69,7 +69,7 @@ export function getFakeScene(id: number): Scene{
     const scene: Scene = {
         id: id, title: title, geoPos: geoPos, options: options,
         script: script,
-        duration: duration,
+        transistion: duration,
         time: new Date()
     } 
     

@@ -83,8 +83,7 @@
     </div>
 </ng-template>
 
-<show-importer *ngIf="showImporter" (closeImporterEvent)="showImporter=false">
-</show-importer>
+<show-importer *ngIf="showImporter" (closeImporterEvent)="showImporter=false"></show-importer>
 
 <modal title="Delete Show"  *ngIf="showDeleteConfirm"
  (closedEvent)="showDeleteConfirm=false">

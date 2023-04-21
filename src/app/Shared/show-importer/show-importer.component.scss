@@ -62,5 +62,38 @@
     & > p {
         color: $clr-err;
     }
+}
+
+.imported-shows{
+    overflow-y: auto;
+    max-height: 30rem;
+
+    .show{
+        @extend %max-W, %card;
+        justify-content: space-between;
+        max-width: 25rem;
+        padding: 0.5rem;
+    
+        &:not(:last-child){
+            margin-bottom: 0.5rem;
+        }
+    }
+    
+    .delete{
+        cursor: pointer;
+        color: $clr-err;
+        border: none;
+        outline: none;
+        background: transparent;
+    
+        &:hover{
+            color: shade($clr-err, 30%);
+        }
+    }
+}
+
+#imported{
+    @extend %max-W;
+    margin-left: 1rem;
 
 }

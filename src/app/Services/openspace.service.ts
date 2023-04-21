@@ -45,28 +45,38 @@ export class OpenspaceService {
   }
 
   connect(): void{ this.client.connect() }
-
+  
   isConnected(): Observable<boolean>{  return this._isConnected.asObservable() }
   
-  flyToGeo({lat, long, alt, timestamp, node}: GeoPosition, duration?: number): void{
-    
-    console.log(timestamp);
+  flyToGeo({lat, long, alt, timestamp, node}: GeoPosition, transistion: number | null = null): void{
     
     this.setTime(timestamp)
     this.pauseTime()
 
-    if(!duration){
+    if(!transistion){
       this.openspace.globebrowsing.flyToGeo(node, lat, long, alt)
     }
     else{
-      this.openspace.globebrowsing.flyToGeo(node, lat, long, alt, duration)
+      this.openspace.globebrowsing.flyToGeo(node, lat, long, alt, transistion)
     }
   }
 
   async getCurrentPosition(): Promise<GeoPosition>{
-    const pos = await this.openspace.globebrowsing.getGeoPositionForCamera()
-    const anchor = await this.getCurrentAnchor()
     const time = await this.getTime()
+    const anchor = await this.getCurrentAnchor()
+    const canHaveGeo = await this.nodeCanHaveGeo(anchor)
+
+    if(!canHaveGeo){
+      return {
+        lat: 0,
+        long: 0,
+        alt: 0,
+        node: anchor,
+        timestamp: time
+      }
+    }
+    
+    const pos: number[] = await this.openspace.globebrowsing.getGeoPositionForCamera()
 
     return {
       lat: pos[1],
@@ -107,6 +117,15 @@ export class OpenspaceService {
     const renderable = this.nodeToRenderable(node)
 
     return await this.getPropertyValue<RenderableType>(`Scene.${renderable}.Renderable.Type`)   
+  }
+
+  async nodeCanHaveGeo(node: SceneGraphNode): Promise<boolean>{
+    try{
+      return (await this.getRenderableType(node)) === RenderableType.RENDERABLEGLOBE
+    }
+    catch{
+      return true
+    }
   }
 
   setTime(timestamp: string): void{

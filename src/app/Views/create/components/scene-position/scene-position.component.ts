@@ -1,11 +1,11 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NonNullableFormBuilder, Validators } from '@angular/forms';
-import { BehaviorSubject, filter, map, Subject, Subscription, takeUntil, catchError, throttleTime, switchMap, tap, distinctUntilKeyChanged, of, mergeMap, throwError, from, EMPTY } from 'rxjs';
+import { BehaviorSubject, filter, map, Subject, Subscription, takeUntil, catchError, throttleTime, tap, distinctUntilKeyChanged } from 'rxjs';
 import { GeoPosition } from 'src/app/Models/GeoPosition';
 import { GeoPosForm } from 'src/app/Models/ShowForm';
 import { NotificationType } from 'src/app/Models/ToastNotification';
 import { NotificationService } from 'src/app/Services/notification.service';
-import { OpenspaceService, RenderableType, SceneGraphNode } from 'src/app/Services/openspace.service';
+import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service';
 import { BaseComponent } from 'src/app/Shared/base/base.component';
 
 @Component({
@@ -23,28 +23,30 @@ import { BaseComponent } from 'src/app/Shared/base/base.component';
 
 export class ScenePositionComponent extends BaseComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
   @Input() isAutoMode: boolean = false
-    
-  private listener!: Subscription
+
   private readonly numRegex = /^-?\d*\.?\d*$/
-  private readonly $geoPos = new Subject<GeoPosition>()
-  
-  readonly $isAutoMode = new BehaviorSubject<boolean>(this.isAutoMode)
-  readonly pathNavOptions = Object.values(SceneGraphNode)
-
-  public $nodeCanHaveGeo = new Subject<boolean>()
-  public $isDisconnected = this.openSpaceService.isConnected()
-  .pipe( 
-    takeUntil(this.$unsub),
-    map(isConnected => !isConnected) 
-  )  
-
   geoPosForm = this.fb.group<GeoPosForm>({
     alt: this.fb.control<number>(0.0, [ Validators.required, Validators.pattern(this.numRegex) ]),
     lat: this.fb.control<number>(0.0, [ Validators.required, Validators.pattern(this.numRegex) ]),
     long: this.fb.control<number>(0.0, [ Validators.required, Validators.pattern(this.numRegex) ]),
     node: this.fb.control<SceneGraphNode>(SceneGraphNode.Earth, Validators.required),
-    timestamp: this.fb.control<string>(new Date().toISOString())
+    timestamp: this.fb.control<string>("")
   })
+
+  
+  readonly pathNavOptions = Object.values(SceneGraphNode)
+  
+  private listener!: Subscription
+  readonly $nodeCanHaveGeo = new Subject<boolean>()
+  readonly $geoPos = new Subject<GeoPosition>()
+  readonly $isAutoMode = new BehaviorSubject<boolean>(this.isAutoMode)
+
+  readonly $isDisconnected = this.openSpaceService.isConnected()
+  .pipe( 
+    map(isConnected => !isConnected),
+    takeUntil(this.$unsub)
+  )  
+
 
   onChange: any = () => {}
   onTouch: any = () => {}
@@ -53,14 +55,14 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
       private fb: NonNullableFormBuilder) { 
 
     super()
-    
+        
     this.$isAutoMode.asObservable()
-    .pipe(takeUntil(this.$unsub))
+    .pipe( takeUntil(this.$unsub) )
     .subscribe(isAuto => {
       this.isAutoMode = isAuto
       
-      if(isAuto){ this.geoPosForm.disable() }
-      else{ this.geoPosForm.enable() }
+      if(isAuto){ this.disableAllControls() }
+      else{ this.enableAllControls() }
       
       this.setGeoListener(isAuto)
     })
@@ -80,53 +82,92 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
       }, {emitEvent: false})
     })
 
+    //Node can have geo event
     this.geoPosForm.valueChanges
-    .pipe(
-      takeUntil(this.$unsub),
+    .pipe( 
       distinctUntilKeyChanged('node'),
-      map(value => value.node!),
-      switchMap(node => { 
-        return from(this.openSpaceService.getRenderableType(node))
-        .pipe( catchError(() =>  EMPTY) )
-      }),
-      map(renderableType => renderableType === RenderableType.RENDERABLEGLOBE),
-      tap(canHaveGeo => this.$nodeCanHaveGeo.next(canHaveGeo)),
+      takeUntil(this.$unsub)
     )
-    .subscribe({
-      next: canHaveGeoPosition => {
-       
-        if(!canHaveGeoPosition){
-          this.geoPosForm.controls.alt.disable()
-          this.geoPosForm.controls.lat.disable()
-          this.geoPosForm.controls.long.disable()
-          
-          return
-        }
-        
-        this.geoPosForm.controls.alt.enable()
-        this.geoPosForm.controls.lat.enable()
-        this.geoPosForm.controls.long.enable()
-      },
-      error: () => {
-        console.log('error');
+    .subscribe( async ({ node }) => {
+      if(!!node){
+        this.$nodeCanHaveGeo.next(await this.openSpaceService.nodeCanHaveGeo(node))
       }
     })
 
+    this.$geoPos.asObservable()
+    .pipe(
+      distinctUntilKeyChanged('node'),
+      takeUntil(this.$unsub)
+    )
+    .subscribe( async ({ node }) => {
+      if(!node){ return }
 
+      const canHaveGeo = await this.openSpaceService.nodeCanHaveGeo(node)
+
+      if(!canHaveGeo){
+        this.notiService.showNotification({
+          title: `${node} cannot have a Geo-Position.`,
+          type: NotificationType.WARNING
+        })
+      }
+    })
+
+    this.$nodeCanHaveGeo
+    .pipe( takeUntil(this.$unsub) )
+    .subscribe({
+      next: canHaveGeoPosition => {
+        
+        if(!canHaveGeoPosition){
+          this.geoPosForm.controls.alt.disable({ emitEvent: false })
+          this.geoPosForm.controls.lat.disable({ emitEvent: false })
+          this.geoPosForm.controls.long.disable({ emitEvent: false })
+
+          const node = this.geoPosForm.controls.node.value
+
+          this.notiService.showNotification({
+            title: `${node} cannot have a Geo-Position.`,
+            type: NotificationType.WARNING
+          })
+          
+          this.geoPosForm.patchValue({
+            alt: 0,
+            lat: 0,
+            long: 0,
+          })
+
+          this.$isAutoMode.next(false)
+          return
+        }
+        
+        //If not in autoMode re-enable controls.
+        if(!this.isAutoMode){
+          this.geoPosForm.controls.alt.enable({ emitEvent: false })
+          this.geoPosForm.controls.lat.enable({ emitEvent: false })
+          this.geoPosForm.controls.long.enable({ emitEvent: false })
+        }
+      },
+      error: () => console.log('error') 
+    })
+    
     this.geoPosForm.valueChanges
     .pipe(
-      filter( () => this.lat!.valid && this.long!.valid && this.alt!.valid ),
+      tap(async () => {
+        const timestamp = await this.openSpaceService.getTime()
+        this.geoPosForm.controls.timestamp.setValue(timestamp, { emitEvent: false })
+      }),
+      filter( () => this.lat!.valid && this.long!.valid && this.alt!.valid),
       map(_=> this.geoPosForm.getRawValue() as GeoPosition),
       takeUntil(this.$unsub),
     )
     .subscribe( v => this.onChange(v) )
   }
   
+  ngOnInit(): void { }
+  
   get alt(){ return this.geoPosForm.get('alt')! }
   get lat(){ return this.geoPosForm.get('lat')! }
   get long(){ return this.geoPosForm.get('long')! }
 
-  ngOnInit(): void { }
 
   override ngOnDestroy(): void {
     super.ngOnDestroy()
@@ -161,6 +202,8 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
       return
     }
 
+    this.disableAllControls()
+
     this.listener = 
     this.openSpaceService
     .listenCurrentPosition()
@@ -171,8 +214,8 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
           type: NotificationType.ERROR
         })
 
-        this.isAutoMode = false
-        this.geoPosForm.enable()
+        this.$isAutoMode.next(false)
+        this.enableAllControls()
 
         return this.$geoPos
       }),
@@ -182,5 +225,15 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
       this.$geoPos.next(pos)
       this.onChange(pos)
     })
+  }
+
+  private enableAllControls(): void{
+    Object.values(this.geoPosForm.controls)
+    .forEach(ctrl => ctrl.enable({ emitEvent: false }) )
+  }
+
+  private disableAllControls(): void{
+    Object.values(this.geoPosForm.controls)
+    .forEach(ctrl => ctrl.disable({ emitEvent: false }) )
   }
 }

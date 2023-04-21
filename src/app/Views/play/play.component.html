@@ -13,6 +13,27 @@
 
 <div class="player">
     <h1>{{currScene?.scene?.title}}</h1>
+    <div class="section">
+        <p class="title">GeoPosition</p>
+        <ul class="geoPos">
+            <li>
+                <p>Node: </p>
+                <p>{{currScene?.scene?.geoPos?.node}}</p>
+            </li>
+            <li>
+                <p>Latitude:</p>
+                <p>{{currScene?.scene?.geoPos?.lat}}</p>
+            </li>
+            <li>
+                <p>Longitude:</p>
+                <p>{{currScene?.scene?.geoPos?.long}}</p>
+            </li>
+            <li>
+                <p>Altitude:</p>
+                <p>{{currScene?.scene?.geoPos?.alt}}</p>
+            </li>
+        </ul>
+    </div>
 
     <textarea class="input" [textContent]="currScene?.scene?.script" disabled></textarea>
 

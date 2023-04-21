@@ -1,5 +1,6 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { Show } from 'src/app/Models/Show';
+import { ShowService } from 'src/app/Services/show.service';
 
 @Component({
   selector: 'show-card',
@@ -12,14 +13,17 @@ export class ShowCardComponent implements OnInit {
   @Input() show!: Show
   @Output() cardClicked = new EventEmitter<Show>()
 
-  constructor() { }
+  constructor(private showService: ShowService) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 
   @HostListener('click', ['$event'])
   onClick(e: any){
     this.cardClicked.emit(this.show)
+  }
+
+  onChange(): void{
+    this.showService.save(this.show)
   }
 }

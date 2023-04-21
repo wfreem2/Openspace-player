@@ -40,7 +40,8 @@ export class ShowService {
       id: this.id,
       title: '',
       scenes: [],
-      dateCreated: new Date()
+      dateCreated: new Date(),
+      isStarred: false
     }
   }
 

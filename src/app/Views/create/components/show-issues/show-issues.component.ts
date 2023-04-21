@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Scene } from 'src/app/Models/Scene';
-import { SceneIssue } from 'src/app/Models/SceneIssue';
+import { IssueServerity, SceneIssue } from 'src/app/Models/SceneIssue';
 
 @Component({
   selector: 'show-issues',
@@ -18,5 +18,9 @@ export class ShowIssuesComponent implements OnInit {
 
   goTo(scene: Scene): void{
     this.goToScene.emit(scene)
+  }
+
+  get IssueSeverity(){
+    return IssueServerity
   }
 }

@@ -24,6 +24,12 @@ $txt-color: #262949;
 
 $bd-rad: 10px;
 
+$txt-lg: 2rem; 
+$txt-md: 1.4rem; 
+$txt-sm: 1rem; 
+
+$shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+
 %flx{ display: flex; }
 %flx-col{ @extend %flx; flex-direction: column; }
 %just-center{ @extend %flx; justify-content: center; }

@@ -25,7 +25,7 @@ export class YourShowsComponent extends BaseComponent implements OnInit, OnDestr
 
   readonly favoriteShows: ShowPipe = {
     name: 'favorites',
-    transform: s => s
+    transform: shows => shows.filter(s => s.isStarred)
   }
 
   readonly recentShows: ShowPipe = {

@@ -2,18 +2,34 @@
 
 <ul class="issues" [class.no-issues]="!invalidScenes?.length">
     <ng-template [ngIf]="invalidScenes?.length">
-        <li class="issue" *ngFor="let issue of invalidScenes">
-            <p>Scene: <b>{{issue.scene.title}}</b></p>
+        <li class="issue" *ngFor="let invalidScene of invalidScenes">
+            <p>
+                <span class="subtitle">Scene: </span> 
+                <b>{{invalidScene.scene.title}}</b>
+            </p>
+            <button class="go-to" (click)="goTo(invalidScene.scene)">Go-to</button>
+
             <ul class="error-msgs">
-                <li *ngFor="let msg of issue.issues" class="msg">
-                    <p>
-                        <b>{{msg.charAt(0).toUpperCase() + msg.slice(1)}}</b>
+                <li class="msg" *ngFor="let issue of invalidScene.issues">
+                    <p class="subtitle">Control: </p>
+                    <p>{{issue.control}}</p>
+                    <p class="subtitle">Message: </p>
+                    <p>{{issue.errorMsg}}</p>
+                    <p class="subtitle">Severity: </p>
+                    <p [ngClass]="{
+                        'warning': issue.severityLevel === IssueSeverity.WARNING, 
+                        'error': issue.severityLevel === IssueSeverity.ERROR}">
+                        {{issue.severityLevel}}
                     </p>
                 </li>
-            </ul>
-            <button class="go-to" (click)="goTo(issue.scene)">Go-to</button>
+            </ul>            
         </li>
     </ng-template>
 
-    <p *ngIf="!invalidScenes?.length">No Issues</p>
+    <ng-template [ngIf]="!invalidScenes?.length">
+        <div class="flx-col align-center gap-1">
+            <tabler-icon class="ico" name="trophy"></tabler-icon>
+            <p class="txt-md">Hooray! No Issues found.</p>
+        </div>
+    </ng-template>
 </ul>

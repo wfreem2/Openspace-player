@@ -3,13 +3,16 @@
     <button class="btn primary" (click)="newScene()">New Scene</button>
 </div>
 
-<div class="search-bar">
+<div class="search-bar input">
     <i-tabler name="search" class="icon"></i-tabler>
     <input id="search" type="text" 
      placeholder="Search Scenes" [(ngModel)]="query">
+     <button (click)="query=''" id="x" class="align-center" *ngIf="query.length">
+        <tabler-icon name="x" class="icon"></tabler-icon>
+     </button>
 </div>
 
-<div class="list" cdkDropList [cdkDropListData]="scenes" (cdkDropListDropped)="onDrop($event)">
+<div *ngIf="(scenes | searchScenes: query).length" class="list" cdkDropList [cdkDropListData]="scenes" (cdkDropListDropped)="onDrop($event)">
     <div class="wrapper" *ngFor="let s of scenes | searchScenes: query" cdkDrag>
 
         <div class="custom-placeholder" *cdkDragPlaceholder=""></div>
@@ -29,3 +32,10 @@
         </list-item>
     </div>
 </div>
+
+<ng-template #noresults [ngIf]="scenes.length && !(scenes | searchScenes: query).length">
+    <div class="max-WH flx-col align-center">
+        <img class="img-contain" src="/assets/no-results.svg" alt="">
+        <p class="txt-md">No results found.</p>
+    </div>
+</ng-template>

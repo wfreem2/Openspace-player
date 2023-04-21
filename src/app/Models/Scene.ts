@@ -8,6 +8,6 @@ export interface Scene{
     geoPos: GeoPosition,
     options: SceneOptions,
     navState?: NavigationState,
-    script?: string,
-    duration?: number,
+    script: string | null,
+    transistion: number | null,
 }

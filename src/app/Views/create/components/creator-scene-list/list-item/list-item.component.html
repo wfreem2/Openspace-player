@@ -7,16 +7,16 @@
     <ng-container [ngTemplateOutlet]="more"></ng-container>
 </div>
 
-<div class="ctx-menu" *ngIf="isCtxShowing" clickedoutsideof (onClickOutside)="onClickOutsideOf($event)">
-    <div id="delete" (click)="onDeleteClicked()">
+<ul class="ctx-menu" *ngIf="isCtxShowing" clickedoutsideof (onClickOutside)="onClickOutsideOf($event)">
+    <li id="delete" (click)="onDeleteClicked()">
         Delete
         <i-tabler name="trash" class="icon"></i-tabler>
-    </div>
-    <div (click)="onDuplicateClicked()">
+    </li>
+    <li (click)="onDuplicateClicked()">
         Duplicate
         <i-tabler name="copy" class="icon"></i-tabler>
-    </div>
-</div>
+    </li>
+</ul>
 
 
 

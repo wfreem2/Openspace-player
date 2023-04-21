@@ -64,7 +64,8 @@
     }
 
     &:disabled{
-        background: shade($gray, 5%);
+        cursor: not-allowed;
+        background: #eaf1f8;
         border-color: shade($gray, 40%);
     }
 }

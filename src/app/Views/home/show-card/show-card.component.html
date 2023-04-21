@@ -13,6 +13,6 @@
   </div>
   <div class="section">
     <p class="header">Favorite</p>
-    <p class="content">star</p>
+    <input type="checkbox" [(ngModel)]="show.isStarred" (ngModelChange)="onChange()" class="content"/>
   </div>
 </div>

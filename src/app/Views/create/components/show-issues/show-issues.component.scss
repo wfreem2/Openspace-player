@@ -4,9 +4,8 @@
 
 :host{
     display: grid;
-    grid-template-rows: max-content 1fr;
+    grid-template-rows: max-content minmax(0, 1fr);
     gap: 0.5rem;
-    overflow-y: hidden;
     min-width: 100%;
     width: 0;
 }
@@ -16,34 +15,34 @@
 }
 
 .issues{
-    @extend %max-W;
+    @extend %max-W, %flx-col;
     max-width: 100%;
-    height: 0;
-    min-height: 100%;
+    padding: 0 0.5rem;
+    gap: 0.5rem;
     overflow-y: auto;
-    padding-left: 0.5rem;
-    
+
     &.no-issues{
         @extend %align-center, %just-center;
     }
 
     .issue{
-        @extend %max-W;
+        @extend %max-W, %card;
         transition: all 0.2s;
         display: grid;
         grid-template-columns: 1fr max-content;
         grid-template-rows: max-content max-content;
-        overflow-y: hidden;
+        align-items: center;
         gap: 0.5rem;
         padding: 0.5rem;
         
-        &:not(:last-child){
-            border-bottom: solid 2px shade($gray, 20%);
-        }
-
         &:hover{
-            background: tint($clr-accent, 80%);
+            border-color: $clr-accent;
         }
+    }
+
+    .ico{
+        width: 3rem;
+        height: 3rem;
     }
 
     .error-msgs{
@@ -51,11 +50,42 @@
         @extend %flx-col;
         gap: 0.5rem;
         max-width: 100%;
-        overflow-y: auto;
         padding-left: 0.5rem;
 
-        .msg{ color: $clr-err; }
+        .msg{ 
+            display: grid;
+            grid-template-columns: max-content 1fr;
+            grid-template-rows: max-content max-content max-content;
+            align-items: center;
+            gap: 0.5rem 1rem;
+            padding-bottom: 0.5rem;
+
+            & > .subtitle{
+                grid-column: 1;
+            }
+
+            &:not(:last-child){
+                border-bottom: solid 2px $gray;
+            }
+        }
     }
+}
+
+.warning, .error{
+    text-align: center;
+    width: 7rem;
+    padding: 0.25rem;
+    border-radius: $bd-rad;
+}
+
+.warning{
+    color: shade(#ffd78e, 70%);
+    background: #ffd78e;
+}
+
+.error{
+    color: $clr-err;
+    background: tint($clr-err, 80%);
 }
 
 .go-to{

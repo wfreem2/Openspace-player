@@ -53,7 +53,7 @@ export class DropdownComponent extends BaseComponent implements OnInit, OnDestro
     const hostClicked = isElementOrChildClicked(this.hostRef.nativeElement, 
       event.target as HTMLElement)
       
-    if(!hostClicked){ this.isCollapsed = true}
+    if(!hostClicked){ this.isCollapsed = true }
   }
 
 

@@ -70,6 +70,7 @@
 .title{ font-size: 1.5rem; }
 
 .scene-creator, .scene-list{
+    padding: 1rem;
     background: #fafafb;
     height: calc(100vh - 7.125rem);
     // max-height: calc(100% - 7.125rem);
@@ -79,7 +80,6 @@ $grid-bd: solid 2px $gray;
 
 // Scene creation
 .scene-creator{
-    padding: 1rem;
     grid-column: 2;
     grid-row: 2;
 
@@ -142,9 +142,8 @@ $grid-bd: solid 2px $gray;
 .scene-list{
     grid-column: 1;
     display: grid;
-    grid-template-rows: 70% 30%;
+    grid-template-rows: minmax(0, 3fr) minmax(0, 2fr);
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
     border-right: $grid-bd;
     
     
@@ -156,8 +155,17 @@ $grid-bd: solid 2px $gray;
 }
 
 #no-scene{
-    @extend %max-WH, %just-center, %align-center;
     grid-row: 1 / span all;
+    & > img{
+        max-width: 40rem;
+        max-height: 40rem
+    }
+
+    & > .btn{
+        width: 15rem;
+        height: 3rem;
+        font-size: $txt-md;
+    }
 }
 
 .transition{
@@ -300,6 +308,7 @@ $grid-bd: solid 2px $gray;
 
 .tab-content{
     @extend %card, %max-WH;
+    max-width: 60rem;
     display: grid;
     grid-template-rows: max-content minmax(0, 1fr);
     justify-items: center;
@@ -314,6 +323,7 @@ $grid-bd: solid 2px $gray;
 
 .tabs{
     @extend %align-center;
+    flex-wrap: wrap;
     background: #ffffff;
     overflow: hidden;
     
