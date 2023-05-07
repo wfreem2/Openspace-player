@@ -23,6 +23,15 @@ export class PlayComponent implements OnInit {
   scenes!: PlayableScene[]
   currIdx?: number
 
+  readonly TABS = {
+    Summary: 'Summary',
+    Position: 'Position',
+    Transistion: 'Transistion',
+    Options: 'Options',
+    Script: 'Script'
+  }
+
+  selectedTab: string = this.TABS.Summary
 
   constructor(private route: ActivatedRoute, private showService: ShowService,
      private openSpaceService: OpenspaceService, private notiService: NotificationService,
@@ -38,7 +47,7 @@ export class PlayComponent implements OnInit {
       this.show = show
       
       this.scenes = show.scenes.map(s => { 
-        return { scene: s, isActive: false}
+        return { ...s, isActive: false}
       })
     })
    }
@@ -61,7 +70,7 @@ export class PlayComponent implements OnInit {
     this.currScene = playableScene
 
     this.currIdx = this.scenes.indexOf(playableScene)
-    this.execute(this.currScene.scene)
+    this.execute(this.currScene)
   }
 
   private execute(scene: Scene): void{
@@ -88,4 +97,7 @@ export class PlayComponent implements OnInit {
 
 }
 
-type PlayableScene = { scene: Scene, isActive: boolean}
+
+interface PlayableScene extends Scene{ 
+  isActive: boolean
+}

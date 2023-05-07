@@ -24,7 +24,7 @@ export class SceneExecutorService {
 
       this.openSpaceService.flyTo(node)
     })
-    
+    .catch(err => console.log('Error executing scene'))
 
     if(!options){ return }
 
