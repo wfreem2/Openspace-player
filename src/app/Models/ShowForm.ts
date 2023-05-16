@@ -2,6 +2,7 @@ import { FormArray, FormControl, FormGroup, FormRecord } from "@angular/forms";
 import { SceneGraphNode } from "../Services/openspace.service";
 import { GeoPosition } from "./GeoPosition";
 import { SceneOptions } from "./SceneOptions";
+import { NavigationState } from "./NavigationState";
 
 
 export interface SceneForm{
@@ -28,4 +29,5 @@ export interface GeoPosForm{
     long: FormControl<number>
     node: FormControl<SceneGraphNode>,
     timestamp: FormControl<string>
+    navState: FormControl<NavigationState | undefined>
 }

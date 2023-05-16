@@ -1,4 +1,5 @@
 import { SceneGraphNode } from "../Services/openspace.service";
+import { NavigationState } from "./NavigationState";
 
 export interface GeoPosition{
     lat: number,
@@ -6,4 +7,5 @@ export interface GeoPosition{
     alt: number,
     node: SceneGraphNode, 
     timestamp: string
+    navState?: NavigationState
 }

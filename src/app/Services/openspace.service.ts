@@ -65,6 +65,7 @@ export class OpenspaceService {
     const time = await this.getTime()
     const anchor = await this.getCurrentAnchor()
     const canHaveGeo = await this.nodeCanHaveGeo(anchor)
+    const navState = await this.getNavigationState()
 
     if(!canHaveGeo){
       return {
@@ -72,7 +73,8 @@ export class OpenspaceService {
         long: 0,
         alt: 0,
         node: anchor,
-        timestamp: time
+        timestamp: time,
+        navState: navState
       }
     }
     
@@ -83,7 +85,8 @@ export class OpenspaceService {
       long: pos[2],
       alt: pos[3],
       node: anchor,
-      timestamp: time
+      timestamp: time,
+      navState: navState
     }
   }
   

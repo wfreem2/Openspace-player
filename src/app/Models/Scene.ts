@@ -1,5 +1,4 @@
 import { GeoPosition } from "./GeoPosition";
-import { NavigationState } from "./NavigationState";
 import { SceneOptions } from "./SceneOptions";
 
 export interface Scene{
@@ -7,7 +6,6 @@ export interface Scene{
     title: string,
     geoPos: GeoPosition,
     options: SceneOptions,
-    navState?: NavigationState,
     script: string | null,
     transistion: number | null,
 }
