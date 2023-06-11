@@ -1,36 +1,47 @@
 <form id="opts-form" [formGroup]="optionsForm">
-    <div class="section" id="trails" #s2>
-        <div>
-            <p class="title">Trails</p>
-            <ng-container *ngTemplateOutlet="chevron; context: {el: s2}"></ng-container>
-        </div>
+	<div class="section" id="trails" #s2>
+		<div>
+			<p class="title">Trails</p>
+			<ng-container *ngTemplateOutlet="chevron; context: { el: s2 }"></ng-container>
+		</div>
 
-        <div class="search">
-            <i-tabler name="search" class="icon"></i-tabler>
-            <input type="text"  placeholder="Node Name" #i (input)="query.next(i.value)">
-            <sorting-selector (sortingChangedEvent)="sort($event)"></sorting-selector>
-        </div>
+		<div class="search">
+			<i-tabler name="search" class="icon"></i-tabler>
+			<input type="text" placeholder="Node Name" #i (input)="query.next(i.value)" />
+			<sorting-selector (sortingChangedEvent)="sort($event)"></sorting-selector>
+		</div>
 
-        <div class="select-opts">
-            <button (click)="_$selectAll.next()">Select All</button>
-            <button (click)="_$deselectAll.next()">Deselect All</button>
-        </div>
+		<div class="select-opts">
+			<button (click)="_$selectAll.next()">Select All</button>
+			<button (click)="_$deselectAll.next()">Deselect All</button>
+		</div>
 
-        <ul class="options-list" formArrayName="enabledTrails">
-            <li class="option" [class.active]="option.controls.isEnabled.value"
-             *ngFor="let option of $filteredTrails | async" [formGroup]="option">
-                <label for="{{option.controls.trail.value}}">{{option.controls.trail.value}} Trail</label>
-                <input type="checkbox" name="{{option.controls.trail.value}}" formControlName="isEnabled">
-            </li>
-        </ul>
-    </div>
+		<ul class="options-list" formArrayName="enabledTrails">
+			<li
+				class="option"
+				[class.active]="option.controls.isEnabled.value"
+				*ngFor="let option of $filteredTrails | async"
+				[formGroup]="option">
+				<label for="{{ option.controls.trail.value }}">{{ option.controls.trail.value }} Trail</label>
+				<input type="checkbox" name="{{ option.controls.trail.value }}" formControlName="isEnabled" />
+			</li>
+		</ul>
+	</div>
 </form>
 
-
 <ng-template #chevron let-el="el">
-    <svg (click)="toggleClass(el)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        class="chevron feather feather-chevron-down">
-        <polyline points="6 9 12 15 18 9"></polyline>
-    </svg>
+	<svg
+		(click)="toggleClass(el)"
+		xmlns="http://www.w3.org/2000/svg"
+		width="24"
+		height="24"
+		viewBox="0 0 24 24"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="2"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+		class="chevron feather feather-chevron-down">
+		<polyline points="6 9 12 15 18 9"></polyline>
+	</svg>
 </ng-template>

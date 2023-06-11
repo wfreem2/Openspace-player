@@ -1,52 +1,52 @@
 @import './utils.scss';
 
 // Default button style
-.btn{
-    @include reset-input;
-    @extend %align-center, %just-center;
-    padding: 0.5rem 1rem;
-    color: #ffffff;
-    border-radius: 6px;
-    gap: 0.5rem;
-    font-size: 1rem;
-    
-    &:not(:disabled){
-        &:active{
-            transform: translateY(2px);
-        }
-            
-        &.primary{
-            @extend .btn;
-            background: $clr-accent;
+.btn {
+	@include reset-input;
+	@extend %align-center, %just-center;
+	padding: 0.5rem 1rem;
+	color: #ffffff;
+	border-radius: 6px;
+	gap: 0.5rem;
+	font-size: 1rem;
 
-            &:hover{
-                background: shade($clr-accent, 30%);
-            }
-        }
+	&:not(:disabled) {
+		&:active {
+			transform: translateY(2px);
+		}
 
-        &.secondary{
-            @extend .btn;
-            color: $txt-color;
-            background: #ffffff;
-            border: solid 1px $txt-color;
+		&.primary {
+			@extend .btn;
+			background: $clr-accent;
 
-            &:hover{
-                $clr: shade($clr-accent, 50%);
-                color: $clr;
-                border-color: $clr;
-            }
-        }
-    }
+			&:hover {
+				background: shade($clr-accent, 30%);
+			}
+		}
 
-    &:disabled{
-        cursor: not-allowed; 
+		&.secondary {
+			@extend .btn;
+			color: $txt-color;
+			background: #ffffff;
+			border: solid 1px $txt-color;
 
-        &.primary{
-            background: tint($clr-accent, 50%);
-        }
+			&:hover {
+				$clr: shade($clr-accent, 50%);
+				color: $clr;
+				border-color: $clr;
+			}
+		}
+	}
 
-        &.secondary{
-            background: tint($clr-secondary, 70%);
-        }
-    }  
+	&:disabled {
+		cursor: not-allowed;
+
+		&.primary {
+			background: tint($clr-accent, 50%);
+		}
+
+		&.secondary {
+			background: tint($clr-secondary, 70%);
+		}
+	}
 }

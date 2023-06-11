@@ -1,262 +1,254 @@
 <div class="creator">
-    <div class="header">
-        <a routerLink="/" id="back">
-            <i-tabler name="arrow-bar-to-left" class="ico"></i-tabler>
-            Back to Home
-        </a>
-        <input name="title" class="title input" type="text" selectallOnclick
-        [class.invalid]="!show.title.length" required autofocus
-        placeholder="e.g., Tour of the Solar System." 
-        [(ngModel)]="show.title"
-        (ngModelChange)="onTitleChange($event)"/>  
-        
-        <connection-status id="connection-status"></connection-status>
+	<div class="header">
+		<a routerLink="/" id="back">
+			<i-tabler name="arrow-bar-to-left" class="ico"></i-tabler>
+			Back to Home
+		</a>
+		<input
+			name="title"
+			class="title input"
+			type="text"
+			selectallOnclick
+			[class.invalid]="!show.title.length"
+			required
+			autofocus
+			placeholder="e.g., Tour of the Solar System."
+			[(ngModel)]="show.title"
+			(ngModelChange)="onTitleChange($event)" />
 
-        <creator-menu id="menu" [menuItems]="menu"></creator-menu>
-    </div>
+		<connection-status id="connection-status"></connection-status>
 
-    <div class="scene-creator">
-        <ng-container *ngIf="($selectedScene | async) then sceneTabs; else noScene"></ng-container>
-    </div>
+		<creator-menu id="menu" [menuItems]="menu"></creator-menu>
+	</div>
 
-    <div class="scene-list">
-        <creator-scene-list
-        [scenes]="show.scenes"
-        [defaultScene]="DEFAULT_SCENE"
-        [$sceneIssues]="$setSceneIssues.asObservable()"
-        [$currentScene]="$setScene"
-        (duplicateClickedEvent)="$duplicateScene.next($event)"
-        (deleteClickedEvent)="onDeleteClicked()"
-        (listDragDropEvent)="isSaved=false">
-        </creator-scene-list>
+	<div class="scene-creator">
+		<ng-container *ngIf="$selectedScene | async; then sceneTabs; else noScene"></ng-container>
+	</div>
 
-        <show-issues 
-        [invalidScenes]="$setSceneIssues.asObservable() | async"
-        (goToScene)="$setScene.next($event)">
-        </show-issues>
-    </div>
+	<div class="scene-list">
+		<creator-scene-list
+			[scenes]="show.scenes"
+			[defaultScene]="DEFAULT_SCENE"
+			[$sceneIssues]="$setSceneIssues.asObservable()"
+			[$currentScene]="$setScene"
+			(duplicateClickedEvent)="$duplicateScene.next($event)"
+			(deleteClickedEvent)="onDeleteClicked()"
+			(listDragDropEvent)="isSaved = false">
+		</creator-scene-list>
+
+		<show-issues [invalidScenes]="$setSceneIssues.asObservable() | async" (goToScene)="$setScene.next($event)">
+		</show-issues>
+	</div>
 </div>
 
-<manual *ngIf="$isManualShowing | async"(closedEvent)="$setManualVisibility.next(false)">
-</manual>
+<manual *ngIf="$isManualShowing | async" (closedEvent)="$setManualVisibility.next(false)"> </manual>
 
-<modal title="Delete Scene?" *ngIf="$isConfirmShowing | async"
-    (closedEvent)="$setConfirmVisibility.next(false)">
-    <div *ngIf="$selectedScene | async as scene" class="modal-content">
-        <p class="prompt"> Deleting scene <b>{{scene.title}}</b> cannot be undone.</p>
-        <button class="btn secondary" (click)="$setConfirmVisibility.next(false)">No, Cancel</button>
-        <button class="btn primary" id="delete" (click)="deleteScene()">Yes, Delete</button>
-    </div>
+<modal title="Delete Scene?" *ngIf="$isConfirmShowing | async" (closedEvent)="$setConfirmVisibility.next(false)">
+	<div *ngIf="$selectedScene | async as scene" class="modal-content">
+		<p class="prompt">
+			Deleting scene <b>{{ scene.title }}</b> cannot be undone.
+		</p>
+		<button class="btn secondary" (click)="$setConfirmVisibility.next(false)">No, Cancel</button>
+		<button class="btn primary" id="delete" (click)="deleteScene()">Yes, Delete</button>
+	</div>
 </modal>
 
-<modal title="Reset Scene?" *ngIf="$isResetShowing | async"
-    (closedEvent)="$setResetVisibility.next(false)">
-    <div *ngIf="$selectedScene | async as scene" class="modal-content">
-        <p class="prompt"> Reset scene <b>{{scene.title}}</b> to default values?</p>
-        <button class="btn secondary" (click)="$setResetVisibility.next(false)">No, Cancel</button>
-        <button class="btn primary" (click)="resetScene()">Yes, Reset</button>
-    </div>
+<modal title="Reset Scene?" *ngIf="$isResetShowing | async" (closedEvent)="$setResetVisibility.next(false)">
+	<div *ngIf="$selectedScene | async as scene" class="modal-content">
+		<p class="prompt">
+			Reset scene <b>{{ scene.title }}</b> to default values?
+		</p>
+		<button class="btn secondary" (click)="$setResetVisibility.next(false)">No, Cancel</button>
+		<button class="btn primary" (click)="resetScene()">Yes, Reset</button>
+	</div>
 </modal>
 
-<modal title="Duplicate Scene" *ngIf="$isDuplicateShowing | async as scene"
-    (closedEvent)="$duplicateScene.next(null)">
-    <div class="modal-content" id="duplicate">
-        <div class="floating-input">
-            <input class="input" type="text" [(ngModel)]="scene.title" placeholder=" "/>
-            <span>Scene Title</span>
-        </div>
-        <button class="btn secondary" (click)="$duplicateScene.next(null)">Cancel</button>
-        <button class="btn primary" type="submit" (click)="duplicateScene(scene)" 
-        [disabled]="sceneTitleExists(scene.title) || !scene.title.length">Duplicate</button>
-        <p class="error err-msg" *ngIf="sceneTitleExists(scene.title)">Scene with title <b>{{scene.title}}</b> already exists.</p>
-    </div>
+<modal title="Duplicate Scene" *ngIf="$isDuplicateShowing | async as scene" (closedEvent)="$duplicateScene.next(null)">
+	<div class="modal-content" id="duplicate">
+		<div class="floating-input">
+			<input class="input" type="text" [(ngModel)]="scene.title" placeholder=" " />
+			<span>Scene Title</span>
+		</div>
+		<button class="btn secondary" (click)="$duplicateScene.next(null)">Cancel</button>
+		<button
+			class="btn primary"
+			type="submit"
+			(click)="duplicateScene(scene)"
+			[disabled]="sceneTitleExists(scene.title) || !scene.title.length">
+			Duplicate
+		</button>
+		<p class="error err-msg" *ngIf="sceneTitleExists(scene.title)">
+			Scene with title <b>{{ scene.title }}</b> already exists.
+		</p>
+	</div>
 </modal>
 
 <modal title="Export Show" *ngIf="$isExportShowing | async" (closedEvent)="$setExportVisibility.next(false)">
-<!-- <modal title="Export Show" *ngIf="true" (closedEvent)="$setExportVisibility.next(false)"> -->
-    <div class="modal-content" id="export">
-        <div class="prompt">
-            <label for="export-name">File Name</label>
-            <input type="text" class="input" name="export-name" placeholder="e.g, MyAwesomeShow" 
-            selectallOnclick [(ngModel)]="exportedShowName"/>
-        </div>
-        <button class="btn secondary" (click)="$setExportVisibility.next(false)">Cancel</button>
-        <button class="btn primary" (click)="saveToDisk(); $setExportVisibility.next(false)">Export Show</button>
-    </div>
+	<!-- <modal title="Export Show" *ngIf="true" (closedEvent)="$setExportVisibility.next(false)"> -->
+	<div class="modal-content" id="export">
+		<div class="prompt">
+			<label for="export-name">File Name</label>
+			<input
+				type="text"
+				class="input"
+				name="export-name"
+				placeholder="e.g, MyAwesomeShow"
+				selectallOnclick
+				[(ngModel)]="exportedShowName" />
+		</div>
+		<button class="btn secondary" (click)="$setExportVisibility.next(false)">Cancel</button>
+		<button class="btn primary" (click)="saveToDisk(); $setExportVisibility.next(false)">Export Show</button>
+	</div>
 </modal>
 
 <ng-template #sceneTabs>
-    <form id="scene-form" [formGroup]="sceneForm" *ngIf="$selectedScene | async as scene">
-        <div class="scene-title" [class.ng-invalid]="!scene.title.trim().length">
-            <input name="title" type="text" class="title" required
-            formControlName="title" placeholder="Scene Title">
-            <i-tabler name="x" id="x" (click)="sceneForm.controls.title.setValue('')"></i-tabler>
-        </div>
+	<form id="scene-form" [formGroup]="sceneForm" *ngIf="$selectedScene | async as scene">
+		<div class="scene-title" [class.ng-invalid]="!scene.title.trim().length">
+			<input name="title" type="text" class="title" required formControlName="title" placeholder="Scene Title" />
+			<i-tabler name="x" id="x" (click)="sceneForm.controls.title.setValue('')"></i-tabler>
+		</div>
 
-        <ul class="tabs">
-            <li class="tab" 
-                [class.active]="selectedTab===TABS.Summary"
-                (click)="selectedTab=TABS.Summary">
-                <tabler-icon name="planet" class="icon"></tabler-icon>
-                Summary
-            </li>
-            <li class="tab" 
-                [class.active]="selectedTab===TABS.Position"
-                (click)="selectedTab=TABS.Position">
-                <tabler-icon name="map-2" class="icon"></tabler-icon>
-                Position
-            </li>
-            <li class="tab" 
-                [class.active]="selectedTab===TABS.Options"
-                (click)="selectedTab=TABS.Options">
-                <tabler-icon name="adjustments-horizontal" class="icon"></tabler-icon>
-                Options
-            </li>
-            <li class="tab" 
-                [class.active]="selectedTab===TABS.Transistion"
-                (click)="selectedTab=TABS.Transistion">
-                <tabler-icon name="ease-in-out-control-points" class="icon"></tabler-icon>
-                Transistion
-            </li>
-            <li class="tab" 
-                [class.active]="selectedTab===TABS.Script"
-                (click)="selectedTab=TABS.Script">
-                <tabler-icon name="clipboard-text" class="icon"></tabler-icon>
-                Script
-            </li>
-        </ul>
-            
-        <div class="tab-content" [style.display]="selectedTab===TABS.Summary ? '' : 'none'">
-            <div class="tab-summary">
-                <p class="title">Scene Summary</p>
-                <p class="desc">
-                    View all of the important settings for this scene in one place.
-                </p>
-            </div>
+		<ul class="tabs">
+			<li class="tab" [class.active]="selectedTab === TABS.Summary" (click)="selectedTab = TABS.Summary">
+				<tabler-icon name="planet" class="icon"></tabler-icon>
+				Summary
+			</li>
+			<li class="tab" [class.active]="selectedTab === TABS.Position" (click)="selectedTab = TABS.Position">
+				<tabler-icon name="map-2" class="icon"></tabler-icon>
+				Position
+			</li>
+			<li class="tab" [class.active]="selectedTab === TABS.Options" (click)="selectedTab = TABS.Options">
+				<tabler-icon name="adjustments-horizontal" class="icon"></tabler-icon>
+				Options
+			</li>
+			<li class="tab" [class.active]="selectedTab === TABS.Transistion" (click)="selectedTab = TABS.Transistion">
+				<tabler-icon name="ease-in-out-control-points" class="icon"></tabler-icon>
+				Transistion
+			</li>
+			<li class="tab" [class.active]="selectedTab === TABS.Script" (click)="selectedTab = TABS.Script">
+				<tabler-icon name="clipboard-text" class="icon"></tabler-icon>
+				Script
+			</li>
+		</ul>
 
-            <div class="summary">
-                <div class="section">
-                    <p class="title">GeoPosition</p>
-                    <ul class="geoPos">
-                        <li>
-                            <p>Node: </p>
-                            <p>{{formValue.geoPos.node}}</p>
-                        </li>
-                        <li>
-                            <p>Latitude:</p>
-                            <p>{{formValue.geoPos.lat}}</p>
-                        </li>
-                        <li>
-                            <p>Longitude:</p>
-                            <p>{{formValue.geoPos.long}}</p>
-                        </li>
-                        <li>
-                            <p>Altitude:</p>
-                            <p>{{formValue.geoPos.alt}}</p>
-                        </li>
-                    </ul>
-                </div>
+		<div class="tab-content" [style.display]="selectedTab === TABS.Summary ? '' : 'none'">
+			<div class="tab-summary">
+				<p class="title">Scene Summary</p>
+				<p class="desc">View all of the important settings for this scene in one place.</p>
+			</div>
 
-                <div class="section">
-                    <p class="title">Enabled Trails ({{formValue.options.enabledTrails.length}})</p>
-                    <ul class="enabledTrails">
-                        <li *ngFor="let trail of formValue.options.enabledTrails">
-                            {{trail}}
-                        </li>
-                        <li *ngIf="!formValue.options.enabledTrails.length">
-                            No trails enabled
-                        </li>
-                    </ul>
-                </div>
-                <div class="section" id="duration">
-                    <p class="title">Transition Duration</p>
-                    <ul>
-                        <li *ngIf="formValue.transistion">
-                            {{formValue.transistion}} seconds
-                        </li>
-                        <li *ngIf="!formValue.transistion">
-                            Default Transition
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        <div class="tab-content position" [style.display]="selectedTab===TABS.Position ? '' : 'none'">
-            <div class="tab-summary">
-                <p class="title">Scene Position</p>
-                <p class="desc">
-                    Set parameters such as latitude, longitude, and altitude to position the camera
-                    on this scene.
-                </p>
-            </div>
+			<div class="summary">
+				<div class="section">
+					<p class="title">GeoPosition</p>
+					<ul class="geoPos">
+						<li>
+							<p>Node:</p>
+							<p>{{ formValue.geoPos.node }}</p>
+						</li>
+						<li>
+							<p>Latitude:</p>
+							<p>{{ formValue.geoPos.lat }}</p>
+						</li>
+						<li>
+							<p>Longitude:</p>
+							<p>{{ formValue.geoPos.long }}</p>
+						</li>
+						<li>
+							<p>Altitude:</p>
+							<p>{{ formValue.geoPos.alt }}</p>
+						</li>
+					</ul>
+				</div>
 
-            <scene-position id="scene-pos"
-            formControlName="geoPos"
-            [isAutoMode]="isAutoMode">
-            </scene-position>
-        </div>
-        
-        <div class="tab-content" [style.display]="selectedTab===TABS.Options ? '' : 'none'">
-            <div class="tab-summary">
-                <p class="title">Scene Options</p>
-                <p class="desc">
-                    Enable or Disable trails for this scene.
-                </p>
-            </div>
-            <scene-options formControlName="options"></scene-options>
-        </div>
-        
-        <div class="tab-content" [style.display]="selectedTab===TABS.Transistion ? '' : 'none'">
-            <div class="tab-summary">
-                <p class="title">Scene Transistion Duration</p>
-                <p class="desc">How long it takes to transistion from one scene to the next (in seconds).</p>
-            </div>
-            <div class="transistion">
-                <input class="input" 
-                step="0.1"
-                type="number"
-                name="transistion"
-                formControlName="transistion"
-                placeholder="e.g, 5.7" id="transition"/>
-                
-                <p class="error" *ngIf="sceneForm.controls['transistion'].errors?.['pattern']">
-                    This field is digits only
-                </p>
-            </div>
-        </div>
+				<div class="section">
+					<p class="title">Enabled Trails ({{ formValue.options.enabledTrails.length }})</p>
+					<ul class="enabledTrails">
+						<li *ngFor="let trail of formValue.options.enabledTrails">
+							{{ trail }}
+						</li>
+						<li *ngIf="!formValue.options.enabledTrails.length">No trails enabled</li>
+					</ul>
+				</div>
+				<div class="section" id="duration">
+					<p class="title">Transition Duration</p>
+					<ul>
+						<li *ngIf="formValue.transistion">{{ formValue.transistion }} seconds</li>
+						<li *ngIf="!formValue.transistion">Default Transition</li>
+					</ul>
+				</div>
+			</div>
+		</div>
 
-        <div class="tab-content" [style.display]="selectedTab===TABS.Script ? '' : 'none'">
-            <div class="tab-summary">
-                <p class="title">Scene Script</p>
-                <p class="desc">
-                    Here you can a write a script or some notes that will be shown to you
-                    when this scene is selected in the player.
-                </p>
-            </div>
+		<div class="tab-content position" [style.display]="selectedTab === TABS.Position ? '' : 'none'">
+			<div class="tab-summary">
+				<p class="title">Scene Position</p>
+				<p class="desc">
+					Set parameters such as latitude, longitude, and altitude to position the camera on this scene.
+				</p>
+			</div>
 
-            <textarea id="script" class="input" 
-            cols="30" rows="20"
-            formControlName="script"
-            placeholder="Script Text">
-            </textarea>
-        </div>
-        
-        <div id="options">
-            <button id="reset" type="button" (click)="onResetClicked()">Reset</button>
-            <button id="preview" type="button" *ngIf="$selectedScene | async as scene" class="btn secondary" (click)="preview(scene)">Preview</button>
-        </div>
-    </form>
+			<scene-position id="scene-pos" formControlName="geoPos" [isAutoMode]="isAutoMode"> </scene-position>
+		</div>
+
+		<div class="tab-content" [style.display]="selectedTab === TABS.Options ? '' : 'none'">
+			<div class="tab-summary">
+				<p class="title">Scene Options</p>
+				<p class="desc">Enable or Disable trails for this scene.</p>
+			</div>
+			<scene-options formControlName="options"></scene-options>
+		</div>
+
+		<div class="tab-content" [style.display]="selectedTab === TABS.Transistion ? '' : 'none'">
+			<div class="tab-summary">
+				<p class="title">Scene Transistion Duration</p>
+				<p class="desc">How long it takes to transistion from one scene to the next (in seconds).</p>
+			</div>
+			<div class="transistion">
+				<input
+					class="input"
+					step="0.1"
+					type="number"
+					name="transistion"
+					formControlName="transistion"
+					placeholder="e.g, 5.7"
+					id="transition" />
+
+				<p class="error" *ngIf="sceneForm.controls['transistion'].errors?.['pattern']">This field is digits only</p>
+			</div>
+		</div>
+
+		<div class="tab-content" [style.display]="selectedTab === TABS.Script ? '' : 'none'">
+			<div class="tab-summary">
+				<p class="title">Scene Script</p>
+				<p class="desc">
+					Here you can a write a script or some notes that will be shown to you when this scene is selected in the
+					player.
+				</p>
+			</div>
+
+			<textarea id="script" class="input" cols="30" rows="20" formControlName="script" placeholder="Script Text">
+			</textarea>
+		</div>
+
+		<div id="options">
+			<button id="reset" type="button" (click)="onResetClicked()">Reset</button>
+			<button
+				id="preview"
+				type="button"
+				*ngIf="$selectedScene | async as scene"
+				class="btn secondary"
+				(click)="preview(scene)">
+				Preview
+			</button>
+		</div>
+	</form>
 </ng-template>
 
 <ng-template #noScene>
-    <div class="max-WH flx-col just-center align-center gap-1" id="no-scene">
-        <img class="img-contain" src="/assets/launching.svg" alt="">
-        <p class="txt-lg">No Scene Selected</p>
-        <p class="subtitle">
-            Click a scene in the scenes list or create a new scene to 
-            get started.
-        </p>
-        <button class="btn primary" (click)="newScene()">New Scene</button>
-    </div>
+	<div class="max-WH flx-col just-center align-center gap-1" id="no-scene">
+		<img class="img-contain" src="/assets/launching.svg" alt="" />
+		<p class="txt-lg">No Scene Selected</p>
+		<p class="subtitle">Click a scene in the scenes list or create a new scene to get started.</p>
+		<button class="btn primary" (click)="newScene()">New Scene</button>
+	</div>
 </ng-template>

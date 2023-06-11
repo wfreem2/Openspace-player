@@ -1,25 +1,21 @@
 <modal title="Manual" (closedEvent)="closedEvent.emit()">
-    <div class="modal-content">
-        <ul class="items">
-            <li class="item" [class.active]="selectedEntry===1" (click)="selectedEntry=1">Welcome</li>
-            <li class="item" [class.active]="selectedEntry===2" (click)="selectedEntry=2">Getting Started</li>
-            <li class="item" [class.active]="selectedEntry===3" (click)="selectedEntry=3">Creating a Show</li>
-        </ul>
+	<div class="modal-content">
+		<ul class="items">
+			<li class="item" [class.active]="selectedEntry === 1" (click)="selectedEntry = 1">Welcome</li>
+			<li class="item" [class.active]="selectedEntry === 2" (click)="selectedEntry = 2">Getting Started</li>
+			<li class="item" [class.active]="selectedEntry === 3" (click)="selectedEntry = 3">Creating a Show</li>
+		</ul>
 
-        <div class="item-outlet">
-            <ng-container [ngTemplateOutlet]="welcome" *ngIf="selectedEntry===1"></ng-container>
-        </div>
-    </div>
+		<div class="item-outlet">
+			<ng-container [ngTemplateOutlet]="welcome" *ngIf="selectedEntry === 1"></ng-container>
+		</div>
+	</div>
 </modal>
 
 <ng-template class="item-content" #welcome>
-    <p class="title">Welcome to the OpenSpace Player Manual!</p>
-    <br>
-    <section>
-        <p>
-            Throughout this manual are helpful resources to get you on your
-            way to creating awesome shows!
-        </p>
-    </section>
+	<p class="title">Welcome to the OpenSpace Player Manual!</p>
+	<br />
+	<section>
+		<p>Throughout this manual are helpful resources to get you on your way to creating awesome shows!</p>
+	</section>
 </ng-template>
-

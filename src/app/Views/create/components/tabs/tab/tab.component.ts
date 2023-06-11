@@ -1,18 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core'
 
 @Component({
-  selector: 'tab',
-  template: `<div [style.display]="isActive ? '' : 'none'"><ng-content></ng-content></div>`,
+	selector: 'tab',
+	template: `<div [style.display]="isActive ? '' : 'none'"><ng-content></ng-content></div>`
 })
-
 export class TabComponent implements OnInit {
+	@Input() iconName?: string
+	@Input() name!: string
+	@Input() isActive: boolean = false
 
-  @Input() iconName?: string
-  @Input() name!: string
-  @Input() isActive: boolean = false
-  
-  constructor() { }
+	constructor() {}
 
-  ngOnInit(): void { }
-
+	ngOnInit(): void {}
 }

@@ -1,45 +1,43 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core'
 
 @Component({
-  selector: 'sorting-selector',
-  templateUrl: './sorting-selector.component.html',
-  styleUrls: ['./sorting-selector.component.scss']
+	selector: 'sorting-selector',
+	templateUrl: './sorting-selector.component.html',
+	styleUrls: ['./sorting-selector.component.scss']
 })
-
 export class SortingSelectorComponent implements OnInit {
+	sortingType: SortingType = SortingType.None
+	@Output() sortingChangedEvent = new EventEmitter<SortingType>()
 
-  sortingType: SortingType = SortingType.None
-  @Output() sortingChangedEvent = new EventEmitter<SortingType>()
+	constructor() {}
 
-  
-  constructor() { }
+	ngOnInit(): void {}
 
-  ngOnInit(): void { }
+	toggleSorting() {
+		switch (this.sortingType) {
+			case SortingType.None:
+				this.sortingType = SortingType.Ascending
+				break
 
-  toggleSorting(){
+			case SortingType.Ascending:
+				this.sortingType = SortingType.Descending
+				break
 
-    switch(this.sortingType){
-      case SortingType.None:
-        this.sortingType = SortingType.Ascending
-        break
+			case SortingType.Descending:
+				this.sortingType = SortingType.None
+				break
+		}
 
-      case SortingType.Ascending:
-        this.sortingType = SortingType.Descending
-        break
+		this.sortingChangedEvent.emit(this.sortingType)
+	}
 
-      case SortingType.Descending:
-        this.sortingType = SortingType.None
-        break
-    }
-
-    this.sortingChangedEvent.emit(this.sortingType)
-  }
-
-  get SortingType() { return SortingType }
+	get SortingType() {
+		return SortingType
+	}
 }
 
-export enum SortingType{ 
-  Ascending='asc',
-  Descending='des',
-  None='none'
+export enum SortingType {
+	Ascending = 'asc',
+	Descending = 'des',
+	None = 'none'
 }

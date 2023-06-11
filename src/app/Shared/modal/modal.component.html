@@ -1,10 +1,10 @@
 <div class="modal">
-    <h2 id="title">{{title}}</h2>
-    <button *ngIf="showCloseBtn" id="close" (click)="closedEvent.emit()">
-        <i-tabler class="icon" name="x"></i-tabler>
-    </button>
+	<h2 id="title">{{ title }}</h2>
+	<button *ngIf="showCloseBtn" id="close" (click)="closedEvent.emit()">
+		<i-tabler class="icon" name="x"></i-tabler>
+	</button>
 
-    <div id="content">
-        <ng-content></ng-content>
-    </div>
+	<div id="content">
+		<ng-content></ng-content>
+	</div>
 </div>

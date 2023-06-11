@@ -2,98 +2,96 @@
 @import '/src/scss/mixins.scss';
 @import '/src/scss/func.scss';
 
-:host{
-    position: fixed;
+:host {
+	position: fixed;
 }
 
-.modal-content{
-    @extend %flx-col, %align-center;
-    gap: 1rem
+.modal-content {
+	@extend %flx-col, %align-center;
+	gap: 1rem;
 }
 
-#dropzone{
-    @extend %flx-col, %align-center, %just-center;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    min-height: max-content;
-    height: 10rem;
-    min-width: max-content;
-    width: 30rem;
-    border: solid 2px shade($gray, 10%);
-    border-style: dashed;
-    border-radius: $bd-rad;
+#dropzone {
+	@extend %flx-col, %align-center, %just-center;
+	gap: 0.5rem;
+	padding: 0.5rem;
+	min-height: max-content;
+	height: 10rem;
+	min-width: max-content;
+	width: 30rem;
+	border: solid 2px shade($gray, 10%);
+	border-style: dashed;
+	border-radius: $bd-rad;
 }
 
-#dropzone.active{
-    border-style: solid;
-    border-color: $clr-accent;
-    background: tint($clr-accent, 80%);
+#dropzone.active {
+	border-style: solid;
+	border-color: $clr-accent;
+	background: tint($clr-accent, 80%);
 
-    .icon{
-        color: $clr-secondary;
-    }
+	.icon {
+		color: $clr-secondary;
+	}
 }
 
-#choose-file{
-    cursor: pointer;
-    color: $clr-accent;
+#choose-file {
+	cursor: pointer;
+	color: $clr-accent;
 }
 
-.icon{
-    width: 3rem;
-    height: 3rem;
-    color: shade($gray, 20%);
+.icon {
+	width: 3rem;
+	height: 3rem;
+	color: shade($gray, 20%);
 }
 
-#actions{
-    @extend %align-center;
-    gap: 1rem;
+#actions {
+	@extend %align-center;
+	gap: 1rem;
 
-    & > .btn{
-        min-width: 10rem;
-    }
+	& > .btn {
+		min-width: 10rem;
+	}
 }
 
+#errors {
+	@extend %max-W, %flx;
+	justify-content: flex-start;
 
-#errors{
-    @extend %max-W, %flx;
-    justify-content: flex-start;
-    
-    & > p {
-        color: $clr-err;
-    }
+	& > p {
+		color: $clr-err;
+	}
 }
 
-.imported-shows{
-    overflow-y: auto;
-    max-height: 30rem;
+.imported-shows {
+	overflow-y: auto;
+	max-height: 30rem;
 
-    .show{
-        @extend %max-W, %card;
-        justify-content: space-between;
-        max-width: 25rem;
-        padding: 0.5rem;
-    
-        &:not(:last-child){
-            margin-bottom: 0.5rem;
-        }
-    }
-    
-    .delete{
-        cursor: pointer;
-        color: $clr-err;
-        border: none;
-        outline: none;
-        background: transparent;
-    
-        &:hover{
-            color: shade($clr-err, 30%);
-        }
-    }
+	.show {
+		@extend %max-W, %card;
+		justify-content: space-between;
+		max-width: 25rem;
+		padding: 0.5rem;
+
+		&:not(:last-child) {
+			margin-bottom: 0.5rem;
+		}
+	}
+
+	.delete {
+		cursor: pointer;
+		color: $clr-err;
+		border: none;
+		outline: none;
+		background: transparent;
+
+		&:hover {
+			color: shade($clr-err, 30%);
+		}
+	}
 }
 
-#imported{
-    @extend %max-W;
-    margin-left: 1rem;
-
+#imported {
+	@extend %max-W;
+	margin-left: 1rem;
 }

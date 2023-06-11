@@ -1,41 +1,56 @@
 <div class="header">
-    <p class="title">Scenes ({{scenes.length}})</p>
-    <button class="btn primary" (click)="newScene()">New Scene</button>
+	<p class="title">Scenes ({{ scenes.length }})</p>
+	<button class="btn primary" (click)="newScene()">New Scene</button>
 </div>
 
 <div class="search-bar input">
-    <i-tabler name="search" class="icon"></i-tabler>
-    <input id="search" type="text" 
-     placeholder="Search Scenes" [(ngModel)]="query">
-     <button (click)="query=''" id="x" class="align-center" *ngIf="query.length">
-        <tabler-icon name="x" class="icon"></tabler-icon>
-     </button>
+	<i-tabler name="search" class="icon"></i-tabler>
+	<input id="search" type="text" placeholder="Search Scenes" [(ngModel)]="query" />
+	<button (click)="query = ''" id="x" class="align-center" *ngIf="query.length">
+		<tabler-icon name="x" class="icon"></tabler-icon>
+	</button>
 </div>
 
-<div *ngIf="(scenes | searchScenes: query).length" class="list" cdkDropList [cdkDropListData]="scenes" (cdkDropListDropped)="onDrop($event)">
-    <div class="wrapper" *ngFor="let s of scenes | searchScenes: query" cdkDrag>
+<div
+	*ngIf="(scenes | searchScenes : query).length"
+	class="list"
+	cdkDropList
+	[cdkDropListData]="scenes"
+	(cdkDropListDropped)="onDrop($event)">
+	<div class="wrapper" *ngFor="let s of scenes | searchScenes : query" cdkDrag>
+		<div class="custom-placeholder" *cdkDragPlaceholder=""></div>
 
-        <div class="custom-placeholder" *cdkDragPlaceholder=""></div>
-        
-        <svg cdkDragHandle xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class=" breake feather feather-menu">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-        </svg>
-        
-        <list-item class="item" [scene]="s" 
-        [isInvalid]="isSceneInvalid($sceneIssues | async, s)"
-        [isActive]="($currScene | async) === s"
-        (itemClickedEvent)="$currentScene.next($event)"
-        (deleteClickedEvent)="onDeleteClicked($event)"
-        (duplicateClickedEvent)="onDuplicateClicked($event)">
-        </list-item>
-    </div>
+		<svg
+			cdkDragHandle
+			xmlns="http://www.w3.org/2000/svg"
+			width="24"
+			height="24"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			class="breake feather feather-menu">
+			<line x1="3" y1="12" x2="21" y2="12"></line>
+			<line x1="3" y1="6" x2="21" y2="6"></line>
+		</svg>
+
+		<list-item
+			class="item"
+			[scene]="s"
+			[isInvalid]="isSceneInvalid($sceneIssues | async, s)"
+			[isActive]="($currScene | async) === s"
+			(itemClickedEvent)="$currentScene.next($event)"
+			(deleteClickedEvent)="onDeleteClicked($event)"
+			(duplicateClickedEvent)="onDuplicateClicked($event)">
+		</list-item>
+	</div>
 </div>
 
-<ng-template #noresults [ngIf]="scenes.length && !(scenes | searchScenes: query).length">
-    <div class="max-WH flx-col align-center">
-        <img class="img-contain" src="/assets/no-results.svg" alt="">
-        <p class="txt-md">No results found.</p>
-    </div>
+<ng-template #noresults [ngIf]="scenes.length && !(scenes | searchScenes : query).length">
+	<div class="max-WH flx-col align-center">
+		<img class="img-contain" src="/assets/no-results.svg" alt="" />
+		<p class="txt-md">No results found.</p>
+	</div>
 </ng-template>

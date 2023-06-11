@@ -1,100 +1,94 @@
 <div class="header">
-    <p class="title">Your Shows</p>
-    <p class="desc">All of your amazing shows in one place. 
-        Use the searchbar to search for your favorites or create a new one.</p>
+	<p class="title">Your Shows</p>
+	<p class="desc">
+		All of your amazing shows in one place. Use the searchbar to search for your favorites or create a new one.
+	</p>
 </div>
 
 <div class="actions">
-    <div class="search-bar input">
-        <i-tabler name="search" class="icon"></i-tabler>
-        <input id="search" type="text" placeholder="e.g., Tour of the Solar System." [(ngModel)]="query">
-    </div>
+	<div class="search-bar input">
+		<i-tabler name="search" class="icon"></i-tabler>
+		<input id="search" type="text" placeholder="e.g., Tour of the Solar System." [(ngModel)]="query" />
+	</div>
 
-    <a routerLink="/creator/new" class="btn primary">New Show</a>
-    <button class="btn secondary" (click)="showImporter=true">Import</button>
+	<a routerLink="/creator/new" class="btn primary">New Show</a>
+	<button class="btn secondary" (click)="showImporter = true">Import</button>
 
-    <ul class="filters">
-        <li class="filter"
-        (click)="applyFilter(allShows)"
-        [class.active]="selectedPipe === allShows">
-            All Shows
-        </li>
-        <li class="filter" 
-        (click)="applyFilter(favoriteShows)"
-        [class.active]="selectedPipe === favoriteShows">
-            My Favorties
-        </li>
-        <li class="filter" 
-        (click)="applyFilter(recentShows)"
-        [class.active]="selectedPipe === recentShows">
-            Most Recent
-        </li>
-    </ul>
+	<ul class="filters">
+		<li class="filter" (click)="applyFilter(allShows)" [class.active]="selectedPipe === allShows">All Shows</li>
+		<li class="filter" (click)="applyFilter(favoriteShows)" [class.active]="selectedPipe === favoriteShows">
+			My Favorties
+		</li>
+		<li class="filter" (click)="applyFilter(recentShows)" [class.active]="selectedPipe === recentShows">Most Recent</li>
+	</ul>
 </div>
 
-<ng-container *ngIf="shows.length then list; else empty"></ng-container>
+<ng-container *ngIf="shows.length; then list; else empty"></ng-container>
 
-<ng-template #list>  
-    <div class="list-wrapper">
-        <div class="shows">
-            <show-card *ngFor="let s of shows | filterSortShow: selectedPipe | searchShows: query"
-            [active]="selectedShow === s"
-            [show]="s" (cardClicked)="selectedShow=s"></show-card>
-        </div>
+<ng-template #list>
+	<div class="list-wrapper">
+		<div class="shows">
+			<show-card
+				*ngFor="let s of shows | filterSortShow : selectedPipe | searchShows : query"
+				[active]="selectedShow === s"
+				[show]="s"
+				(cardClicked)="selectedShow = s"></show-card>
+		</div>
 
-        <div class="hr"></div>
+		<div class="hr"></div>
 
-        <div class="preview">
-            <ng-container *ngIf="selectedShow">
-                <div class="selected-show">
-                    <div class="header">
-                        <p class="title">{{selectedShow.title}}</p>
+		<div class="preview">
+			<ng-container *ngIf="selectedShow">
+				<div class="selected-show">
+					<div class="header">
+						<p class="title">{{ selectedShow.title }}</p>
 
-                        <div class="btns">
-                            <a class="btn secondary" id="edit" [routerLink]="['/creator', selectedShow.id]">
-                                <tabler-icon name="edit"></tabler-icon>
-                                Edit
-                            </a>
-                            <button class="btn secondary delete" (click)="showDeleteConfirm=true">
-                                <tabler-icon name="trash"></tabler-icon>
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                    <p class="subtitle">Scenes ({{selectedShow.scenes.length}})</p>
-                    <ul class="scenes">
-                        <li class="scene" *ngFor="let scene of selectedShow.scenes">
-                            {{scene.title}}
-                        </li>
-                    </ul>
-                    <a id="play-btn" class="btn primary" [routerLink]="['/player', selectedShow.id]">Play</a>
-                </div>
-            </ng-container>
+						<div class="btns">
+							<a class="btn secondary" id="edit" [routerLink]="['/creator', selectedShow.id]">
+								<tabler-icon name="edit"></tabler-icon>
+								Edit
+							</a>
+							<button class="btn secondary delete" (click)="showDeleteConfirm = true">
+								<tabler-icon name="trash"></tabler-icon>
+								Delete
+							</button>
+						</div>
+					</div>
+					<p class="subtitle">Scenes ({{ selectedShow.scenes.length }})</p>
+					<ul class="scenes">
+						<li class="scene" *ngFor="let scene of selectedShow.scenes">
+							{{ scene.title }}
+						</li>
+					</ul>
+					<a id="play-btn" class="btn primary" [routerLink]="['/player', selectedShow.id]">Play</a>
+				</div>
+			</ng-container>
 
-            <p *ngIf="!selectedShow">Select a show to preview it here.</p>
-        </div>
-    </div>
+			<p *ngIf="!selectedShow">Select a show to preview it here.</p>
+		</div>
+	</div>
 </ng-template>
 
 <ng-template #empty>
-    <div class="empty-wrapper">
-        <img src="/assets/space.svg" alt="">
-        <p>No Shows Yet. <a id="create" routerLink="/creator/new">Create One</a> to get started.</p>
-    </div>
+	<div class="empty-wrapper">
+		<img src="/assets/space.svg" alt="" />
+		<p>No Shows Yet. <a id="create" routerLink="/creator/new">Create One</a> to get started.</p>
+	</div>
 </ng-template>
 
-<show-importer *ngIf="showImporter" (closeImporterEvent)="showImporter=false"></show-importer>
+<show-importer *ngIf="showImporter" (closeImporterEvent)="showImporter = false"></show-importer>
 
-<modal title="Delete Show"  *ngIf="showDeleteConfirm"
- (closedEvent)="showDeleteConfirm=false">
-    <div class="modal-content">
-        <tabler-icon name="trash" id="trash-icon"></tabler-icon>
-        <p class="title">Are you sure you want to delete <b>{{selectedShow?.title}}</b> show?</p>
-        <p class="subtitle">This action cannot be undone.</p>
+<modal title="Delete Show" *ngIf="showDeleteConfirm" (closedEvent)="showDeleteConfirm = false">
+	<div class="modal-content">
+		<tabler-icon name="trash" id="trash-icon"></tabler-icon>
+		<p class="title">
+			Are you sure you want to delete <b>{{ selectedShow?.title }}</b> show?
+		</p>
+		<p class="subtitle">This action cannot be undone.</p>
 
-        <div class="btns">
-            <button class="btn secondary" (click)="showDeleteConfirm=false">No, Cancel</button>
-            <button class="btn primary delete" (click)="deleteShow()">Yes, Delete</button>
-        </div>
-    </div>
+		<div class="btns">
+			<button class="btn secondary" (click)="showDeleteConfirm = false">No, Cancel</button>
+			<button class="btn primary delete" (click)="deleteShow()">Yes, Delete</button>
+		</div>
+	</div>
 </modal>

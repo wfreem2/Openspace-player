@@ -1,60 +1,60 @@
 @import '/src/scss/variables.scss';
 @import '/src/scss/func.scss';
 
-:host{
-    display: grid;
-    grid-template-rows: max-content minmax(0, 1fr);
-    justify-items: center;
-    row-gap: 1.5rem;
+:host {
+	display: grid;
+	grid-template-rows: max-content minmax(0, 1fr);
+	justify-items: center;
+	row-gap: 1.5rem;
 }
 
-.tabs{
-    @extend %align-center;
-    background: #ffffff;
-    overflow: hidden;
-    
-    .tab{
-        @extend %align-center, %just-center;
-        cursor: pointer;
-        padding: 0.75rem;
-        min-width: 7rem;
-        height: 2.5rem;
-        gap: 0.5rem;
-        color: shade($gray, 30%);
-        border: solid 1px shade($gray, 10%);
-        
-        &:first-child{
-            border-top-left-radius: $bd-rad;
-            border-bottom-left-radius: $bd-rad;
-        }
+.tabs {
+	@extend %align-center;
+	background: #ffffff;
+	overflow: hidden;
 
-        &:last-child{
-            border-top-right-radius: $bd-rad;
-            border-bottom-right-radius: $bd-rad;
-        }
+	.tab {
+		@extend %align-center, %just-center;
+		cursor: pointer;
+		padding: 0.75rem;
+		min-width: 7rem;
+		height: 2.5rem;
+		gap: 0.5rem;
+		color: shade($gray, 30%);
+		border: solid 1px shade($gray, 10%);
 
-        &:hover{            
-            color: shade($gray, 80%);
-            background: tint($gray, 5%);
-        }
+		&:first-child {
+			border-top-left-radius: $bd-rad;
+			border-bottom-left-radius: $bd-rad;
+		}
 
-        &.active{
-            color: $clr-accent;
-            border-color: $clr-accent;
-        }
-    }
+		&:last-child {
+			border-top-right-radius: $bd-rad;
+			border-bottom-right-radius: $bd-rad;
+		}
+
+		&:hover {
+			color: shade($gray, 80%);
+			background: tint($gray, 5%);
+		}
+
+		&.active {
+			color: $clr-accent;
+			border-color: $clr-accent;
+		}
+	}
 }
 
-.icon{
-    color: inherit;
-    // stroke: inherit;
+.icon {
+	color: inherit;
+	// stroke: inherit;
 }
 
-.wrapper{
-    @extend %max-W, %just-center;
-    padding: 1rem;
-    background: #ffffff;
-    border-radius: $bd-rad;
-    border: solid 1px $gray;
-    height: 100%;
+.wrapper {
+	@extend %max-W, %just-center;
+	padding: 1rem;
+	background: #ffffff;
+	border-radius: $bd-rad;
+	border: solid 1px $gray;
+	height: 100%;
 }

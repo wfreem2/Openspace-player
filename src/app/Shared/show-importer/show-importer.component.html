@@ -1,36 +1,42 @@
 <modal title="Import Show From File" (closedEvent)="closeImporterEvent.emit()">
-    <div class="modal-content">
-        <div id="dropzone" [class.active]="dropzoneActive"
-            (dragover)="dropzoneActive=true; $event.preventDefault()"
-            (dragleave)="dropzoneActive=false; $event.preventDefault()"
-            (drop)="handleDrop($event)">
-            <div>
-                Drag & Drop or
-                <label for="show-file" id="choose-file">Browse files</label>
-                to upload.
-            </div>
-            <input hidden 
-                (input)="handleBrowse($event)"
-                name="show" 
-                type="file"
-                id="show-file" accept=".json"
-                ondragover="dropzoneActive=true"
-                ondragleave="dropzoneActive=false"/>
-        </div>
-        <div id="errors" *ngIf="hasErrors">
-            <p>{{errorMsg}}</p>
-        </div>
-        <div id="imported" *ngIf="importedShows.length">
-            <ul class="imported-shows">
-                <li *ngFor="let show of importedShows" class="flx align-center show">
-                    <p class="title txt-md">{{show.title}}</p>
-                    <button class="delete" (click)="removeShow(show)">Remove</button>
-                </li>
-            </ul>
-        </div>
-        <div id="actions">
-            <button class="btn secondary" (click)="closeImporterEvent.emit()">Cancel</button>
-            <button class="btn primary" [disabled]="hasErrors || !importedShows.length" (click)="importShows()">Import</button>
-        </div>  
-    </div>
+	<div class="modal-content">
+		<div
+			id="dropzone"
+			[class.active]="dropzoneActive"
+			(dragover)="dropzoneActive = true; $event.preventDefault()"
+			(dragleave)="dropzoneActive = false; $event.preventDefault()"
+			(drop)="handleDrop($event)">
+			<div>
+				Drag & Drop or
+				<label for="show-file" id="choose-file">Browse files</label>
+				to upload.
+			</div>
+			<input
+				hidden
+				(input)="handleBrowse($event)"
+				name="show"
+				type="file"
+				id="show-file"
+				accept=".json"
+				ondragover="dropzoneActive=true"
+				ondragleave="dropzoneActive=false" />
+		</div>
+		<div id="errors" *ngIf="hasErrors">
+			<p>{{ errorMsg }}</p>
+		</div>
+		<div id="imported" *ngIf="importedShows.length">
+			<ul class="imported-shows">
+				<li *ngFor="let show of importedShows" class="flx align-center show">
+					<p class="title txt-md">{{ show.title }}</p>
+					<button class="delete" (click)="removeShow(show)">Remove</button>
+				</li>
+			</ul>
+		</div>
+		<div id="actions">
+			<button class="btn secondary" (click)="closeImporterEvent.emit()">Cancel</button>
+			<button class="btn primary" [disabled]="hasErrors || !importedShows.length" (click)="importShows()">
+				Import
+			</button>
+		</div>
+	</div>
 </modal>

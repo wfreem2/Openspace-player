@@ -1,13 +1,11 @@
 @import '/src/scss/variables.scss';
 
-main{
-    @extend %max-WH;
-    display: grid;
-    grid-template-rows: 5rem 0px minmax(0, 1fr);
+main {
+	@extend %max-WH;
+	display: grid;
+	grid-template-rows: 5rem 0px minmax(0, 1fr);
 
-    &.full{
-        grid-template-rows: 0rem minmax(0, 1fr);
-    }
+	&.full {
+		grid-template-rows: 0rem minmax(0, 1fr);
+	}
 }
-
-

@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing'
 
-import { OsService } from './os.service';
+import { OsService } from './os.service'
 
 describe('OsService', () => {
-  let service: OsService;
+	let service: OsService
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(OsService);
-  });
+	beforeEach(() => {
+		TestBed.configureTestingModule({})
+		service = TestBed.inject(OsService)
+	})
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+	it('should be created', () => {
+		expect(service).toBeTruthy()
+	})
+})

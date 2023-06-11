@@ -1,15 +1,13 @@
-import { Directive, ElementRef } from '@angular/core';
+import { Directive, ElementRef } from '@angular/core'
 
 @Directive({
-  selector: '[selectallOnclick]'
+	selector: '[selectallOnclick]'
 })
 export class SelectallOnclickDirective {
+	private readonly input: HTMLInputElement
 
-  private readonly input: HTMLInputElement
-
-  constructor({ nativeElement }: ElementRef) {
-    this.input = nativeElement
-    this.input.addEventListener('focus', () => this.input.select() )
-  }
-  
+	constructor({ nativeElement }: ElementRef) {
+		this.input = nativeElement
+		this.input.addEventListener('focus', () => this.input.select())
+	}
 }

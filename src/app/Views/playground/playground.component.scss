@@ -1,12 +1,10 @@
 @import '/src/scss/variables.scss';
 
-
-:host{
-    @extend %max-WH, %align-center, %just-center;
-    background: #ffffff;
+:host {
+	@extend %max-WH, %align-center, %just-center;
+	background: #ffffff;
 }
 
-
-#drop{
-    max-width: 20rem;
+#drop {
+	max-width: 20rem;
 }

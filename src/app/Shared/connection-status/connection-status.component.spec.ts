@@ -1,23 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { ConnectionStatusComponent } from './connection-status.component';
+import { ConnectionStatusComponent } from './connection-status.component'
 
 describe('ConnectionStatusComponent', () => {
-  let component: ConnectionStatusComponent;
-  let fixture: ComponentFixture<ConnectionStatusComponent>;
+	let component: ConnectionStatusComponent
+	let fixture: ComponentFixture<ConnectionStatusComponent>
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ ConnectionStatusComponent ]
-    })
-    .compileComponents();
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			declarations: [ConnectionStatusComponent]
+		}).compileComponents()
 
-    fixture = TestBed.createComponent(ConnectionStatusComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+		fixture = TestBed.createComponent(ConnectionStatusComponent)
+		component = fixture.componentInstance
+		fixture.detectChanges()
+	})
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+	it('should create', () => {
+		expect(component).toBeTruthy()
+	})
+})

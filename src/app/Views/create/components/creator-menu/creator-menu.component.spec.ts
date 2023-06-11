@@ -1,24 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { CreatorMenuComponent } from './creator-menu.component';
+import { CreatorMenuComponent } from './creator-menu.component'
 
 describe('CreatorMenuComponent', () => {
-  let component: CreatorMenuComponent;
-  let fixture: ComponentFixture<CreatorMenuComponent>;
+	let component: CreatorMenuComponent
+	let fixture: ComponentFixture<CreatorMenuComponent>
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ CreatorMenuComponent ]
-    })
-    .compileComponents();
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			declarations: [CreatorMenuComponent]
+		}).compileComponents()
 
-    fixture = TestBed.createComponent(CreatorMenuComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-  
-  it('should create', () => {
-    component.menuItems = []
-    expect(component).toBeTruthy();
-  });
-});
+		fixture = TestBed.createComponent(CreatorMenuComponent)
+		component = fixture.componentInstance
+		fixture.detectChanges()
+	})
+
+	it('should create', () => {
+		component.menuItems = []
+		expect(component).toBeTruthy()
+	})
+})

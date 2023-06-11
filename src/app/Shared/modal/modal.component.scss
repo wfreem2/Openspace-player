@@ -2,61 +2,59 @@
 @import '/src/scss/mixins.scss';
 @import '/src/scss/func.scss';
 
+:host {
+	@extend %max-WH, %align-center, %just-center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 999;
 
-:host{
-    @extend %max-WH, %align-center, %just-center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 999;
-
-    background: #e7e8ea50;
+	background: #e7e8ea50;
 }
 
-.modal{
-    @extend %card;
-    display: grid;
-    grid-template-columns: 1fr max-content;
-    grid-template-rows: max-content 1fr;
-    gap: 1rem;
-    background: #ffffff;
-    padding: 0.75rem;
-    border-radius: 24px;
-    min-height: max-content;
-    max-width: 50rem;
-    // height: 15rem;
+.modal {
+	@extend %card;
+	display: grid;
+	grid-template-columns: 1fr max-content;
+	grid-template-rows: max-content 1fr;
+	gap: 1rem;
+	background: #ffffff;
+	padding: 0.75rem;
+	border-radius: 24px;
+	min-height: max-content;
+	max-width: 50rem;
+	// height: 15rem;
 
+	#title {
+		grid-row: 1;
+		grid-column: 1;
+	}
 
-    #title{
-        grid-row: 1;
-        grid-column: 1;
-    }
+	#close {
+		@extend %align-center, %just-center;
+		grid-row: 1;
+		grid-column: 2;
+		cursor: pointer;
+	}
 
-    #close{
-        @extend %align-center, %just-center;
-        grid-row: 1;
-        grid-column: 2;
-        cursor: pointer;
-    }
-
-    #content{
-        grid-row: 2;
-        grid-column: 1 / span 2;
-        justify-self: center;
-        align-self: center;
-        margin: 0 0.5rem;
-    }
+	#content {
+		grid-row: 2;
+		grid-column: 1 / span 2;
+		justify-self: center;
+		align-self: center;
+		margin: 0 0.5rem;
+	}
 }
 
-#close{
-    @include reset-input;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    color: shade($gray, 20%);
+#close {
+	@include reset-input;
+	width: 2rem;
+	height: 2rem;
+	border-radius: 50%;
+	color: shade($gray, 20%);
 
-    &:hover{
-        color: $clr-secondary;
-        background: $gray;
-    }
+	&:hover {
+		color: $clr-secondary;
+		background: $gray;
+	}
 }

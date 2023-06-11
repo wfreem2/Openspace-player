@@ -1,37 +1,37 @@
 @import '/src/scss/variables.scss';
 
-:host{
-    @extend %max-WH, %align-center, %just-center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 99;
-    background: #9e9a9e49;
+:host {
+	@extend %max-WH, %align-center, %just-center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 99;
+	background: #9e9a9e49;
 }
 
-.popup{
-    @extend %glass, %card;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr max-content;
-    align-items: center;
-    column-gap: 1rem;
-    row-gap: 1rem;
-    padding: 1rem;
-    min-width: 10rem;
+.popup {
+	@extend %glass, %card;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr max-content;
+	align-items: center;
+	column-gap: 1rem;
+	row-gap: 1rem;
+	padding: 1rem;
+	min-width: 10rem;
 
-    max-width: 25rem;
-    max-height: 15rem;
+	max-width: 25rem;
+	max-height: 15rem;
 }
 
-#prompt{
-    font-size: 1.5rem;
-    grid-row: 1;
-    grid-column: 1 / span 2;
-    text-align: center;
+#prompt {
+	font-size: 1.5rem;
+	grid-row: 1;
+	grid-column: 1 / span 2;
+	text-align: center;
 }
 
-.btn{
-    grid-row: 2;
-    cursor: pointer;
+.btn {
+	grid-row: 2;
+	cursor: pointer;
 }

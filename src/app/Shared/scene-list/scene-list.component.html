@@ -1,11 +1,11 @@
 <ng-template [ngIf]="!scenes.length">
-    <div class="wrapper">
-        <p>Nothing to Show</p>
-    </div>
+	<div class="wrapper">
+		<p>Nothing to Show</p>
+	</div>
 </ng-template>
 
 <ng-template [ngIf]="scenes.length">
-    <ul class="list">
-        <li class="item" *ngFor="let s of scenes">{{s.title}}</li>
-    </ul>
+	<ul class="list">
+		<li class="item" *ngFor="let s of scenes">{{ s.title }}</li>
+	</ul>
 </ng-template>

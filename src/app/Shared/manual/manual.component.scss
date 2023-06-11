@@ -2,42 +2,43 @@
 @import '/src/scss/func.scss';
 @import '/src/scss/variables.scss';
 
-$bd-color:  tint($clr-accent, 50%);
+$bd-color: tint($clr-accent, 50%);
 
-.modal-content{
-    display: grid;
-    grid-template-columns: 15rem 1fr;
-    grid-template-rows: 1fr;
-    border-radius: $bd-rad;
-    border: solid 2px $bd-color;
-    height: 30rem;
-    max-height: 30rem;
+.modal-content {
+	display: grid;
+	grid-template-columns: 15rem 1fr;
+	grid-template-rows: 1fr;
+	border-radius: $bd-rad;
+	border: solid 2px $bd-color;
+	height: 30rem;
+	max-height: 30rem;
 }
 
-.items{
-    @extend %flx-col;
-    overflow-y: auto;
-    height: 0;
-    min-height: 100%;
-    border-right: solid 2px $bd-color;
-    
-    .item{
-        @extend %flx-col, %just-center;
+.items {
+	@extend %flx-col;
+	overflow-y: auto;
+	height: 0;
+	min-height: 100%;
+	border-right: solid 2px $bd-color;
 
-        min-height: 3rem;
-        padding: 0.5rem;
+	.item {
+		@extend %flx-col, %just-center;
 
-        &:hover, &.active{
-            color: #ffffff;
-            background: $clr-accent;
-        }
-    }
+		min-height: 3rem;
+		padding: 0.5rem;
+
+		&:hover,
+		&.active {
+			color: #ffffff;
+			background: $clr-accent;
+		}
+	}
 }
 
-.item-outlet{
-    justify-self: center;
-    padding: 0.5rem;
-    overflow-y: auto;
-    height: 0;
-    min-height: 100%;
+.item-outlet {
+	justify-self: center;
+	padding: 0.5rem;
+	overflow-y: auto;
+	height: 0;
+	min-height: 100%;
 }

@@ -1,25 +1,26 @@
-<div class="header" [class.disabled]="isDisabled" [class.active]="!isCollapsed" 
-    (click)="isCollapsed = !isCollapsed; moveToTop(selectedItem)">
-    <div id="selected-item">
-        <tabler-icon name="planet"></tabler-icon>
-        <p>{{selectedItem.item}}</p> 
-    </div>
-    <i-tabler name="chevron-down" id="chevron" [class.rotated]="!isCollapsed"></i-tabler>
+<div
+	class="header"
+	[class.disabled]="isDisabled"
+	[class.active]="!isCollapsed"
+	(click)="isCollapsed = !isCollapsed; moveToTop(selectedItem)">
+	<div id="selected-item">
+		<tabler-icon name="planet"></tabler-icon>
+		<p>{{ selectedItem.item }}</p>
+	</div>
+	<i-tabler name="chevron-down" id="chevron" [class.rotated]="!isCollapsed"></i-tabler>
 </div>
 
 <div class="items-wrapper" [class.collapsed]="isCollapsed" *ngIf="!isDisabled">
-    <div class="search">
-        <i-tabler class="icon" name="search"></i-tabler>
-        <input type="text"  placeholder="Node Name" ngModel
-        (ngModelChange)="query.next($event)">
+	<div class="search">
+		<i-tabler class="icon" name="search"></i-tabler>
+		<input type="text" placeholder="Node Name" ngModel (ngModelChange)="query.next($event)" />
 
-        <sorting-selector (sortingChangedEvent)="onSortSelected($event)"></sorting-selector>
-    </div>
-    <ul class="items">
-        <li *ngFor="let i of filteredSelectableItems" (click)="selectItem(i)"
-            [class.selected]="i.isSelected">
-            <i-tabler *ngIf="i.isSelected" name="check" class="icon"></i-tabler>
-            {{i.item}}
-        </li>
-    </ul>
+		<sorting-selector (sortingChangedEvent)="onSortSelected($event)"></sorting-selector>
+	</div>
+	<ul class="items">
+		<li *ngFor="let i of filteredSelectableItems" (click)="selectItem(i)" [class.selected]="i.isSelected">
+			<i-tabler *ngIf="i.isSelected" name="check" class="icon"></i-tabler>
+			{{ i.item }}
+		</li>
+	</ul>
 </div>

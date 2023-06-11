@@ -1,31 +1,40 @@
 <div class="wrapper" [class.active]="isActive" (click)="onItemClick()">
-    <div>
-        <p>{{scene.title}}</p>
-    </div>
+	<div>
+		<p>{{ scene.title }}</p>
+	</div>
 
-    <i-tabler *ngIf="isInvalid" name="exclamation-circle" class="icon" id="exclamation"></i-tabler>
-    <ng-container [ngTemplateOutlet]="more"></ng-container>
+	<i-tabler *ngIf="isInvalid" name="exclamation-circle" class="icon" id="exclamation"></i-tabler>
+	<ng-container [ngTemplateOutlet]="more"></ng-container>
 </div>
 
 <ul class="ctx-menu" *ngIf="isCtxShowing" clickedoutsideof (onClickOutside)="onClickOutsideOf($event)">
-    <li id="delete" (click)="onDeleteClicked()">
-        Delete
-        <i-tabler name="trash" class="icon"></i-tabler>
-    </li>
-    <li (click)="onDuplicateClicked()">
-        Duplicate
-        <i-tabler name="copy" class="icon"></i-tabler>
-    </li>
+	<li id="delete" (click)="onDeleteClicked()">
+		Delete
+		<i-tabler name="trash" class="icon"></i-tabler>
+	</li>
+	<li (click)="onDuplicateClicked()">
+		Duplicate
+		<i-tabler name="copy" class="icon"></i-tabler>
+	</li>
 </ul>
 
-
-
 <ng-template #more>
-    <svg #m (click)="isCtxShowing = !isCtxShowing" id="more" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-        stroke-linejoin="round" class="feather feather-more-vertical">
-        <circle cx="12" cy="12" r="1"></circle>
-        <circle cx="12" cy="5" r="1"></circle>
-        <circle cx="12" cy="19" r="1"></circle>
-    </svg>
+	<svg
+		#m
+		(click)="isCtxShowing = !isCtxShowing"
+		id="more"
+		xmlns="http://www.w3.org/2000/svg"
+		width="20"
+		height="20"
+		viewBox="0 0 24 24"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="2"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+		class="feather feather-more-vertical">
+		<circle cx="12" cy="12" r="1"></circle>
+		<circle cx="12" cy="5" r="1"></circle>
+		<circle cx="12" cy="19" r="1"></circle>
+	</svg>
 </ng-template>

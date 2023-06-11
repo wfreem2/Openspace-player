@@ -1,28 +1,35 @@
 @import '/src/scss/variables.scss';
 @import '/src/scss/mixins.scss';
 
-.wrapper{
-    @include reset-input;
-    cursor: pointer;
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    align-items: center;
-    column-gap: 0.2rem;
-    color: #a7a4a4;
-    width: max-content;
+.wrapper {
+	@include reset-input;
+	cursor: pointer;
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	align-items: center;
+	column-gap: 0.2rem;
+	color: #a7a4a4;
+	width: max-content;
 
-    &:hover{
-        svg{ color: shade($clr-accent, 30%); }
-        p{ color: shade($clr-accent, 30%); }
-    }
+	&:hover {
+		svg {
+			color: shade($clr-accent, 30%);
+		}
+		p {
+			color: shade($clr-accent, 30%);
+		}
+	}
 }
 
-p{ color: inherit; }
-
-p, svg{
-    pointer-events: none;
+p {
+	color: inherit;
 }
 
-.active{
-    color: $clr-accent;
+p,
+svg {
+	pointer-events: none;
+}
+
+.active {
+	color: $clr-accent;
 }

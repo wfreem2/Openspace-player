@@ -11,7 +11,6 @@ $screen-lg-min: 992px;
 // Large tablets and desktops
 $screen-xl-min: 1200px;
 
-
 $transistion: all 0.2s;
 
 $bg: #f8f8fa;
@@ -24,72 +23,86 @@ $txt-color: #262949;
 
 $bd-rad: 10px;
 
-$txt-lg: 2rem; 
-$txt-md: 1.4rem; 
-$txt-sm: 1rem; 
+$txt-lg: 2rem;
+$txt-md: 1.4rem;
+$txt-sm: 1rem;
 
 $shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 
-%flx{ display: flex; }
-%flx-col{ @extend %flx; flex-direction: column; }
-%just-center{ @extend %flx; justify-content: center; }
-%align-center{ @extend %flx; align-items: center; }
-
-%max-W{ width: 100%; }
-%max-H{ height: 100%;}
-%max-WH{ @extend %max-H, %max-W; }
-
-%shadow{
-    box-shadow:
-    0px 2.4px 4.3px rgba(0, 0, 0, 0.08),
-    0px 6.5px 12px rgba(0, 0, 0, 0.052),
-    0px 15.7px 28.9px rgba(0, 0, 0, 0.04),
-    0px 52px 96px rgba(0, 0, 0, 0.028);
+%flx {
+	display: flex;
+}
+%flx-col {
+	@extend %flx;
+	flex-direction: column;
+}
+%just-center {
+	@extend %flx;
+	justify-content: center;
+}
+%align-center {
+	@extend %flx;
+	align-items: center;
 }
 
-%svg-M{
-  color: inherit;
-  width: 1.5rem;
-  height: 1.5rem;
+%max-W {
+	width: 100%;
+}
+%max-H {
+	height: 100%;
+}
+%max-WH {
+	@extend %max-H, %max-W;
 }
 
-%glass{
-  $blur: 25px;
-  background: rgba(255, 255, 255, 0.75);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur($blur);
-  -webkit-backdrop-filter: blur($blur);
+%shadow {
+	box-shadow: 0px 2.4px 4.3px rgba(0, 0, 0, 0.08), 0px 6.5px 12px rgba(0, 0, 0, 0.052),
+		0px 15.7px 28.9px rgba(0, 0, 0, 0.04), 0px 52px 96px rgba(0, 0, 0, 0.028);
 }
 
-%card{
-  background: #ffffff;
-  border-radius: $bd-rad;
-  border: solid 1px $gray;
+%svg-M {
+	color: inherit;
+	width: 1.5rem;
+	height: 1.5rem;
 }
 
-%subtitle{
-  color: shade($gray, 40%);
+%glass {
+	$blur: 25px;
+	background: rgba(255, 255, 255, 0.75);
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur($blur);
+	-webkit-backdrop-filter: blur($blur);
 }
 
-%chip{
-  @extend %align-center, %just-center;
-  cursor: pointer;
-  gap: 1rem;
-  height: 2rem;
-  min-width: 5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 24px;
-  color: shade($gray, 50%);
-  background: #ffffff;
-  border: solid 1px $clr-secondary;
+%card {
+	background: #ffffff;
+	border-radius: $bd-rad;
+	border: solid 1px $gray;
+}
 
-  &.active{
-    color: #ffffff;
-    background: $clr-secondary;
-  }
+%subtitle {
+	color: shade($gray, 40%);
+}
 
-  &:not(.active):hover{
-    color: shade($gray, 80%);
-    background: tint($gray, 40%);
-  }
+%chip {
+	@extend %align-center, %just-center;
+	cursor: pointer;
+	gap: 1rem;
+	height: 2rem;
+	min-width: 5rem;
+	padding: 0.5rem 1rem;
+	border-radius: 24px;
+	color: shade($gray, 50%);
+	background: #ffffff;
+	border: solid 1px $clr-secondary;
+
+	&.active {
+		color: #ffffff;
+		background: $clr-secondary;
+	}
+
+	&:not(.active):hover {
+		color: shade($gray, 80%);
+		background: tint($gray, 40%);
+	}
 }

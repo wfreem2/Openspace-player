@@ -1,54 +1,54 @@
 @import '/src/scss/variables.scss';
 @import '/src/scss/func.scss';
 
-:host{
-    height: max-content
+:host {
+	height: max-content;
 }
 
-.show{
-    @extend %align-center;
-    transition: all 0.2s;
-    cursor: pointer;
-    display: grid;
-    grid-template-columns: 1fr max-content max-content max-content;
-    gap: 2rem;
-    padding: 1rem;
-    border-radius: $bd-rad;
-    border: solid 2px $gray;
-    overflow: auto;
-    &.active{
-        .content{
-            color: $clr-secondary;
-        }
+.show {
+	@extend %align-center;
+	transition: all 0.2s;
+	cursor: pointer;
+	display: grid;
+	grid-template-columns: 1fr max-content max-content max-content;
+	gap: 2rem;
+	padding: 1rem;
+	border-radius: $bd-rad;
+	border: solid 2px $gray;
+	overflow: auto;
+	&.active {
+		.content {
+			color: $clr-secondary;
+		}
 
-        background: tint($clr-accent, 90%);
-        border-color: $clr-accent;
-    }
+		background: tint($clr-accent, 90%);
+		border-color: $clr-accent;
+	}
 
-    &:not(.active):hover{
-        border-color: tint($clr-accent, 50%);
-    }
+	&:not(.active):hover {
+		border-color: tint($clr-accent, 50%);
+	}
 }
 
-.section{
-    @extend %flx-col;
-    gap: 0.5rem;
+.section {
+	@extend %flx-col;
+	gap: 0.5rem;
 }
 
-.header{
-    font-size: 1rem;
-    color: shade($gray, 40%);
+.header {
+	font-size: 1rem;
+	color: shade($gray, 40%);
 }
 
-p{
-    color: inherit
+p {
+	color: inherit;
 }
 
-.content{
-    color: shade($gray, 50%);
-    
-    &.title{
-        font-size: 1.25rem;
-        color: $clr-secondary;
-    }
+.content {
+	color: shade($gray, 50%);
+
+	&.title {
+		font-size: 1.25rem;
+		color: $clr-secondary;
+	}
 }

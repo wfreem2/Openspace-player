@@ -1,71 +1,75 @@
-%input{
-    font-size: 1rem;
-    padding: 0.5rem;
-    border: solid 2px $gray;
-    border-radius: 8px;
+%input {
+	font-size: 1rem;
+	padding: 0.5rem;
+	border: solid 2px $gray;
+	border-radius: 8px;
 }
 
+.floating-input {
+	@extend %input;
+	position: relative;
 
-.floating-input{
-    @extend %input;
-    position: relative;
+	&:focus-within {
+		border-color: $clr-accent;
+	}
 
-    &:focus-within{
-        border-color: $clr-accent;
-    }
+	input[type='text'],
+	input[type='password'] {
+		@include reset-input;
+		padding: 0rem;
+		height: 1.5rem;
+		margin-top: 12px;
 
-    input[type=text], input[type=password]{
-        @include reset-input;
-        padding: 0rem;
-        height: 1.5rem;
-        margin-top: 12px;
+		&:focus ~ span,
+		&:not(:placeholder-shown) ~ span {
+			top: 0.5rem;
+			font-size: 0.95rem;
+		}
 
-        &:focus ~ span, &:not(:placeholder-shown) ~ span{
-            top: 0.5rem;
-            font-size: 0.95rem;
-        }
-        
-        &:focus ~ span{ color: $clr-accent; }
-    }
+		&:focus ~ span {
+			color: $clr-accent;
+		}
+	}
 
-    span{
-        position: absolute;
-        pointer-events: none;
-        transform: translate(0, -50%);
-        left: 0.5rem;
-        top: 50%;
-        transition: 0.2s ease all;
-        color: tint($clr-accent , 30%);
-    }
+	span {
+		position: absolute;
+		pointer-events: none;
+		transform: translate(0, -50%);
+		left: 0.5rem;
+		top: 50%;
+		transition: 0.2s ease all;
+		color: tint($clr-accent, 30%);
+	}
 
-    &.error{
-        color: $clr-err;
-    }
+	&.error {
+		color: $clr-err;
+	}
 }
 
 //Default text input style
-.input{
-    @include reset-input;
-    @extend %max-W;
-    transition: border-color 0.2s;
-    font-size: 1rem;
-    background: #ffffff;
-    padding: 0.5rem 1rem;
-    border: solid 2px $gray;
-    border-radius: $bd-rad;
+.input {
+	@include reset-input;
+	@extend %max-W;
+	transition: border-color 0.2s;
+	font-size: 1rem;
+	background: #ffffff;
+	padding: 0.5rem 1rem;
+	border: solid 2px $gray;
+	border-radius: $bd-rad;
 
-    &:invalid, &.ng-invalid{
-        border-color: $clr-err;
-    }
+	&:invalid,
+	&.ng-invalid {
+		border-color: $clr-err;
+	}
 
-    &:not(:disabled):not(.ng-invalid):hover,
-    &:not(:disabled):not(.ng-invalid):focus-within{
-        border-color: $clr-accent;
-    }
+	&:not(:disabled):not(.ng-invalid):hover,
+	&:not(:disabled):not(.ng-invalid):focus-within {
+		border-color: $clr-accent;
+	}
 
-    &:disabled{
-        cursor: not-allowed;
-        background: #eaf1f8;
-        border-color: shade($gray, 40%);
-    }
+	&:disabled {
+		cursor: not-allowed;
+		background: #eaf1f8;
+		border-color: shade($gray, 40%);
+	}
 }

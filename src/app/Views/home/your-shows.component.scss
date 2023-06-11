@@ -2,198 +2,199 @@
 @import '/src/scss/mixins.scss';
 @import '/src/scss/func.scss';
 
-:host{
-    @extend %card, %max-H;
-    justify-self: center;
-    align-self: center;
-    display: grid;
-    grid-template-rows: max-content max-content 1fr;
-    gap: 2rem;
-    background: #ffffff;
-    padding: 2rem;
-    margin: 1rem;
-    width: 95%;
-    max-width: 100rem;
-    max-height: 50rem;
+:host {
+	@extend %card, %max-H;
+	justify-self: center;
+	align-self: center;
+	display: grid;
+	grid-template-rows: max-content max-content 1fr;
+	gap: 2rem;
+	background: #ffffff;
+	padding: 2rem;
+	margin: 1rem;
+	width: 95%;
+	max-width: 100rem;
+	max-height: 50rem;
 }
 
-.actions{
-    display: grid;
-    grid-template-columns: 1fr max-content max-content;
-    grid-template-rows: 3rem max-content;
-    padding: 0.5rem;
-    gap: 1rem;
-    border-bottom: solid 1px $gray;
+.actions {
+	display: grid;
+	grid-template-columns: 1fr max-content max-content;
+	grid-template-rows: 3rem max-content;
+	padding: 0.5rem;
+	gap: 1rem;
+	border-bottom: solid 1px $gray;
 
-    .btn{
-        cursor: pointer;
-        text-decoration: none;
-        max-width: 8rem;
-        justify-self: flex-end
-    }
+	.btn {
+		cursor: pointer;
+		text-decoration: none;
+		max-width: 8rem;
+		justify-self: flex-end;
+	}
 }
 
-.empty-wrapper{
-    @extend %max-WH, %flx-col, %just-center, %align-center;
-    gap: 1rem;
+.empty-wrapper {
+	@extend %max-WH, %flx-col, %just-center, %align-center;
+	gap: 1rem;
 
-    img{
-        width: 100%;
-        height: 100%;
-        max-width: 25rem;
-        max-height: 25rem; 
-    }
-
+	img {
+		width: 100%;
+		height: 100%;
+		max-width: 25rem;
+		max-height: 25rem;
+	}
 }
 
-#create{
-    cursor: pointer;
-    text-decoration: none;
-    color: $clr-accent;
+#create {
+	cursor: pointer;
+	text-decoration: none;
+	color: $clr-accent;
 }
 
-.search-bar{
-    grid-column: 1;
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    align-items: center;
-    column-gap: 0.75rem;
-    max-width: 35rem;
+.search-bar {
+	grid-column: 1;
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	align-items: center;
+	column-gap: 0.75rem;
+	max-width: 35rem;
 
-    input{ 
-        @include reset-input;
-        font-size: 1.2rem; 
-    }
+	input {
+		@include reset-input;
+		font-size: 1.2rem;
+	}
 
-    .icon{ color: #807d7d; }
+	.icon {
+		color: #807d7d;
+	}
 
-    &:focus-within, &:hover{
-        border-color: $clr-accent;
-    }
+	&:focus-within,
+	&:hover {
+		border-color: $clr-accent;
+	}
 }
 
+.filters {
+	@extend %align-center;
+	gap: 1rem;
+	flex-wrap: wrap;
 
-.filters{
-    @extend %align-center;
-    gap: 1rem;
-    flex-wrap: wrap;
-
-    .filter{
-        @extend %chip;
-        & > label{
-            cursor: pointer;
-        }
-    }
+	.filter {
+		@extend %chip;
+		& > label {
+			cursor: pointer;
+		}
+	}
 }
 
-.list-wrapper{
-    display: grid;
-    grid-template-columns: 1fr max-content 1fr;
-    gap: 1rem;
-    overflow: hidden;
+.list-wrapper {
+	display: grid;
+	grid-template-columns: 1fr max-content 1fr;
+	gap: 1rem;
+	overflow: hidden;
 
-    & > .hr{
-        height: 100%;
-        width: 1px;
-        background: $gray;
-    }
+	& > .hr {
+		height: 100%;
+		width: 1px;
+		background: $gray;
+	}
 
-    & > .shows{
-        @extend %flx-col;
-        gap: 1rem;
-        padding-right: 0.5rem;
-        overflow-y: auto;
-    }
+	& > .shows {
+		@extend %flx-col;
+		gap: 1rem;
+		padding-right: 0.5rem;
+		overflow-y: auto;
+	}
 }
 
-.preview{
-    @extend %align-center, %just-center;
-    .selected-show{
-        @extend %max-WH;
-        display: grid;
-        grid-template-rows: max-content max-content minmax(0, 1fr) max-content;
-        gap: 2rem;
-        padding: 0.5rem;
-        overflow-y: hidden;
+.preview {
+	@extend %align-center, %just-center;
+	.selected-show {
+		@extend %max-WH;
+		display: grid;
+		grid-template-rows: max-content max-content minmax(0, 1fr) max-content;
+		gap: 2rem;
+		padding: 0.5rem;
+		overflow-y: hidden;
 
-        .title{
-            font-size: 2rem;
-        }
+		.title {
+			font-size: 2rem;
+		}
 
-        .subtitle{
-            @extend %subtitle;
-            font-size: 1.3rem;
-        }
+		.subtitle {
+			@extend %subtitle;
+			font-size: 1.3rem;
+		}
 
-        .scenes{
-            height: 0;
-            min-height: 100%;
-            margin-left: 1rem;
-            overflow-y: auto;
-        }
+		.scenes {
+			height: 0;
+			min-height: 100%;
+			margin-left: 1rem;
+			overflow-y: auto;
+		}
 
-        .scene:not(:last-child){
-            margin-bottom: 0.5rem;
-        }
+		.scene:not(:last-child) {
+			margin-bottom: 0.5rem;
+		}
 
-        .header{
-            @extend %align-center;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-        
-        #play-btn{
-            justify-self: center;
-            width: 15rem;
-            height: 3rem;
-        }
-    }
+		.header {
+			@extend %align-center;
+			justify-content: space-between;
+			gap: 1rem;
+		}
+
+		#play-btn {
+			justify-self: center;
+			width: 15rem;
+			height: 3rem;
+		}
+	}
 }
 
-.btns{
-    @extend %align-center;
-    gap: 1rem;
+.btns {
+	@extend %align-center;
+	gap: 1rem;
 
-    .btn{
-        cursor: pointer;
-    }
+	.btn {
+		cursor: pointer;
+	}
 
-    .delete{
-        color: #db1b32;
-        border-color: #db1b32;
-    }
+	.delete {
+		color: #db1b32;
+		border-color: #db1b32;
+	}
 }
 
-.header{
-    .title{
-        font-size: 2.5rem;
-    }
+.header {
+	.title {
+		font-size: 2.5rem;
+	}
 
-    .desc{
-        @extend %subtitle;
-        max-width: 40rem;
-    }
+	.desc {
+		@extend %subtitle;
+		max-width: 40rem;
+	}
 }
 
-.modal-content{
-    margin: 1rem;
-    display: grid;
-    grid-template-rows: 1fr max-content max-content max-content;
-    justify-items: center;
-    gap: 1rem;
+.modal-content {
+	margin: 1rem;
+	display: grid;
+	grid-template-rows: 1fr max-content max-content max-content;
+	justify-items: center;
+	gap: 1rem;
 
-    #trash-icon{
-        color: #db1b32;
-        width: 4rem;
-        height: 4rem;
-    }
+	#trash-icon {
+		color: #db1b32;
+		width: 4rem;
+		height: 4rem;
+	}
 
-    .subtitle{
-        @extend %subtitle;
-    }
+	.subtitle {
+		@extend %subtitle;
+	}
 
-    .delete{
-        color: #ffffff;
-        background: #db1b32;
-    }
+	.delete {
+		color: #ffffff;
+		background: #db1b32;
+	}
 }

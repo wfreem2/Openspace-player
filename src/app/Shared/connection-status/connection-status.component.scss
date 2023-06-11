@@ -2,73 +2,83 @@
 @import '/src/scss/mixins.scss';
 @import '/src/scss/func.scss';
 
-
-:host, .status{
-    @extend %align-center;
-    gap: 0.25rem;
-    width: 10rem;
+:host,
+.status {
+	@extend %align-center;
+	gap: 0.25rem;
+	width: 10rem;
 }
 
 $clr-loading: #7d69d8;
 $clr-connected: #00ab55;
 
-.status{
-    @extend %just-center, %align-center;
-    font-weight: 600;
-    color: $txt-color;
-    border: solid 2px transparent;
-    border-radius: 16px;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.9rem;
+.status {
+	@extend %just-center, %align-center;
+	font-weight: 600;
+	color: $txt-color;
+	border: solid 2px transparent;
+	border-radius: 16px;
+	padding: 0.25rem 0.5rem;
+	font-size: 0.9rem;
 
-    .icon{
-        width: 1.1rem;
-        height: 1.1rem;
-    }
+	.icon {
+		width: 1.1rem;
+		height: 1.1rem;
+	}
 
-    &.loading{
-        background: tint($clr-loading, 90%);
-        border-color:tint($clr-loading, 60%);
-        color: tint($clr-loading, 10%);
-    }
+	&.loading {
+		background: tint($clr-loading, 90%);
+		border-color: tint($clr-loading, 60%);
+		color: tint($clr-loading, 10%);
+	}
 
-    &.disconnected{
-        background: tint($clr-err, 90%);
-        border-color:tint($clr-err, 60%);
-        color: tint($clr-err, 10%);
-    }
-    
-    &.connected{
-        background: tint($clr-connected, 90%);
-        border-color:tint($clr-connected, 60%);
-        color: tint($clr-connected, 10%);
-    }
+	&.disconnected {
+		background: tint($clr-err, 90%);
+		border-color: tint($clr-err, 60%);
+		color: tint($clr-err, 10%);
+	}
+
+	&.connected {
+		background: tint($clr-connected, 90%);
+		border-color: tint($clr-connected, 60%);
+		color: tint($clr-connected, 10%);
+	}
 }
 
 #spinner {
-    display: inline-block;
-    width: 1rem;
-    height: 1rem;
-    border: 3px solid $clr-loading;
-    border-radius: 50%;
-    border-top-color: #ffffff;
-    animation: spin 1s ease-in-out infinite;
-    -webkit-animation: spin 1s ease-in-out infinite;
+	display: inline-block;
+	width: 1rem;
+	height: 1rem;
+	border: 3px solid $clr-loading;
+	border-radius: 50%;
+	border-top-color: #ffffff;
+	animation: spin 1s ease-in-out infinite;
+	-webkit-animation: spin 1s ease-in-out infinite;
 }
 
 @keyframes spin {
-to { -webkit-transform: rotate(360deg); }
+	to {
+		-webkit-transform: rotate(360deg);
+	}
 }
 @-webkit-keyframes spin {
-to { -webkit-transform: rotate(360deg); }
+	to {
+		-webkit-transform: rotate(360deg);
+	}
 }
 
-#circle{
-    width: .5rem;
-    height: .5rem;
-    border-radius: 50%;
+#circle {
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 50%;
 
-    &.disconnected{ background: red; }
-    &.connected{ background: green; }
-    &.connecting{ background: orange; }
+	&.disconnected {
+		background: red;
+	}
+	&.connected {
+		background: green;
+	}
+	&.connecting {
+		background: orange;
+	}
 }

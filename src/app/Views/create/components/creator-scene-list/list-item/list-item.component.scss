@@ -1,81 +1,83 @@
 @import '/src/scss/variables.scss';
 @import '/src/scss/func.scss';
 
-
-:host{
-    position: relative;
+:host {
+	position: relative;
 }
 
-.wrapper{
-    @extend %max-WH;
-    cursor: pointer;
-    display: grid;
-    align-items: center;
-    grid-template-columns: 1fr max-content max-content;
-    gap: 0.2rem;
-    border-radius: 8px;
-    padding: 0.5rem;
+.wrapper {
+	@extend %max-WH;
+	cursor: pointer;
+	display: grid;
+	align-items: center;
+	grid-template-columns: 1fr max-content max-content;
+	gap: 0.2rem;
+	border-radius: 8px;
+	padding: 0.5rem;
 
-    &:hover{
-        background: $gray;
-    }
-    
-    &.active{
-        @extend %shadow;
-        
-        p{ color: #ffffff; }
-        svg{ color: #ffffff; }
-        #exclamation{ fill: #ffffff;}
-        background-color: $clr-secondary;
-    }
+	&:hover {
+		background: $gray;
+	}
 
-    & > div:first-child{
-        @extend %align-center;
-        gap: 0.5rem;
-    }
-    
+	&.active {
+		@extend %shadow;
 
-    #exclamation{ color: $clr-err; }
+		p {
+			color: #ffffff;
+		}
+		svg {
+			color: #ffffff;
+		}
+		#exclamation {
+			fill: #ffffff;
+		}
+		background-color: $clr-secondary;
+	}
 
-    .icon{
-        width: 1.3rem;
-        height: 1.3rem;
-    }
+	& > div:first-child {
+		@extend %align-center;
+		gap: 0.5rem;
+	}
 
-}    
+	#exclamation {
+		color: $clr-err;
+	}
 
+	.icon {
+		width: 1.3rem;
+		height: 1.3rem;
+	}
+}
 
+.ctx-menu {
+	@extend %card, %flx-col;
+	position: absolute;
+	top: 110%;
+	right: 0.5rem;
+	overflow: hidden;
+	z-index: 99;
+	font-size: 0.9rem;
+	width: 10rem;
+	height: max-content;
+	background: #ffffff;
+	border-radius: $bd-rad;
 
+	li {
+		@extend %max-W, %align-center;
+		cursor: pointer;
+		justify-content: space-between;
+		padding: 0.5rem;
 
-.ctx-menu{
-    @extend %card, %flx-col;
-    position: absolute;
-    top: 110%;
-    right: 0.5rem;
-    overflow: hidden;
-    z-index: 99;
-    font-size: 0.9rem;
-    width: 10rem;
-    height: max-content;
-    background: #ffffff;
-    border-radius: $bd-rad;
+		&:not(:last-child) {
+			border-bottom: solid 1px $gray;
+		}
 
-    li{
-        @extend %max-W, %align-center;
-        cursor: pointer;
-        justify-content: space-between;
-        padding: 0.5rem;
+		&:hover {
+			background: tint($gray, 60%);
+		}
+	}
 
-        &:not(:last-child){
-            border-bottom: solid 1px $gray;
-        }
-
-        &:hover{
-            background: tint($gray, 60%);
-        }
-    }
-
-    #delete{ 
-        color: red; 
-    }
+	#delete {
+		color: red;
+	}
 }

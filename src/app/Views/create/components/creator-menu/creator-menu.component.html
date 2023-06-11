@@ -1,15 +1,19 @@
 <div class="menu">
-    <div class="item" clickedoutsideof *ngFor="let menu of items"
-        [class.active]="menu.isShowing" 
-        (onClickOutside)="menu.isShowing=false"
-        (click)="menu.isShowing=true">
+	<div
+		class="item"
+		clickedoutsideof
+		*ngFor="let menu of items"
+		[class.active]="menu.isShowing"
+		(onClickOutside)="menu.isShowing = false"
+		(click)="menu.isShowing = true">
+		<p class="name">{{ menu.menuItem.name }}</p>
 
-        <p class="name">{{menu.menuItem.name}}</p>
-
-        <div class="dropdown" *ngIf="menu.isShowing">
-           <creator-menu-item *ngFor="let subMenu of menu.menuItem.subMenus"
-           (itemClicked)="menu.isShowing=false" [menuItem]="subMenu">
-           </creator-menu-item>
-        </div>
-    </div>
+		<div class="dropdown" *ngIf="menu.isShowing">
+			<creator-menu-item
+				*ngFor="let subMenu of menu.menuItem.subMenus"
+				(itemClicked)="menu.isShowing = false"
+				[menuItem]="subMenu">
+			</creator-menu-item>
+		</div>
+	</div>
 </div>

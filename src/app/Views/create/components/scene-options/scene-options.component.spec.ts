@@ -1,201 +1,187 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testing"
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms"
-import { sample, sampleSize } from "lodash"
-import { first, map, skip, take } from "rxjs"
-import { IconsModule } from "src/app/icons.module"
-import { SceneOptions } from "src/app/Models/SceneOptions"
-import { SceneGraphNode } from "src/app/Services/openspace.service"
-import { SortingSelectorComponent, SortingType } from "src/app/Shared/sorting-selector/sorting-selector.component"
-import { testControlValueImplementation } from "src/app/Utils/test-utils"
-import { SceneOptionsComponent } from "./scene-options.component"
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing'
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { sample, sampleSize } from 'lodash'
+import { first, map, skip, take } from 'rxjs'
+import { IconsModule } from 'src/app/icons.module'
+import { SceneOptions } from 'src/app/Models/SceneOptions'
+import { SceneGraphNode } from 'src/app/Services/openspace.service'
+import { SortingSelectorComponent, SortingType } from 'src/app/Shared/sorting-selector/sorting-selector.component'
+import { testControlValueImplementation } from 'src/app/Utils/test-utils'
+import { SceneOptionsComponent } from './scene-options.component'
 
 describe('Scene-options component', () => {
-    let component: SceneOptionsComponent
-    let fixture: ComponentFixture<SceneOptionsComponent>
+	let component: SceneOptionsComponent
+	let fixture: ComponentFixture<SceneOptionsComponent>
 
-    const mapSceneOptions =  map( (v: any) => {
-        return {
-            enabledTrails: v.enabledTrails?.filter( (t:any) => t.isEnabled).map((t:any) => t.trail),
-            keepCameraPosition: v.keepCameraPosition
-        } as SceneOptions
-    })
+	const mapSceneOptions = map((v: any) => {
+		return {
+			enabledTrails: v.enabledTrails?.filter((t: any) => t.isEnabled).map((t: any) => t.trail),
+			keepCameraPosition: v.keepCameraPosition
+		} as SceneOptions
+	})
 
-    const sortingFn = (a: FormGroup, b: FormGroup) => {
-        const firstVal = a.controls['trail'].value
-        const secondVal = b.controls['trail'].value
+	const sortingFn = (a: FormGroup, b: FormGroup) => {
+		const firstVal = a.controls['trail'].value
+		const secondVal = b.controls['trail'].value
 
-        if(firstVal < secondVal){ return -1 }
-        if(firstVal > secondVal){ return 1 }
+		if (firstVal < secondVal) {
+			return -1
+		}
+		if (firstVal > secondVal) {
+			return 1
+		}
 
-        return 0
-    }
+		return 0
+	}
 
-    beforeEach( async () => {
-        TestBed.configureTestingModule({
-            declarations: [SceneOptionsComponent, SortingSelectorComponent],
-            imports: [ReactiveFormsModule, FormsModule, IconsModule]
-        })
-        .compileComponents()
-        .then( () => {
-            fixture = TestBed.createComponent(SceneOptionsComponent)
-            component = fixture.componentInstance
-            fixture.detectChanges()
-        })
-    })
+	beforeEach(async () => {
+		TestBed.configureTestingModule({
+			declarations: [SceneOptionsComponent, SortingSelectorComponent],
+			imports: [ReactiveFormsModule, FormsModule, IconsModule]
+		})
+			.compileComponents()
+			.then(() => {
+				fixture = TestBed.createComponent(SceneOptionsComponent)
+				component = fixture.componentInstance
+				fixture.detectChanges()
+			})
+	})
 
+	it('#writeValue() should correctly set options on form', () => {
+		const vals = sampleSize(Object.values(SceneGraphNode), 3)
 
-    it('#writeValue() should correctly set options on form', () => {
+		let expectedOptions: SceneOptions = {
+			enabledTrails: vals,
+			keepCameraPosition: false
+		}
 
-        const vals = sampleSize(Object.values(SceneGraphNode), 3)
+		component.writeValue(expectedOptions)
+		fixture.detectChanges()
 
-        let expectedOptions: SceneOptions = {
-            enabledTrails: vals,
-            keepCameraPosition: false
-        }
+		const expectedTrails = component.optionsForm.value.enabledTrails?.filter((t) => t.isEnabled).map((t) => t.trail)
+		const expectedCamera = component.optionsForm.value.keepCameraPosition
 
-        component.writeValue(expectedOptions)
-        fixture.detectChanges()
+		expect(expectedCamera).toEqual(expectedOptions.keepCameraPosition)
+		expect(expectedTrails?.sort()).toEqual(expectedOptions.enabledTrails.sort())
+	})
 
-        const expectedTrails = component.optionsForm.value.enabledTrails?.filter(t => t.isEnabled).map( t => t.trail)
-        const expectedCamera = component.optionsForm.value.keepCameraPosition
+	it('#writeValue() should not set value with unexpected object', () => {
+		const someObject = { notexpected: 'NotExpected' }
 
-        expect(expectedCamera).toEqual(expectedOptions.keepCameraPosition)
-        expect(expectedTrails?.sort()).toEqual(expectedOptions.enabledTrails.sort())
-    })
+		const defaultValue = component.optionsForm.getRawValue()
 
-    it('#writeValue() should not set value with unexpected object', () => {
+		component.writeValue(someObject)
+		fixture.detectChanges()
 
-        const someObject = { notexpected: 'NotExpected'}
+		expect(component.optionsForm.getRawValue()).toEqual(defaultValue)
+	})
 
-        const defaultValue = component.optionsForm.getRawValue()
+	it('#writeValue() should not emit valuechanges', fakeAsync(() => {
+		let expectedOptions: SceneOptions = {
+			enabledTrails: [SceneGraphNode.Mercury, SceneGraphNode.Mars],
+			keepCameraPosition: false
+		}
 
-        component.writeValue(someObject)
-        fixture.detectChanges()
+		let changes
 
-        expect(component.optionsForm.getRawValue()).toEqual(defaultValue)
-    })
+		component.optionsForm.valueChanges.subscribe((v) => (changes = v))
 
-    it('#writeValue() should not emit valuechanges', fakeAsync(() => {
+		component.writeValue(expectedOptions)
+		fixture.detectChanges()
 
-        let expectedOptions: SceneOptions = {
-            enabledTrails: [SceneGraphNode.Mercury, SceneGraphNode.Mars],
-            keepCameraPosition: false
-        }
+		tick(100)
+		expect(changes).toBeUndefined()
+	}))
 
-        let changes;
+	it('#selectAllTrails() should select all trails', (done) => {
+		let expectedTrails = Object.values(SceneGraphNode)
 
-        component.optionsForm.valueChanges
-        .subscribe(v => changes = v)
-        
-        component.writeValue(expectedOptions)
-        fixture.detectChanges()
-        
-        tick(100)
-        expect(changes).toBeUndefined()
-    }))
+		component.optionsForm.valueChanges.pipe(mapSceneOptions).subscribe((v) => {
+			expect(v.enabledTrails).toEqual(expectedTrails)
+			done()
+		})
 
+		component._$selectAll.next()
+		fixture.detectChanges()
+	})
 
-    it('#selectAllTrails() should select all trails', (done) => {
+	it('#deselectAllTrails() should deselect all trails', (done) => {
+		component.optionsForm.valueChanges.pipe(mapSceneOptions).subscribe((v) => {
+			expect(v.enabledTrails).toEqual([])
+			done()
+		})
 
-        let expectedTrails = Object.values(SceneGraphNode)
+		component._$deselectAll.next()
+		fixture.detectChanges()
+	})
 
-        component.optionsForm.valueChanges
-        .pipe(mapSceneOptions)
-        .subscribe(v => {
-            expect(v.enabledTrails).toEqual(expectedTrails)            
-            done()
-        })
-        
-        component._$selectAll.next()
-        fixture.detectChanges()
-    })
+	it('setting values on options form should emit event with correct values', (done) => {
+		const valsToChange: SceneOptions = {
+			enabledTrails: [SceneGraphNode.Callisto, SceneGraphNode.Deimos],
+			keepCameraPosition: true
+		}
 
-    
-    it('#deselectAllTrails() should deselect all trails', (done) => {
+		component.optionsForm.valueChanges.pipe(mapSceneOptions).subscribe((v) => {
+			expect(v).toEqual(valsToChange)
+			done()
+		})
 
-        component.optionsForm.valueChanges
-        .pipe(mapSceneOptions)
-        .subscribe(v => {
-            expect(v.enabledTrails).toEqual([])            
-            done()
-        })
-        
-        component._$deselectAll.next()
-        fixture.detectChanges()
-    })
+		component.optionsForm.patchValue({
+			enabledTrails: valsToChange.enabledTrails.map((t) => {
+				return { isEnabled: true, trail: t }
+			}),
+			keepCameraPosition: valsToChange.keepCameraPosition
+		})
+	})
 
-    it('setting values on options form should emit event with correct values', (done) => {
+	it('#sort() should sort controls ascending with SortingType.Ascending', (done) => {
+		const expectedSort = component._filteredTrails.getValue().sort(sortingFn)
 
-        const valsToChange: SceneOptions = {
-            enabledTrails: [SceneGraphNode.Callisto, SceneGraphNode.Deimos],
-            keepCameraPosition: true
-        }
-        
-        component.optionsForm.valueChanges
-        .pipe(mapSceneOptions)
-        .subscribe(v => {
-            expect(v).toEqual(valsToChange)
-            done()
-        })
+		component.$filteredTrails
+			.pipe(
+				skip(1), //Skip first emission (default list)
+				first()
+			)
+			.subscribe((value) => {
+				expect(value).toEqual(expectedSort)
+				done()
+			})
 
-        component.optionsForm.patchValue({
-            enabledTrails: valsToChange.enabledTrails.map(t => { return {isEnabled: true, trail: t}}),
-            keepCameraPosition: valsToChange.keepCameraPosition
-        })
-    })
+		component.sort(SortingType.Ascending)
+	})
 
-    it('#sort() should sort controls ascending with SortingType.Ascending', (done) => {
-        
-        const expectedSort = component._filteredTrails.getValue().sort(sortingFn)
+	it('#sort() should sort controls descending with SortingType.Descending', (done) => {
+		const expectedSort = component._filteredTrails.getValue().sort(sortingFn).reverse()
 
-        component.$filteredTrails
-        .pipe( 
-            skip(1), //Skip first emission (default list)
-            first() 
-        )
-        .subscribe( value => {
-            expect(value).toEqual(expectedSort)
-            done()
-        })
+		component.$filteredTrails
+			.pipe(
+				skip(1), //Skip first emission (default list)
+				first()
+			)
+			.subscribe((value) => {
+				expect(value).toEqual(expectedSort)
+				done()
+			})
 
-        component.sort(SortingType.Ascending)
-    })
+		component.sort(SortingType.Descending)
+	})
 
-    it('#sort() should sort controls descending with SortingType.Descending', (done) => {
-        
-        const expectedSort = component._filteredTrails.getValue().sort(sortingFn).reverse()
-        
-        component.$filteredTrails
-        .pipe( 
-            skip(1), //Skip first emission (default list)
-            first() 
-        )
-        .subscribe( value => {
-            expect(value).toEqual(expectedSort)
-            done()
-        })
+	it('#sort() should sort controls with original sorting with SortingType.None', (done) => {
+		const expectedSort = component.optionsForm.controls.enabledTrails.controls
 
-        component.sort(SortingType.Descending)
-    })
+		component.$filteredTrails
+			.pipe(
+				skip(3) //Skip first emission (default list) and Sorting.Descending & Ascending
+			)
+			.subscribe((value) => {
+				expect(value).toEqual(expectedSort)
+				done()
+			})
 
-    it('#sort() should sort controls with original sorting with SortingType.None', (done) => {
-        
-        const expectedSort = component.optionsForm.controls.enabledTrails.controls
+		component.sort(SortingType.Descending)
+		component.sort(SortingType.Ascending)
+		component.sort(SortingType.None)
+	})
 
-        component.$filteredTrails
-        .pipe( 
-            skip(3), //Skip first emission (default list) and Sorting.Descending & Ascending
-        )
-        .subscribe( value => {
-            expect(value).toEqual(expectedSort)
-            done()
-        })
-
-        component.sort(SortingType.Descending)
-        component.sort(SortingType.Ascending)
-        component.sort(SortingType.None)
-
-    })
-
-    it('should properly implement ControlValueAccessor', () => testControlValueImplementation(component))
-})      
+	it('should properly implement ControlValueAccessor', () => testControlValueImplementation(component))
+})

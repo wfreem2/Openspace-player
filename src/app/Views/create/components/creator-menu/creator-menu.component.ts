@@ -1,70 +1,65 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { fromEvent, takeUntil, filter, tap, Observable, first } from 'rxjs';
-import { CreatorMenuItem, CreatorSubMenuItem } from 'src/app/Models/CreatorMenuItem';
-import { BaseComponent } from 'src/app/Shared/base/base.component';
-import * as keycode from 'keycode';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { fromEvent, takeUntil, filter, tap, Observable, first } from 'rxjs'
+import { CreatorMenuItem, CreatorSubMenuItem } from 'src/app/Models/CreatorMenuItem'
+import { BaseComponent } from 'src/app/Shared/base/base.component'
+import * as keycode from 'keycode'
 
 @Component({
-  selector: 'creator-menu',
-  templateUrl: './creator-menu.component.html',
-  styleUrls: ['./creator-menu.component.scss']
+	selector: 'creator-menu',
+	templateUrl: './creator-menu.component.html',
+	styleUrls: ['./creator-menu.component.scss']
 })
 export class CreatorMenuComponent extends BaseComponent implements OnInit {
+	@Input() menuItems: CreatorMenuItem[] = []
 
-  @Input() menuItems: CreatorMenuItem[] = []
-  
+	items!: { menuItem: CreatorMenuItem; isShowing: boolean }[]
+	keyBindings: { menu: CreatorSubMenuItem; key: string }[] = []
 
-  items!: { menuItem: CreatorMenuItem, isShowing: boolean }[]
-  keyBindings: {menu: CreatorSubMenuItem, key: string}[] = []
+	constructor() {
+		super()
+	}
 
-  constructor() {
-    super()
-  }
+	ngOnInit(): void {
+		this.items = this.menuItems.map((item) => {
+			return { isShowing: false, menuItem: item }
+		})
 
-  ngOnInit(): void {
+		this.keyBindings = this.menuItems
+			.flatMap((item) => item.subMenus)
+			.flatMap((subMenu) => {
+				return {
+					key: subMenu.hotKey.slice(0)[0].toLowerCase(),
+					menu: subMenu
+				}
+			})
 
-    this.items = this.menuItems.map(item => {
-      return { isShowing: false, menuItem: item }
-    })
+		fromEvent<KeyboardEvent>(document, 'keydown')
+			.pipe(
+				filter((ev) => {
+					//Only if there is a keybinding that exists for the pressed keys
+					return ev.ctrlKey && this.keyBindings.some(({ key }) => keycode(ev) === key)
+				}),
+				tap((ev) => ev.preventDefault()),
+				takeUntil(this.$unsub)
+			)
+			.subscribe(this.keyPressHandler.bind(this))
+	}
 
-    this.keyBindings = this.menuItems
-    .flatMap(item => item.subMenus)
-    .flatMap(subMenu => {
-     return {
-      key: subMenu.hotKey.slice(0)[0].toLowerCase(),
-      menu: subMenu
-     } 
-    })
+	private keyPressHandler(e: KeyboardEvent) {
+		const { menu } = this.keyBindings.find(({ key }) => key === keycode(e))!
 
+		if (menu.isDisabled instanceof Observable<boolean>) {
+			menu.isDisabled.pipe(first()).subscribe((isDisabled) => {
+				if (!isDisabled) {
+					menu.callBack()
+				}
+			})
 
-    fromEvent<KeyboardEvent>(document, 'keydown')
-    .pipe(
-      filter(ev => {
-        //Only if there is a keybinding that exists for the pressed keys
-         return ev.ctrlKey && this.keyBindings.some(({ key }) => keycode(ev) === key)
-      }),
-      tap( ev => ev.preventDefault() ),
-      takeUntil(this.$unsub)
-    )
-    .subscribe( this.keyPressHandler.bind(this) )
+			return
+		}
 
-  }
-
-  private keyPressHandler(e: KeyboardEvent){
-    const { menu } = this.keyBindings.find( ({ key }) => key === keycode(e))!
-
-    if(menu.isDisabled instanceof Observable<boolean>){
-      menu.isDisabled.pipe( first() )
-      .subscribe(isDisabled => {
-        if(!isDisabled){
-          menu.callBack()
-        }
-      })
-
-      return
-    }
-    
-    if(!menu.isDisabled){ menu.callBack() }
-  }
-
+		if (!menu.isDisabled) {
+			menu.callBack()
+		}
+	}
 }

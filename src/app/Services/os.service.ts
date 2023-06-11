@@ -1,15 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class OsService {
+	constructor() {}
 
-  constructor() { }
+	static get getCommandKey(): string {
+		const isWindows = window.navigator.userAgent.includes('Win')
 
-  static get getCommandKey(): string{
-    const isWindows = window.navigator.userAgent.includes('Win')
-
-    return isWindows ? 'CTRL' : '⌘'
-  }
+		return isWindows ? 'CTRL' : '⌘'
+	}
 }

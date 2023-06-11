@@ -2,34 +2,33 @@
 @import '/src/scss/mixins.scss';
 @import '/src/scss/func.scss';
 
+.item {
+	@extend %max-W;
+	display: grid;
+	grid-template-columns: 1fr max-content;
+	column-gap: 1rem;
+	align-items: center;
 
-.item{
-    @extend %max-W;
-    display: grid;
-    grid-template-columns: 1fr max-content;
-    column-gap: 1rem;
-    align-items: center;
+	cursor: pointer;
+	padding: 0.35rem;
+	border-radius: 4px;
+	transition: $transistion;
 
-    cursor: pointer;
-    padding: 0.35rem;
-    border-radius: 4px;
-    transition: $transistion;
-    
-    p{ 
-        color: inherit; 
-        white-space: nowrap;
-    }
+	p {
+		color: inherit;
+		white-space: nowrap;
+	}
 
-    &:hover{
-        background: $gray;
-    }
+	&:hover {
+		background: $gray;
+	}
 
-    &.disabled{
-        cursor: not-allowed;
-        color: shade($gray, 30%);
-    }
+	&.disabled {
+		cursor: not-allowed;
+		color: shade($gray, 30%);
+	}
 }
 
-.hotkey{
-    font-size: 0.9rem;
+.hotkey {
+	font-size: 0.9rem;
 }

@@ -2,36 +2,39 @@
 @import '/src/scss/mixins.scss';
 @import '/src/scss/func.scss';
 
-.menu{
-    @extend %align-center, %max-W;
-    gap: 1rem;
-    padding: 0.25rem;
+.menu {
+	@extend %align-center, %max-W;
+	gap: 1rem;
+	padding: 0.25rem;
 }
 
-.item{
-    @extend %align-center, %just-center;
-    position: relative;
-    padding: 0.25rem 0.75rem;
-    border-radius: 4px;
-    
-    &.active, &:hover{
-        background: $gray;
-    }
+.item {
+	@extend %align-center, %just-center;
+	position: relative;
+	padding: 0.25rem 0.75rem;
+	border-radius: 4px;
+
+	&.active,
+	&:hover {
+		background: $gray;
+	}
 }
 
-.name{ cursor: pointer; }
+.name {
+	cursor: pointer;
+}
 
-.dropdown{
-    @extend %card, %flx-col;
-    position: absolute;
-    cursor: default;
-    z-index: 99;
-    left: 0;
-    top: 110%;
-    min-width: 10rem;
-    overflow-y: auto;
-    overflow-x: hidden;
-    gap: 0.5rem;
-    padding: 0.25rem;
-    background: #ffffff;
+.dropdown {
+	@extend %card, %flx-col;
+	position: absolute;
+	cursor: default;
+	z-index: 99;
+	left: 0;
+	top: 110%;
+	min-width: 10rem;
+	overflow-y: auto;
+	overflow-x: hidden;
+	gap: 0.5rem;
+	padding: 0.25rem;
+	background: #ffffff;
 }

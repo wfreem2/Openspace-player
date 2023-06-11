@@ -2,79 +2,80 @@
 @import '/src/scss/mixins.scss';
 @import '/src/scss/func.scss';
 
-:host{
-    display: grid;
-    grid-template-columns: max-content 1fr max-content;
-    align-items: center;
-    justify-items: center;
-    box-shadow: unset;
-    gap: 1rem;
-    padding: 0.5rem;
-    border-bottom: solid 2px $gray;
-    background: $clr-primary
+:host {
+	display: grid;
+	grid-template-columns: max-content 1fr max-content;
+	align-items: center;
+	justify-items: center;
+	box-shadow: unset;
+	gap: 1rem;
+	padding: 0.5rem;
+	border-bottom: solid 2px $gray;
+	background: $clr-primary;
 }
 
-#links{
-    @extend %align-center;
-    flex: 2;
-    gap: 1rem;
+#links {
+	@extend %align-center;
+	flex: 2;
+	gap: 1rem;
 
-    a{
-        transition: all 0.2s;
-        text-decoration: none;
-        min-width: 8rem;
-        padding: 0.75rem 2rem;
-        color: $txt-color;
-        border-radius: $bd-rad; 
-        text-align: center;
+	a {
+		transition: all 0.2s;
+		text-decoration: none;
+		min-width: 8rem;
+		padding: 0.75rem 2rem;
+		color: $txt-color;
+		border-radius: $bd-rad;
+		text-align: center;
 
-        &:hover:not(.active){
-            transform: translateY(-2px);
-            color: #ffffff;
-            background: $clr-accent;
-        }
+		&:hover:not(.active) {
+			transform: translateY(-2px);
+			color: #ffffff;
+			background: $clr-accent;
+		}
 
-        &.active{
-            color: $clr-accent;
-            background: tint($clr-accent, 80%);
-        }
-    }
+		&.active {
+			color: $clr-accent;
+			background: tint($clr-accent, 80%);
+		}
+	}
 }
 
-#status-bar{
-    @extend %align-center, %max-H;
-    gap: 1rem;
+#status-bar {
+	@extend %align-center, %max-H;
+	gap: 1rem;
 }
 
+#refresh-btn {
+	@include reset-input;
+	@extend %align-center, %just-center;
+	cursor: pointer;
+	transition: background 0.2s;
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 50%;
+	padding: 0.5rem;
 
-#refresh-btn{
-    @include reset-input;
-    @extend %align-center, %just-center;
-    cursor: pointer;
-    transition: background 0.2s;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    padding: 0.5rem;
+	&:hover {
+		background: $gray;
 
-    &:hover{
-        background: $gray;
+		svg {
+			stroke: $txt-color;
+		}
+	}
 
-        svg{ stroke: $txt-color; }
-    }
+	// Refresh icon
+	svg {
+		stroke: #a2a4a7;
 
-    // Refresh icon
-    svg{
-        stroke: #a2a4a7;
-
-        &.syncing{
-            animation: spin 2s infinite linear;
-        }
-    }
+		&.syncing {
+			animation: spin 2s infinite linear;
+		}
+	}
 }
 
-@keyframes spin { 
-    100% { 
-        transform:rotate(360deg); 
-    } 
+@keyframes spin {
+	100% {
+		transform: rotate(360deg);
+	}
 }

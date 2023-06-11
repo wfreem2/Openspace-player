@@ -1,77 +1,86 @@
-import { faker } from "@faker-js/faker"
-import { sampleSize } from "lodash"
-import { GeoPosition } from "../Models/GeoPosition"
-import { Scene } from "../Models/Scene"
-import { SceneOptions } from "../Models/SceneOptions"
-import { SceneGraphNode } from "../Services/openspace.service"
+import { faker } from '@faker-js/faker'
+import { sampleSize } from 'lodash'
+import { GeoPosition } from '../Models/GeoPosition'
+import { Scene } from '../Models/Scene'
+import { SceneOptions } from '../Models/SceneOptions'
+import { SceneGraphNode } from '../Services/openspace.service'
 
-export function testControlValueImplementation(component: any){
-    const onChange = () => { console.log('change') }
-    const onTouch = () => { console.log('touch') }
+export function testControlValueImplementation(component: any) {
+	const onChange = () => {
+		console.log('change')
+	}
+	const onTouch = () => {
+		console.log('touch')
+	}
 
-    component.registerOnChange(onChange)
-    component.registerOnTouched(onTouch)
+	component.registerOnChange(onChange)
+	component.registerOnTouched(onTouch)
 
-    expect(component.onChange).toEqual(onChange)
-    expect(component.onTouch).toEqual(onTouch)
+	expect(component.onChange).toEqual(onChange)
+	expect(component.onTouch).toEqual(onTouch)
 }
 
-export function getFakeScenes(N: number = 5): Scene[]{
+export function getFakeScenes(N: number = 5): Scene[] {
+	let scenes: Scene[] = []
 
-    let scenes: Scene[] = []
+	for (let i = 0; i < N; i++) {
+		const id = i
+		const title = faker.address.cityName()
+		const geoPos: GeoPosition = {
+			alt: Math.random(),
+			lat: Math.random(),
+			long: Math.random(),
+			node: sampleSize(Object.values(SceneGraphNode), 1)[0],
+			timestamp: new Date().toISOString()
+		}
+		const options: SceneOptions = {
+			enabledTrails: sampleSize(Object.values(SceneGraphNode), 5),
+			keepCameraPosition: faker.datatype.boolean()
+		}
 
-    for(let i = 0; i < N; i++){
-        const id = i
-        const title = faker.address.cityName()
-        const geoPos: GeoPosition = {
-            alt: Math.random(),
-            lat: Math.random(),
-            long: Math.random(),
-            node: sampleSize(Object.values(SceneGraphNode), 1)[0],
-            timestamp: new Date().toISOString()
-        }
-        const options: SceneOptions = {
-            enabledTrails: sampleSize(Object.values(SceneGraphNode), 5),
-            keepCameraPosition: faker.datatype.boolean()
-        } 
+		const duration = Math.random()
+		const script = faker.lorem.sentence()
 
-        const duration = Math.random()
-        const script = faker.lorem.sentence()
+		const scene: Scene = {
+			id: id,
+			title: title,
+			geoPos: geoPos,
+			options: options,
+			script: i % 2 === 0 ? script : null,
+			transistion: i % 2 === 0 ? duration : null
+		}
 
-        const scene: Scene = {
-            id: id, title: title, geoPos: geoPos, options: options,
-            script: (i % 2 === 0) ? script : null,
-            transistion: (i % 2 === 0) ? duration : null
-        }
+		scenes.push(scene)
+	}
 
-        scenes.push(scene)
-    }
-
-    return scenes
+	return scenes
 }
 
-export function getFakeScene(id: number): Scene{
-    const title = faker.address.cityName()
-    const geoPos: GeoPosition = {
-        alt: Math.random(),
-        lat: Math.random(),
-        long: Math.random(),
-        node: sampleSize(Object.values(SceneGraphNode), 1)[0],
-        timestamp: new Date().toISOString()
-    }
-    const options: SceneOptions = {
-        enabledTrails: sampleSize(Object.values(SceneGraphNode), 5),
-        keepCameraPosition: faker.datatype.boolean()
-    } 
+export function getFakeScene(id: number): Scene {
+	const title = faker.address.cityName()
+	const geoPos: GeoPosition = {
+		alt: Math.random(),
+		lat: Math.random(),
+		long: Math.random(),
+		node: sampleSize(Object.values(SceneGraphNode), 1)[0],
+		timestamp: new Date().toISOString()
+	}
+	const options: SceneOptions = {
+		enabledTrails: sampleSize(Object.values(SceneGraphNode), 5),
+		keepCameraPosition: faker.datatype.boolean()
+	}
 
-    const duration = Math.random()
-    const script = faker.lorem.sentence()
+	const duration = Math.random()
+	const script = faker.lorem.sentence()
 
-    const scene: Scene = {
-        id: id, title: title, geoPos: geoPos, options: options,
-        script: script,
-        transistion: duration,
-    } 
-    
-    return scene
+	const scene: Scene = {
+		id: id,
+		title: title,
+		geoPos: geoPos,
+		options: options,
+		script: script,
+		transistion: duration
+	}
+
+	return scene
 }

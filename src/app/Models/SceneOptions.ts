@@ -1,6 +1,6 @@
-import { SceneGraphNode } from "../Services/openspace.service";
+import { SceneGraphNode } from '../Services/openspace.service'
 
-export interface SceneOptions{
-    keepCameraPosition: boolean,
-    enabledTrails: SceneGraphNode[]
+export interface SceneOptions {
+	keepCameraPosition: boolean
+	enabledTrails: SceneGraphNode[]
 }

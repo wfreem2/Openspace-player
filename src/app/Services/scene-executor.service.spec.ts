@@ -1,75 +1,79 @@
-import { TestBed } from '@angular/core/testing';
-import { sampleSize } from 'lodash';
-import { Scene } from '../Models/Scene';
-import { getFakeScene } from '../Utils/test-utils';
-import { OpenspaceService, RenderableType, SceneGraphNode } from './openspace.service';
+import { TestBed } from '@angular/core/testing'
+import { sampleSize } from 'lodash'
+import { Scene } from '../Models/Scene'
+import { getFakeScene } from '../Utils/test-utils'
+import { OpenspaceService, RenderableType, SceneGraphNode } from './openspace.service'
 
-import { SceneExecutorService } from './scene-executor.service';
+import { SceneExecutorService } from './scene-executor.service'
 
 describe('SceneExecutorService', () => {
-  let fakeScene: Scene
-  let service: SceneExecutorService
+	let fakeScene: Scene
+	let service: SceneExecutorService
 
-  let fakeOpenSpaceService: jasmine.SpyObj<OpenspaceService>
+	let fakeOpenSpaceService: jasmine.SpyObj<OpenspaceService>
 
-  beforeEach(async () => {
+	beforeEach(async () => {
+		fakeOpenSpaceService = jasmine.createSpyObj('OpenSpaceService', [
+			'flyToGeo',
+			'flyTo',
+			'getCurrentPosition',
+			'disableAllNodeTrails',
+			'isConnected',
+			'enableAllNodeTrails',
+			'setTrailVisibility',
+			'setNavigationState',
+			'getRenderableType',
+			'nodeCanHaveGeo'
+		])
 
-    fakeOpenSpaceService = jasmine.createSpyObj('OpenSpaceService', 
-    ['flyToGeo', 'flyTo', 'getCurrentPosition', 'disableAllNodeTrails', 'isConnected', 
-    'enableAllNodeTrails', 'setTrailVisibility', 'setNavigationState', 'getRenderableType', 'nodeCanHaveGeo'])
+		fakeScene = getFakeScene(1)
 
-    fakeScene = getFakeScene(1)
+		TestBed.configureTestingModule({
+			providers: [{ provide: OpenspaceService, useValue: fakeOpenSpaceService }]
+		})
 
-    TestBed.configureTestingModule({
-      providers: [
-        {provide: OpenspaceService, useValue: fakeOpenSpaceService}
-      ]
-    })
+		service = TestBed.inject(SceneExecutorService)
 
-    service = TestBed.inject(SceneExecutorService);
-    
-    fakeOpenSpaceService.getRenderableType.and.resolveTo(RenderableType.RENDERABLEGLOBE)
-  });
+		fakeOpenSpaceService.getRenderableType.and.resolveTo(RenderableType.RENDERABLEGLOBE)
+	})
 
-  it('should be created', () => {
-    expect(service).toBeTruthy()
-  });
+	it('should be created', () => {
+		expect(service).toBeTruthy()
+	})
 
-  it('#execute() with a RenderableGlobe should call flyToGeo', async () => {
-    fakeOpenSpaceService.getRenderableType.and.resolveTo(RenderableType.RENDERABLEGLOBE)
+	it('#execute() with a RenderableGlobe should call flyToGeo', async () => {
+		fakeOpenSpaceService.getRenderableType.and.resolveTo(RenderableType.RENDERABLEGLOBE)
 
-    await service.execute(fakeScene)
+		await service.execute(fakeScene)
 
-    expect(fakeOpenSpaceService.flyToGeo).toHaveBeenCalled()
-  })
+		expect(fakeOpenSpaceService.flyToGeo).toHaveBeenCalled()
+	})
 
-  it('#execute() with a RENDERABLEMODEL should call flyToGeo', async () => {
-    fakeOpenSpaceService.getRenderableType.and.resolveTo(RenderableType.RENDERABLEMODEL)
+	it('#execute() with a RENDERABLEMODEL should call flyToGeo', async () => {
+		fakeOpenSpaceService.getRenderableType.and.resolveTo(RenderableType.RENDERABLEMODEL)
 
-    await service.execute(fakeScene)
+		await service.execute(fakeScene)
 
-    expect(fakeOpenSpaceService.flyTo).toHaveBeenCalled()
-  })
+		expect(fakeOpenSpaceService.flyTo).toHaveBeenCalled()
+	})
 
-  it('#execute() should call enableAllNodeTrails when all trails are enabled', async () => {
-      
-      fakeScene.options.enabledTrails = Object.values(SceneGraphNode)
-      
-      await service.execute(fakeScene)
+	it('#execute() should call enableAllNodeTrails when all trails are enabled', async () => {
+		fakeScene.options.enabledTrails = Object.values(SceneGraphNode)
 
-      expect(fakeOpenSpaceService.enableAllNodeTrails).toHaveBeenCalled()
-  })
+		await service.execute(fakeScene)
 
-  it('#execute() should call disableNodeTrails when options are provided', async () => {   
-      
-    await service.execute(fakeScene)
-    expect(fakeOpenSpaceService.disableAllNodeTrails).toHaveBeenCalled()
-  })
+		expect(fakeOpenSpaceService.enableAllNodeTrails).toHaveBeenCalled()
+	})
 
-  it('#execute() should call setTrailVisibility when some trails are enabled', async () => {
-      fakeScene.options.enabledTrails = sampleSize(Object.values(SceneGraphNode), 10)
+	it('#execute() should call disableNodeTrails when options are provided', async () => {
+		await service.execute(fakeScene)
+		expect(fakeOpenSpaceService.disableAllNodeTrails).toHaveBeenCalled()
+	})
 
-      await service.execute(fakeScene)
-      expect(fakeOpenSpaceService.setTrailVisibility).toHaveBeenCalled()
-  })
-});
+	it('#execute() should call setTrailVisibility when some trails are enabled', async () => {
+		fakeScene.options.enabledTrails = sampleSize(Object.values(SceneGraphNode), 10)
+
+		await service.execute(fakeScene)
+		expect(fakeOpenSpaceService.setTrailVisibility).toHaveBeenCalled()
+	})
+})

@@ -1,44 +1,42 @@
 @import '/src/scss/variables.scss';
 
-
-:host{
-    @extend %max-WH, %flx-col;
-    position: relative;
-    overflow-y: auto;
-    gap: 0.5rem;   
+:host {
+	@extend %max-WH, %flx-col;
+	position: relative;
+	overflow-y: auto;
+	gap: 0.5rem;
 }
 
-.wrapper{
-    @extend %max-WH, %align-center, %just-center;
+.wrapper {
+	@extend %max-WH, %align-center, %just-center;
 }
 
-
-ul{
-    padding: 0.5rem;
+ul {
+	padding: 0.5rem;
 }
 
-.item{
-    @extend %max-W, %align-center;
-    justify-content: space-between;
-    padding: 0.5rem;
-    border-radius: 8px;
-    margin-bottom: 0.5rem;
+.item {
+	@extend %max-W, %align-center;
+	justify-content: space-between;
+	padding: 0.5rem;
+	border-radius: 8px;
+	margin-bottom: 0.5rem;
 
-    svg{
-        cursor: pointer;
-        width: 1.25rem;
-        height: 1.25rem;
-    }
+	svg {
+		cursor: pointer;
+		width: 1.25rem;
+		height: 1.25rem;
+	}
 
-    &:not(:last-child){
-        margin-bottom: 0.5rem;
-    }
-    
-    &:not(.active):hover{
-        background: $gray;
-    }
+	&:not(:last-child) {
+		margin-bottom: 0.5rem;
+	}
 
-    &.active{
-        background: $gray;
-    }
+	&:not(.active):hover {
+		background: $gray;
+	}
+
+	&.active {
+		background: $gray;
+	}
 }

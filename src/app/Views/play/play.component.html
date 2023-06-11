@@ -1,113 +1,131 @@
 <div class="header">
-    <h1 class="subtitle">{{show.title}}</h1>
+	<h1 class="subtitle">{{ show.title }}</h1>
 </div>
 
 <ul class="list">
-    <li *ngFor="let s of scenes" class="item" 
-    [class.active]="s.isActive" 
-    (click)="setScene(s)">
-        {{s.title}}
-    </li>
+	<li *ngFor="let s of scenes" class="item" [class.active]="s.isActive" (click)="setScene(s)">
+		{{ s.title }}
+	</li>
 </ul>
 
 <div class="player" *ngIf="currScene">
-    <h1>{{currScene.title}}</h1>
+	<h1>{{ currScene.title }}</h1>
 
-    <ul class="tabs">
-        <li class="tab" 
-            [class.active]="selectedTab===TABS.Summary"
-            (click)="selectedTab=TABS.Summary">
-            <tabler-icon name="planet" class="icon"></tabler-icon>
-            Summary
-        </li>
-        <li class="tab" 
-                [class.active]="selectedTab===TABS.Script"
-                (click)="selectedTab=TABS.Script">
-                <tabler-icon name="clipboard-text" class="icon"></tabler-icon>
-                Script
-        </li>
-    </ul>
+	<ul class="tabs">
+		<li class="tab" [class.active]="selectedTab === TABS.Summary" (click)="selectedTab = TABS.Summary">
+			<tabler-icon name="planet" class="icon"></tabler-icon>
+			Summary
+		</li>
+		<li class="tab" [class.active]="selectedTab === TABS.Script" (click)="selectedTab = TABS.Script">
+			<tabler-icon name="clipboard-text" class="icon"></tabler-icon>
+			Script
+		</li>
+	</ul>
 
-    <div class="tab-content" [style.display]="selectedTab===TABS.Summary ? '' : 'none'">
-        <div class="summary">
-            <div class="section">
-                <p class="title">GeoPosition</p>
-                <ul class="geoPos">
-                    <li>
-                        <p>Node: </p>
-                        <p>{{currScene.geoPos.node}}</p>
-                    </li>
-                    <li>
-                        <p>Latitude:</p>
-                        <p>{{currScene.geoPos.lat}}</p>
-                    </li>
-                    <li>
-                        <p>Longitude:</p>
-                        <p>{{currScene.geoPos.long}}</p>
-                    </li>
-                    <li>
-                        <p>Altitude:</p>
-                        <p>{{currScene.geoPos.alt}}</p>
-                    </li>
-                </ul>
-            </div>
+	<div class="tab-content" [style.display]="selectedTab === TABS.Summary ? '' : 'none'">
+		<div class="summary">
+			<div class="section">
+				<p class="title">GeoPosition</p>
+				<ul class="geoPos">
+					<li>
+						<p>Node:</p>
+						<p>{{ currScene.geoPos.node }}</p>
+					</li>
+					<li>
+						<p>Latitude:</p>
+						<p>{{ currScene.geoPos.lat }}</p>
+					</li>
+					<li>
+						<p>Longitude:</p>
+						<p>{{ currScene.geoPos.long }}</p>
+					</li>
+					<li>
+						<p>Altitude:</p>
+						<p>{{ currScene.geoPos.alt }}</p>
+					</li>
+				</ul>
+			</div>
 
-            <div class="section">
-                <p class="title">Enabled Trails ({{currScene.options.enabledTrails.length}})</p>
-                <ul class="enabledTrails">
-                    <li *ngFor="let trail of currScene.options.enabledTrails">
-                        {{trail}}
-                    </li>
-                    <li *ngIf="!currScene.options.enabledTrails.length">
-                        No trails enabled
-                    </li>
-                </ul>
-            </div>
-            <div class="section" id="duration">
-                <p class="title">Transition Duration</p>
-                <ul>
-                    <li *ngIf="currScene.transistion">
-                        {{currScene.transistion}} seconds
-                    </li>
-                    <li *ngIf="!currScene.transistion">
-                        Default Transition
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+			<div class="section">
+				<p class="title">Enabled Trails ({{ currScene.options.enabledTrails.length }})</p>
+				<ul class="enabledTrails">
+					<li *ngFor="let trail of currScene.options.enabledTrails">
+						{{ trail }}
+					</li>
+					<li *ngIf="!currScene.options.enabledTrails.length">No trails enabled</li>
+				</ul>
+			</div>
+			<div class="section" id="duration">
+				<p class="title">Transition Duration</p>
+				<ul>
+					<li *ngIf="currScene.transistion">{{ currScene.transistion }} seconds</li>
+					<li *ngIf="!currScene.transistion">Default Transition</li>
+				</ul>
+			</div>
+		</div>
+	</div>
 
-    <div class="tab-content" [style.display]="selectedTab===TABS.Script ? '' : 'none'">
-        <textarea id="script" class="input" [ngModel]="currScene.script"
-        cols="30" rows="20" [disabled]="true" placeholder="Script Text">
-        </textarea>
-    </div>
+	<div class="tab-content" [style.display]="selectedTab === TABS.Script ? '' : 'none'">
+		<textarea
+			id="script"
+			class="input"
+			[ngModel]="currScene.script"
+			cols="30"
+			rows="20"
+			[disabled]="true"
+			placeholder="Script Text">
+		</textarea>
+	</div>
 
-    <div class="btns">
-        <button id="back" class="btn secondary" (click)="setScene(scenes[currIdx!-1])"
-        [disabled]="!currScene || currIdx === 0">
-            <ng-container [ngTemplateOutlet]="left"></ng-container>
-            Back
-        </button>
-        <button id="next" class="btn primary" (click)="setScene(scenes[currIdx!+1])"
-            [disabled]="!currScene || currIdx === scenes.length-1">
-            Next
-            <ng-container [ngTemplateOutlet]="right"></ng-container>
-        </button>
-    </div>
+	<div class="btns">
+		<button
+			id="back"
+			class="btn secondary"
+			(click)="setScene(scenes[currIdx! - 1])"
+			[disabled]="!currScene || currIdx === 0">
+			<ng-container [ngTemplateOutlet]="left"></ng-container>
+			Back
+		</button>
+		<button
+			id="next"
+			class="btn primary"
+			(click)="setScene(scenes[currIdx! + 1])"
+			[disabled]="!currScene || currIdx === scenes.length - 1">
+			Next
+			<ng-container [ngTemplateOutlet]="right"></ng-container>
+		</button>
+	</div>
 </div>
 
 <ng-template #left>
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
-        <line x1="19" y1="12" x2="5" y2="12"></line>
-        <polyline points="12 19 5 12 12 5"></polyline>
-    </svg>
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="20"
+		height="20"
+		viewBox="0 0 24 24"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="2"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+		class="feather feather-arrow-left">
+		<line x1="19" y1="12" x2="5" y2="12"></line>
+		<polyline points="12 19 5 12 12 5"></polyline>
+	</svg>
 </ng-template>
 <ng-template #right>
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right">
-        <line x1="5" y1="12" x2="19" y2="12"></line>
-        <polyline points="12 5 19 12 12 19"></polyline>
-    </svg>
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="20"
+		height="20"
+		viewBox="0 0 24 24"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="2"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+		class="feather feather-arrow-right">
+		<line x1="5" y1="12" x2="19" y2="12"></line>
+		<polyline points="12 5 19 12 12 19"></polyline>
+	</svg>
 </ng-template>
