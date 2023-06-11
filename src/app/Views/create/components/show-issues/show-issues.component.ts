@@ -20,6 +20,7 @@ export class ShowIssuesComponent implements OnInit {
     this.goToScene.emit(scene)
   }
 
+  //For DOM
   get IssueSeverity(){
     return IssueServerity
   }
