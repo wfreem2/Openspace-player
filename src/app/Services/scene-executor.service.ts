@@ -10,14 +10,14 @@ export class SceneExecutorService {
   constructor(private openSpaceService: OpenspaceService) { }
 
 
-  public execute(scene: Scene): void{
+  public async execute(scene: Scene): Promise<void>{
   
     const { options, transistion } = scene
     const { node, navState } = scene.geoPos
     
-    this.openSpaceService.getRenderableType(node)
-    .then(renderableType => {
-      
+    const renderableType = await this.openSpaceService.getRenderableType(node)
+    
+    try{
       if(navState){ this.openSpaceService.setNavigationState(navState) }
       
       if(renderableType === RenderableType.RENDERABLEGLOBE){
@@ -38,11 +38,13 @@ export class SceneExecutorService {
         break
         
         default: //Some trails enabled
-        enabledTrails.forEach(trial => this.openSpaceService.setTrailVisibility(trial, true))
+          enabledTrails.forEach(trail => this.openSpaceService.setTrailVisibility(trail, true))
         break
       }
-    })
-    .catch(() => console.log('Error executing scene'))
+    }
+    catch{
+      console.log('Error executing scene')
+    }
   }
 
 }

@@ -38,7 +38,8 @@ describe('CreateComponent', () => {
         id: 1,
         title: 'Test Show',
         dateCreated: new Date(),
-        scenes: []
+        scenes: [],
+        isStarred: true
     }
     
     beforeEach( async () => {
@@ -75,7 +76,7 @@ describe('CreateComponent', () => {
             fixture.detectChanges()
 
             fakeOpenSpaceService.isConnected.and.returnValue( of(true) )
-            fakeOpenSpaceService.getTime.and.resolveTo( new Date() )
+            fakeOpenSpaceService.getTime.and.resolveTo( new Date().toISOString() )
         })
 
         fakeShow.scenes = getFakeScenes(5)
@@ -109,9 +110,8 @@ describe('CreateComponent', () => {
             title: rawScene.title + 'some other stuff',
             geoPos: rawScene.geoPos,
             options: rawScene.options,
-            transistion: rawScene.transistion || undefined,
-            script: rawScene.script || undefined,
-            time: new Date()
+            transistion: rawScene.transistion || null,
+            script: rawScene.script || null,
         }
         
         component.$setScene.next(newScene)

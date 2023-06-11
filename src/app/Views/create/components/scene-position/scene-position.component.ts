@@ -23,7 +23,7 @@ import { BaseComponent } from 'src/app/Shared/base/base.component';
 })
 
 export class ScenePositionComponent extends BaseComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
-  @Input() isAutoMode: boolean = false
+  @Input() isAutoMode = false
 
   private readonly numRegex = /^-?\d*\.?\d*$/
   geoPosForm = this.fb.group<GeoPosForm>({
@@ -38,7 +38,7 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
   
   readonly pathNavOptions = Object.values(SceneGraphNode)
   
-  private listener!: Subscription
+  private listener?: Subscription
   readonly $nodeCanHaveGeo = new Subject<boolean>()
   readonly $geoPos = new Subject<GeoPosition>()
   readonly $isAutoMode = new BehaviorSubject<boolean>(this.isAutoMode)
@@ -57,12 +57,12 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
       private fb: NonNullableFormBuilder) { 
 
     super()
-        
+    
     this.$isAutoMode.asObservable()
     .pipe( takeUntil(this.$unsub) )
     .subscribe(isAuto => {
       this.isAutoMode = isAuto
-      
+
       if(isAuto){ this.disableAllControls() }
       else{ this.enableAllControls() }
       
@@ -76,7 +76,6 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
       takeUntil(this.$unsub)
     )
     .subscribe(async geoPos => {
-
       this.geoPosForm.patchValue({
         alt: geoPos.alt,
         lat: geoPos.lat,
@@ -84,9 +83,7 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
         node: geoPos.node,
         timestamp: geoPos.timestamp,
         navState: geoPos.navState
-      }, {emitEvent: false })
-
-      console.log(this.geoPosForm.getRawValue());
+      }, { emitEvent: false })
     })
 
     //Emitting boolean indicating nodes that can/cannot have a geoposition
@@ -96,7 +93,7 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
       takeUntil(this.$unsub)
     )
     .subscribe( async ({ node }) => {
-      if(!!node){
+      if(node){
         this.$nodeCanHaveGeo.next(await this.openSpaceService.nodeCanHaveGeo(node))
       }
     })
@@ -210,9 +207,8 @@ export class ScenePositionComponent extends BaseComponent implements OnInit, OnD
   setDisabledState?(isDisabled: boolean): void { }
 
   private async setGeoListener(isAuto: boolean){
-
-    if(!isAuto && !!this.listener){ 
-      this.listener.unsubscribe() 
+    if(!isAuto){ 
+      this.listener?.unsubscribe() 
       return
     }
 

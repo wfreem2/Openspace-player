@@ -27,7 +27,8 @@ export function getFakeScenes(N: number = 5): Scene[]{
             alt: Math.random(),
             lat: Math.random(),
             long: Math.random(),
-            node: sampleSize(Object.values(SceneGraphNode), 1)[0]
+            node: sampleSize(Object.values(SceneGraphNode), 1)[0],
+            timestamp: new Date().toISOString()
         }
         const options: SceneOptions = {
             enabledTrails: sampleSize(Object.values(SceneGraphNode), 5),
@@ -39,9 +40,8 @@ export function getFakeScenes(N: number = 5): Scene[]{
 
         const scene: Scene = {
             id: id, title: title, geoPos: geoPos, options: options,
-            script: (i % 2 === 0) ? script : undefined,
-            transistion: (i % 2 === 0) ? duration : undefined,
-            time: new Date()
+            script: (i % 2 === 0) ? script : null,
+            transistion: (i % 2 === 0) ? duration : null
         }
 
         scenes.push(scene)
@@ -56,7 +56,8 @@ export function getFakeScene(id: number): Scene{
         alt: Math.random(),
         lat: Math.random(),
         long: Math.random(),
-        node: sampleSize(Object.values(SceneGraphNode), 1)[0]
+        node: sampleSize(Object.values(SceneGraphNode), 1)[0],
+        timestamp: new Date().toISOString()
     }
     const options: SceneOptions = {
         enabledTrails: sampleSize(Object.values(SceneGraphNode), 5),
@@ -70,7 +71,6 @@ export function getFakeScene(id: number): Scene{
         id: id, title: title, geoPos: geoPos, options: options,
         script: script,
         transistion: duration,
-        time: new Date()
     } 
     
     return scene

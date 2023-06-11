@@ -107,6 +107,7 @@ describe('ShowImporterComponent', () => {
       title: 'fake Show',
       scenes: getFakeScenes(2),
       dateCreated: new Date(),
+      isStarred: false
     }
 
     const validFile = jasmine.createSpyObj<File>("File", 

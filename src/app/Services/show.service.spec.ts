@@ -8,9 +8,15 @@ describe("ShowService", () => {
 
     const shows: Show[] = 
     [
-        { id: 1, title: 'Show 1', scenes: [], dateCreated: new Date() },
-        { id: 2, title: 'Show 2', scenes: [], dateCreated: new Date() },
-        { id: 3, title: 'Show 3', scenes: [], dateCreated: new Date() }
+        { id: 1, title: 'Show 1', scenes: [], dateCreated: new Date(),
+            isStarred: false
+     },
+        { id: 2, title: 'Show 2', scenes: [], dateCreated: new Date(),
+            isStarred: false
+     },
+        { id: 3, title: 'Show 3', scenes: [], dateCreated: new Date(),
+            isStarred: false
+     }
     ]   
 
     beforeEach( () =>{ 
@@ -22,7 +28,9 @@ describe("ShowService", () => {
 
     it('#addShow() show with existing id should have id reassigned', () => {
         const id = 3    
-        const show = { id: 3, title: 'Show 3 conflicting', scenes: [], dateCreated: new Date() }
+        const show = { id: 3, title: 'Show 3 conflicting', scenes: [], dateCreated: new Date(),
+        isStarred: false
+    }
 
         showService.addShow(show)
 
@@ -40,7 +48,9 @@ describe("ShowService", () => {
 
     it('#saveShow() should save existing show without appending', () => {
         
-        const toAdd: Show = { id: 4, title: 'Show 4', scenes: [], dateCreated: new Date() }
+        const toAdd: Show = { id: 4, title: 'Show 4', scenes: [], dateCreated: new Date(),
+        isStarred: false
+    }
         showService.addShow(toAdd)
 
         const newTitle = 'Show 4 - New title'
@@ -68,7 +78,9 @@ describe("ShowService", () => {
 
     it('#saveShow() should save non-existing show and append', () => {
         
-        const toAdd: Show = { id: 4, title: 'Show 4', scenes: [], dateCreated: new Date() }
+        const toAdd: Show = { id: 4, title: 'Show 4', scenes: [], dateCreated: new Date(),
+        isStarred: false
+    }
         
         spyOn(showService, 'addShow').and.callThrough()
         
@@ -87,7 +99,10 @@ describe("ShowService", () => {
 
     it('#saveShow() should save show to localstorage', () => {
         
-        const toAdd: Show = { id: 4, title: 'Show 4', scenes: [], dateCreated: new Date() }
+        const toAdd: Show = {
+            id: 4, title: 'Show 4', scenes: [], dateCreated: new Date(), 
+            isStarred: false
+        }
 
         showService.save(toAdd)
         const savedShows: Show[] = JSON.parse(localStorage.getItem('shows')!)
@@ -109,7 +124,8 @@ describe("ShowService", () => {
             id: 0,
             scenes: getFakeScenes(3),
             dateCreated: new Date(),
-            title: 'valid show'
+            title: 'valid show',
+            isStarred: false
         }
 
         const actual = showService.instanceOfShow(validShow)

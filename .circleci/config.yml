@@ -28,7 +28,7 @@ jobs:
           key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
           paths:
             - "node_modules"
-      - run: npm run test
+      - run: npm run ci-test
       - store_test_results:
           path: test-results
 

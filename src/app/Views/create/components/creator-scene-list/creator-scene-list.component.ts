@@ -1,9 +1,8 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
-import { cloneDeep } from 'lodash';
 import { Scene } from 'src/app/Models/Scene';
 import { ListItemComponent } from './list-item/list-item.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { filter, Observable, ReplaySubject, Subject, tap } from 'rxjs';
+import { filter, Observable, Subject } from 'rxjs';
 import { BaseComponent } from 'src/app/Shared/base/base.component';
 import { SceneIssue } from 'src/app/Models/SceneIssue';
 
@@ -32,7 +31,7 @@ export class CreatorSceneListComponent extends BaseComponent implements OnInit, 
   
   constructor(private cdRef : ChangeDetectorRef) { super() }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.$currScene = this.$currentScene
     .pipe(
       filter(scene => !!scene)

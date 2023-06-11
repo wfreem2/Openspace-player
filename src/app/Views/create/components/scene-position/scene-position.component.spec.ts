@@ -15,7 +15,7 @@ describe('Scene-Positon component', () => {
     let fixture: ComponentFixture<ScenePositionComponent>
 
     const fakeOpenSpaceService: jasmine.SpyObj<OpenspaceService> =
-     jasmine.createSpyObj('OpenSpaceService', ['listenCurrentPosition', 'isConnected'])
+     jasmine.createSpyObj('OpenSpaceService', ['listenCurrentPosition', 'isConnected', 'nodeCanHaveGeo'])
     
     beforeEach( async () => {
         const $fakeObs =  of({
@@ -27,7 +27,8 @@ describe('Scene-Positon component', () => {
 
         fakeOpenSpaceService.listenCurrentPosition.and.returnValue($fakeObs)
         fakeOpenSpaceService.isConnected.and.returnValue(of(true))
-        
+        fakeOpenSpaceService.nodeCanHaveGeo.and.resolveTo(true)
+
         TestBed.configureTestingModule({
             declarations: [ScenePositionComponent, SortingSelectorComponent, DropdownComponent],
             providers: [{provide: OpenspaceService, useValue: fakeOpenSpaceService}, NotificationService],
@@ -48,7 +49,9 @@ describe('Scene-Positon component', () => {
             alt: Math.random(),
             lat: Math.random(),
             long: Math.random(),
-            node: sampleSize(Object.values(SceneGraphNode), 1)[0]
+            node: sampleSize(Object.values(SceneGraphNode), 1)[0],
+            timestamp: new Date().toISOString(),
+            navState: {} as GeoPosition['navState']
         }
 
         component.writeValue(expectedGeo)
@@ -59,7 +62,7 @@ describe('Scene-Positon component', () => {
 
     it('#writeValue() should not set geoposition with unexpected object ', () => {
 
-        const unexpectedObj = { unexpected: 'an unexpected object'}
+        const unexpectedObj = { unexpected: 'an unexpected object' }
         
         const defaultValue = component.geoPosForm.getRawValue()
 
@@ -92,19 +95,23 @@ describe('Scene-Positon component', () => {
     })
 
     it('lat, long, and alt controls with values that are not numbers should have invalid status', () => {
-
         const badGeoPosition = {
             lat: 'invalid',
             long: '0.33bad',
             alt: 'notgood',
-            node: sampleSize(Object.values(SceneGraphNode), 1)[0]
+            node: SceneGraphNode.Earth
         }
 
-        component.writeValue(badGeoPosition)
+        component.isAutoMode = false
         fixture.detectChanges();
 
-        [component.alt, component.lat, component.long]
-        .forEach(ctrl => expect(ctrl.errors!['pattern']).toBeTruthy() )
+        component.writeValue(badGeoPosition);
+
+        const ctrls = [component.alt, component.lat, component.long]
+
+        ctrls.forEach(ctrl => {
+            expect(ctrl.errors!['pattern']).toBeTruthy() 
+        })
     })
 
     it('should properly implement ControlValueAccessor', () => testControlValueImplementation(component))

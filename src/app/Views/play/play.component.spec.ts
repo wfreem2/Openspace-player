@@ -21,7 +21,8 @@ describe('Play Component', () => {
         id: 1,
         title: 'Test Show',
         dateCreated: new Date(),
-        scenes: []
+        scenes: [],
+        isStarred: false
     }
     
     let fakeShowService: any

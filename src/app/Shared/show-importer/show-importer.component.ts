@@ -61,7 +61,6 @@ export class ShowImporterComponent implements OnInit {
       const jsonParsed = JSON.parse(jsonString)
   
       if(!this.showService.instanceOfShow(jsonParsed)){
-        debugger
         this.errorMsg = 'JSON data is not a valid show'
         this.hasErrors = true
         
