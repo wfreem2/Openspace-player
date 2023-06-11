@@ -6,12 +6,8 @@ import { SceneOptions } from '../Models/SceneOptions'
 import { SceneGraphNode } from '../Services/openspace.service'
 
 export function testControlValueImplementation(component: any) {
-	const onChange = () => {
-		console.log('change')
-	}
-	const onTouch = () => {
-		console.log('touch')
-	}
+	const onChange = () => { }
+	const onTouch = () => { }
 
 	component.registerOnChange(onChange)
 	component.registerOnTouched(onTouch)
@@ -21,7 +17,7 @@ export function testControlValueImplementation(component: any) {
 }
 
 export function getFakeScenes(N: number = 5): Scene[] {
-	let scenes: Scene[] = []
+	const scenes: Scene[] = []
 
 	for (let i = 0; i < N; i++) {
 		const id = i

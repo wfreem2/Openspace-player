@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { tap, BehaviorSubject, takeUntil, startWith, map, Observable, catchError, of } from 'rxjs'
+import { takeUntil, startWith, map, Observable, catchError, of } from 'rxjs'
 import { OpenspaceService } from 'src/app/Services/openspace.service'
 import { BaseComponent } from '../base/base.component'
 

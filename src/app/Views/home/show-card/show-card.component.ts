@@ -17,7 +17,7 @@ export class ShowCardComponent implements OnInit {
 	ngOnInit(): void {}
 
 	@HostListener('click', ['$event'])
-	onClick(e: any) {
+	onClick() {
 		this.cardClicked.emit(this.show)
 	}
 

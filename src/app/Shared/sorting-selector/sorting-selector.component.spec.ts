@@ -10,7 +10,7 @@ describe('SortingSelector', () => {
 			declarations: [SortingSelectorComponent]
 		})
 			.compileComponents()
-			.then((_) => {
+			.then(() => {
 				fixture = TestBed.createComponent(SortingSelectorComponent)
 				component = fixture.componentInstance
 				fixture.detectChanges()

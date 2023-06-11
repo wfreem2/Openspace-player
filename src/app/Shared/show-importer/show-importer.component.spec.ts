@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { Show } from 'src/app/Models/Show'
 import { ShowService } from 'src/app/Services/show.service'
-import { getFakeScene, getFakeScenes } from 'src/app/Utils/test-utils'
+import { getFakeScenes } from 'src/app/Utils/test-utils'
 import { ModalComponent } from '../modal/modal.component'
 
 import { ShowImporterComponent } from './show-importer.component'

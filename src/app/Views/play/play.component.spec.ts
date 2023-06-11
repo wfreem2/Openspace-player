@@ -1,11 +1,10 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing'
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { ActivatedRoute } from '@angular/router'
 import { RouterTestingModule } from '@angular/router/testing'
-import { sampleSize } from 'lodash'
 import { of } from 'rxjs'
 import { Show } from 'src/app/Models/Show'
 import { NotificationService } from 'src/app/Services/notification.service'
-import { OpenspaceService, SceneGraphNode } from 'src/app/Services/openspace.service'
+import { OpenspaceService } from 'src/app/Services/openspace.service'
 import { SceneExecutorService } from 'src/app/Services/scene-executor.service'
 import { ShowService } from 'src/app/Services/show.service'
 import { getFakeScenes } from 'src/app/Utils/test-utils'
@@ -139,9 +138,9 @@ describe('Play Component', () => {
 		fixture.detectChanges()
 
 		const el: HTMLElement = fixture.nativeElement
-		const btn: HTMLButtonElement = el.querySelector('#next')!
+		const btn: HTMLButtonElement | null = el.querySelector('#next')
 
-		expect(btn.disabled).toBeTrue()
+		expect(btn?.disabled).toBeTrue()
 	})
 
 	it('back button should be disabled when first scene is active', () => {
@@ -151,8 +150,8 @@ describe('Play Component', () => {
 		fixture.detectChanges()
 
 		const el: HTMLElement = fixture.nativeElement
-		const btn: HTMLButtonElement = el.querySelector('#back')!
+		const btn: HTMLButtonElement | null = el.querySelector('#back')
 
-		expect(btn.disabled).toBeTrue()
+		expect(btn?.disabled).toBeTrue()
 	})
 })

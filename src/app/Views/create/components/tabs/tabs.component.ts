@@ -13,7 +13,7 @@ export class TabsComponent implements OnInit, AfterContentInit {
 	ngOnInit(): void {}
 
 	ngAfterContentInit(): void {
-		let activeTabs = this.tabs.filter((t) => t.isActive)
+		const activeTabs = this.tabs.filter((t) => t.isActive)
 
 		//Set first tab to active by default
 		if (!activeTabs.length) {

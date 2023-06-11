@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core'
+import { Component, ElementRef, forwardRef, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { map, of, Subject, switchMap, takeUntil } from 'rxjs'
 import { isElementOrChildClicked } from 'src/app/Utils/utils'

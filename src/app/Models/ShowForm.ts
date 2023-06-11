@@ -1,4 +1,4 @@
-import { FormArray, FormControl, FormGroup, FormRecord } from '@angular/forms'
+import { FormArray, FormControl, FormGroup } from '@angular/forms'
 import { SceneGraphNode } from '../Services/openspace.service'
 import { GeoPosition } from './GeoPosition'
 import { SceneOptions } from './SceneOptions'

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { Scene } from 'src/app/Models/Scene'
@@ -83,7 +84,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
 				return s
 			}
 
-			s!.title += ' (1)'
+			s.title += ' (1)'
 
 			return s
 		})
@@ -124,8 +125,11 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
 			}
 		}),
 		tap((scene) => {
-			let original = this.show.scenes.find((s) => s.id === scene.id)!
-			Object.assign(original, scene)
+			const original = this.show.scenes.find((s) => s.id === scene.id)
+
+			if(original){	
+				Object.assign(original, scene)
+			}
 		}),
 		takeUntil(this.$unsub)
 	)
@@ -163,10 +167,14 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
 		this.route.params
 			.pipe(
 				map((params) => params?.['id']),
-				map((id) => showService.getShowById(parseInt(id))!),
+				map((id) => showService.getShowById(parseInt(id))),
 				first()
 			)
 			.subscribe((show) => {
+				if(!show){
+					//TODO route to error page
+					throw new Error(`Show with provided id does not exist`)
+				}
 				this.show = show
 				this.$setSaveDisabled.next(true)
 			})
@@ -335,7 +343,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
 		return this.show.scenes.some((s) => s.title.trim() === title.trim())
 	}
 
-	onTitleChange(title: string): void {
+	onTitleChange(): void {
 		this.$setSaveDisabled.next(!this.isShowValid())
 	}
 
@@ -365,7 +373,7 @@ export class CreateComponent extends BaseComponent implements OnInit, OnDestroy 
 			.map(([ctrlName, ctrl]) => {
 				const { errors } = ctrl
 				let errorMsg = ''
-				let normalizedCtrlName = ctrlName.charAt(0).toUpperCase() + ctrlName.slice(1)
+				const normalizedCtrlName = ctrlName.charAt(0).toUpperCase() + ctrlName.slice(1)
 
 				switch (true) {
 					case !!errors?.['pattern']:

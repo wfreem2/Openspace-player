@@ -1,7 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing'
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { sample, sampleSize } from 'lodash'
-import { first, map, skip, take } from 'rxjs'
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { sampleSize } from 'lodash'
+import { first, map, skip } from 'rxjs'
 import { IconsModule } from 'src/app/icons.module'
 import { SceneOptions } from 'src/app/Models/SceneOptions'
 import { SceneGraphNode } from 'src/app/Services/openspace.service'
@@ -50,7 +50,7 @@ describe('Scene-options component', () => {
 	it('#writeValue() should correctly set options on form', () => {
 		const vals = sampleSize(Object.values(SceneGraphNode), 3)
 
-		let expectedOptions: SceneOptions = {
+		const expectedOptions: SceneOptions = {
 			enabledTrails: vals,
 			keepCameraPosition: false
 		}
@@ -77,7 +77,7 @@ describe('Scene-options component', () => {
 	})
 
 	it('#writeValue() should not emit valuechanges', fakeAsync(() => {
-		let expectedOptions: SceneOptions = {
+		const expectedOptions: SceneOptions = {
 			enabledTrails: [SceneGraphNode.Mercury, SceneGraphNode.Mars],
 			keepCameraPosition: false
 		}
@@ -94,7 +94,7 @@ describe('Scene-options component', () => {
 	}))
 
 	it('#selectAllTrails() should select all trails', (done) => {
-		let expectedTrails = Object.values(SceneGraphNode)
+		const expectedTrails = Object.values(SceneGraphNode)
 
 		component.optionsForm.valueChanges.pipe(mapSceneOptions).subscribe((v) => {
 			expect(v.enabledTrails).toEqual(expectedTrails)

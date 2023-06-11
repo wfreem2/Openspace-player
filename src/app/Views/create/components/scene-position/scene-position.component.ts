@@ -169,7 +169,7 @@ export class ScenePositionComponent
 					this.geoPosForm.controls.long.enable({ emitEvent: false })
 				}
 			},
-			error: () => console.log('error')
+			error: () => console.log('error') //TODO handle error
 		})
 
 		//Emitting values for parent form to consume
@@ -179,10 +179,10 @@ export class ScenePositionComponent
 					try {
 						const timestamp = await this.openSpaceService.getTime()
 						this.geoPosForm.controls.timestamp.setValue(timestamp, { emitEvent: false })
-					} catch {}
+					} catch { /* Time not being captured is not a critical error (for now) */ }
 				}),
 				catchError((val) => of(val)),
-				filter(() => this.lat!.valid && this.long!.valid && this.alt!.valid),
+				filter(() => this.lat?.valid && this.long?.valid && this.alt?.valid),
 				map(() => this.geoPosForm.getRawValue() as GeoPosition),
 				takeUntil(this.$unsub)
 			)
@@ -191,6 +191,7 @@ export class ScenePositionComponent
 
 	ngOnInit(): void {}
 
+	/* Getters for accessing controls from DOM */
 	get alt() {
 		return this.geoPosForm.get('alt')!
 	}

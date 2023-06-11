@@ -57,7 +57,12 @@ describe('Dropdown component', () => {
 	it('#selectItem() should select the provided item', () => {
 		const toSelect = component.selectableItems.find((i) => i.item === items[3])
 
-		component.selectItem(toSelect!)
+		if(!toSelect){
+			fail('Item to select not found in selectable items')
+			return
+		}
+
+		component.selectItem(toSelect)
 		fixture.detectChanges()
 
 		expect(toSelect).toEqual(component.selectedItem)
@@ -65,14 +70,19 @@ describe('Dropdown component', () => {
 
 	it('selected item should be moved to the top of the list', () => {
 		const toSelect = component.selectableItems.find((i) => i.item === items[3])
-
-		let header: HTMLElement = fixture.nativeElement.getElementsByClassName('header')[0]
-		component.selectItem(toSelect!)
+		
+		if(!toSelect){
+			fail('Item to select not found in selectable items')
+			return
+		}
+		
+		const header: HTMLElement = fixture.nativeElement.getElementsByClassName('header')[0]
+		component.selectItem(toSelect)
 		fixture.detectChanges()
 
 		header.click()
 
-		expect(component.filteredSelectableItems[0]).toEqual(toSelect!)
+		expect(component.filteredSelectableItems[0]).toEqual(toSelect)
 	})
 
 	it('#onSortSelected() should sort the items ascending with SortingType.Ascending', () => {
@@ -103,7 +113,7 @@ describe('Dropdown component', () => {
 	})
 
 	it('filtered items should include search query', () => {
-		;['Earth', 'EARTH', 'VeNuS'].forEach((query) => {
+		['Earth', 'EARTH', 'VeNuS'].forEach((query) => {
 			component.query.next(query)
 			fixture.detectChanges()
 

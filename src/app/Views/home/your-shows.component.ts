@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { first, map, takeUntil } from 'rxjs'
+import { map, takeUntil } from 'rxjs'
 import { Show } from 'src/app/Models/Show'
 import { ShowService } from 'src/app/Services/show.service'
 import { BaseComponent } from 'src/app/Shared/base/base.component'

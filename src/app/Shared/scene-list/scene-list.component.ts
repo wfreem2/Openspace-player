@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ScaleInOut } from 'src/app/Animations/animations'
 import { Scene } from 'src/app/Models/Scene'
 

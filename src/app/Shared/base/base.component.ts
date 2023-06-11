@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { Subject } from 'rxjs'
 
