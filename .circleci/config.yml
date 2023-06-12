@@ -1,11 +1,16 @@
 version: 2.1
 orbs:
   browser-tools: circleci/browser-tools@1.4.0
-jobs:
-  build:
-    working_directory: ~/my-project
+
+executors:
+  node-browser:
     docker:
       - image: cimg/node:current-browsers
+    working_directory: ~/my-project
+
+jobs:
+  test:
+    executor: node-browser
     steps:
       - checkout
       - browser-tools/install-chrome
@@ -27,19 +32,23 @@ jobs:
       - save_cache:
           key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
           paths:
-            - "node_modules"
-  # run unit tests
-  test:
-    docker:
-      - image: cimg/node:current-browsers
-    steps:
+            - node_modules
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./
+      # run unit tests
       - run: npm run ci-test
       - store_test_results:
           path: test-results
+
+  # linting
   lint:
-    docker:
-      - image: cimg/node:current
+    executor: node-browser
     steps:
+      - attach_workspace:
+          at: ./
+      - run: npm install
       - run: npm run lint
 
 workflows:
@@ -53,10 +62,7 @@ workflows:
           value: << pipeline.git.branch >>
 
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+      - test
       - lint:
           requires:
             - test
