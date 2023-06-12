@@ -28,12 +28,35 @@ jobs:
           key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
           paths:
             - "node_modules"
+  # run unit tests
+  test:
+    docker:
+      - image: cimg/node:current-browsers
+    steps:
       - run: npm run ci-test
       - store_test_results:
           path: test-results
-
+  lint:
+    docker:
+      - image: cimg/node:current
+    steps:
+      - run: npm run lint
 
 workflows:
-  build_and_test:
+  build-test:
+    # only run on main and release branches
+    when:
+      or:
+      - equal: [ main, << pipeline.git.branch >> ]
+      - matches:
+          pattern: "release-*"
+          value: << pipeline.git.branch >>
+
     jobs:
       - build
+      - test:
+          requires:
+            - build
+      - lint:
+          requires:
+            - test
