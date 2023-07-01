@@ -24,7 +24,7 @@
     "@faker-js/faker": "^7.6.0",
     "@syncfusion/ej2-material-theme": "~20.4.49",
     "angular-tabler-icons": "^1.119.0",
-    "jasmine": "^4.5.0",
+    "jasmine": "^4.6.0",
     "karma": "^6.4.1",
     "keycode": "^2.2.1",
     "lodash": "^4.17.21",
