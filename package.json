@@ -22,7 +22,7 @@
     "@angular/platform-browser-dynamic": "^14.2.12",
     "@angular/router": "^14.2.12",
     "@faker-js/faker": "^7.6.0",
-    "@syncfusion/ej2-material-theme": "~20.4.49",
+    "@syncfusion/ej2-material-theme": "~20.4.54",
     "angular-tabler-icons": "^1.119.0",
     "jasmine": "^4.5.0",
     "karma": "^6.4.1",
